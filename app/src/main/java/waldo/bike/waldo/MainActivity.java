@@ -3,6 +3,8 @@ package waldo.bike.waldo;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -10,7 +12,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import android.widget.Toast;
 
+import Utilities.Constants;
+import Utilities.DeviceConnection;
 
 
 public class MainActivity extends Activity {
@@ -23,6 +28,16 @@ public class MainActivity extends Activity {
             getFragmentManager().beginTransaction()
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
+        }
+        //instantiante the action bar
+        ActionBar actionBar = getActionBar();
+        actionBar.setIcon(R.drawable.waldo_action_bar);
+        actionBar.setTitle("");
+        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFFFFF")));
+        //check if there's Internet Connection
+        DeviceConnection deviceConnection = new DeviceConnection(getApplicationContext());
+        if (!deviceConnection.checkInternetConnection()) {
+            Toast.makeText(getApplicationContext(), Constants.NO_INTERNET_CONNECTION, Toast.LENGTH_SHORT).show();
         }
     }
 
