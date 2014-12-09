@@ -29,6 +29,8 @@ public class MainActivity extends Activity {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     int countResume = 0;
+    private static Context mContext;
+    static AlertDialog staticDialog = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,19 +45,13 @@ public class MainActivity extends Activity {
         actionBar.setIcon(R.drawable.waldo_action_bar);
         actionBar.setTitle("");
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFFFFF")));
-        //check if there's Internet Connection
-        DeviceConnection deviceConnection = new DeviceConnection(getApplicationContext());
-        if (!deviceConnection.checkInternetConnection()) {
-            showInternetDisabledAlertToUser(false);
-            Log.i(LOG_TAG, "in OnCreate() Internet");
-            //Toast.makeText(getApplicationContext(), Constants.NO_INTERNET_CONNECTION, Toast.LENGTH_SHORT).show();
-        }
-        else if (! deviceConnection.checkGpsEnabled()){
-            Log.i(LOG_TAG, "in OnCreate() GPS");
-            showGPSDisabledAlertToUser();
-            //Toast.makeText(getApplicationContext(), Constants.GPS_DISABLED, Toast.LENGTH_SHORT).show();
-        }
+        mContext = getApplicationContext();
     }
+
+    public static Context getContext() {
+        return mContext;
+    }
+
 
     private void showGPSDisabledAlertToUser(){
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
@@ -73,7 +69,7 @@ public class MainActivity extends Activity {
         alert.show();
     }
 
-    private void showInternetDisabledAlertToUser(boolean cancelDialog){
+    private void showInternetDisabledAlertToUser(){
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setMessage(Constants.INTERNET_IS_DISABLED)
                 .setCancelable(false)
@@ -85,13 +81,12 @@ public class MainActivity extends Activity {
                                 startActivity(callSettingIntent);
                             }
                         });
-        AlertDialog alert = alertDialogBuilder.create();
+        //AlertDialog alert = alertDialogBuilder.create();
+        staticDialog = alertDialogBuilder.create();
 
-        alert.show();
+        staticDialog.show();
+        //alert.show();
 
-        if (cancelDialog) {
-            alert.cancel();
-        }
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -103,6 +98,21 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        DeviceConnection deviceConnection = new DeviceConnection(getApplicationContext());
+        //check if there's Internet Connection
+        if (!deviceConnection.checkGpsEnabled()) {
+            showGPSDisabledAlertToUser();
+            Log.i(LOG_TAG, "in OnResume() Internet");
+            //Toast.makeText(getApplicationContext(), Constants.NO_INTERNET_CONNECTION, Toast.LENGTH_SHORT).show();
+        }
+        else if (!deviceConnection.checkInternetConnection()){
+            Log.i(LOG_TAG, "in OnResume() GPS");
+            showInternetDisabledAlertToUser();
+            //Toast.makeText(getApplicationContext(), Constants.GPS_DISABLED, Toast.LENGTH_SHORT).show();
+        }
+
+
+    /*
         if (countResume == 0) {
             countResume+=1;
             Log.i(LOG_TAG, "in OnResume() in countResume=0 branch");
@@ -119,7 +129,7 @@ public class MainActivity extends Activity {
                 Log.i(LOG_TAG, "in OnResume() on GPS branch.");
                 showGPSDisabledAlertToUser();
             }
-        }
+        }*/
     }
 
     @Override
@@ -136,12 +146,15 @@ public class MainActivity extends Activity {
 
     public static class NetworkChangeReceiver extends BroadcastReceiver {
         public NetworkChangeReceiver() {
-        super();
+            super();
         }
         @Override
         public void onReceive(Context context, Intent intent) {
-        MainActivity mainActivity = new MainActivity();
-        mainActivity.showInternetDisabledAlertToUser(true);
+
+        if ((staticDialog != null) && staticDialog.isShowing()) {
+            staticDialog.dismiss();
+        }
+
         Log.i(LOG_TAG,"Network state changed!");
         }
     }

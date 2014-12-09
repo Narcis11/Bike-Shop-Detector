@@ -77,7 +77,6 @@ public class DeviceConnection implements
     }
 
 
-
     @Override
     public void onConnected(Bundle bundle) {
         Toast.makeText(mContext,Constants.LOCATION_RECEIVED,Toast.LENGTH_SHORT).show();
