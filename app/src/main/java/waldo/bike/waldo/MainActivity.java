@@ -28,9 +28,6 @@ import Utilities.DeviceConnection;
 public class MainActivity extends Activity {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
-    int countResume = 0;
-    private static Context mContext;
-    static AlertDialog staticDialog = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,49 +42,10 @@ public class MainActivity extends Activity {
         actionBar.setIcon(R.drawable.waldo_action_bar);
         actionBar.setTitle("");
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFFFFF")));
-        mContext = getApplicationContext();
-    }
-
-    public static Context getContext() {
-        return mContext;
     }
 
 
-    private void showGPSDisabledAlertToUser(){
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage(Constants.GPS_IS_DISABLED)
-                .setCancelable(false)
-                .setPositiveButton(Constants.ENABLE_GPS,
-                        new DialogInterface.OnClickListener(){
-                            public void onClick(DialogInterface dialog, int id){
-                                Intent callGPSSettingIntent = new Intent(
-                                        android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);//open GPS Settings screen
-                                startActivity(callGPSSettingIntent);
-                            }
-                        });
-        AlertDialog alert = alertDialogBuilder.create();
-        alert.show();
-    }
 
-    private void showInternetDisabledAlertToUser(){
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage(Constants.INTERNET_IS_DISABLED)
-                .setCancelable(false)
-                .setPositiveButton(Constants.ENABLE_INTERNET,
-                        new DialogInterface.OnClickListener(){
-                            public void onClick(DialogInterface dialog, int id){
-                                Intent callSettingIntent = new Intent(
-                                        Settings.ACTION_SETTINGS); //open Settings screen
-                                startActivity(callSettingIntent);
-                            }
-                        });
-        //AlertDialog alert = alertDialogBuilder.create();
-        staticDialog = alertDialogBuilder.create();
-
-        staticDialog.show();
-        //alert.show();
-
-    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -98,38 +56,6 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        DeviceConnection deviceConnection = new DeviceConnection(getApplicationContext());
-        //check if there's Internet Connection
-        if (!deviceConnection.checkGpsEnabled()) {
-            showGPSDisabledAlertToUser();
-            Log.i(LOG_TAG, "in OnResume() Internet");
-            //Toast.makeText(getApplicationContext(), Constants.NO_INTERNET_CONNECTION, Toast.LENGTH_SHORT).show();
-        }
-        else if (!deviceConnection.checkInternetConnection()){
-            Log.i(LOG_TAG, "in OnResume() GPS");
-            showInternetDisabledAlertToUser();
-            //Toast.makeText(getApplicationContext(), Constants.GPS_DISABLED, Toast.LENGTH_SHORT).show();
-        }
-
-
-    /*
-        if (countResume == 0) {
-            countResume+=1;
-            Log.i(LOG_TAG, "in OnResume() in countResume=0 branch");
-        }
-        else {
-        DeviceConnection deviceConnection = new DeviceConnection(getApplicationContext());
-        if (!deviceConnection.checkInternetConnection()) {
-            Log.i(LOG_TAG, "in OnResume() on Internet branch.");
-            showInternetDisabledAlertToUser(false);
-            //Toast.makeText(getApplicationContext(), Constants.NO_INTERNET_CONNECTION, Toast.LENGTH_SHORT).show();
-        }
-
-        else if (!deviceConnection.checkGpsEnabled()) {
-                Log.i(LOG_TAG, "in OnResume() on GPS branch.");
-                showGPSDisabledAlertToUser();
-            }
-        }*/
     }
 
     @Override
@@ -144,20 +70,6 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    public static class NetworkChangeReceiver extends BroadcastReceiver {
-        public NetworkChangeReceiver() {
-            super();
-        }
-        @Override
-        public void onReceive(Context context, Intent intent) {
-
-        if ((staticDialog != null) && staticDialog.isShowing()) {
-            staticDialog.dismiss();
-        }
-
-        Log.i(LOG_TAG,"Network state changed!");
-        }
-    }
 
     /**
      * A placeholder fragment containing a simple view.
