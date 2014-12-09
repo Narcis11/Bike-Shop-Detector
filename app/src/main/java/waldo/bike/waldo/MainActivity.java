@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -44,16 +46,11 @@ public class MainActivity extends Activity {
         //check if there's Internet Connection
         DeviceConnection deviceConnection = new DeviceConnection(getApplicationContext());
         if (!deviceConnection.checkInternetConnection()) {
-            showInternetDisabledAlertToUser();
+            showInternetDisabledAlertToUser(false);
             Log.i(LOG_TAG, "in OnCreate() Internet");
             //Toast.makeText(getApplicationContext(), Constants.NO_INTERNET_CONNECTION, Toast.LENGTH_SHORT).show();
         }
-        //check if GPS in enabled
-        if (deviceConnection.checkGpsEnabled()) {
-
-            Toast.makeText(getApplicationContext(), Constants.GPS_IS_ENABLED, Toast.LENGTH_SHORT).show();
-        }
-        else {
+        else if (! deviceConnection.checkGpsEnabled()){
             Log.i(LOG_TAG, "in OnCreate() GPS");
             showGPSDisabledAlertToUser();
             //Toast.makeText(getApplicationContext(), Constants.GPS_DISABLED, Toast.LENGTH_SHORT).show();
@@ -68,21 +65,15 @@ public class MainActivity extends Activity {
                         new DialogInterface.OnClickListener(){
                             public void onClick(DialogInterface dialog, int id){
                                 Intent callGPSSettingIntent = new Intent(
-                                        android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                                        android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);//open GPS Settings screen
                                 startActivity(callGPSSettingIntent);
                             }
                         });
-        alertDialogBuilder.setNegativeButton(Constants.CANCEL_BUTTON,
-                new DialogInterface.OnClickListener(){
-                    public void onClick(DialogInterface dialog, int id){
-                        dialog.cancel();
-                    }
-                });
         AlertDialog alert = alertDialogBuilder.create();
         alert.show();
     }
 
-    private void showInternetDisabledAlertToUser(){
+    private void showInternetDisabledAlertToUser(boolean cancelDialog){
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setMessage(Constants.INTERNET_IS_DISABLED)
                 .setCancelable(false)
@@ -90,18 +81,17 @@ public class MainActivity extends Activity {
                         new DialogInterface.OnClickListener(){
                             public void onClick(DialogInterface dialog, int id){
                                 Intent callSettingIntent = new Intent(
-                                        Settings.ACTION_SETTINGS);
+                                        Settings.ACTION_SETTINGS); //open Settings screen
                                 startActivity(callSettingIntent);
                             }
                         });
-        alertDialogBuilder.setNegativeButton(Constants.CANCEL_BUTTON,
-                new DialogInterface.OnClickListener(){
-                    public void onClick(DialogInterface dialog, int id){
-                        dialog.cancel();
-                    }
-                });
         AlertDialog alert = alertDialogBuilder.create();
+
         alert.show();
+
+        if (cancelDialog) {
+            alert.cancel();
+        }
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -115,14 +105,20 @@ public class MainActivity extends Activity {
         super.onResume();
         if (countResume == 0) {
             countResume+=1;
+            Log.i(LOG_TAG, "in OnResume() in countResume=0 branch");
         }
         else {
         DeviceConnection deviceConnection = new DeviceConnection(getApplicationContext());
         if (!deviceConnection.checkInternetConnection()) {
-            Log.i(LOG_TAG, "in OnResume()");
-            showInternetDisabledAlertToUser();
+            Log.i(LOG_TAG, "in OnResume() on Internet branch.");
+            showInternetDisabledAlertToUser(false);
             //Toast.makeText(getApplicationContext(), Constants.NO_INTERNET_CONNECTION, Toast.LENGTH_SHORT).show();
         }
+
+        else if (!deviceConnection.checkGpsEnabled()) {
+                Log.i(LOG_TAG, "in OnResume() on GPS branch.");
+                showGPSDisabledAlertToUser();
+            }
         }
     }
 
@@ -136,6 +132,18 @@ public class MainActivity extends Activity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public static class NetworkChangeReceiver extends BroadcastReceiver {
+        public NetworkChangeReceiver() {
+        super();
+        }
+        @Override
+        public void onReceive(Context context, Intent intent) {
+        MainActivity mainActivity = new MainActivity();
+        mainActivity.showInternetDisabledAlertToUser(true);
+        Log.i(LOG_TAG,"Network state changed!");
+        }
     }
 
     /**
