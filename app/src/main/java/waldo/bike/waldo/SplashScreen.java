@@ -34,7 +34,7 @@ public class SplashScreen extends Activity{
             finish();
             }
         }, Constants.SPLASH_TIME_OUT);*/
-        mContext = getApplicationContext();
+        mContext = getApplicationContext(); //needed to start the Main Activity
     }
 
     @Override
@@ -66,7 +66,6 @@ public class SplashScreen extends Activity{
     @Override
     protected void onStart() {
         super.onStart();
-        Log.i(LOG_TAG,"In onStart()");
     }
 
     private void showInternetDisabledAlertToUser(){
