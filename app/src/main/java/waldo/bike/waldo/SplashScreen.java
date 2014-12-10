@@ -122,7 +122,7 @@ public class SplashScreen extends Activity{
 
     public static void startMainActivity(Context c) {
         Intent MainActivityIntent = new Intent(c,MainActivity.class);
-        MainActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        MainActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); //without this flag, the main activity can't start
         c.startActivity(MainActivityIntent);
     }
 }
