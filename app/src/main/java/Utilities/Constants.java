@@ -14,4 +14,6 @@ public class Constants {
     public static final String INTERNET_IS_DISABLED = "Internet connection in required.";
     public static final String ENABLE_INTERNET = "Click to turn on mobile data.";
     public static final int    SPLASH_TIME_OUT = 3000;
+    public static final String PREVIOUS_STATE_CONNECTED="CONNECTED";
+    public static final String PREVIOUS_STATE_DISCONNECTED="DISCONNECTED";
 }

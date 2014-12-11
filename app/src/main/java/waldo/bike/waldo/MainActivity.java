@@ -32,6 +32,7 @@ public class MainActivity extends Activity {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private static Context mContext;
     private static boolean firstLoad = true;
+    private static String previousNetworkState = "CONNECTED"; //main activity only loads if there's Internet connection, so it's safe to assign this value
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,13 +84,18 @@ public class MainActivity extends Activity {
         @Override
         public void onReceive(Context context, Intent intent) {
             DeviceConnection deviceConnection = new DeviceConnection(context);
+            Log.i(LOG_TAG,"Intent is " + intent.getAction());
             if (!firstLoad) { //if this is the first load of the Activity, we need to ignore network changes
+                Log.i(LOG_TAG, "Previous network state: " + previousNetworkState);
                 Log.i(LOG_TAG, "Main Activity: Network state changed!");
-                if (deviceConnection.checkInternetConnected() && (!deviceConnection.checkWifiDataToggle())) {
+                //we don't display the message if the user turns on wifi when data connection is turned on or viceversa
+                if (deviceConnection.checkInternetConnected() && (!previousNetworkState.equals("CONNECTED"))) {
                     Toast.makeText(context, "Reconnected!", Toast.LENGTH_SHORT).show();
+                    previousNetworkState = Constants.PREVIOUS_STATE_CONNECTED;
                 }
                 if (deviceConnection.checkInternetDisConnected() && !(deviceConnection.checkInternetConnected() || deviceConnection.checkInternetConnecting())) {
                     Toast.makeText(context, "Lost Internet Connection!", Toast.LENGTH_SHORT).show();
+                    previousNetworkState = Constants.PREVIOUS_STATE_DISCONNECTED;
                 }
             }
             firstLoad = false;
