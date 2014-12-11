@@ -92,7 +92,17 @@ public class DeviceConnection implements
             return false;
         }
     }
-
+    //checking to see if Mobile Data is enabled and the user enables Wi-Fi in the same time
+    //if Wi-Fi is enabling and Mobile Data is CONNECTED OR DISCONNECTING
+    public boolean checkWifiDataToggle() {
+        WifiManager wifiManager = (WifiManager)mContext.getSystemService(mContext.WIFI_SERVICE);
+        ConnectivityManager connect = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connect.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        if (wifiManager.getWifiState() == WifiManager.WIFI_STATE_ENABLED && ( (networkInfo.getState() == NetworkInfo.State.CONNECTED) || (networkInfo.getState() == NetworkInfo.State.DISCONNECTING))) {
+            return true;
+        }
+        return false;
+    }
     private boolean servicesConnected() {
         // Check that Google Play services is available
         int resultCode =

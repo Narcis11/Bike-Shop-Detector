@@ -85,7 +85,7 @@ public class MainActivity extends Activity {
             DeviceConnection deviceConnection = new DeviceConnection(context);
             if (!firstLoad) { //if this is the first load of the Activity, we need to ignore network changes
                 Log.i(LOG_TAG, "Main Activity: Network state changed!");
-                if (deviceConnection.checkInternetConnected()) {
+                if (deviceConnection.checkInternetConnected() && (!deviceConnection.checkWifiDataToggle())) {
                     Toast.makeText(context, "Reconnected!", Toast.LENGTH_SHORT).show();
                 }
                 if (deviceConnection.checkInternetDisConnected() && !(deviceConnection.checkInternetConnected() || deviceConnection.checkInternetConnecting())) {
@@ -94,6 +94,8 @@ public class MainActivity extends Activity {
             }
             firstLoad = false;
         }
+
+
     }
     /**
      * A placeholder fragment containing a simple view.
