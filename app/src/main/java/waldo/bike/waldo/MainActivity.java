@@ -31,7 +31,7 @@ public class MainActivity extends Activity {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private static Context mContext;
-    private static boolean isInternetConnected = false;
+    private static boolean firstLoad = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,14 +83,16 @@ public class MainActivity extends Activity {
         @Override
         public void onReceive(Context context, Intent intent) {
             DeviceConnection deviceConnection = new DeviceConnection(context);
-            Log.i(LOG_TAG,"Main Activity: Network state changed!");
+            if (!firstLoad) { //if this is the first load of the Activity, we need to ignore network changes
+                Log.i(LOG_TAG, "Main Activity: Network state changed!");
                 if (deviceConnection.checkInternetConnected()) {
                     Toast.makeText(context, "Reconnected!", Toast.LENGTH_SHORT).show();
                 }
-            if (deviceConnection.checkInternetDisConnected() && !(deviceConnection.checkInternetConnected() || deviceConnection.checkInternetConnecting())) {
-                Toast.makeText(context, "Lost Internet Connection!", Toast.LENGTH_SHORT).show();
+                if (deviceConnection.checkInternetDisConnected() && !(deviceConnection.checkInternetConnected() || deviceConnection.checkInternetConnecting())) {
+                    Toast.makeText(context, "Lost Internet Connection!", Toast.LENGTH_SHORT).show();
+                }
             }
-
+            firstLoad = false;
         }
     }
     /**
