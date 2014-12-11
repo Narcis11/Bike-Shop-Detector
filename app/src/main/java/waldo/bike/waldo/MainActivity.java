@@ -21,6 +21,8 @@ import android.view.ViewGroup;
 import android.os.Build;
 import android.widget.Toast;
 
+import java.util.zip.CheckedOutputStream;
+
 import Utilities.Constants;
 import Utilities.DeviceConnection;
 
@@ -28,6 +30,8 @@ import Utilities.DeviceConnection;
 public class MainActivity extends Activity {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
+    private static Context mContext;
+    private static boolean isInternetConnected = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +46,7 @@ public class MainActivity extends Activity {
         actionBar.setIcon(R.drawable.waldo_action_bar);
         actionBar.setTitle("");
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFFFFF")));
+        mContext = getApplicationContext();
     }
 
 
@@ -70,7 +75,24 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    public static class MainNetworkReceiver extends BroadcastReceiver {
+        public MainNetworkReceiver() {
 
+            super();
+        }
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            DeviceConnection deviceConnection = new DeviceConnection(context);
+            Log.i(LOG_TAG,"Main Activity: Network state changed!");
+                if (deviceConnection.checkInternetConnected()) {
+                    Toast.makeText(context, "Reconnected!", Toast.LENGTH_SHORT).show();
+                }
+            if (deviceConnection.checkInternetDisConnected() && !(deviceConnection.checkInternetConnected() || deviceConnection.checkInternetConnecting())) {
+                Toast.makeText(context, "Lost Internet Connection!", Toast.LENGTH_SHORT).show();
+            }
+
+        }
+    }
     /**
      * A placeholder fragment containing a simple view.
      */

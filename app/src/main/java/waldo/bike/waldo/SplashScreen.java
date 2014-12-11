@@ -50,7 +50,7 @@ public class SplashScreen extends Activity{
             isGPSEnabled = true;
         }
 
-        if (!deviceConnection.checkInternetConnection()){
+        if (!deviceConnection.checkInternetConnected()){
             Log.i(LOG_TAG, "in OnResume() Internet");
             showInternetDisabledAlertToUser();
         }
@@ -112,7 +112,6 @@ public class SplashScreen extends Activity{
             if ((staticDialog != null) && staticDialog.isShowing()) {
                 staticDialog.cancel();
             }
-            Log.i(LOG_TAG,"Splash Screen: Network state changed!");
             if (isGPSEnabled) {
                 startMainActivity(mContext);
             }
