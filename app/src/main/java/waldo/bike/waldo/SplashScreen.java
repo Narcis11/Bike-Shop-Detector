@@ -70,9 +70,9 @@ public class SplashScreen extends Activity{
 
     private void showInternetDisabledAlertToUser(){
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage(Constants.INTERNET_IS_DISABLED)
+        alertDialogBuilder.setMessage(R.string.internet_is_disabled)
                 .setCancelable(false)
-                .setPositiveButton(Constants.ENABLE_INTERNET,
+                .setPositiveButton(R.string.enable_internet,
                         new DialogInterface.OnClickListener(){
                             public void onClick(DialogInterface dialog, int id){
                                 Intent callSettingIntent = new Intent(
@@ -88,9 +88,9 @@ public class SplashScreen extends Activity{
 
     private void showGPSDisabledAlertToUser(){
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage(Constants.GPS_IS_DISABLED)
+        alertDialogBuilder.setMessage(R.string.gps_is_disabled)
                 .setCancelable(false)
-                .setPositiveButton(Constants.ENABLE_GPS,
+                .setPositiveButton(R.string.enable_gps,
                         new DialogInterface.OnClickListener(){
                             public void onClick(DialogInterface dialog, int id){
                                 Intent callGPSSettingIntent = new Intent(
