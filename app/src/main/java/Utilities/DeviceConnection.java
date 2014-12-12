@@ -21,9 +21,7 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
  * Created by Narcis11 on 07.12.2014.
  * This class is used to get the location and location updates of the user and check the internet connection status.
  */
-public class DeviceConnection implements
-        GooglePlayServicesClient.ConnectionCallbacks,
-        GooglePlayServicesClient.OnConnectionFailedListener {
+public class DeviceConnection {
 
     private final Context mContext;
     private static final String LOG_TAG = DeviceConnection.class.getSimpleName();
@@ -92,38 +90,6 @@ public class DeviceConnection implements
             return false;
         }
     }
-    private boolean servicesConnected() {
-        // Check that Google Play services is available
-        int resultCode =
-                GooglePlayServicesUtil.
-                        isGooglePlayServicesAvailable(mContext);
-        // If Google Play services is available
-        if (ConnectionResult.SUCCESS == resultCode) {
-            // In debug mode, log the status
-            Log.i(LOG_TAG,
-                    "Google Play services is available.");
-            // Continue
-            return true;
-            // Google Play services was not available for some reason.
-            // resultCode holds the error code.
-        } else {
-            return false;
-        }
-    }
 
 
-    @Override
-    public void onConnected(Bundle bundle) {
-        Toast.makeText(mContext,Constants.LOCATION_RECEIVED,Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onDisconnected() {
-        Toast.makeText(mContext,Constants.LOCATION_LOST,Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-
-    }
 }
