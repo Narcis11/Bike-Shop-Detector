@@ -80,7 +80,7 @@ public class DeviceConnection {
         }
         return false;
     }
-
+	//check if GPS connection is turned on
     public boolean checkGpsEnabled() {
         LocationManager locationManager = (LocationManager) mContext.getSystemService(mContext.LOCATION_SERVICE);
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
