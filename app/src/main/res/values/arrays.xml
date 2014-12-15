@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array
+        name="range_values_array">
+        <item>@string/range_array_1</item>
+        <item>@string/range_array_2</item>
+        <item>@string/range_array_3</item>
+        <item>@string/range_array_4</item>
+        <item>@string/range_array_5</item>
+    </string-array>
+
+    <string-array
+        name="unit_values_array">
+        <item>@string/unit_array_metric</item>
+        <item>@string/unit_array_imperial</item>
+    </string-array>
+</resources>
