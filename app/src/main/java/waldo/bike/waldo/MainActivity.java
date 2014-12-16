@@ -8,6 +8,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.GpsStatus;
@@ -21,6 +22,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,7 +55,7 @@ public class MainActivity extends Activity implements
     private static String previousNetworkState = "CONNECTED"; //main activity only loads if there's Internet connection, so it's safe to assign this value
     private TextView mLocationView;
     private GoogleApiClient mGoogleApiClient;
-
+    private boolean orientationChanged = false;
     private LocationRequest mLocationRequest;
 
     @Override
@@ -87,12 +90,14 @@ public class MainActivity extends Activity implements
     protected void onStart() {
         super.onStart();
         mGoogleApiClient.connect();
+        Log.i(LOG_TAG,"In onStart()");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         mGoogleApiClient.disconnect();
+        Log.i(LOG_TAG,"In onStop()");
     }
 
     @Override
@@ -112,7 +117,13 @@ public class MainActivity extends Activity implements
         }
     }
 
-    @Override
+             @Override
+             public void onConfigurationChanged(Configuration newConfig) {
+                 super.onConfigurationChanged(newConfig);
+                 Log.i(LOG_TAG,"Orientation changed");
+             }
+
+             @Override
     public void onBackPressed() {
         super.onBackPressed();
         this.finish();
@@ -203,7 +214,19 @@ public class MainActivity extends Activity implements
                     "Magazinul cu bomboane - 2,3 km - 20 min"
             };
             List<String> shopList = new ArrayList<String>(Arrays.asList(shops));
+            // The ArrayAdapter takes data from a source and
+            // populates the ListView it's attached to.
+            ArrayAdapter<String> shopsAdapter = new ArrayAdapter<String>(
+              getActivity(),
+              R.layout.list_item_shops,
+              R.id.list_item_shops_textview,
+              shopList
+            );
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+            // Get a reference to the ListView, and attach this adapter to it.
+            ListView listView = (ListView) rootView.findViewById(R.id.listview_shops);
+            listView.setAdapter(shopsAdapter);
+
             return rootView;
         }
     }
