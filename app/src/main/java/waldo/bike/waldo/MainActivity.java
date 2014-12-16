@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.location.GpsStatus;
 import android.location.Location;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -29,6 +30,9 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.zip.CheckedOutputStream;
 
 import Utilities.Constants;
@@ -38,7 +42,8 @@ import Utilities.DeviceConnection;
 public class MainActivity extends Activity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener {
+        LocationListener
+         {
 
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
@@ -46,7 +51,6 @@ public class MainActivity extends Activity implements
     private static boolean firstLoad = true;
     private static String previousNetworkState = "CONNECTED"; //main activity only loads if there's Internet connection, so it's safe to assign this value
     private TextView mLocationView;
-
     private GoogleApiClient mGoogleApiClient;
 
     private LocationRequest mLocationRequest;
@@ -101,6 +105,11 @@ public class MainActivity extends Activity implements
     @Override
     protected void onResume() {
         super.onResume();
+        DeviceConnection deviceConnection = new DeviceConnection(mContext);
+        //checking if the user has disabled GPS
+        if (!deviceConnection.checkGpsEnabled()) {
+            Log.i(LOG_TAG,"GPS not enabled!");
+        }
     }
 
     @Override
@@ -122,6 +131,7 @@ public class MainActivity extends Activity implements
         }
         return super.onOptionsItemSelected(item);
     }
+    //listener to the GPS status (on/off)
 
     public static class MainNetworkReceiver extends BroadcastReceiver {
         public MainNetworkReceiver() {
@@ -150,13 +160,12 @@ public class MainActivity extends Activity implements
     //required methods for managing the location
     @Override
     public void onLocationChanged(Location location) {
-        mLocationView.setText("Location received: " + location.toString());
+        //mLocationView.setText("Location received: " + location.toString());
         Log.i(LOG_TAG,"Location is " + location.toString());
     }
 
     @Override
     public void onConnected(Bundle bundle) {
-        Log.i(LOG_TAG,"Connected to GPS");
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setInterval(1000); // Update location every second
@@ -185,6 +194,15 @@ public class MainActivity extends Activity implements
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
+            //adding some dummy data for the moment
+            String[] shops = {
+                    "Bike Nature - 0,7 km - 5 min",
+                    "Veloteca - 1 km - 7 min",
+                    "Moș Ion Roată - 1,4 km - 10 min",
+                    "Magazinul nr 3. - 1,8 km -  15 min",
+                    "Magazinul cu bomboane - 2,3 km - 20 min"
+            };
+            List<String> shopList = new ArrayList<String>(Arrays.asList(shops));
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
             return rootView;
         }
