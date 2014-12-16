@@ -3,6 +3,7 @@ package Utilities;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.view.Display;
 
 import waldo.bike.waldo.R;
 
@@ -29,4 +30,6 @@ public class Utility {
         return prefs.getBoolean(displayNotificationsKey,
                Boolean.parseBoolean(context.getString(R.string.pref_enable_notifications_default)));
     }
+
+
 }

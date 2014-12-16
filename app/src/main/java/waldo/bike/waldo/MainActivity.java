@@ -16,6 +16,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -57,6 +58,7 @@ public class MainActivity extends Activity implements
     private GoogleApiClient mGoogleApiClient;
     private boolean orientationChanged = false;
     private LocationRequest mLocationRequest;
+    private int previousOrientation = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +85,7 @@ public class MainActivity extends Activity implements
                 .build();
 
         mContext = getApplicationContext();
+        previousOrientation = getScreenOrientation();
     }
 
 
@@ -90,13 +93,22 @@ public class MainActivity extends Activity implements
     protected void onStart() {
         super.onStart();
         mGoogleApiClient.connect();
-        Log.i(LOG_TAG,"In onStart()");
+        Log.i(LOG_TAG, "In onStart()");
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        previousOrientation = 4; //random value
+    }
+
+             @Override
     protected void onStop() {
         super.onStop();
-        mGoogleApiClient.disconnect();
+        if (previousOrientation  == 4 ) {
+            mGoogleApiClient.disconnect();
+            Log.i(LOG_TAG,"GPS api disconnected");
+        }
         Log.i(LOG_TAG,"In onStop()");
     }
 
@@ -142,7 +154,12 @@ public class MainActivity extends Activity implements
         }
         return super.onOptionsItemSelected(item);
     }
-    //listener to the GPS status (on/off)
+
+    public int getScreenOrientation()
+    {   //landscape = 2; portrait = 1;
+        int orientation = getResources().getConfiguration().orientation;
+        return orientation;
+    }
 
     public static class MainNetworkReceiver extends BroadcastReceiver {
         public MainNetworkReceiver() {
@@ -172,7 +189,7 @@ public class MainActivity extends Activity implements
     @Override
     public void onLocationChanged(Location location) {
         //mLocationView.setText("Location received: " + location.toString());
-        Log.i(LOG_TAG,"Location is " + location.toString());
+        Log.i(LOG_TAG, "Location is " + location.toString());
     }
 
     @Override
