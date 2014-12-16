@@ -99,7 +99,9 @@ public class MainActivity extends Activity implements
     @Override
     protected void onPause() {
         super.onPause();
-        previousOrientation = 4; //random value
+        //random value used to prevent the GPS from disconnecting
+        //at every orientation change (onPause() is called before onStop())
+        previousOrientation = 4;
     }
 
              @Override
@@ -124,18 +126,12 @@ public class MainActivity extends Activity implements
         super.onResume();
         DeviceConnection deviceConnection = new DeviceConnection(mContext);
         //checking if the user has disabled GPS
-        if (!deviceConnection.checkGpsEnabled()) {
+            if (!deviceConnection.checkGpsEnabled()) {
             Log.i(LOG_TAG,"GPS not enabled!");
         }
     }
 
-             @Override
-             public void onConfigurationChanged(Configuration newConfig) {
-                 super.onConfigurationChanged(newConfig);
-                 Log.i(LOG_TAG,"Orientation changed");
-             }
-
-             @Override
+    @Override
     public void onBackPressed() {
         super.onBackPressed();
         this.finish();
@@ -148,6 +144,7 @@ public class MainActivity extends Activity implements
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
+            //start the settings activity
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
             return true;
