@@ -53,12 +53,13 @@ public class MainActivity extends Activity implements
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private static Context mContext;
     private static boolean firstLoad = true;
+    private static boolean firstLoadForGPS = true;
     private static String previousNetworkState = "CONNECTED"; //main activity only loads if there's Internet connection, so it's safe to assign this value
     private TextView mLocationView;
     private GoogleApiClient mGoogleApiClient;
     private boolean orientationChanged = false;
     private LocationRequest mLocationRequest;
-    private int previousOrientation = 0;
+    private static int previousOrientation = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,15 +86,18 @@ public class MainActivity extends Activity implements
                 .build();
 
         mContext = getApplicationContext();
-        previousOrientation = getScreenOrientation();
+        if (firstLoadForGPS) {
+            previousOrientation = getScreenOrientation();
+        }
     }
 
 
     @Override
     protected void onStart() {
         super.onStart();
-        mGoogleApiClient.connect();
-        Log.i(LOG_TAG, "In onStart()");
+        if (previousOrientation  != 4 ) {
+            mGoogleApiClient.connect();
+        }
     }
 
     @Override
@@ -102,16 +106,15 @@ public class MainActivity extends Activity implements
         //random value used to prevent the GPS from disconnecting
         //at every orientation change (onPause() is called before onStop())
         previousOrientation = 4;
+        firstLoadForGPS = false;
     }
 
              @Override
     protected void onStop() {
         super.onStop();
-        if (previousOrientation  == 4 ) {
+        if (previousOrientation != 4 ) {
             mGoogleApiClient.disconnect();
-            Log.i(LOG_TAG,"GPS api disconnected");
         }
-        Log.i(LOG_TAG,"In onStop()");
     }
 
     @Override
@@ -211,11 +214,10 @@ public class MainActivity extends Activity implements
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment {
+    public static class PlaceholderFragment extends Fragment  {
 
         public PlaceholderFragment() {
         }
-
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
