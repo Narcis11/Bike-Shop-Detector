@@ -39,8 +39,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.zip.CheckedOutputStream;
 
+import Places.FetchGooglePlaces;
 import Utilities.Constants;
 import Utilities.DeviceConnection;
+import Utilities.Utility;
 
 
 public class MainActivity extends Activity implements
@@ -60,7 +62,7 @@ public class MainActivity extends Activity implements
     private boolean orientationChanged = false;
     private LocationRequest mLocationRequest;
     private static int previousOrientation = 0;
-
+    private static String[] mLatLng = new String[2];
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -152,6 +154,12 @@ public class MainActivity extends Activity implements
             startActivity(intent);
             return true;
         }
+
+        if (id == R.id.action_refresh) {
+            FetchGooglePlaces fetchGooglePlaces = new FetchGooglePlaces(mContext);
+            fetchGooglePlaces.execute(mLatLng);
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -189,7 +197,11 @@ public class MainActivity extends Activity implements
     @Override
     public void onLocationChanged(Location location) {
         //mLocationView.setText("Location received: " + location.toString());
-        Log.i(LOG_TAG, "Location is " + location.toString());
+
+        mLatLng = Utility.getLatLng(location.toString());
+        /*Log.i(LOG_TAG,"Latitude is " + mLatLng[0]);
+        Log.i(LOG_TAG,"Longitude is " + mLatLng[1]);
+        Log.i(LOG_TAG, "Location is " + location.toString());*/
     }
 
     @Override
