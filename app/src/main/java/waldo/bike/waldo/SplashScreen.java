@@ -1,11 +1,14 @@
 package waldo.bike.waldo;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
@@ -35,6 +38,11 @@ public class SplashScreen extends Activity{
             }
         }, Constants.SPLASH_TIME_OUT);*/
         mContext = getApplicationContext(); //needed to start the Main Activity
+        //instantiante the action bar
+        ActionBar actionBar = getActionBar();
+        actionBar.setIcon(R.drawable.waldo_action_bar);
+        actionBar.setTitle("");
+        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFFFFF")));
     }
 
     @Override
