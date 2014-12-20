@@ -38,7 +38,7 @@ public class Utility {
         final String threeKilometers = "3 km";
         final String fourKilometers = "4 km";
         final String fiveKilometers = "5 km";
-
+        final String tenKilometers = "10 km";
         switch (range) {
             case oneKilometer: {
                 return "1000";
@@ -54,6 +54,9 @@ public class Utility {
             }
             case fiveKilometers:{
                 return "5000";
+            }
+            case tenKilometers:{
+                return "10000";
             }
             default: return "10000";
 

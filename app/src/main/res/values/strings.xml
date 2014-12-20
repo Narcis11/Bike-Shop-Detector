@@ -34,6 +34,7 @@
     <string name="range_array_3">3 km</string>
     <string name="range_array_4">4 km</string>
     <string name="range_array_5">5 km</string>
+    <string name="range_array_10">10 km</string>
 
     <!--Values for the Settings/Unit array-->
     <string name="unit_array_metric">Metric</string>
