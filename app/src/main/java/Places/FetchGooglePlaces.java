@@ -1,6 +1,5 @@
 package Places;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -16,23 +15,18 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Vector;
 
 import Utilities.Constants;
 import Utilities.Utility;
 
 /**
- * Created by Narcis11 on 18.12.2014.
- * Used for retrieving the desired places using Google's API
- * Example URI:
- * https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=44.437919,26.127671&radius=3000&key=AIzaSyDfiTJ2PvK6eOjpm62eV6FlmX3HcInona0&types=bicycle_store
+ * Created by Narcis11 on 20.12.2014.
  */
 public class FetchGooglePlaces extends AsyncTask<String, Void, String[]> {
     private final Context mContext;
     private final String LOG_TAG = FetchGooglePlaces.class.getSimpleName();
     public FetchGooglePlaces (Context context) {
-        mContext = context;
-
+            mContext = context;
     }
 
     @Override
@@ -64,7 +58,7 @@ public class FetchGooglePlaces extends AsyncTask<String, Void, String[]> {
                     .appendQueryParameter(QUERY_KEY,key)
                     .appendQueryParameter(QUERY_TYPES,types)
                     .build();
-            Log.i(LOG_TAG,"Uri is: " + builtUri.toString());
+            Log.i(LOG_TAG, "Uri is: " + builtUri.toString());
 
             URL url = new URL(builtUri.toString());
 
@@ -92,7 +86,7 @@ public class FetchGooglePlaces extends AsyncTask<String, Void, String[]> {
                 return null;
             }
             placesJsonStr = buffer.toString();
-         //   Log.i(LOG_TAG,"Response is: " + placesJsonStr);
+            //   Log.i(LOG_TAG,"Response is: " + placesJsonStr);
         }
         catch(IOException e) {
             Log.e(LOG_TAG, "Error in fetching places: " + e);
@@ -195,5 +189,9 @@ public class FetchGooglePlaces extends AsyncTask<String, Void, String[]> {
         finally {
             return null;//fetch failed, nothing to return;
         }
+    }
+
+    @Override
+    protected void onPostExecute(String[] result) {
     }
 }

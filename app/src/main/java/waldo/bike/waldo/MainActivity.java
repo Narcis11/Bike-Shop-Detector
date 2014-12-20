@@ -54,24 +54,27 @@ public class MainActivity extends Activity implements
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private static Context mContext;
+    //state variables, used to control application behaviour
     private static boolean firstLoad = true;
     private static boolean firstLoadForGPS = true;
     private static String previousNetworkState = "CONNECTED"; //main activity only loads if there's Internet connection, so it's safe to assign this value
+    private boolean orientationChanged = false;
+    private static int previousOrientation = 0;
+    private static Bundle newSavedInstance;
+    private static boolean firstGPSConnection = true;
+
     private TextView mLocationView;
     private GoogleApiClient mGoogleApiClient;
-    private boolean orientationChanged = false;
     private LocationRequest mLocationRequest;
-    private static int previousOrientation = 0;
+
     private static String[] mLatLng = new String[2];
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        newSavedInstance = savedInstanceState;
         setContentView(R.layout.activity_main);
-        if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.container, new ShopsFragment())
-                    .commit();
-        }
+
         //instantiante the action bar
         ActionBar actionBar = getActionBar();
         actionBar.setIcon(R.drawable.waldo_action_bar);
@@ -160,6 +163,7 @@ public class MainActivity extends Activity implements
             fetchGooglePlaces.execute(mLatLng);
             return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -197,11 +201,15 @@ public class MainActivity extends Activity implements
     @Override
     public void onLocationChanged(Location location) {
         //mLocationView.setText("Location received: " + location.toString());
-
+        ShopsFragment shopsFragment = (ShopsFragment) getFragmentManager().findFragmentById(R.id.listview_shops);
+       if (firstGPSConnection) { //only display the fragment if it's not already in the main activity
+            getFragmentManager().beginTransaction()
+                    .add(R.id.container, new ShopsFragment())
+                    .commit();
+           Log.i(LOG_TAG,"Fragment created!");
+        }
         mLatLng = Utility.getLatLng(location.toString());
-        /*Log.i(LOG_TAG,"Latitude is " + mLatLng[0]);
-        Log.i(LOG_TAG,"Longitude is " + mLatLng[1]);
-        Log.i(LOG_TAG, "Location is " + location.toString());*/
+        firstGPSConnection = false;
     }
 
     @Override
