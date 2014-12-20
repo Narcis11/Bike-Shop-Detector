@@ -60,21 +60,29 @@ public class MainActivity extends Activity implements
     private static String previousNetworkState = "CONNECTED"; //main activity only loads if there's Internet connection, so it's safe to assign this value
     private boolean orientationChanged = false;
     private static int previousOrientation = 0;
-    private static Bundle newSavedInstance;
-    private static boolean firstGPSConnection = true;
+    private static boolean firstGPSConnection = true; //used to control fragment behaviour in onLocationChanged()
+    private static boolean isGPSConnected = false;//used to control fragment behaviour in onResume()
+    private static boolean onDestroyCalled = false;
 
+    private static String fragmentTag = "ShopsFragment";
     private TextView mLocationView;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
-
+    //used to store the user's coordinates
     private static String[] mLatLng = new String[2];
 
-    @Override
+             @Override
+             protected void onDestroy() {
+                 super.onDestroy();
+                 onDestroyCalled = true;
+                 Log.i(LOG_TAG,"in onDestroy()");
+             }
+
+             @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        newSavedInstance = savedInstanceState;
         setContentView(R.layout.activity_main);
-
+        Log.i(LOG_TAG,"in onCreate()");
         //instantiante the action bar
         ActionBar actionBar = getActionBar();
         actionBar.setIcon(R.drawable.waldo_action_bar);
@@ -89,8 +97,8 @@ public class MainActivity extends Activity implements
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .build();
-
         mContext = getApplicationContext();
+        onDestroyCalled = false;
         if (firstLoadForGPS) {
             previousOrientation = getScreenOrientation();
         }
@@ -100,14 +108,18 @@ public class MainActivity extends Activity implements
     @Override
     protected void onStart() {
         super.onStart();
+        Log.i(LOG_TAG,"in onStart()");
         if (previousOrientation  != 4 ) {
             mGoogleApiClient.connect();
         }
+
+
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        Log.i(LOG_TAG,"in onPause");
         //random value used to prevent the GPS from disconnecting
         //at every orientation change (onPause() is called before onStop())
         previousOrientation = 4;
@@ -132,11 +144,22 @@ public class MainActivity extends Activity implements
     @Override
     protected void onResume() {
         super.onResume();
+        Log.i(LOG_TAG,"in onResume()");
         DeviceConnection deviceConnection = new DeviceConnection(mContext);
         //checking if the user has disabled GPS
             if (!deviceConnection.checkGpsEnabled()) {
             Log.i(LOG_TAG,"GPS not enabled!");
         }
+        ShopsFragment shopsFragment = (ShopsFragment) getFragmentManager().findFragmentByTag(fragmentTag);
+        if (isGPSConnected && shopsFragment == null) { //only display the fragment if it's not already visible and the GPS is connected
+        //    getFragmentManager().beginTransaction().remove(shopsFragment).commit();
+            getFragmentManager().beginTransaction()
+                    .add(R.id.container, new ShopsFragment(),fragmentTag)
+                    .commit();
+            Log.i(LOG_TAG,"Fragment created in onResume");
+        }
+
+
     }
 
     @Override
@@ -201,12 +224,12 @@ public class MainActivity extends Activity implements
     @Override
     public void onLocationChanged(Location location) {
         //mLocationView.setText("Location received: " + location.toString());
-        ShopsFragment shopsFragment = (ShopsFragment) getFragmentManager().findFragmentById(R.id.listview_shops);
-       if (firstGPSConnection) { //only display the fragment if it's not already in the main activity
+
+       if (firstGPSConnection) { //only display the fragment if it's the first GPS connection
             getFragmentManager().beginTransaction()
-                    .add(R.id.container, new ShopsFragment())
+                    .add(R.id.container, new ShopsFragment(),fragmentTag)
                     .commit();
-           Log.i(LOG_TAG,"Fragment created!");
+           Log.i(LOG_TAG,"Fragment created in onLocationChanged");
         }
         mLatLng = Utility.getLatLng(location.toString());
         firstGPSConnection = false;
@@ -217,7 +240,7 @@ public class MainActivity extends Activity implements
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setInterval(1000); // Update location every second
-
+        isGPSConnected = true;
         LocationServices.FusedLocationApi.requestLocationUpdates(
                 mGoogleApiClient, mLocationRequest, this);
     }
