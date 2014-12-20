@@ -42,6 +42,7 @@ import java.util.zip.CheckedOutputStream;
 import Places.FetchGooglePlaces;
 import Utilities.Constants;
 import Utilities.DeviceConnection;
+import Utilities.GlobalState;
 import Utilities.Utility;
 
 
@@ -80,12 +81,18 @@ public class MainActivity extends Activity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+         if (savedInstanceState == null) {
+                 getFragmentManager().beginTransaction()
+                      .add(R.id.container, new ShopsFragment(),fragmentTag)
+                      .commit();
+         }
         Log.i(LOG_TAG,"in onCreate()");
         //instantiante the action bar
         ActionBar actionBar = getActionBar();
         actionBar.setIcon(R.drawable.waldo_action_bar);
         actionBar.setTitle("");
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFFFFF")));
+
         mLocationView = new TextView(this);
 
        // setContentView(mLocationView); CRASHES BECAUSE OF THIS LINE
@@ -148,13 +155,13 @@ public class MainActivity extends Activity implements
             Log.i(LOG_TAG,"GPS not enabled!");
         }
         ShopsFragment shopsFragment = (ShopsFragment) getFragmentManager().findFragmentByTag(fragmentTag);
-        if (isGPSConnected && shopsFragment == null) { //only display the fragment if it's not already visible and the GPS is connected
+/*        if (isGPSConnected && shopsFragment == null) { //only display the fragment if it's not already visible and the GPS is connected
         //    getFragmentManager().beginTransaction().remove(shopsFragment).commit();
             getFragmentManager().beginTransaction()
                     .add(R.id.container, new ShopsFragment(),fragmentTag)
                     .commit();
             Log.i(LOG_TAG,"Fragment created in onResume");
-        }
+        }*/
 
 
     }
@@ -175,12 +182,6 @@ public class MainActivity extends Activity implements
             //start the settings activity
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
-            return true;
-        }
-
-        if (id == R.id.action_refresh) {
-            FetchGooglePlaces fetchGooglePlaces = new FetchGooglePlaces(mContext);
-            fetchGooglePlaces.execute(mLatLng);
             return true;
         }
 
@@ -221,15 +222,24 @@ public class MainActivity extends Activity implements
     @Override
     public void onLocationChanged(Location location) {
         //mLocationView.setText("Location received: " + location.toString());
-
-       if (firstGPSConnection) { //only display the fragment if it's the first GPS connection
-            getFragmentManager().beginTransaction()
+       // Log.i(LOG_TAG,"Location is " + location.toString());
+      //  Log.i(LOG_TAG,"firstGPSConnection is " + firstGPSConnection);
+ /*      if (firstGPSConnection) { //only display the fragment if it's the first GPS connection
+           getFragmentManager().beginTransaction()
                     .add(R.id.container, new ShopsFragment(),fragmentTag)
-                    .commit();
+                    .commit(); //TO BE REMOVED
            Log.i(LOG_TAG,"Fragment created in onLocationChanged");
+           mLatLng = Utility.getLatLng(location.toString());
+           GlobalState.latitude = mLatLng[0];
+           GlobalState.longitude = mLatLng[1];
+        }*/
+        if (firstGPSConnection) {
+            mLatLng = Utility.getLatLngFromLocation(location.toString());
+            GlobalState.latitude = mLatLng[0];
+            GlobalState.longitude = mLatLng[1];
+            Log.i(LOG_TAG,"Lat/lng in onLocationChanged - " + mLatLng[0] + "/" + mLatLng[1]);
         }
-        mLatLng = Utility.getLatLng(location.toString());
-        firstGPSConnection = false;
+            firstGPSConnection = false;
     }
 
     @Override

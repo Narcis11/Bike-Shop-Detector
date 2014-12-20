@@ -7,6 +7,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +29,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import Places.FetchGooglePlaces;
 import Utilities.Constants;
+import Utilities.GlobalState;
 import Utilities.Utility;
 
 /**
@@ -39,17 +43,28 @@ public class ShopsFragment extends Fragment{
     private static final String LOG_TAG = ShopsFragment.class.getSimpleName();
     public ShopsFragment() {
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         //adding some dummy data for the moment
+        Log.i(LOG_TAG,"Lat/Lng in fragment = " + GlobalState.latitude + "/" + GlobalState.longitude);
         mShopsAdapter =
                 new ArrayAdapter<String>(
-                  getActivity(),
-                  R.layout.list_item_shops,
-                  R.id.list_item_shops_textview,
-                  new ArrayList<String>()
+                        getActivity(),
+                        R.layout.list_item_shops,
+                        R.id.list_item_shops_textview,
+                        new ArrayList<String>()
                 );
+
+        Log.i(LOG_TAG,"Size of mShopsAdapter = " + mShopsAdapter.getCount());
+        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        // Get a reference to the ListView, and attach this adapter to it.
+        ListView listView = (ListView) rootView.findViewById(R.id.listview_shops);
+        listView.setAdapter(mShopsAdapter);
+
+        return rootView;
+        /*
         String[] shops = {
                 "Bike Nature - 0,7 km - 5 min",
                 "Veloteca - 1 km - 7 min",
@@ -66,15 +81,52 @@ public class ShopsFragment extends Fragment{
                 R.id.list_item_shops_textview,
                 shopList
         );
+*/
 
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        // Get a reference to the ListView, and attach this adapter to it.
-        ListView listView = (ListView) rootView.findViewById(R.id.listview_shops);
-        listView.setAdapter(shopsAdapter);
-
-        return rootView;
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.shopsfragment,menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_refresh) {
+            updateShopList();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+       // updateShopList();
+    }
+
+
+
+
+    private void updateShopList() {
+        String[] coordinates = new String[2];
+        coordinates[0] = GlobalState.latitude;
+        coordinates[1] = GlobalState.longitude;
+        Log.i(LOG_TAG,"Lat/lng in updateShopList - " + coordinates[0] + "/" + coordinates[1]);
+        new FetchGooglePlaces(getActivity(), mShopsAdapter).execute(coordinates);
+    }
 
 }
 

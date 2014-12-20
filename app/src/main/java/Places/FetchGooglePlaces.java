@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,8 +26,11 @@ import Utilities.Utility;
 public class FetchGooglePlaces extends AsyncTask<String, Void, String[]> {
     private final Context mContext;
     private final String LOG_TAG = FetchGooglePlaces.class.getSimpleName();
-    public FetchGooglePlaces (Context context) {
+    private ArrayAdapter<String> mShopsAdapter;
+
+    public FetchGooglePlaces (Context context, ArrayAdapter<String> shopsAdapter) {
             mContext = context;
+            mShopsAdapter = shopsAdapter;
     }
 
     @Override
@@ -108,6 +112,7 @@ public class FetchGooglePlaces extends AsyncTask<String, Void, String[]> {
             return getPlaceDataFromJson(placesJsonStr);
         }
         catch(JSONException e) {
+            Log.i(LOG_TAG,"return failed in doInBackground");
             Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
         }
@@ -187,11 +192,26 @@ public class FetchGooglePlaces extends AsyncTask<String, Void, String[]> {
             e.printStackTrace();
         }
         finally {
-            return null;//fetch failed, nothing to return;
+
+           // return null;//fetch failed, nothing to return;
         }
+        Log.i(LOG_TAG,"Returned null from getPlaceDataFromJson.");
+        return null;
     }
 
     @Override
     protected void onPostExecute(String[] result) {
+        super.onPostExecute(result);
+        if (result != null) {
+            Log.i(LOG_TAG,"result != null in onPostExecute()");
+            mShopsAdapter.clear();
+            for (String placeDetailsString : result) {
+                //we can't add nulls to the Adapter, otherwise it will issue a NullPointerException
+                    mShopsAdapter.add(placeDetailsString);
+            }
+            //Warning for later changes: if you use addAll() instead of this loop, you'll probably get a NullPointerException
+            //if the result contains nulls. The for loop ignores the null values.
+
+        }
     }
 }

@@ -63,7 +63,7 @@ public class Utility {
         }
     }
 
-    public static String[] getLatLng (String location) {
+    public static String[] getLatLngFromLocation (String location) {
         String[] latLng = new String[2];
         String latitudeReference = "mLatitude=";
         String longitudeReference = "mLongitude=";
