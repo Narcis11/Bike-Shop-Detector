@@ -69,7 +69,7 @@ public class MainActivity extends Activity implements
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
+                    .add(R.id.container, new ShopsFragment())
                     .commit();
         }
         //instantiante the action bar
@@ -226,36 +226,5 @@ public class MainActivity extends Activity implements
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment  {
 
-        public PlaceholderFragment() {
-        }
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            //adding some dummy data for the moment
-            String[] shops = {
-                    "Bike Nature - 0,7 km - 5 min",
-                    "Veloteca - 1 km - 7 min",
-                    "Moș Ion Roată - 1,4 km - 10 min",
-                    "Magazinul nr 3. - 1,8 km -  15 min",
-                    "Magazinul cu bomboane - 2,3 km - 20 min"
-            };
-            List<String> shopList = new ArrayList<String>(Arrays.asList(shops));
-            // The ArrayAdapter takes data from a source and
-            // populates the ListView it's attached to.
-            ArrayAdapter<String> shopsAdapter = new ArrayAdapter<String>(
-              getActivity(),
-              R.layout.list_item_shops,
-              R.id.list_item_shops_textview,
-              shopList
-            );
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            // Get a reference to the ListView, and attach this adapter to it.
-            ListView listView = (ListView) rootView.findViewById(R.id.listview_shops);
-            listView.setAdapter(shopsAdapter);
-
-            return rootView;
-        }
-    }
 }
