@@ -207,10 +207,12 @@ public class FetchGooglePlaces extends AsyncTask<String, Void, String[]> {
             mShopsAdapter.clear();
             for (String placeDetailsString : result) {
                 //we can't add nulls to the Adapter, otherwise it will issue a NullPointerException
+                if (placeDetailsString != null) {
                     mShopsAdapter.add(placeDetailsString);
+                }
             }
             //Warning for later changes: if you use addAll() instead of this loop, you'll probably get a NullPointerException
-            //if the result contains nulls. The for loop ignores the null values.
+            //if the result contains nulls. You must always check for nulls when passing data to the adapter.
 
         }
     }

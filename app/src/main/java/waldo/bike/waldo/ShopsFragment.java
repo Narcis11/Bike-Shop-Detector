@@ -48,6 +48,7 @@ public class ShopsFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         //adding some dummy data for the moment
+        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         Log.i(LOG_TAG,"Lat/Lng in fragment = " + GlobalState.latitude + "/" + GlobalState.longitude);
         mShopsAdapter =
                 new ArrayAdapter<String>(
@@ -58,7 +59,7 @@ public class ShopsFragment extends Fragment{
                 );
 
         Log.i(LOG_TAG,"Size of mShopsAdapter = " + mShopsAdapter.getCount());
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+
         // Get a reference to the ListView, and attach this adapter to it.
         ListView listView = (ListView) rootView.findViewById(R.id.listview_shops);
         listView.setAdapter(mShopsAdapter);
