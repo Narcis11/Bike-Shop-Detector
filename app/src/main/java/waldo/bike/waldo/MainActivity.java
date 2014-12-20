@@ -62,7 +62,6 @@ public class MainActivity extends Activity implements
     private static int previousOrientation = 0;
     private static boolean firstGPSConnection = true; //used to control fragment behaviour in onLocationChanged()
     private static boolean isGPSConnected = false;//used to control fragment behaviour in onResume()
-    private static boolean onDestroyCalled = false;
 
     private static String fragmentTag = "ShopsFragment";
     private TextView mLocationView;
@@ -74,7 +73,6 @@ public class MainActivity extends Activity implements
              @Override
              protected void onDestroy() {
                  super.onDestroy();
-                 onDestroyCalled = true;
                  Log.i(LOG_TAG,"in onDestroy()");
              }
 
@@ -98,7 +96,6 @@ public class MainActivity extends Activity implements
                 .addOnConnectionFailedListener(this)
                 .build();
         mContext = getApplicationContext();
-        onDestroyCalled = false;
         if (firstLoadForGPS) {
             previousOrientation = getScreenOrientation();
         }
