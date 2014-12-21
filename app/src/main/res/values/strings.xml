@@ -47,4 +47,10 @@
     <string name="pref_enable_notifications_true">Enabled</string>
     <string name="pref_enable_notifications_false">Disabled</string>
     <string name="pref_enable_notifications_default" translatable="false">true</string>
+
+    <!--Names of slider menu options-->
+    <string name="add_a_shop">Add a shop</string>
+    <string name="view_all_shops">View all shops</string>
+    <!-- Content Description -->
+    <string name="desc_list_item_icon">Item Icon</string>
 </resources>
