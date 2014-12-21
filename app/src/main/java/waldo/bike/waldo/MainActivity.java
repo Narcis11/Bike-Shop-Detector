@@ -127,7 +127,7 @@ public class MainActivity extends Activity implements
                 .build();
         mContext = getApplicationContext();
         if (firstLoadForGPS) {
-            previousOrientation = getScreenOrientation();
+            previousOrientation = Utility.getScreenOrientation(mContext);
         }
 
      //this piece of code is used for creating the slider menu
@@ -266,14 +266,24 @@ public class MainActivity extends Activity implements
             return true;
         }
 
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
-    public int getScreenOrientation()
-    {   //landscape = 2; portrait = 1;
-        int orientation = getResources().getConfiguration().orientation;
-        return orientation;
-    }
+             /***
+              * Called when invalidateOptionsMenu() is triggered
+              */
+             @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+         // if nav drawer is opened, hide the action items
+         boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
+         menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
+         return super.onPrepareOptionsMenu(menu);
+             }
+
 
     public static class MainNetworkReceiver extends BroadcastReceiver {
         public MainNetworkReceiver() {

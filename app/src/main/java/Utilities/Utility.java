@@ -72,4 +72,10 @@ public class Utility {
         latLng[1] = location.substring(location.indexOf(longitudeReference) + longitudeReference.length(), location.indexOf(altitudeReference) - 1);
         return latLng;
     }
+
+    public static int getScreenOrientation(Context context)
+    {   //landscape = 2; portrait = 1;
+        int orientation = context.getResources().getConfiguration().orientation;
+        return orientation;
+    }
 }
