@@ -26,6 +26,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -182,12 +183,14 @@ public class MainActivity extends Activity implements
                      }
                  };
                  mDrawerLayout.setDrawerListener(mDrawerToggle);
+                 mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
 
            /*      if (savedInstanceState == null) {
                      // on first time display view for first nav item
                      displayView(0);
                  }*/
     }
+
 
 
     @Override
@@ -273,41 +276,7 @@ public class MainActivity extends Activity implements
         return super.onOptionsItemSelected(item);
     }
 
-             /***
-              * Called when invalidateOptionsMenu() is triggered
-              */
-             @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-         // if nav drawer is opened, hide the action items
-         boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
-         menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
-         return super.onPrepareOptionsMenu(menu);
-             }
 
-    @Override
-    public void setTitle(CharSequence title) {
-         mTitle = title;
-         getActionBar().setTitle(mTitle);
-             }
-
-    /**
-    * When using the ActionBarDrawerToggle, you must call it during
-    * onPostCreate() and onConfigurationChanged()...
-    */
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-         super.onPostCreate(savedInstanceState);
-         // Sync the toggle state after onRestoreInstanceState has occurred.
-         mDrawerToggle.syncState();
-             }
-
-    @Override
-         public void onConfigurationChanged(Configuration newConfig) {
-         super.onConfigurationChanged(newConfig);
-         // Pass any configuration change to the drawer toggls
-         mDrawerToggle.onConfigurationChanged(newConfig);
-             }
 
     public static class MainNetworkReceiver extends BroadcastReceiver {
         public MainNetworkReceiver() {
@@ -377,7 +346,62 @@ public class MainActivity extends Activity implements
         Log.i(LOG_TAG, "GoogleApiClient connection has failed");
     }
     /**
-     * A placeholder fragment containing a simple view.
+     * These methods are used for the Slider Menu
      */
 
+             /***
+              * Called when invalidateOptionsMenu() is triggered
+              */
+             @Override
+             public boolean onPrepareOptionsMenu(Menu menu) {
+                 // if nav drawer is opened, hide the action items
+                 boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
+                 menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
+                 return super.onPrepareOptionsMenu(menu);
+             }
+
+             @Override
+             public void setTitle(CharSequence title) {
+                 mTitle = title;
+                 getActionBar().setTitle(mTitle);
+             }
+
+             /**
+              * When using the ActionBarDrawerToggle, you must call it during
+              * onPostCreate() and onConfigurationChanged()...
+              */
+
+             @Override
+             protected void onPostCreate(Bundle savedInstanceState) {
+                 super.onPostCreate(savedInstanceState);
+                 // Sync the toggle state after onRestoreInstanceState has occurred.
+                 mDrawerToggle.syncState();
+             }
+
+             @Override
+             public void onConfigurationChanged(Configuration newConfig) {
+                 super.onConfigurationChanged(newConfig);
+                 // Pass any configuration change to the drawer toggls
+                 mDrawerToggle.onConfigurationChanged(newConfig);
+             }
+
+    private class SlideMenuClickListener implements
+            ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position,
+                                long id) {
+            // display view for selected nav drawer item
+            Log.i(LOG_TAG,"Button pressed at position " + position);
+            if (position == 1) {
+                openMap();
+
+
+            }
+        }
+    }
+
+    public void openMap() {
+        Intent intent = new Intent(this, MapsActivity.class);
+        startActivity(intent);
+    }
 }
