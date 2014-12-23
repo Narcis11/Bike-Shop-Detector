@@ -47,7 +47,7 @@ public class ShopsFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        //adding some dummy data for the moment
+
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         Log.i(LOG_TAG,"Lat/Lng in fragment = " + GlobalState.latitude + "/" + GlobalState.longitude);
         mShopsAdapter =
@@ -89,7 +89,7 @@ public class ShopsFragment extends Fragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+        setHasOptionsMenu(true); //tells the system that we have button(s) in the menu
     }
 
     @Override
