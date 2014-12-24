@@ -396,8 +396,6 @@ public class MainActivity extends Activity implements
             Log.i(LOG_TAG,"Button pressed at position " + position);
             if (position == 1) {
                 openMap();
-
-
             }
         }
     }

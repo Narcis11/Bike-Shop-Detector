@@ -88,17 +88,25 @@ public class MapsActivity extends FragmentActivity {
             mMap.moveCamera(CameraUpdateFactory.newLatLng(shopLatLng));
             mMap.animateCamera(CameraUpdateFactory.zoomTo(Constants.USER_SHOP_ZOOM));//*; //zoom to the position
         }
-        //if there's no bundle, then the call is from the main activity (View all shops button)
-        String[] allShopsInfo = GlobalState.ALL_SHOPS_INFO.split(Constants.PIPE_SEPARATOR);
-        //ceva de genul "|HyperSport,44.481649,26.09269"
-        for (int i = 0; i < allShopsInfo.length; i ++) {
-            allShopsName = allShopsInfo[i].substring(allShopsInfo[i].indexOf(Constants.PIPE_SEPARATOR),allShopsInfo[i].indexOf(Constants.COMMA_SEPARATOR));
-            allShopsLat = allShopsInfo[i].substring(allShopsInfo[i].indexOf(Constants.COMMA_SEPARATOR), allShopsInfo[i].lastIndexOf(Constants.COMMA_SEPARATOR));
-            allShopsLng = allShopsInfo[i].substring(allShopsInfo[i].lastIndexOf(Constants.COMMA_SEPARATOR));
+        else {
+            //if there's no bundle, then the call is from the main activity (View all shops button)
+            Log.i(LOG_TAG, "GlobalState.ALL_SHOPS_INFO in maps activity: " + GlobalState.ALL_SHOPS_INFO);
+            if (GlobalState.ALL_SHOPS_INFO.length() > 0) {
+                String[] allShopsInfo = GlobalState.ALL_SHOPS_INFO.substring(1).split(Constants.HASH_SEPARATOR);
+                //ceva de genul "HyperSport,44.481649,26.09269|"
+                Log.i(LOG_TAG, "allShopsInfo[1] = " + allShopsInfo[1]);
+                Log.i(LOG_TAG, "allShopsInfo.length = " + allShopsInfo.length);
+                for (int i = 0; i < allShopsInfo.length; i++) {
+                    Log.i(LOG_TAG, "i is " + i);
+                    allShopsName = allShopsInfo[i].substring(0, allShopsInfo[i].indexOf(Constants.COMMA_SEPARATOR));
+                    allShopsLat = allShopsInfo[i].substring(allShopsInfo[i].indexOf(Constants.COMMA_SEPARATOR) + 1, allShopsInfo[i].lastIndexOf(Constants.COMMA_SEPARATOR));
+                    allShopsLng = allShopsInfo[i].substring(allShopsInfo[i].lastIndexOf(Constants.COMMA_SEPARATOR) + 1);
 
-            mMap.addMarker(new MarkerOptions().position(new LatLng(Double.valueOf(allShopsLat), Double.valueOf(allShopsLng))).title(allShopsName));
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(Double.valueOf(allShopsLat), Double.valueOf(allShopsLng))));
-            mMap.animateCamera(CameraUpdateFactory.zoomTo(Constants.CITY_ZOOM));
+                    mMap.addMarker(new MarkerOptions().position(new LatLng(Double.valueOf(allShopsLat), Double.valueOf(allShopsLng))).title(allShopsName));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(Double.valueOf(allShopsLat), Double.valueOf(allShopsLng))));
+                    mMap.animateCamera(CameraUpdateFactory.zoomTo(Constants.CITY_ZOOM));
+                }
+            }
         }
     }
 }

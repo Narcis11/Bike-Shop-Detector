@@ -45,7 +45,6 @@ public class FetchGooglePlaces extends AsyncTask<String, Void, String[]> {
         String placesJsonStr = "";//used for storing the response from the API call
         //used for querying the Google Places API
         final String types = "bicycle_store";
-        final String transferScheme = "https";
         final String key = Constants.API_KEY;
         final String latLng = params[0] + "," + params[1];
         final String output = "json";
@@ -183,9 +182,7 @@ public class FetchGooglePlaces extends AsyncTask<String, Void, String[]> {
 
                 resultStrs[i] = placeName + ", " + address + ", open? " + openNow + Constants.PIPE_SEPARATOR + latitude + Constants.SLASH_SEPARATOR + longitude;
                 Log.i(LOG_TAG,"Parsed result is: " + resultStrs[i]);
-                GlobalState.ALL_SHOPS_INFO +=  Constants.PIPE_SEPARATOR + placeName + Constants.COMMA_SEPARATOR + latitude + Constants.COMMA_SEPARATOR + longitude;
-                //ceva de genul "|HyperSport,44.481649,26.09269"
-                Log.i(LOG_TAG,"ALL_COORDINATES = " + GlobalState.ALL_SHOPS_INFO);
+                GlobalState.ALL_SHOPS_INFO += Constants.HASH_SEPARATOR + placeName + Constants.COMMA_SEPARATOR + latitude + Constants.COMMA_SEPARATOR + longitude;
             }
 
             return resultStrs;
