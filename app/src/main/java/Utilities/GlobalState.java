@@ -7,6 +7,6 @@ import android.app.Application;
  */
 public class GlobalState {
     public static String testString = "";
-    public static String latitude = "";
-    public static String longitude = "";
+    public static String USER_LAT = "";
+    public static String USER_LNG = "";
 }

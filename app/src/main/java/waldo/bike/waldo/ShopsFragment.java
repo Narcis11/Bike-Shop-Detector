@@ -2,6 +2,8 @@ package waldo.bike.waldo;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -28,6 +31,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import Places.FetchGooglePlaces;
 import Utilities.Constants;
@@ -41,6 +45,9 @@ public class ShopsFragment extends Fragment{
 
     public ArrayAdapter<String> mShopsAdapter;
     private static final String LOG_TAG = ShopsFragment.class.getSimpleName();
+    private String shopLatitude = "";
+    private String shopLongitude = "";
+    private String shopName = "";
     public ShopsFragment() {
     }
 
@@ -49,7 +56,7 @@ public class ShopsFragment extends Fragment{
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        Log.i(LOG_TAG,"Lat/Lng in fragment = " + GlobalState.latitude + "/" + GlobalState.longitude);
+        Log.i(LOG_TAG,"Lat/Lng in fragment = " + GlobalState.USER_LAT + "/" + GlobalState.USER_LNG);
         mShopsAdapter =
                 new ArrayAdapter<String>(
                         getActivity(),
@@ -64,6 +71,25 @@ public class ShopsFragment extends Fragment{
         ListView listView = (ListView) rootView.findViewById(R.id.listview_shops);
         listView.setAdapter(mShopsAdapter);
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                String placeDetails = mShopsAdapter.getItem(position);
+                String coordinates = placeDetails.substring(placeDetails.indexOf(Constants.COORDINATES_SEPARATOR) + 1);
+                shopLatitude = coordinates.substring(0, coordinates.indexOf(Constants.LAT_LNG_SEPARATOR));
+                shopLongitude = coordinates.substring(coordinates.indexOf(Constants.LAT_LNG_SEPARATOR) + 1);
+                shopName = placeDetails.substring(0,placeDetails.indexOf(Constants.API_RESULT_SEPARATOR));
+                Intent openMap = new Intent(getActivity().getApplicationContext(),MapsActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString(Constants.BUNDLE_SHOP_LAT,shopLatitude);
+                bundle.putString(Constants.BUNDLE_SHOP_LNG,shopLongitude);
+                bundle.putString(Constants.BUNDLE_SHOP_NAME,shopName);
+                openMap.putExtras(bundle);
+                startActivity(openMap);
+
+            }
+        });
         return rootView;
         /*
         String[] shops = {
@@ -115,16 +141,17 @@ public class ShopsFragment extends Fragment{
     @Override
     public void onStart() {
         super.onStart();
+        Log.i(LOG_TAG,"In fragment onStart()");
        // updateShopList();
     }
 
 
 
 
-    private void updateShopList() {
+    public void updateShopList() {
         String[] coordinates = new String[2];
-        coordinates[0] = GlobalState.latitude;
-        coordinates[1] = GlobalState.longitude;
+        coordinates[0] = GlobalState.USER_LAT;
+        coordinates[1] = GlobalState.USER_LNG;
         Log.i(LOG_TAG,"Lat/lng in updateShopList - " + coordinates[0] + "/" + coordinates[1]);
         new FetchGooglePlaces(getActivity(), mShopsAdapter).execute(coordinates);
     }

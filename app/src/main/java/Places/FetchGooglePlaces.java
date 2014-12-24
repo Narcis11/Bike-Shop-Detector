@@ -181,7 +181,7 @@ public class FetchGooglePlaces extends AsyncTask<String, Void, String[]> {
                 placeName = placeDetails.getString(API_NAME);
                 address = placeDetails.getString(API_ADDRESS);
 
-                resultStrs[i] = placeName + ", " + address + ", open? " + openNow;
+                resultStrs[i] = placeName + ", " + address + ", open? " + openNow + Constants.COORDINATES_SEPARATOR + latitude + Constants.LAT_LNG_SEPARATOR + longitude;
                 Log.i(LOG_TAG,"Parsed result is: " + resultStrs[i]);
             }
 

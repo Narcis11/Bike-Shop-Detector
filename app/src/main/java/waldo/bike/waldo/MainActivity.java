@@ -319,9 +319,11 @@ public class MainActivity extends Activity implements
         }*/
         if (firstGPSConnection) {
             mLatLng = Utility.getLatLngFromLocation(location.toString());
-            GlobalState.latitude = mLatLng[0];
-            GlobalState.longitude = mLatLng[1];
+            GlobalState.USER_LAT = mLatLng[0];
+            GlobalState.USER_LNG = mLatLng[1];
             Log.i(LOG_TAG,"Lat/lng in onLocationChanged - " + mLatLng[0] + "/" + mLatLng[1]);
+         //   ShopsFragment shopsFragment = new ShopsFragment();
+        //    shopsFragment.updateShopList();
         }
             firstGPSConnection = false;
     }
