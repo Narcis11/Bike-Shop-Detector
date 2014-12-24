@@ -76,10 +76,10 @@ public class ShopsFragment extends Fragment{
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 String placeDetails = mShopsAdapter.getItem(position);
-                String coordinates = placeDetails.substring(placeDetails.indexOf(Constants.COORDINATES_SEPARATOR) + 1);
-                shopLatitude = coordinates.substring(0, coordinates.indexOf(Constants.LAT_LNG_SEPARATOR));
-                shopLongitude = coordinates.substring(coordinates.indexOf(Constants.LAT_LNG_SEPARATOR) + 1);
-                shopName = placeDetails.substring(0,placeDetails.indexOf(Constants.API_RESULT_SEPARATOR));
+                String coordinates = placeDetails.substring(placeDetails.indexOf(Constants.PIPE_SEPARATOR) + 1);
+                shopLatitude = coordinates.substring(0, coordinates.indexOf(Constants.SLASH_SEPARATOR));
+                shopLongitude = coordinates.substring(coordinates.indexOf(Constants.SLASH_SEPARATOR) + 1);
+                shopName = placeDetails.substring(0,placeDetails.indexOf(Constants.COMMA_SEPARATOR));
                 Intent openMap = new Intent(getActivity().getApplicationContext(),MapsActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString(Constants.BUNDLE_SHOP_LAT,shopLatitude);
