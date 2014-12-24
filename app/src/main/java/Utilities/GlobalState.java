@@ -10,5 +10,5 @@ public class GlobalState {
     public static String USER_LAT = "";
     public static String USER_LNG = "";
     public static String FRAGMENT_CALL = "";
-
+    public static String ALL_SHOPS_INFO = "";
 }

@@ -18,6 +18,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import Utilities.Constants;
+import Utilities.GlobalState;
 import Utilities.Utility;
 
 /**
@@ -157,7 +158,6 @@ public class FetchGooglePlaces extends AsyncTask<String, Void, String[]> {
                 String latitude;
                 String longitude;
 
-
                 // placeDetails is the whole object representing a shop
                 JSONObject placeDetails = placesArray.getJSONObject(i);
                 JSONObject geometry = placeDetails.getJSONObject(API_GEOMETRY); //geometry object
@@ -181,8 +181,11 @@ public class FetchGooglePlaces extends AsyncTask<String, Void, String[]> {
                 placeName = placeDetails.getString(API_NAME);
                 address = placeDetails.getString(API_ADDRESS);
 
-                resultStrs[i] = placeName + ", " + address + ", open? " + openNow + Constants.COORDINATES_SEPARATOR + latitude + Constants.LAT_LNG_SEPARATOR + longitude;
+                resultStrs[i] = placeName + ", " + address + ", open? " + openNow + Constants.PIPE_SEPARATOR + latitude + Constants.SLASH_SEPARATOR + longitude;
                 Log.i(LOG_TAG,"Parsed result is: " + resultStrs[i]);
+                GlobalState.ALL_SHOPS_INFO +=  Constants.PIPE_SEPARATOR + placeName + Constants.COMMA_SEPARATOR + latitude + Constants.COMMA_SEPARATOR + longitude;
+                //ceva de genul "|HyperSport,44.481649,26.09269"
+                Log.i(LOG_TAG,"ALL_COORDINATES = " + GlobalState.ALL_SHOPS_INFO);
             }
 
             return resultStrs;

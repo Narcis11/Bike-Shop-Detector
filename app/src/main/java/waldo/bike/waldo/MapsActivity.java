@@ -68,6 +68,9 @@ public class MapsActivity extends FragmentActivity {
     private void setUpMap() {
         Bundle bundle = getIntent().getExtras();
         String fragmentCall = "";
+        String allShopsName = "";
+        String allShopsLat = "";
+        String allShopsLng = "";
 
         //(fragmentCall = bundle.getString(Constants.BUNDLE_FRAGMENT) ) != null && fragmentCall.equals(Constants.CALLED_FROM_FRAGMENT)
         if ( bundle != null && !bundle.isEmpty() ) {
@@ -84,6 +87,18 @@ public class MapsActivity extends FragmentActivity {
             mMap.addMarker(new MarkerOptions().position(userLatLng).title(Constants.USERS_NAME));
             mMap.moveCamera(CameraUpdateFactory.newLatLng(shopLatLng));
             mMap.animateCamera(CameraUpdateFactory.zoomTo(Constants.USER_SHOP_ZOOM));//*; //zoom to the position
+        }
+        //if there's no bundle, then the call is from the main activity (View all shops button)
+        String[] allShopsInfo = GlobalState.ALL_SHOPS_INFO.split(Constants.PIPE_SEPARATOR);
+        //ceva de genul "|HyperSport,44.481649,26.09269"
+        for (int i = 0; i < allShopsInfo.length; i ++) {
+            allShopsName = allShopsInfo[i].substring(allShopsInfo[i].indexOf(Constants.PIPE_SEPARATOR),allShopsInfo[i].indexOf(Constants.COMMA_SEPARATOR));
+            allShopsLat = allShopsInfo[i].substring(allShopsInfo[i].indexOf(Constants.COMMA_SEPARATOR), allShopsInfo[i].lastIndexOf(Constants.COMMA_SEPARATOR));
+            allShopsLng = allShopsInfo[i].substring(allShopsInfo[i].lastIndexOf(Constants.COMMA_SEPARATOR));
+
+            mMap.addMarker(new MarkerOptions().position(new LatLng(Double.valueOf(allShopsLat), Double.valueOf(allShopsLng))).title(allShopsName));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(Double.valueOf(allShopsLat), Double.valueOf(allShopsLng))));
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(Constants.CITY_ZOOM));
         }
     }
 }
