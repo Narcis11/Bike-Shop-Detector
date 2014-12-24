@@ -2,6 +2,7 @@ package waldo.bike.waldo;
 
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -15,6 +16,7 @@ import Utilities.GlobalState;
 public class MapsActivity extends FragmentActivity {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
+    private static final String LOG_TAG = MapsActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +70,8 @@ public class MapsActivity extends FragmentActivity {
         String fragmentCall = "";
 
         //(fragmentCall = bundle.getString(Constants.BUNDLE_FRAGMENT) ) != null && fragmentCall.equals(Constants.CALLED_FROM_FRAGMENT)
-        if ( bundle != null ) {
+        if ( bundle != null && !bundle.isEmpty() ) {
+            Log.i(LOG_TAG, "Preparing to extract bundles");
             Double shopLat = Double.valueOf(bundle.getString(Constants.BUNDLE_SHOP_LAT));
             Double shopLng = Double.valueOf(bundle.getString(Constants.BUNDLE_SHOP_LNG));
             Double userLat = Double.valueOf(GlobalState.USER_LAT);
