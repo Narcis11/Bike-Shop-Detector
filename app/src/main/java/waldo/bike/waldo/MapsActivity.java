@@ -10,6 +10,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import Utilities.Constants;
+import Utilities.GlobalState;
 
 public class MapsActivity extends FragmentActivity {
 
@@ -64,13 +65,22 @@ public class MapsActivity extends FragmentActivity {
      */
     private void setUpMap() {
         Bundle bundle = getIntent().getExtras();
-        Double shopLat = Double.valueOf(bundle.getString(Constants.BUNDLE_SHOP_LAT));
-        Double shopLng = Double.valueOf(bundle.getString(Constants.BUNDLE_SHOP_LNG));
-        String shopName = bundle.getString(Constants.BUNDLE_SHOP_NAME);
-        LatLng shopLatLng = new LatLng(shopLat,shopLng);
+        String fragmentCall = "";
 
-        mMap.addMarker(new MarkerOptions().position(shopLatLng).title(shopName));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(shopLatLng));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(Constants.DEFAULT_ZOOM));//*; //zoom to the position
+        //(fragmentCall = bundle.getString(Constants.BUNDLE_FRAGMENT) ) != null && fragmentCall.equals(Constants.CALLED_FROM_FRAGMENT)
+        if ( bundle != null ) {
+            Double shopLat = Double.valueOf(bundle.getString(Constants.BUNDLE_SHOP_LAT));
+            Double shopLng = Double.valueOf(bundle.getString(Constants.BUNDLE_SHOP_LNG));
+            Double userLat = Double.valueOf(GlobalState.USER_LAT);
+            Double userLng = Double.valueOf(GlobalState.USER_LNG);
+            String shopName = bundle.getString(Constants.BUNDLE_SHOP_NAME);
+            LatLng shopLatLng = new LatLng(shopLat, shopLng);
+            LatLng userLatLng = new LatLng(userLat, userLng);
+
+            mMap.addMarker(new MarkerOptions().position(shopLatLng).title(shopName));
+            mMap.addMarker(new MarkerOptions().position(userLatLng).title(Constants.USERS_NAME));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(shopLatLng));
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(Constants.USER_SHOP_ZOOM));//*; //zoom to the position
+        }
     }
 }

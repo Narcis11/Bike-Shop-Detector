@@ -85,9 +85,9 @@ public class ShopsFragment extends Fragment{
                 bundle.putString(Constants.BUNDLE_SHOP_LAT,shopLatitude);
                 bundle.putString(Constants.BUNDLE_SHOP_LNG,shopLongitude);
                 bundle.putString(Constants.BUNDLE_SHOP_NAME,shopName);
+                bundle.putString(Constants.BUNDLE_FRAGMENT,Constants.CALLED_FROM_FRAGMENT);
                 openMap.putExtras(bundle);
                 startActivity(openMap);
-
             }
         });
         return rootView;

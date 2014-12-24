@@ -404,6 +404,10 @@ public class MainActivity extends Activity implements
 
     public void openMap() {
         Intent intent = new Intent(this, MapsActivity.class);
+/*        Bundle bundle = new Bundle();
+        bundle.putString(Constants.BUNDLE_USER_LAT,GlobalState.USER_LAT);
+        bundle.putString(Constants.BUNDLE_USER_LNG,GlobalState.USER_LNG);
+        intent.putExtras(bundle);*/
         startActivity(intent);
     }
 }

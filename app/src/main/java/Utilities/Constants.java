@@ -13,8 +13,17 @@ public class Constants {
     public static final String LAT_LNG_SEPARATOR = "/";
     public static final String API_RESULT_SEPARATOR = ",";
     //keys used in bundle communication
-    public static final String BUNDLE_SHOP_LAT = "bundle_shop_lat";
-    public static final String BUNDLE_SHOP_LNG = "bundle_shop_lng";
-    public static final String BUNDLE_SHOP_NAME = "bundle_shop_name";
-    public static final float    DEFAULT_ZOOM = 19;
+    public static final String BUNDLE_SHOP_LAT = "bundle_shop_lat_key";
+    public static final String BUNDLE_SHOP_LNG = "bundle_shop_lng_key";
+    public static final String BUNDLE_SHOP_NAME = "bundle_shop_name_key";
+    public static final String BUNDLE_USER_LAT = "bundle_user_lat_key";
+    public static final String BUNDLE_USER_LNG = "bundle_user_lng_key";
+    public static final String BUNDLE_FRAGMENT = "fragment_key";
+    public static final String BUNDLE_ACTIVITY = "activity_key";
+    public static final String CALLED_FROM_FRAGMENT = "fragment_call";
+    public static final String CALLED_FROM_MAIN_ACTIVITY = "activity_call";
+    //used in the Maps Activity
+    public static final float  DEFAULT_ZOOM = 19;
+    public static final float  USER_SHOP_ZOOM = 13; //used when we have the shop's marker and the user's marker on the map
+    public static final String USERS_NAME = "Your location";
 }
