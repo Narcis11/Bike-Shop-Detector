@@ -16,7 +16,7 @@
     <string name="enable_gps">Click to activate GPS.</string>
     <string name="internet_is_disabled">Internet connection is required.</string>
     <string name="enable_internet">Click to turn on mobile data.</string>
-    <string name="data_not_fetched">Please wait until the information is retrieved</string>
+    <string name="data_not_fetched">No shops to display</string>
     <string name="api_zero_results">No bike shops in the selected range</string>
     <string name="api_error">Error occurred while retrieving shops</string>
     <!-- Formatting for Settings/Range preference -->

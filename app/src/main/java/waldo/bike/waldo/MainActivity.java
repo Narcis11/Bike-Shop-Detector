@@ -12,6 +12,8 @@ import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.GpsStatus;
 import android.location.Location;
 import android.os.Bundle;
@@ -38,9 +40,11 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.zip.CheckedOutputStream;
 
 import Places.FetchGooglePlaces;
@@ -322,6 +326,15 @@ public class MainActivity extends Activity implements
             GlobalState.USER_LAT = mLatLng[0];
             GlobalState.USER_LNG = mLatLng[1];
             Log.i(LOG_TAG,"Lat/lng in onLocationChanged - " + mLatLng[0] + "/" + mLatLng[1]);
+            //getting the user's city
+            try {
+                Geocoder geocoder = new Geocoder(mContext, Locale.getDefault());
+                List<Address> addresses = geocoder.getFromLocation(Double.valueOf(mLatLng[0]), Double.valueOf(mLatLng[1]), 1);
+                GlobalState.USERS_CITY = addresses.get(0).getLocality();//we need this to open correctly the map with all the shops
+            }
+            catch (IOException e) {
+                Log.e(LOG_TAG,"Exception in MainActivity! = " + e.getMessage());
+            }
          //   ShopsFragment shopsFragment = new ShopsFragment();
         //    shopsFragment.updateShopList();
         }

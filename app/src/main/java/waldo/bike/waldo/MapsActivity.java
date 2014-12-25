@@ -97,7 +97,7 @@ public class MapsActivity extends FragmentActivity {
                     allShopsLng = allShopsInfo[i].substring(allShopsInfo[i].lastIndexOf(Constants.DOLLAR_SEPARATOR) + 1);
 
                     mMap.addMarker(new MarkerOptions().position(new LatLng(Double.valueOf(allShopsLat), Double.valueOf(allShopsLng))).title(allShopsName));
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(Double.valueOf(allShopsLat), Double.valueOf(allShopsLng))));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(Double.valueOf(GlobalState.USER_LAT), Double.valueOf(GlobalState.USER_LNG))));
                     mMap.animateCamera(CameraUpdateFactory.zoomTo(Constants.CITY_ZOOM));
                 }
             GlobalState.ALL_SHOPS_INFO = "";

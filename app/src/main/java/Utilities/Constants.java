@@ -31,7 +31,7 @@ public class Constants {
     public static final String CALLED_FROM_MAIN_ACTIVITY = "activity_call";
 
     //used in the Maps Activity
-    public static final float  CITY_ZOOM = 12;
+    public static final float  CITY_ZOOM = 11;
     public static final float  SHOP_ZOOM = 18;
     public static final float  USER_SHOP_ZOOM = 13; //used when we have the shop's marker and the user's marker on the map
     public static final String USERS_NAME = "My location";
