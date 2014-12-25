@@ -94,14 +94,15 @@ public class MapsActivity extends FragmentActivity {
                 String[] allShopsInfo = GlobalState.ALL_SHOPS_INFO.substring(1).split(Constants.HASH_SEPARATOR);
                 //ceva de genul "HyperSport,44.481649,26.09269|"
                 for (int i = 0; i < allShopsInfo.length; i++) {
-                    allShopsName = allShopsInfo[i].substring(0, allShopsInfo[i].indexOf(Constants.COMMA_SEPARATOR));
-                    allShopsLat = allShopsInfo[i].substring(allShopsInfo[i].indexOf(Constants.COMMA_SEPARATOR) + 1, allShopsInfo[i].lastIndexOf(Constants.COMMA_SEPARATOR));
-                    allShopsLng = allShopsInfo[i].substring(allShopsInfo[i].lastIndexOf(Constants.COMMA_SEPARATOR) + 1);
+                    allShopsName = allShopsInfo[i].substring(0, allShopsInfo[i].indexOf(Constants.DOLLAR_SEPARATOR));
+                    allShopsLat = allShopsInfo[i].substring(allShopsInfo[i].indexOf(Constants.DOLLAR_SEPARATOR) + 1, allShopsInfo[i].lastIndexOf(Constants.DOLLAR_SEPARATOR));
+                    allShopsLng = allShopsInfo[i].substring(allShopsInfo[i].lastIndexOf(Constants.DOLLAR_SEPARATOR) + 1);
 
                     mMap.addMarker(new MarkerOptions().position(new LatLng(Double.valueOf(allShopsLat), Double.valueOf(allShopsLng))).title(allShopsName));
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(Double.valueOf(allShopsLat), Double.valueOf(allShopsLng))));
                     mMap.animateCamera(CameraUpdateFactory.zoomTo(Constants.CITY_ZOOM));
                 }
+            GlobalState.ALL_SHOPS_INFO = "";
         }
     }
 }

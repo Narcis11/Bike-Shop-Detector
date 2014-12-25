@@ -184,9 +184,9 @@ public class FetchGooglePlaces extends AsyncTask<String, Void, String[]> {
                 placeName = placeDetails.getString(API_NAME);
                 address = placeDetails.getString(API_ADDRESS);
 
-                resultStrs[i] = placeName + ", " + address + ", open? " + openNow + Constants.PIPE_SEPARATOR + latitude + Constants.SLASH_SEPARATOR + longitude;
+                resultStrs[i] = placeName + Constants.COMMA_SEPARATOR + " " + address + ", open? " + openNow + Constants.PIPE_SEPARATOR + latitude + Constants.SLASH_SEPARATOR + longitude;
                 Log.i(LOG_TAG, "Parsed result is: " + resultStrs[i]);
-                GlobalState.ALL_SHOPS_INFO += Constants.HASH_SEPARATOR + placeName + Constants.COMMA_SEPARATOR + latitude + Constants.COMMA_SEPARATOR + longitude;
+                GlobalState.ALL_SHOPS_INFO += Constants.HASH_SEPARATOR + placeName + Constants.DOLLAR_SEPARATOR + latitude + Constants.DOLLAR_SEPARATOR + longitude;
             }
                 return resultStrs;
             }
