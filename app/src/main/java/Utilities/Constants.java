@@ -4,9 +4,12 @@ package Utilities;
  * Created by Narcis11 on 07.12.2014.
  */
 public class Constants {
+
+    //statuses
     public static final String PREVIOUS_STATE_CONNECTED="CONNECTED";
     public static final String PREVIOUS_STATE_DISCONNECTED="DISCONNECTED";
-    public static final String API_KEY="AIzaSyA2rM5Kq8ch0L-N0nALu9xx7O4GYgtMjow";
+    public static final String OK_STATUS = "OK";
+    public static final String ZERO_RESULTS = "ZERO_RESULTS";
     public static final String NOT_AVAILABLE="NOT AVAILABLE";
 
     //separators of the result string from the API call
@@ -30,4 +33,5 @@ public class Constants {
     public static final float  CITY_ZOOM = 12;
     public static final float  USER_SHOP_ZOOM = 13; //used when we have the shop's marker and the user's marker on the map
     public static final String USERS_NAME = "My location";
+    public static final String API_KEY="AIzaSyA2rM5Kq8ch0L-N0nALu9xx7O4GYgtMjow";
 }

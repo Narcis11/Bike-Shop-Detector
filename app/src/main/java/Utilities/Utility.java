@@ -33,36 +33,43 @@ public class Utility {
     //used for determining the radius used in the Nearby Search. Returns 10.000 if no range is selected
     public static String formatPreferredRange(Context context) {
         String range = getPreferredRange(context);
+        // we can't use getResources().getString(), because the switch statement requires constant expressions
         final String oneKilometer = "1 km";
         final String twoKilometers = "2 km";
         final String threeKilometers = "3 km";
         final String fourKilometers = "4 km";
         final String fiveKilometers = "5 km";
         final String tenKilometers = "10 km";
+        final String returnOneKm = "1000";
+        final String returnTwoKm = "2000";
+        final String returnThreeKm = "3000";
+        final String returnFourKm = "4000";
+        final String returnFiveKm = "5000";
+        final String returnTenKm = "10000";
         switch (range) {
             case oneKilometer: {
-                return "1000";
+                return returnOneKm;
             }
             case twoKilometers: {
-                return "2000";
+                return returnTwoKm;
             }
             case threeKilometers: {
-                return "3000";
+                return returnThreeKm;
             }
             case fourKilometers:{
-                return "4000";
+                return returnFourKm;
             }
             case fiveKilometers:{
-                return "5000";
+                return returnFiveKm;
             }
             case tenKilometers:{
-                return "10000";
+                return returnTenKm;
             }
-            default: return "10000";
+            default: return returnTenKm;
 
         }
     }
-
+    //this method parses the location String ang extracts the latitude and longitude
     public static String[] getLatLngFromLocation (String location) {
         String[] latLng = new String[2];
         String latitudeReference = "mLatitude=";

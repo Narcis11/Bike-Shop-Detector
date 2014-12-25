@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,6 +21,7 @@ import java.net.URL;
 import Utilities.Constants;
 import Utilities.GlobalState;
 import Utilities.Utility;
+import waldo.bike.waldo.R;
 
 /**
  * Created by Narcis11 on 20.12.2014.
@@ -145,9 +147,12 @@ public class FetchGooglePlaces extends AsyncTask<String, Void, String[]> {
 
         try {
             JSONObject placesJson = new JSONObject(placeJsonStr);
+            GlobalState.FETCH_STATUS = placesJson.getString(API_STATUS);
+            Log.i(LOG_TAG,"Status is " + GlobalState.FETCH_STATUS);
+            if ( GlobalState.FETCH_STATUS.equals(Constants.OK_STATUS)) { //we only parse of the result is OK
             JSONArray placesArray = placesJson.getJSONArray(API_RESULT); //root node
 
-            String[] resultStrs = new String[50];//we assume that we'll never get more than 50 results.
+            String[] resultStrs = new String[100];//we assume that we'll never get more than 100 results.
             for (int i = 0; i < placesArray.length(); i++) {
                 // These are the values that will be collected.
                 String id;
@@ -163,15 +168,14 @@ public class FetchGooglePlaces extends AsyncTask<String, Void, String[]> {
                 JSONObject location = geometry.getJSONObject(API_LOCATION); //location object
                 latitude = location.getString(API_COORD_LAT);
                 longitude = location.getString(API_COORD_LONG);
-                Log.i(LOG_TAG,"Lat/Lng = " + latitude + "/" + longitude);
+                Log.i(LOG_TAG, "Lat/Lng = " + latitude + "/" + longitude);
                 //getting info from opening_hours
                 try {
                     //some shops don't have opening hours, that's why we put this request into a try/catch
                     JSONObject openingHours = placeDetails.getJSONObject(API_OPENING_HOURS);
                     openNow = openingHours.getString(API_OPEN_NOW);
-                }
-                catch(JSONException e) {
-                    Log.e(LOG_TAG,"Opening_Hours - Caught JSON Exception: " + e.getMessage());
+                } catch (JSONException e) {
+                    Log.e(LOG_TAG, "Opening Hours JSON Exception: " + e.getMessage());
                 }
 
 
@@ -181,11 +185,14 @@ public class FetchGooglePlaces extends AsyncTask<String, Void, String[]> {
                 address = placeDetails.getString(API_ADDRESS);
 
                 resultStrs[i] = placeName + ", " + address + ", open? " + openNow + Constants.PIPE_SEPARATOR + latitude + Constants.SLASH_SEPARATOR + longitude;
-                Log.i(LOG_TAG,"Parsed result is: " + resultStrs[i]);
+                Log.i(LOG_TAG, "Parsed result is: " + resultStrs[i]);
                 GlobalState.ALL_SHOPS_INFO += Constants.HASH_SEPARATOR + placeName + Constants.COMMA_SEPARATOR + latitude + Constants.COMMA_SEPARATOR + longitude;
             }
+                return resultStrs;
+            }
 
-            return resultStrs;
+        return  null; //result is NOT OK, so we return null and handle the error in onPostExecute();
+
         }
         catch(JSONException e) {
             Log.e(LOG_TAG,"Caught JSON Exception: " + e.getMessage());
@@ -213,7 +220,13 @@ public class FetchGooglePlaces extends AsyncTask<String, Void, String[]> {
             }
             //Warning for later changes: if you use addAll() instead of this loop, you'll probably get a NullPointerException
             //if the result contains nulls. You must always check for nulls when passing data to the adapter.
+        }
 
+        else if (GlobalState.FETCH_STATUS.equals(Constants.ZERO_RESULTS)) {
+            Toast.makeText(mContext, R.string.api_zero_results, Toast.LENGTH_SHORT).show();
+        }
+        else {
+            Toast.makeText(mContext, R.string.api_error, Toast.LENGTH_SHORT).show();
         }
     }
 }
