@@ -91,7 +91,6 @@ public class MapsActivity extends FragmentActivity {
         else {
             //if there's no bundle, then the call is from the main activity (View all shops button)
             Log.i(LOG_TAG, "GlobalState.ALL_SHOPS_INFO in maps activity: " + GlobalState.ALL_SHOPS_INFO);
-            if (GlobalState.ALL_SHOPS_INFO.length() > 0) {
                 String[] allShopsInfo = GlobalState.ALL_SHOPS_INFO.substring(1).split(Constants.HASH_SEPARATOR);
                 //ceva de genul "HyperSport,44.481649,26.09269|"
                 Log.i(LOG_TAG, "allShopsInfo[1] = " + allShopsInfo[1]);
@@ -106,7 +105,6 @@ public class MapsActivity extends FragmentActivity {
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(Double.valueOf(allShopsLat), Double.valueOf(allShopsLng))));
                     mMap.animateCamera(CameraUpdateFactory.zoomTo(Constants.CITY_ZOOM));
                 }
-            }
         }
     }
 }
