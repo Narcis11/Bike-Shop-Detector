@@ -30,6 +30,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -50,13 +51,13 @@ public class ShopsFragment extends Fragment{
     private String shopName = "";
     public ShopsFragment() {
     }
-
+    //TODO: Sort the list depending on the distance of the user to the shop
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        Log.i(LOG_TAG,"Lat/Lng in fragment = " + GlobalState.USER_LAT + "/" + GlobalState.USER_LNG);
+        Log.i(LOG_TAG,"User's Lat/Lng in fragment = " + GlobalState.USER_LAT + "/" + GlobalState.USER_LNG);
         mShopsAdapter =
                 new ArrayAdapter<String>(
                         getActivity(),
@@ -64,7 +65,6 @@ public class ShopsFragment extends Fragment{
                         R.id.list_item_shops_textview,
                         new ArrayList<String>()
                 );
-
         Log.i(LOG_TAG,"Size of mShopsAdapter = " + mShopsAdapter.getCount());
 
         // Get a reference to the ListView, and attach this adapter to it.

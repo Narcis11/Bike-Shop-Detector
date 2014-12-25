@@ -35,7 +35,7 @@ public class FetchGooglePlaces extends AsyncTask<String, Void, String[]> {
             mContext = context;
             mShopsAdapter = shopsAdapter;
     }
-
+    //TODO: initiate a Google Directions API call to retrieve the distance between the user and each shop
     @Override
     protected String[] doInBackground(String... params) {
         if (params.length == 0) {
@@ -149,7 +149,7 @@ public class FetchGooglePlaces extends AsyncTask<String, Void, String[]> {
             JSONObject placesJson = new JSONObject(placeJsonStr);
             GlobalState.FETCH_STATUS = placesJson.getString(API_STATUS);
             Log.i(LOG_TAG,"Status is " + GlobalState.FETCH_STATUS);
-            if ( GlobalState.FETCH_STATUS.equals(Constants.OK_STATUS)) { //we only parse of the result is OK
+            if ( GlobalState.FETCH_STATUS.equals(Constants.OK_STATUS)) { //we only parse if the result is OK
             JSONArray placesArray = placesJson.getJSONArray(API_RESULT); //root node
 
             String[] resultStrs = new String[100];//we assume that we'll never get more than 100 results.
