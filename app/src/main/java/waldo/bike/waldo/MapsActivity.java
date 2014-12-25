@@ -81,12 +81,10 @@ public class MapsActivity extends FragmentActivity {
             Double userLng = Double.valueOf(GlobalState.USER_LNG);
             String shopName = bundle.getString(Constants.BUNDLE_SHOP_NAME);
             LatLng shopLatLng = new LatLng(shopLat, shopLng);
-            LatLng userLatLng = new LatLng(userLat, userLng);
 
             mMap.addMarker(new MarkerOptions().position(shopLatLng).title(shopName));
-            mMap.addMarker(new MarkerOptions().position(userLatLng).title(Constants.USERS_NAME));
             mMap.moveCamera(CameraUpdateFactory.newLatLng(shopLatLng));
-            mMap.animateCamera(CameraUpdateFactory.zoomTo(Constants.USER_SHOP_ZOOM));//*; //zoom to the position
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(Constants.SHOP_ZOOM));//*; //zoom to the position
         }
         else {
             //if there's no bundle, then the call is from the main activity (View all shops button)
