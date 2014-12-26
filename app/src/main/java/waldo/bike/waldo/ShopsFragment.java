@@ -38,6 +38,7 @@ import Places.FetchGooglePlaces;
 import Utilities.Constants;
 import Utilities.GlobalState;
 import Utilities.Utility;
+import sync.SyncAdapter;
 
 /**
  * Created by Narcis11 on 20.12.2014.
@@ -128,7 +129,8 @@ public class ShopsFragment extends Fragment{
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_refresh) {
-            updateShopList();
+            //updateShopList();
+            SyncAdapter.syncImmediately(getActivity());
             return true;
         }
         return super.onOptionsItemSelected(item);
