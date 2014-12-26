@@ -59,6 +59,7 @@ public class ShopsFragment extends Fragment{
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         Log.i(LOG_TAG,"User's Lat/Lng in fragment = " + GlobalState.USER_LAT + "/" + GlobalState.USER_LNG);
+        mShopsAdapter = GlobalState.GLOBAL_ADAPTER;
         mShopsAdapter =
                 new ArrayAdapter<String>(
                         getActivity(),
@@ -129,8 +130,9 @@ public class ShopsFragment extends Fragment{
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_refresh) {
-            //updateShopList();
-            SyncAdapter.syncImmediately(getActivity());
+            updateShopList();
+          //  GlobalState.GLOBAL_ADAPTER = mShopsAdapter;
+          //  SyncAdapter.syncImmediately(getActivity());
             return true;
         }
         return super.onOptionsItemSelected(item);

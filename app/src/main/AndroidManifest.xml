@@ -16,6 +16,8 @@
         android:name="android.permission.WRITE_SYNC_SETTINGS"/>
     <uses-permission
         android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
+    <uses-permission
+        android:name="android.permission.READ_SYNC_STATS"/>
 
     <application
         android:allowBackup="true"
@@ -81,7 +83,7 @@
             android:syncable="true"/>
 
         <!-- SyncAdapter's dummy authentication service -->
-        <service android:name=".sync.WaldoAuthenticatorService">
+        <service android:name="sync.WaldoAuthenticatorService">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
@@ -90,7 +92,18 @@
                 android:resource="@xml/authenticator" />
         </service>
 
-
+        <!-- The SyncAdapter service -->
+        <service
+            android:name="sync.WaldoSyncService"
+            android:exported="true"
+            >
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter" />
+            </intent-filter>
+            <meta-data
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/syncadapter" />
+        </service>
     </application>
 
 </manifest>

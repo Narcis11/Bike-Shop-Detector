@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 
 /**
  * Created by Narcis11 on 26.12.2014.
