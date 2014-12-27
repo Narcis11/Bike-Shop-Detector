@@ -2,18 +2,18 @@
 
     <ListPreference
         android:title="@string/pref_range_label"
-        android:summary="@string/pref_range_default"
+        android:summary="@string/pref_range_imperial_default"
         android:key="@string/pref_range_key"
-        android:entries="@array/range_values_array"
-        android:entryValues="@array/range_values_array" /> <!--Te the same for the API call as the ones (android:entries) displayed to the user-->
+        android:entries="@array/range_values_imperial_array"
+        android:entryValues="@array/range_values_imperial_array" /> <!--Te the same for the API call as the ones (android:entries) displayed to the user-->
 
 
     <ListPreference
         android:title="@string/pref_speed_label"
-        android:summary="@string/pref_speed_default"
+        android:summary="@string/pref_speed_imperial_default"
         android:key="@string/pref_speed_key"
-        android:entries="@array/speed_values_array"
-        android:entryValues="@array/speed_values_array" />
+        android:entries="@array/speed_values_imperial_array"
+        android:entryValues="@array/speed_values_imperial_array" />
 
     <ListPreference
         android:title="@string/pref_unit_label"

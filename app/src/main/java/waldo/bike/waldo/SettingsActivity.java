@@ -16,11 +16,14 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
 
 
 import java.util.List;
+
+import Utilities.Utility;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -35,11 +38,21 @@ import java.util.List;
  */
 public class SettingsActivity extends PreferenceActivity
         implements Preference.OnPreferenceChangeListener{
+
+    private static final String LOG_TAG = SettingsActivity.class.getSimpleName();
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Add 'general' preferences, defined in the XML file
-        addPreferencesFromResource(R.xml.pref_general);
+        String preferredUnit = Utility.getPreferredUnit(getApplicationContext());
+        if (preferredUnit.equals(getResources().getString(R.string.unit_array_metric))) {
+            addPreferencesFromResource(R.xml.pref_general);
+            Log.i(LOG_TAG, "Loaded pref_general");
+        }
+        else {
+            addPreferencesFromResource(R.xml.pref_imperial_general);
+            Log.i(LOG_TAG, "Loaded pref_imperial_general");
+        }
         // For all preferences, attach an OnPreferenceChangeListener so the UI summary can be
         // updated when the preference changes.
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_range_key)));
@@ -83,4 +96,15 @@ public class SettingsActivity extends PreferenceActivity
         return true;
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.i(LOG_TAG,"Settings: in onPause");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i(LOG_TAG,"Settings: in onResume");
+    }
 }

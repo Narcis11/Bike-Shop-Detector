@@ -33,6 +33,18 @@
         <item>@string/speed_array_7</item>
     </string-array>
 
+    <!--Used for imperial mode-->
+    <string-array
+        name="speed_values_imperial_array">
+        <item>@string/speed_array_imperial_1</item>
+        <item>@string/speed_array_imperial_2</item>
+        <item>@string/speed_array_imperial_3</item>
+        <item>@string/speed_array_imperial_4</item>
+        <item>@string/speed_array_imperial_5</item>
+        <item>@string/speed_array_imperial_6</item>
+        <item>@string/speed_array_imperial_7</item>
+    </string-array>
+
     <string-array
         name="unit_values_array">
         <item>@string/unit_array_metric</item>
