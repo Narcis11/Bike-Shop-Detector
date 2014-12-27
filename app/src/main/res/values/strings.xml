@@ -29,13 +29,36 @@
     <string name="pref_unit_default">Metric</string>
     <string name="pref_unit_label">Unit</string>
 
-    <!-- Values for the Settings/Range array -->
+    <!-- Formatting for Settings/My speed preference -->
+    <string name="pref_speed_key">speed</string>
+    <string name="pref_speed_default">17 km</string>
+    <string name="pref_speed_label">My average speed</string>
+
+    <!-- Values for the Settings/Range array in metric mode-->
     <string name="range_array_1">1 km</string>
     <string name="range_array_2">2 km</string>
     <string name="range_array_3">3 km</string>
     <string name="range_array_4">4 km</string>
     <string name="range_array_5">5 km</string>
     <string name="range_array_10">10 km</string>
+
+    <!-- Values for the Settings/Range array in imperial mode-->
+    <string name="range_array_imperial_1">1 mile</string>
+    <string name="range_array_imperial_2">2 miles</string>
+    <string name="range_array_imperial_3">3 miles</string>
+    <string name="range_array_imperial_4">4 miles</string>
+    <string name="range_array_imperial_5">5 miles</string>
+    <string name="range_array_imperial_10">8 miles</string>
+
+
+    <!-- Values for the Settings/My speed array -->
+    <string name="speed_array_1">14 km/h</string>
+    <string name="speed_array_2">17 km/h</string>
+    <string name="speed_array_3">20 km/h</string>
+    <string name="speed_array_4">23 km/h</string>
+    <string name="speed_array_5">26 km/h</string>
+    <string name="speed_array_6">29 km/h</string>
+    <string name="speed_array_7">32 km/h</string>
 
     <!-- Values for the Settings/Unit array -->
     <string name="unit_array_metric">Metric</string>

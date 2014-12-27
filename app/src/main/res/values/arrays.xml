@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--Used for metric mode-->
     <string-array
         name="range_values_array">
         <item>@string/range_array_1</item>
@@ -8,6 +9,28 @@
         <item>@string/range_array_4</item>
         <item>@string/range_array_5</item>
         <item>@string/range_array_10</item>
+    </string-array>
+
+    <!--Used for imperial mode-->
+    <string-array
+        name="range_values_imperial_array">
+        <item>@string/range_array_imperial_1</item>
+        <item>@string/range_array_imperial_2</item>
+        <item>@string/range_array_imperial_3</item>
+        <item>@string/range_array_imperial_4</item>
+        <item>@string/range_array_imperial_5</item>
+        <item>@string/range_array_imperial_10</item>
+    </string-array>
+
+    <string-array
+        name="speed_values_array">
+        <item>@string/speed_array_1</item>
+        <item>@string/speed_array_2</item>
+        <item>@string/speed_array_3</item>
+        <item>@string/speed_array_4</item>
+        <item>@string/speed_array_5</item>
+        <item>@string/speed_array_6</item>
+        <item>@string/speed_array_7</item>
     </string-array>
 
     <string-array
