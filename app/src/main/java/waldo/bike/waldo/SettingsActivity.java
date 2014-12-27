@@ -44,15 +44,7 @@ public class SettingsActivity extends PreferenceActivity
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Add 'general' preferences, defined in the XML file
-        String preferredUnit = Utility.getPreferredUnit(getApplicationContext());
-        if (preferredUnit.equals(getResources().getString(R.string.unit_array_metric))) {
-            addPreferencesFromResource(R.xml.pref_general);
-            Log.i(LOG_TAG, "Loaded pref_general");
-        }
-        else {
-            addPreferencesFromResource(R.xml.pref_imperial_general);
-            Log.i(LOG_TAG, "Loaded pref_imperial_general");
-        }
+        loadPreferenceScreen();
         // For all preferences, attach an OnPreferenceChangeListener so the UI summary can be
         // updated when the preference changes.
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_range_key)));
@@ -88,6 +80,11 @@ public class SettingsActivity extends PreferenceActivity
             int prefIndex = listPreference.findIndexOfValue(stringValue);
             if (prefIndex >= 0) {
                 preference.setSummary(listPreference.getEntries()[prefIndex]);
+                Log.i(LOG_TAG,"Modified preference is " + ((ListPreference) preference).getValue());
+                if (((ListPreference) preference).getValue().equals(getResources().getString(R.string.unit_array_metric))
+                        || ((ListPreference) preference).getValue().equals(getResources().getString(R.string.unit_array_imperial))) {
+                    loadPreferenceScreen();
+                }
             }
         } else {
             // For other preferences, set the summary to the value's simple string representation.
@@ -96,15 +93,17 @@ public class SettingsActivity extends PreferenceActivity
         return true;
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.i(LOG_TAG,"Settings: in onPause");
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.i(LOG_TAG,"Settings: in onResume");
+    private void loadPreferenceScreen() {
+        String preferredUnit = Utility.getPreferredUnit(getApplicationContext());
+        Log.i(LOG_TAG,"Preferred unit is " + preferredUnit);
+        if (preferredUnit.equals(getResources().getString(R.string.unit_array_metric))) {
+            addPreferencesFromResource(R.xml.pref_general);
+            Log.i(LOG_TAG, "Loaded pref_general");
+        }
+        else {
+            addPreferencesFromResource(R.xml.pref_imperial_general);
+            Log.i(LOG_TAG, "Loaded pref_imperial_general");
+        }
     }
 }
