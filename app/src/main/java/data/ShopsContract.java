@@ -39,7 +39,8 @@ public class ShopsContract {
         public static final String CONTENT_TYPE = "vnd.android.cursor.dir/" + CONTENT_AUTHORITY + "/" + PATH_SHOPS;
         //vnd.android.cursor.item/waldo.bike.waldo/shops
         public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/" + CONTENT_AUTHORITY + "/" + PATH_SHOPS;
-
+        //used in the query method from Shops Provider
+        public static final String SORT_ORDER = COLUMN_DISTANCE_TO_USER + " ASC";
         //used for querying a single row
         public static Uri buildShopsUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI,id);

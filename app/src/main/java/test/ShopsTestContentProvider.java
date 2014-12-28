@@ -8,18 +8,16 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import data.ShopsContract;
 import data.ShopsDbHelper;
 
 /**
  * Created by Narcis11 on 28.12.2014.
- * Used to test the database with sql-specific methods.
+ * Used to test the database with ContentProvider-specific methods.
  */
-public class ShopsTest extends AndroidTestCase {
-    final static String LOG_TAG = ShopsTest.class.getSimpleName();
+public class ShopsTestContentProvider extends AndroidTestCase {
+    final static String LOG_TAG = ShopsTestContentProvider.class.getSimpleName();
 
     public void testCreateDb() throws Throwable {
         mContext.deleteDatabase(ShopsDbHelper.DATABASE_NAME);
@@ -31,13 +29,13 @@ public class ShopsTest extends AndroidTestCase {
     public void testInsertDb() throws Throwable {
         SQLiteDatabase sqLiteDatabase = new ShopsDbHelper(mContext).getWritableDatabase();
         ContentValues insertValues = new ContentValues();
-        insertValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_NAME,"La gicu din deal");
-        insertValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_ADDRESS,"Strada Eroilor");
-        insertValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_LATITUDE,"44.4354543");
-        insertValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_LONGITUDE,"26.7846214");
-        insertValues.put(ShopsContract.ShopsEntry.COLUMN_IS_OPEN,0);
-        insertValues.put(ShopsContract.ShopsEntry.COLUMN_DISTANCE_TO_USER,4000);
-        insertValues.put(ShopsContract.ShopsEntry.COLUMN_DISTANCE_DURATION,19);
+        insertValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_NAME,"Bicle La gica");
+        insertValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_ADDRESS,"Strada Matache de la Playa");
+        insertValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_LATITUDE,"44.4360611");
+        insertValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_LONGITUDE,"26.1227012");
+        insertValues.put(ShopsContract.ShopsEntry.COLUMN_IS_OPEN,1);
+        insertValues.put(ShopsContract.ShopsEntry.COLUMN_DISTANCE_TO_USER,1457);
+        insertValues.put(ShopsContract.ShopsEntry.COLUMN_DISTANCE_DURATION,13);
         long positionID = sqLiteDatabase.insert(ShopsContract.ShopsEntry.TABLE_NAME,null,insertValues);
         assertTrue( positionID != -1);
         Log.i(LOG_TAG, "Inserted row id is " + positionID);
@@ -58,7 +56,7 @@ public class ShopsTest extends AndroidTestCase {
         SQLiteDatabase sqLiteDatabase = new ShopsDbHelper(mContext).getWritableDatabase();
         String tableName = ShopsContract.ShopsEntry.TABLE_NAME;
         String columnValue = "";
-        Cursor cursor = sqLiteDatabase.rawQuery("select * from " + tableName + " order by " + ShopsContract.ShopsEntry.COLUMN_DISTANCE_TO_USER +" asc;", null);
+        Cursor cursor = sqLiteDatabase.rawQuery("select * from " + tableName + " order by _id desc;", null);
         List<String> columnNames = new ArrayList<String>();
         columnNames.add(ShopsContract.ShopsEntry._ID);
         columnNames.add(ShopsContract.ShopsEntry.COLUMN_SHOP_NAME);
@@ -71,12 +69,13 @@ public class ShopsTest extends AndroidTestCase {
         if (cursor.moveToFirst()) {
 
             for (int i = 0; i < columnNames.size(); i++) {
-                columnValue =  columnValue + " " + cursor.getString(cursor.getColumnIndex(columnNames.get(i))) + ",";
+                columnValue =  columnValue + " " + cursor.getString(cursor.getColumnIndex(columnNames.get(i))) + ",";//
+
             }
 
         }
         else {
-            Log.i(LOG_TAG, "Nu exista inregistrari in tabela " + tableName);
+            Log.i(LOG_TAG, "Nu exista inregistrari in tabela " + tableName );
         }
 
         if (!columnValue.equals("")) {
@@ -84,20 +83,5 @@ public class ShopsTest extends AndroidTestCase {
         }
         cursor.close();
         sqLiteDatabase.close();
-    }
-
-    static void validateCursor(Cursor valueCursor, ContentValues expectedValues) {
-
-        assertTrue(valueCursor.moveToFirst());
-
-        Set<Map.Entry<String, Object>> valueSet = expectedValues.valueSet();
-        for (Map.Entry<String, Object> entry : valueSet) {
-            String columnName = entry.getKey();
-            int idx = valueCursor.getColumnIndex(columnName);
-            assertFalse(idx == -1);
-            String expectedValue = entry.getValue().toString();
-            assertEquals(expectedValue, valueCursor.getString(idx));
-        }
-        valueCursor.close();
     }
 }

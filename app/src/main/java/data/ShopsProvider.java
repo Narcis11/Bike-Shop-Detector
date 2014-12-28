@@ -27,14 +27,18 @@ public class ShopsProvider extends ContentProvider {
                 selectionArgs,
                 null,
                 null,
-                sortOrder
+                ShopsContract.ShopsEntry.SORT_ORDER
         );
+        //Tells the cursor to register a Content Observer to watch for changes that appear in that uri or any of its descendants
+        //descendants = uris that are like 'uri%'
+        shopsCursor.setNotificationUri(getContext().getContentResolver(), uri);
         return shopsCursor;
     }
 
     @Override
     public String getType(Uri uri) {
-        return null;
+        //We need all the data from the table, so we return the list item (directory)
+        return ShopsContract.ShopsEntry.CONTENT_TYPE;
     }
 
     @Override
