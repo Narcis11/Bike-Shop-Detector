@@ -1,5 +1,6 @@
 package data;
 
+import android.net.Uri;
 import android.provider.BaseColumns;
 
 /**
@@ -17,5 +18,14 @@ public class ShopsContract {
         public static final String COLUMN_IS_OPEN="is_open";//integer (1 or 0, SQLite does not support boolean types
         public static final String COLUMN_DISTANCE_TO_USER="distance_to_user";//in meters, stored as integer
         public static final String COLUMN_DISTANCE_DURATION="distance_duration";//in minutes, stored as integer
+
+    //this part is used for the Content Provider
+        //the name of the content provider (named as the package of the app)
+        public static final String CONTENT_AUTHORITY = "waldo.bike.waldo";
+        // Use CONTENT_AUTHORITY to create the base of all URIs which apps will use to contact
+        // the content provider. All URIs must begin with "content://"
+        public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
+        //used for pointing to the shops table
+        public static final String PATH_SHOPS = "shops";
     }
 }
