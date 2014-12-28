@@ -51,22 +51,25 @@ public class FetchGooglePlaces extends AsyncTask<String, Void, String[]> {
         final String latLng = params[0] + "," + params[1];
         final String output = "json";
         try {
-            //the query parameters used in the call
+            //the query parameters used in the API places call
             final String BASE_URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/" + output + "?";
             final String QUERY_LOCATION = "location";
             final String QUERY_RADIUS = "radius";
             final String QUERY_KEY = "key";
             final String QUERY_TYPES = "types";
+
+            //the query parameters used in the API directions call
+            final String BASE_DIRECTIONS_URL = "https://maps.googleapis.com/maps/api/directions/" + output + "?";
             //build up the URI
-            Uri builtUri = Uri.parse(BASE_URL).buildUpon()
+            Uri builtPlacesUri = Uri.parse(BASE_URL).buildUpon()
                     .appendQueryParameter(QUERY_LOCATION,latLng)
                     .appendQueryParameter(QUERY_RADIUS,radius)
                     .appendQueryParameter(QUERY_KEY,key)
                     .appendQueryParameter(QUERY_TYPES,types)
                     .build();
-            Log.i(LOG_TAG, "Uri is: " + builtUri.toString());
+            Log.i(LOG_TAG, "Uri is: " + builtPlacesUri.toString());
 
-            URL url = new URL(builtUri.toString());
+            URL url = new URL(builtPlacesUri.toString());
 
             //Create the request to Google, and open the connection
             urlConnection = (HttpURLConnection) url.openConnection();
