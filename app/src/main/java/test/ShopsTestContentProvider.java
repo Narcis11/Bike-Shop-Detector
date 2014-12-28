@@ -52,11 +52,15 @@ public class ShopsTestContentProvider extends AndroidTestCase {
     }
 
 
-    public void testReadDb() {
-        SQLiteDatabase sqLiteDatabase = new ShopsDbHelper(mContext).getWritableDatabase();
-        String tableName = ShopsContract.ShopsEntry.TABLE_NAME;
+    public void testReadContentDb() {
         String columnValue = "";
-        Cursor cursor = sqLiteDatabase.rawQuery("select * from " + tableName + " order by _id desc;", null);
+        Cursor contentCursor = mContext.getContentResolver().query(
+                ShopsContract.ShopsEntry.CONTENT_URI,
+                null,
+                null,
+                null,
+                ShopsContract.ShopsEntry.SORT_ORDER
+        );
         List<String> columnNames = new ArrayList<String>();
         columnNames.add(ShopsContract.ShopsEntry._ID);
         columnNames.add(ShopsContract.ShopsEntry.COLUMN_SHOP_NAME);
@@ -66,22 +70,19 @@ public class ShopsTestContentProvider extends AndroidTestCase {
         columnNames.add(ShopsContract.ShopsEntry.COLUMN_IS_OPEN);
         columnNames.add(ShopsContract.ShopsEntry.COLUMN_DISTANCE_TO_USER);
         columnNames.add(ShopsContract.ShopsEntry.COLUMN_DISTANCE_DURATION);
-        if (cursor.moveToFirst()) {
+   //     ShopsTest.validateCursor(contentCursor,columnNames);
 
+        if (contentCursor.moveToFirst()) {
             for (int i = 0; i < columnNames.size(); i++) {
-                columnValue =  columnValue + " " + cursor.getString(cursor.getColumnIndex(columnNames.get(i))) + ",";//
-
+                columnValue =  columnValue + " " + contentCursor.getString(contentCursor.getColumnIndex(columnNames.get(i))) + ",";
             }
-
         }
         else {
-            Log.i(LOG_TAG, "Nu exista inregistrari in tabela " + tableName );
+            Log.i(LOG_TAG, "Nu exista inregistrari in tabela shops.");
         }
-
         if (!columnValue.equals("")) {
-            Log.i(LOG_TAG, "Randul din " + tableName + " este: " + columnValue);
+            Log.i(LOG_TAG, "Randul din shops este: " + columnValue);
         }
-        cursor.close();
-        sqLiteDatabase.close();
+        contentCursor.close();
     }
 }
