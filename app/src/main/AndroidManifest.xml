@@ -77,11 +77,8 @@
         </activity>
 
         <provider
-            android:name="waldo.bike.waldo.StubProvider"
-            android:authorities="bike.waldo.android.waldo.app"
-            android:exported="false"
-            android:syncable="true"/>
-
+            android:authorities="waldo.bike.waldo"
+            android:name="data.ShopsProvider" />
         <!-- SyncAdapter's dummy authentication service -->
         <service android:name="sync.WaldoAuthenticatorService">
             <intent-filter>
