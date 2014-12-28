@@ -12,8 +12,8 @@ public class ShopsContract {
         public static final String TABLE_NAME="shops";
         public static final String COLUMN_SHOP_NAME="shop_name";//text
         public static final String COLUMN_SHOP_ADDRESS="shop_address";//text
-        public static final String COLUMN_SHOP_LATITUDE="shop_latitude";//real
-        public static final String COLUMN_SHOP_LONGITUDE="shop_longitude";//real
+        public static final String COLUMN_SHOP_LATITUDE="shop_latitude";//text
+        public static final String COLUMN_SHOP_LONGITUDE="shop_longitude";//text
         public static final String COLUMN_IS_OPEN="is_open";//integer (1 or 0, SQLite does not support boolean types
         public static final String COLUMN_DISTANCE_TO_USER="distance_to_user";//in meters, stored as integer
         public static final String COLUMN_DISTANCE_DURATION="distance_duration";//in minutes, stored as integer

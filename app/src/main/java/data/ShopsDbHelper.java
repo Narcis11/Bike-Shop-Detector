@@ -22,16 +22,15 @@ public class ShopsDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         final String SQL_CREATE_SHOPS_TABLE = "CREATE TABLE " + ShopsContract.ShopsEntry.TABLE_NAME + " (" +
                 ShopsContract.ShopsEntry._ID + " INTEGER PRIMARY KEY, " +
-                ShopsContract.ShopsEntry.COLUMN_SHOP_NAME + " TEXT NOT NULL, " +
+                ShopsContract.ShopsEntry.COLUMN_SHOP_NAME + " TEXT, " +
                 ShopsContract.ShopsEntry.COLUMN_SHOP_ADDRESS + " TEXT, " +
-                ShopsContract.ShopsEntry.COLUMN_SHOP_LATITUDE + " REAL NOT NULL, " +
-                ShopsContract.ShopsEntry.COLUMN_SHOP_LONGITUDE + "REAL NOT NULL, " +
+                ShopsContract.ShopsEntry.COLUMN_SHOP_LATITUDE + " TEXT, " +
+                ShopsContract.ShopsEntry.COLUMN_SHOP_LONGITUDE + " TEXT, " +
                 ShopsContract.ShopsEntry.COLUMN_IS_OPEN + " INTEGER, " +
                 ShopsContract.ShopsEntry.COLUMN_DISTANCE_TO_USER + " INTEGER, " +
-                ShopsContract.ShopsEntry.COLUMN_DISTANCE_DURATION + " INTEGER, " +
-                " NOT NULL (" + ShopsContract.ShopsEntry.COLUMN_SHOP_NAME + ", " + ShopsContract.ShopsEntry.COLUMN_SHOP_LATITUDE + ", " +
-                ShopsContract.ShopsEntry.COLUMN_SHOP_LONGITUDE + ") ON CONFLICT IGNORE);";
-        Log.i(LOG_TAG,"Create statement is " + SQL_CREATE_SHOPS_TABLE);
+                ShopsContract.ShopsEntry.COLUMN_DISTANCE_DURATION + " INTEGER);" ;
+/*                " NOT NULL (" + ShopsContract.ShopsEntry.COLUMN_SHOP_NAME + ", " + ShopsContract.ShopsEntry.COLUMN_SHOP_LATITUDE + ", " +
+                ShopsContract.ShopsEntry.COLUMN_SHOP_LONGITUDE + ") ON CONFLICT IGNORE);";*/
         db.execSQL(SQL_CREATE_SHOPS_TABLE);
     }
 
