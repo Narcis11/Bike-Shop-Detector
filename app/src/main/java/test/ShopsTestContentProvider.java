@@ -1,8 +1,10 @@
 package test;
 
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.test.AndroidTestCase;
 import android.util.Log;
 
@@ -26,8 +28,7 @@ public class ShopsTestContentProvider extends AndroidTestCase {
         sqLiteDatabase.close();
     }
 
-    public void testInsertDb() throws Throwable {
-        SQLiteDatabase sqLiteDatabase = new ShopsDbHelper(mContext).getWritableDatabase();
+    public void testInsertContentProvider() throws Throwable {
         ContentValues insertValues = new ContentValues();
         insertValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_NAME,"Bicle La gica");
         insertValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_ADDRESS,"Strada Matache de la Playa");
@@ -36,10 +37,11 @@ public class ShopsTestContentProvider extends AndroidTestCase {
         insertValues.put(ShopsContract.ShopsEntry.COLUMN_IS_OPEN,1);
         insertValues.put(ShopsContract.ShopsEntry.COLUMN_DISTANCE_TO_USER,1457);
         insertValues.put(ShopsContract.ShopsEntry.COLUMN_DISTANCE_DURATION,13);
-        long positionID = sqLiteDatabase.insert(ShopsContract.ShopsEntry.TABLE_NAME,null,insertValues);
-        assertTrue( positionID != -1);
-        Log.i(LOG_TAG, "Inserted row id is " + positionID);
-        sqLiteDatabase.close();
+        Uri insertUri = mContext.getContentResolver().insert(ShopsContract.ShopsEntry.CONTENT_URI,insertValues);
+        long positionId = ContentUris.parseId(insertUri);
+        Log.i(LOG_TAG,"Insert uri is: " + insertUri);
+        Log.i(LOG_TAG,"Row number inserted = " + positionId);
+        assertTrue( positionId != -1);
     }
 
     public void testUpdateDb() throws Throwable {
@@ -52,7 +54,7 @@ public class ShopsTestContentProvider extends AndroidTestCase {
     }
 
 
-    public void testReadContentDb() {
+    public void testReadContentProvider() {
         String columnValue = "";
         Cursor contentCursor = mContext.getContentResolver().query(
                 ShopsContract.ShopsEntry.CONTENT_URI,
