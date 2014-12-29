@@ -45,18 +45,18 @@ public class ShopsTestContentProvider extends AndroidTestCase {
     }
 
     public void testDeleteProvider() throws Throwable {
-        String whereClause = ShopsContract.ShopsEntry.COLUMN_DISTANCE_TO_USER + "<1200";
-        int deletedRows = mContext.getContentResolver().delete(ShopsContract.ShopsEntry.CONTENT_URI,whereClause,null);
+        String whereClause = ShopsContract.ShopsEntry.COLUMN_DISTANCE_TO_USER + "=1100";
+        int deletedRows = mContext.getContentResolver().delete(ShopsContract.ShopsEntry.CONTENT_URI,null,null);
         Log.i(LOG_TAG,"No of rows deleted = " + deletedRows);
     }
 
-    public void testUpdateDb() throws Throwable {
-        SQLiteDatabase sqLiteDatabase = new ShopsDbHelper(mContext).getWritableDatabase();
+    public void testUpdateContent() throws Throwable {
         ContentValues updateValues = new ContentValues();
-        updateValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_LATITUDE,"42.45801");
-        updateValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_LONGITUDE,"22.45000");
-        sqLiteDatabase.update(ShopsContract.ShopsEntry.TABLE_NAME, updateValues, "_id = 1", null);
-        sqLiteDatabase.close();
+        updateValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_LATITUDE, "42.00000");
+        updateValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_LONGITUDE, "22.00000");
+        String whereClause = ShopsContract.ShopsEntry.COLUMN_DISTANCE_TO_USER + "=1100";
+        int updatedRows = mContext.getContentResolver().update(ShopsContract.ShopsEntry.CONTENT_URI,updateValues,whereClause,null);
+        Log.i(LOG_TAG,"No of rows updated = " + updatedRows);
     }
 
 

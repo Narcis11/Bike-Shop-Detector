@@ -62,7 +62,7 @@ public class ShopsProvider extends ContentProvider {
         final SQLiteDatabase sqLiteDatabase = mShopsHelper.getWritableDatabase();
         int rowsDeleted;
         rowsDeleted = sqLiteDatabase.delete(ShopsContract.ShopsEntry.TABLE_NAME,selection,selectionArgs);
-        //a null deletes all rows
+        //a null selection deletes all rows
         //we only notify if rows were indeed deleted
         if (selection == null || rowsDeleted != 0) {
             getContext().getContentResolver().notifyChange(uri, null);
@@ -72,6 +72,13 @@ public class ShopsProvider extends ContentProvider {
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        return 0;
+        final SQLiteDatabase sqLiteDatabase = mShopsHelper.getWritableDatabase();
+        int rowsUpdated;
+        rowsUpdated = sqLiteDatabase.update(ShopsContract.ShopsEntry.TABLE_NAME,values,selection,selectionArgs);
+
+        if (rowsUpdated != 0) {
+            getContext().getContentResolver().notifyChange(uri,null);
+        }
+        return rowsUpdated;
     }
 }
