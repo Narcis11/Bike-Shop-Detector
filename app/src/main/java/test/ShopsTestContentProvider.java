@@ -35,13 +35,19 @@ public class ShopsTestContentProvider extends AndroidTestCase {
         insertValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_LATITUDE,"44.4360611");
         insertValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_LONGITUDE,"26.1227012");
         insertValues.put(ShopsContract.ShopsEntry.COLUMN_IS_OPEN,1);
-        insertValues.put(ShopsContract.ShopsEntry.COLUMN_DISTANCE_TO_USER,1457);
-        insertValues.put(ShopsContract.ShopsEntry.COLUMN_DISTANCE_DURATION,13);
+        insertValues.put(ShopsContract.ShopsEntry.COLUMN_DISTANCE_TO_USER,1100);
+        insertValues.put(ShopsContract.ShopsEntry.COLUMN_DISTANCE_DURATION,10);
         Uri insertUri = mContext.getContentResolver().insert(ShopsContract.ShopsEntry.CONTENT_URI,insertValues);
         long positionId = ContentUris.parseId(insertUri);
         Log.i(LOG_TAG,"Insert uri is: " + insertUri);
         Log.i(LOG_TAG,"Row number inserted = " + positionId);
         assertTrue( positionId != -1);
+    }
+
+    public void testDeleteProvider() throws Throwable {
+        String whereClause = ShopsContract.ShopsEntry.COLUMN_DISTANCE_TO_USER + "<1200";
+        int deletedRows = mContext.getContentResolver().delete(ShopsContract.ShopsEntry.CONTENT_URI,whereClause,null);
+        Log.i(LOG_TAG,"No of rows deleted = " + deletedRows);
     }
 
     public void testUpdateDb() throws Throwable {

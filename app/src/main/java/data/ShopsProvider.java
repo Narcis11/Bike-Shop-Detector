@@ -53,12 +53,21 @@ public class ShopsProvider extends ContentProvider {
         else {
             throw new android.database.SQLException("Failed to insert row into " + uri);
         }
+        getContext().getContentResolver().notifyChange(uri, null);
         return  returnUri;
     }
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        return 0;
+        final SQLiteDatabase sqLiteDatabase = mShopsHelper.getWritableDatabase();
+        int rowsDeleted;
+        rowsDeleted = sqLiteDatabase.delete(ShopsContract.ShopsEntry.TABLE_NAME,selection,selectionArgs);
+        //a null deletes all rows
+        //we only notify if rows were indeed deleted
+        if (selection == null || rowsDeleted != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+        return rowsDeleted;
     }
 
     @Override
