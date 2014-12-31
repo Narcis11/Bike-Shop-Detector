@@ -53,7 +53,15 @@ public class ShopsTest extends AndroidTestCase {
         sqLiteDatabase.close();
     }
 
-
+    public void testCountRowsDb() {
+        SQLiteDatabase sqLiteDatabase = new ShopsDbHelper(mContext).getWritableDatabase();
+        String tableName = ShopsContract.ShopsEntry.TABLE_NAME;
+        Cursor cursor = sqLiteDatabase.rawQuery("select * from " + tableName + ";", null);
+        int noOfRows = cursor.getCount();
+        Log.i(LOG_TAG,"No of rows in the shops table = " + noOfRows);
+        cursor.close();
+        sqLiteDatabase.close();
+    }
     public void testReadDb() {
         SQLiteDatabase sqLiteDatabase = new ShopsDbHelper(mContext).getWritableDatabase();
         String tableName = ShopsContract.ShopsEntry.TABLE_NAME;

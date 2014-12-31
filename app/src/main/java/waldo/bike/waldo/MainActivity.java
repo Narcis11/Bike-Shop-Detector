@@ -102,7 +102,7 @@ public class MainActivity extends Activity implements
              @Override
              protected void onDestroy() {
                  super.onDestroy();
-                 Log.i(LOG_TAG,"in onDestroy()");
+          //       Log.i(LOG_TAG,"in onDestroy()");
              }
 
              @Override
@@ -114,7 +114,7 @@ public class MainActivity extends Activity implements
                       .add(R.id.container, new ShopsFragment(),fragmentTag)
                       .commit();
          }
-        Log.i(LOG_TAG,"in onCreate()");
+    //    Log.i(LOG_TAG,"in onCreate()");
         //instantiante the action bar
         ActionBar actionBar = getActionBar();
         actionBar.setIcon(R.drawable.waldo_action_bar);
@@ -200,7 +200,7 @@ public class MainActivity extends Activity implements
     @Override
     protected void onStart() {
         super.onStart();
-        Log.i(LOG_TAG,"in onStart()");
+      //  Log.i(LOG_TAG,"in onStart()");
         if (previousOrientation  != 4 ) {
             mGoogleApiClient.connect();
         }
@@ -211,7 +211,7 @@ public class MainActivity extends Activity implements
     @Override
     protected void onPause() {
         super.onPause();
-        Log.i(LOG_TAG,"in onPause");
+    //    Log.i(LOG_TAG,"in onPause");
         //random value used to prevent the GPS from disconnecting
         //at every orientation change (onPause() is called before onStop())
         previousOrientation = 4;
@@ -236,7 +236,7 @@ public class MainActivity extends Activity implements
     @Override
     protected void onResume() {
         super.onResume();
-        Log.i(LOG_TAG,"in onResume()");
+     //   Log.i(LOG_TAG,"in onResume()");
         DeviceConnection deviceConnection = new DeviceConnection(mContext);
         //checking if the user has disabled GPS
             if (!deviceConnection.checkGpsEnabled()) {
@@ -291,7 +291,7 @@ public class MainActivity extends Activity implements
         public void onReceive(Context context, Intent intent) {
             DeviceConnection deviceConnection = new DeviceConnection(context);
             if (!firstLoad) { //if this is the first load of the Activity, we need to ignore network changes
-                Log.i(LOG_TAG, "Main Activity: Network state changed!");
+          //      Log.i(LOG_TAG, "Main Activity: Network state changed!");
                 //we don't display the message if the user turns on wifi when data connection is turned on or viceversa
                 if (deviceConnection.checkInternetConnected() && (!previousNetworkState.equals("CONNECTED"))) {
                     Toast.makeText(context, "Reconnected!", Toast.LENGTH_SHORT).show();
@@ -326,12 +326,12 @@ public class MainActivity extends Activity implements
             mLatLng = Utility.getLatLngFromLocation(location.toString());
             GlobalState.USER_LAT = mLatLng[0];
             GlobalState.USER_LNG = mLatLng[1];
-            Log.i(LOG_TAG,"Lat/lng in onLocationChanged - " + mLatLng[0] + "/" + mLatLng[1]);
+      //      Log.i(LOG_TAG,"Lat/lng in onLocationChanged - " + mLatLng[0] + "/" + mLatLng[1]);
             //getting the user's city
             Location shopLocation = new Location("testShop");
             shopLocation.setLatitude(44.430662);
             shopLocation.setLongitude(26.108035);
-            Log.i(LOG_TAG,"Distance to BikeXpert Unirii is " + location.distanceTo(shopLocation));
+         //   Log.i(LOG_TAG,"Distance to BikeXpert Unirii is " + location.distanceTo(shopLocation));
             try {
                 Geocoder geocoder = new Geocoder(mContext, Locale.getDefault());
                 List<Address> addresses = geocoder.getFromLocation(Double.valueOf(mLatLng[0]), Double.valueOf(mLatLng[1]), 1);

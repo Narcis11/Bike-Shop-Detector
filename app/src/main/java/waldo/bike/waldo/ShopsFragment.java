@@ -67,7 +67,7 @@ public class ShopsFragment extends Fragment{
                         R.id.list_item_shops_textview,
                         new ArrayList<String>()
                 );
-        Log.i(LOG_TAG,"Size of mShopsAdapter = " + mShopsAdapter.getCount());
+    //    Log.i(LOG_TAG,"Size of mShopsAdapter = " + mShopsAdapter.getCount());
 
         // Get a reference to the ListView, and attach this adapter to it.
         ListView listView = (ListView) rootView.findViewById(R.id.listview_shops);
