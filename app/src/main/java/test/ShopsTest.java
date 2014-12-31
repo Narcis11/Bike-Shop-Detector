@@ -31,13 +31,13 @@ public class ShopsTest extends AndroidTestCase {
     public void testInsertDb() throws Throwable {
         SQLiteDatabase sqLiteDatabase = new ShopsDbHelper(mContext).getWritableDatabase();
         ContentValues insertValues = new ContentValues();
-        insertValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_NAME,"La Crama din Drăgăşani");
-        insertValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_ADDRESS,"Strada Eroilor");
-        insertValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_LATITUDE,"44.4354543");
-        insertValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_LONGITUDE,"26.7846214");
+        insertValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_NAME,"De ziua neveste-mii");
+        insertValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_ADDRESS,"Strada Pierzaniei");
+        insertValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_LATITUDE,"44.777777");
+        insertValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_LONGITUDE,"26.123456");
         insertValues.put(ShopsContract.ShopsEntry.COLUMN_IS_OPEN,0);
-        insertValues.put(ShopsContract.ShopsEntry.COLUMN_DISTANCE_TO_USER,2000);
-        insertValues.put(ShopsContract.ShopsEntry.COLUMN_DISTANCE_DURATION,10);
+        insertValues.put(ShopsContract.ShopsEntry.COLUMN_DISTANCE_TO_USER,20000);
+        insertValues.put(ShopsContract.ShopsEntry.COLUMN_DISTANCE_DURATION,50);
         long positionID = sqLiteDatabase.insert(ShopsContract.ShopsEntry.TABLE_NAME,null,insertValues);
         assertTrue( positionID != -1);
         Log.i(LOG_TAG, "Inserted row id is " + positionID);

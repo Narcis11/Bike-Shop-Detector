@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.util.Log;
 
 /**
  * Created by Narcis11 on 28.12.2014.
@@ -12,6 +13,7 @@ import android.net.Uri;
 public class ShopsProvider extends ContentProvider {
 
     private ShopsDbHelper mShopsHelper;
+    final String LOG_TAG = ShopsProvider.class.getSimpleName();
     @Override
     public boolean onCreate() {
         mShopsHelper = new ShopsDbHelper(getContext());
@@ -80,5 +82,31 @@ public class ShopsProvider extends ContentProvider {
             getContext().getContentResolver().notifyChange(uri,null);
         }
         return rowsUpdated;
+    }
+    //much faster than the regular method, because all of the inserts are done in a single transaction;
+    @Override
+    public int bulkInsert(Uri uri, ContentValues[] values) {
+        final SQLiteDatabase sqLiteDatabase = mShopsHelper.getWritableDatabase();
+        sqLiteDatabase.beginTransaction();
+        int returnCount = 0;
+        try {
+            for (ContentValues value : values) {
+                long _id = sqLiteDatabase.insert(ShopsContract.ShopsEntry.TABLE_NAME,null,value);
+                if (_id != -1 ){
+                    returnCount++;
+                }
+            }
+            sqLiteDatabase.setTransactionSuccessful();
+        }
+        catch (IllegalStateException e) {
+              Log.e(LOG_TAG, "Error while inserting bulk! = " + e.getMessage());
+              e.printStackTrace();
+              return super.bulkInsert(uri, values);//in case of errors, we call the regular insert method
+        }
+        finally {
+            sqLiteDatabase.endTransaction();
+        }
+        getContext().getContentResolver().notifyChange(uri,null);
+        return returnCount;
     }
 }
