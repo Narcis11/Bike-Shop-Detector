@@ -148,7 +148,8 @@ public class FetchGooglePlaces extends AsyncTask<String, Void, String[]> {
         //children of location
         final String API_COORD_LAT = "lat";
         final String API_COORD_LONG = "lng";
-
+        int dummyDistance = 300;
+        int dummyDuration = 3;
 
 
         try {
@@ -183,8 +184,10 @@ public class FetchGooglePlaces extends AsyncTask<String, Void, String[]> {
                 } catch (JSONException e) {
                     Log.e(LOG_TAG, "Opening Hours JSON Exception: " + e.getMessage());
                 }
-
-
+                //TODO: Remove dummy distance and duration data
+                //*************Creating dummy data********************
+                dummyDistance+=150 + i*20;
+                dummyDuration+=3;
                 //main info from the root object
                 id = placeDetails.getString(API_ID);
                 placeName = placeDetails.getString(API_NAME);
@@ -204,7 +207,9 @@ public class FetchGooglePlaces extends AsyncTask<String, Void, String[]> {
                 shopsValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_LATITUDE,latitude);
                 shopsValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_LONGITUDE,longitude);
                 shopsValues.put(ShopsContract.ShopsEntry.COLUMN_IS_OPEN, isShopOpen);
-                //we don't have the distance to user and duration yet. We'll get it in the SyncAdapter.
+                //TODO: Remove dummy data from the vector and add real data
+                shopsValues.put(ShopsContract.ShopsEntry.COLUMN_DISTANCE_TO_USER,dummyDistance);
+                shopsValues.put(ShopsContract.ShopsEntry.COLUMN_DISTANCE_DURATION,dummyDuration);
                 cVVector.add(shopsValues);
             }
                 if (cVVector.size() > 0) {

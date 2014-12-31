@@ -61,7 +61,9 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
             ShopsContract.ShopsEntry.TABLE_NAME + "." + ShopsContract.ShopsEntry._ID,
             ShopsContract.ShopsEntry.COLUMN_SHOP_NAME,
             ShopsContract.ShopsEntry.COLUMN_SHOP_ADDRESS,
-            ShopsContract.ShopsEntry.COLUMN_IS_OPEN
+            ShopsContract.ShopsEntry.COLUMN_IS_OPEN,
+            ShopsContract.ShopsEntry.COLUMN_DISTANCE_TO_USER,
+            ShopsContract.ShopsEntry.COLUMN_DISTANCE_DURATION
     };
 
     // These indices are tied to SHOPS_COLUMNS.  If SHOPS_COLUMNS changes, these
