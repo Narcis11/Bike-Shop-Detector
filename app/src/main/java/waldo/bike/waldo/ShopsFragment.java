@@ -22,6 +22,7 @@ import android.widget.TextView;
 import Places.FetchGooglePlaces;
 import Utilities.Constants;
 import Utilities.GlobalState;
+import Utilities.Utility;
 import data.ShopsContract;
 
 /**
@@ -30,6 +31,7 @@ import data.ShopsContract;
 public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
 
     public SimpleCursorAdapter mShopsAdapter;
+    private String mRadius;
     private static final String LOG_TAG = ShopsFragment.class.getSimpleName();
     private String shopLatitude = "";
     private String shopLongitude = "";
@@ -88,12 +90,21 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                 },
                 0
         );
-        //we need to format the is_open field from the database
-/*        mShopsAdapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
+        //we need to format the data from the database
+        mShopsAdapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
             @Override
             public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
               //  Log.i(LOG_TAG,"Column index is " + columnIndex);
                 switch (columnIndex) {
+                    case COL_SHOP_NAME:
+                        ((TextView) view).setText(cursor.getString(COL_SHOP_NAME));
+                        return true;
+                    case COL_DISTANCE_TO_USER:
+                        ((TextView) view).setText(cursor.getString(COL_DISTANCE_TO_USER) + " m");
+                        return true;
+                    case COL_DISTANCE_DURATION:
+                        ((TextView) view).setText(cursor.getString(COL_DISTANCE_DURATION) + "'");
+                        return true;
                     case COL_IS_OPEN:
                         if (cursor.getInt(COL_IS_OPEN) == 1){
                             ((TextView) view).setText(Constants.SHOP_OPEN);
@@ -105,11 +116,10 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                             ((TextView) view).setText(Constants.SHOP_UNAVAILABLE);
                         }
                         return  true;
-                    case COL_SHOP_NAME:
                 }
-                return true;
+                return false;
             }
-        });*/
+        });
     //    Log.i(LOG_TAG,"Size of mShopsAdapter = " + mShopsAdapter.getCount());
 
         // Get a reference to the ListView, and attach this adapter to it.
@@ -138,24 +148,6 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
             }
         });
         return rootView;
-        /*
-        String[] shops = {
-                "Bike Nature - 0,7 km - 5 min",
-                "Veloteca - 1 km - 7 min",
-                "Moș Ion Roată - 1,4 km - 10 min",
-                "Magazinul nr 3. - 1,8 km -  15 min",
-                "Magazinul cu bomboane - 2,3 km - 20 min"
-        };
-        List<String> shopList = new ArrayList<String>(Arrays.asList(shops));
-        // The ArrayAdapter takes data from a source and
-        // populates the ListView it's attached to.
-        ArrayAdapter<String> shopsAdapter = new ArrayAdapter<String>(
-                getActivity(),
-                R.layout.list_item_shops,
-                R.id.list_item_shops_textview,
-                shopList
-        );
-*/
 
     }
 
@@ -194,6 +186,16 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
        // updateShopList();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+
     public void updateShopList() {
         String[] coordinates = new String[2];
         coordinates[0] = GlobalState.USER_LAT;
@@ -205,7 +207,6 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     //loaders are initialised in onActivityCreated because their lifecycle is bound to the activity, not the fragment
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        Log.i(LOG_TAG,"In onActivityCreated");
         //initiate loader to populate data in the Shops fragment
         getLoaderManager().initLoader(SHOPS_LOADER_ID,null,this);
         super.onActivityCreated(savedInstanceState);
