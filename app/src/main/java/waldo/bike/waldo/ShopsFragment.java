@@ -89,10 +89,10 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                 0
         );
         //we need to format the is_open field from the database
-        mShopsAdapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
+/*        mShopsAdapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
             @Override
             public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
-                Log.i(LOG_TAG,"Column index is " + columnIndex);
+              //  Log.i(LOG_TAG,"Column index is " + columnIndex);
                 switch (columnIndex) {
                     case COL_IS_OPEN:
                         if (cursor.getInt(COL_IS_OPEN) == 1){
@@ -105,10 +105,11 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                             ((TextView) view).setText(Constants.SHOP_UNAVAILABLE);
                         }
                         return  true;
+                    case COL_SHOP_NAME:
                 }
                 return true;
             }
-        });
+        });*/
     //    Log.i(LOG_TAG,"Size of mShopsAdapter = " + mShopsAdapter.getCount());
 
         // Get a reference to the ListView, and attach this adapter to it.
@@ -212,19 +213,16 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
 
     @Override
     public void onLoadFinished(android.content.Loader<Cursor> loader, Cursor data) {
-        Log.i(LOG_TAG,"In onLoadFinished");
         mShopsAdapter.swapCursor(data);
     }
 
     @Override
     public void onLoaderReset(android.content.Loader<Cursor> loader) {
-        Log.i(LOG_TAG,"In onLoaderReset");
         mShopsAdapter.swapCursor(null);
     }
     //ShopsContract.ShopsEntry.CONTENT_URI
     @Override
     public android.content.Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Log.i(LOG_TAG,"In onCreateLoader");
         return new android.content.CursorLoader(
                 getActivity(),
                 ShopsContract.ShopsEntry.CONTENT_URI,
