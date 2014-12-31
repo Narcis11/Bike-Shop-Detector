@@ -7,6 +7,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -38,20 +40,42 @@ import Places.FetchGooglePlaces;
 import Utilities.Constants;
 import Utilities.GlobalState;
 import Utilities.Utility;
+import data.ShopsContract;
 import sync.SyncAdapter;
 
 /**
  * Created by Narcis11 on 20.12.2014.
  */
-public class ShopsFragment extends Fragment{
+public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
 
     public ArrayAdapter<String> mShopsAdapter;
     private static final String LOG_TAG = ShopsFragment.class.getSimpleName();
     private String shopLatitude = "";
     private String shopLongitude = "";
     private String shopName = "";
+    private static final int SHOPS_LOADER_ID = 0;//loader identifier
+    //These are the columns used by the CursorLoader in the query.
+    //TODO: Add the distance to user and distance duration after you finish the Directions API call
+    public static final String[] SHOPS_COLUMNS = {
+            ShopsContract.ShopsEntry.TABLE_NAME + "." + ShopsContract.ShopsEntry._ID,
+            ShopsContract.ShopsEntry.COLUMN_SHOP_NAME,
+            ShopsContract.ShopsEntry.COLUMN_SHOP_ADDRESS,
+            ShopsContract.ShopsEntry.COLUMN_IS_OPEN
+    };
+
+    // These indices are tied to SHOPS_COLUMNS.  If SHOPS_COLUMNS changes, these
+    // must change.
+    public static final int COL_SHOP_ID = 0;
+    public static final int COL_SHOP_NAME = 1;
+    public static final int COL_SHOP_ADDRESS = 2;
+    public static final int COL_IS_OPEN = 3;
+    public static final int COL_DISTANCE_TO_USER = 4;
+    public static final int COL_DISTANCE_DURATION = 5;
+
     public ShopsFragment() {
     }
+
+
     //TODO: Sort the list depending on the distance of the user to the shop
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -149,9 +173,6 @@ public class ShopsFragment extends Fragment{
        // updateShopList();
     }
 
-
-
-
     public void updateShopList() {
         String[] coordinates = new String[2];
         coordinates[0] = GlobalState.USER_LAT;
@@ -160,5 +181,27 @@ public class ShopsFragment extends Fragment{
         new FetchGooglePlaces(getActivity(), mShopsAdapter).execute(coordinates);
     }
 
+    //loaders are initialised in onActivityCreated because their lifecycle is bound to the activity, not the fragment
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        getLoaderManager().initLoader(SHOPS_LOADER_ID,null,(android.app.LoaderManager.LoaderCallbacks<Cursor>) this);
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    //these three methods are required by the CursorLoader interface
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return null;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
+    }
 }
 
