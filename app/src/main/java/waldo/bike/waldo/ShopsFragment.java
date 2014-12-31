@@ -1,15 +1,12 @@
 package waldo.bike.waldo;
 
 import android.app.Fragment;
-import android.content.Context;
+import android.app.LoaderManager;
+import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,52 +15,35 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 
 import Places.FetchGooglePlaces;
 import Utilities.Constants;
 import Utilities.GlobalState;
-import Utilities.Utility;
 import data.ShopsContract;
-import sync.SyncAdapter;
 
 /**
  * Created by Narcis11 on 20.12.2014.
  */
 public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
 
-    public ArrayAdapter<String> mShopsAdapter;
+    public SimpleCursorAdapter mShopsAdapter;
     private static final String LOG_TAG = ShopsFragment.class.getSimpleName();
     private String shopLatitude = "";
     private String shopLongitude = "";
     private String shopName = "";
     private static final int SHOPS_LOADER_ID = 0;//loader identifier
-    //These are the columns used by the CursorLoader in the query.
-    //TODO: Add the distance to user and distance duration after you finish the Directions API call
     public static final String[] SHOPS_COLUMNS = {
             ShopsContract.ShopsEntry.TABLE_NAME + "." + ShopsContract.ShopsEntry._ID,
             ShopsContract.ShopsEntry.COLUMN_SHOP_NAME,
             ShopsContract.ShopsEntry.COLUMN_SHOP_ADDRESS,
             ShopsContract.ShopsEntry.COLUMN_IS_OPEN,
             ShopsContract.ShopsEntry.COLUMN_DISTANCE_TO_USER,
-            ShopsContract.ShopsEntry.COLUMN_DISTANCE_DURATION
+            ShopsContract.ShopsEntry.COLUMN_DISTANCE_DURATION,
+            ShopsContract.ShopsEntry.COLUMN_SHOP_LATITUDE,
+            ShopsContract.ShopsEntry.COLUMN_SHOP_LONGITUDE
     };
 
     // These indices are tied to SHOPS_COLUMNS.  If SHOPS_COLUMNS changes, these
@@ -74,6 +54,8 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     public static final int COL_IS_OPEN = 3;
     public static final int COL_DISTANCE_TO_USER = 4;
     public static final int COL_DISTANCE_DURATION = 5;
+    public static final int COL_SHOP_LATITUDE = 6;
+    public static final int COL_SHOP_LONGITUDE = 7;
 
     public ShopsFragment() {
     }
@@ -81,22 +63,56 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
 
     //TODO: Sort the list depending on the distance of the user to the shop
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        Log.i(LOG_TAG,"User's Lat/Lng in fragment = " + GlobalState.USER_LAT + "/" + GlobalState.USER_LNG);
-        mShopsAdapter = GlobalState.GLOBAL_ADAPTER;
-        mShopsAdapter =
-                new ArrayAdapter<String>(
-                        getActivity(),
-                        R.layout.list_item_shops,
-                        R.id.list_item_shops_textview,
-                        new ArrayList<String>()
-                );
+
+        Log.i(LOG_TAG, "User's Lat/Lng in fragment = " + GlobalState.USER_LAT + "/" + GlobalState.USER_LNG);
+        mShopsAdapter = new SimpleCursorAdapter(
+                getActivity(),
+                R.layout.list_item_shops,
+                null,
+                new String[] {
+                        ShopsContract.ShopsEntry.COLUMN_SHOP_NAME,
+                        ShopsContract.ShopsEntry.COLUMN_SHOP_ADDRESS,
+                        ShopsContract.ShopsEntry.COLUMN_IS_OPEN,
+                        ShopsContract.ShopsEntry.COLUMN_DISTANCE_TO_USER,
+                        ShopsContract.ShopsEntry.COLUMN_DISTANCE_DURATION
+                },
+                new int[] {
+                        R.id.list_item_shopname_textview,
+                        R.id.list_item_shopaddress_textview,
+                        R.id.list_item_shopisopen_textview,
+                        R.id.list_item_distance_textview,
+                        R.id.list_item_duration_textview
+                },
+                0
+        );
+        //we need to format the is_open field from the database
+        mShopsAdapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
+            @Override
+            public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
+                Log.i(LOG_TAG,"Column index is " + columnIndex);
+                switch (columnIndex) {
+                    case COL_IS_OPEN:
+                        if (cursor.getInt(COL_IS_OPEN) == 1){
+                            ((TextView) view).setText(Constants.SHOP_OPEN);
+                        }
+                        else if (cursor.getInt(COL_IS_OPEN) == 1) {
+                            ((TextView) view).setText(Constants.SHOP_CLOSED);
+                        }
+                        else {
+                            ((TextView) view).setText(Constants.SHOP_UNAVAILABLE);
+                        }
+                        return  true;
+                }
+                return true;
+            }
+        });
     //    Log.i(LOG_TAG,"Size of mShopsAdapter = " + mShopsAdapter.getCount());
 
         // Get a reference to the ListView, and attach this adapter to it.
+        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         ListView listView = (ListView) rootView.findViewById(R.id.listview_shops);
         listView.setAdapter(mShopsAdapter);
 
@@ -104,19 +120,20 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                String placeDetails = mShopsAdapter.getItem(position);
-                String coordinates = placeDetails.substring(placeDetails.indexOf(Constants.PIPE_SEPARATOR) + 1);
-                shopLatitude = coordinates.substring(0, coordinates.indexOf(Constants.SLASH_SEPARATOR));
-                shopLongitude = coordinates.substring(coordinates.indexOf(Constants.SLASH_SEPARATOR) + 1);
-                shopName = placeDetails.substring(0,placeDetails.indexOf(Constants.COMMA_SEPARATOR));
-                Intent openMap = new Intent(getActivity().getApplicationContext(),MapsActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString(Constants.BUNDLE_SHOP_LAT,shopLatitude);
-                bundle.putString(Constants.BUNDLE_SHOP_LNG,shopLongitude);
-                bundle.putString(Constants.BUNDLE_SHOP_NAME,shopName);
-                bundle.putString(Constants.BUNDLE_FRAGMENT,Constants.CALLED_FROM_FRAGMENT);
-                openMap.putExtras(bundle);
-                startActivity(openMap);
+                Cursor cursor = mShopsAdapter.getCursor();
+                if (cursor != null && cursor.moveToPosition(position)) {
+                    shopName = cursor.getString(COL_SHOP_NAME);
+                    shopLatitude = cursor.getString(COL_SHOP_LATITUDE);
+                    shopLongitude = cursor.getString(COL_SHOP_LONGITUDE);
+                    Intent openMap = new Intent(getActivity().getApplicationContext(),MapsActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString(Constants.BUNDLE_SHOP_LAT,shopLatitude);
+                    bundle.putString(Constants.BUNDLE_SHOP_LNG,shopLongitude);
+                    bundle.putString(Constants.BUNDLE_SHOP_NAME,shopName);
+                    bundle.putString(Constants.BUNDLE_FRAGMENT,Constants.CALLED_FROM_FRAGMENT);
+                    openMap.putExtras(bundle);
+                    startActivity(openMap);
+                }
             }
         });
         return rootView;
@@ -172,7 +189,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     @Override
     public void onStart() {
         super.onStart();
-        Log.i(LOG_TAG,"In fragment onStart()");
+       // Log.i(LOG_TAG, "In fragment onStart()");
        // updateShopList();
     }
 
@@ -181,21 +198,34 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
         coordinates[0] = GlobalState.USER_LAT;
         coordinates[1] = GlobalState.USER_LNG;
         Log.i(LOG_TAG,"Lat/lng in updateShopList - " + coordinates[0] + "/" + coordinates[1]);
-        new FetchGooglePlaces(getActivity(), mShopsAdapter).execute(coordinates);
+        new FetchGooglePlaces(getActivity()).execute(coordinates);
     }
 
     //loaders are initialised in onActivityCreated because their lifecycle is bound to the activity, not the fragment
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
+        Log.i(LOG_TAG,"In onActivityCreated");
         //initiate loader to populate data in the Shops fragment
-        getLoaderManager().initLoader(SHOPS_LOADER_ID,null,(android.app.LoaderManager.LoaderCallbacks<Cursor>) this);
+        getLoaderManager().initLoader(SHOPS_LOADER_ID,null,this);
         super.onActivityCreated(savedInstanceState);
     }
 
-    //these three methods are required by the CursorLoader interface
     @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new CursorLoader(
+    public void onLoadFinished(android.content.Loader<Cursor> loader, Cursor data) {
+        Log.i(LOG_TAG,"In onLoadFinished");
+        mShopsAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(android.content.Loader<Cursor> loader) {
+        Log.i(LOG_TAG,"In onLoaderReset");
+        mShopsAdapter.swapCursor(null);
+    }
+    //ShopsContract.ShopsEntry.CONTENT_URI
+    @Override
+    public android.content.Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        Log.i(LOG_TAG,"In onCreateLoader");
+        return new android.content.CursorLoader(
                 getActivity(),
                 ShopsContract.ShopsEntry.CONTENT_URI,
                 SHOPS_COLUMNS,
@@ -203,16 +233,6 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                 null,
                 ShopsContract.ShopsEntry.SORT_ORDER
         );
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-
     }
 }
 

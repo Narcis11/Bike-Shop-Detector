@@ -31,18 +31,17 @@ import waldo.bike.waldo.R;
 /**
  * Created by Narcis11 on 20.12.2014.
  */
-public class FetchGooglePlaces extends AsyncTask<String, Void, String[]> {
+public class FetchGooglePlaces extends AsyncTask<String, Void, Void> {
     private final Context mContext;
     private final String LOG_TAG = FetchGooglePlaces.class.getSimpleName();
     private ArrayAdapter<String> mShopsAdapter;
-    private boolean DEBUG = false;
-    public FetchGooglePlaces (Context context, ArrayAdapter<String> shopsAdapter) {
+    private boolean DEBUG = true;
+    public FetchGooglePlaces (Context context) {
             mContext = context;
-            mShopsAdapter = shopsAdapter;
     }
     //TODO: initiate a Google Directions API call to retrieve the distance between the user and each shop
     @Override
-    protected String[] doInBackground(String... params) {
+    protected Void doInBackground(String... params) {
         if (params.length == 0) {
             return null;//no input, so we return null
         }
@@ -119,7 +118,7 @@ public class FetchGooglePlaces extends AsyncTask<String, Void, String[]> {
             }
         }
         try {
-            return getPlaceDataFromJson(placesJsonStr);
+            getPlaceDataFromJson(placesJsonStr);
         }
         catch(JSONException e) {
             Log.i(LOG_TAG,"return failed in doInBackground");
@@ -130,7 +129,7 @@ public class FetchGooglePlaces extends AsyncTask<String, Void, String[]> {
         return null;
     }
 
-    private String[] getPlaceDataFromJson(String placeJsonStr)
+    private void getPlaceDataFromJson(String placeJsonStr)
             throws JSONException {
 
         final String API_RESULT = "results";//root
@@ -223,7 +222,6 @@ public class FetchGooglePlaces extends AsyncTask<String, Void, String[]> {
                             cvArray);
                     Log.i(LOG_TAG,"No of bulk rows inserted = " + rowsInserted);
                     if (DEBUG) {
-                        Log.i(LOG_TAG,"Before cursor load");
                         Cursor shopsCursor = mContext.getContentResolver().query(
                                 ShopsContract.ShopsEntry.CONTENT_URI,
                                 null,
@@ -237,7 +235,7 @@ public class FetchGooglePlaces extends AsyncTask<String, Void, String[]> {
                             DatabaseUtils.cursorRowToContentValues(shopsCursor, resultValues);
                             Log.i(LOG_TAG, "Query succeeded! **********");
                             for (String key : resultValues.keySet()) {
-                                Log.v(LOG_TAG, key + ": " + resultValues.getAsString(key));
+                                Log.i(LOG_TAG, key + ": " + resultValues.getAsString(key));
                             }
                         } else {
                             Log.i(LOG_TAG, "Query failed! :( **********");
@@ -245,45 +243,25 @@ public class FetchGooglePlaces extends AsyncTask<String, Void, String[]> {
                         shopsCursor.close();
                     }
                 }
-                return resultStrs;
             }
 
-        return  null; //result is NOT OK, so we return null and handle the error in onPostExecute();
 
         }
         catch(JSONException e) {
             Log.e(LOG_TAG,"Caught JSON Exception: " + e.getMessage());
             e.printStackTrace();
         }
-        finally {
-
-           // return null;//fetch failed, nothing to return;
-        }
-        Log.i(LOG_TAG,"Returned null from getPlaceDataFromJson.");
-        return null;
     }
 
     @Override
-    protected void onPostExecute(String[] result) {
-        super.onPostExecute(result);
-        if (result != null) {
-            Log.i(LOG_TAG,"result != null in onPostExecute()");
-            mShopsAdapter.clear();
-            for (String placeDetailsString : result) {
-                //we can't add nulls to the Adapter, otherwise it will issue a NullPointerException
-                if (placeDetailsString != null) {
-                    mShopsAdapter.add(placeDetailsString);
-                }
-            }
-            //Warning for later changes: if you use addAll() instead of this loop, you'll probably get a NullPointerException
-            //if the result contains nulls. You must always check for nulls when passing data to the adapter.
-        }
-
-        else if (GlobalState.FETCH_STATUS.equals(Constants.ZERO_RESULTS)) {
+    protected void onPostExecute(Void aVoid) {
+        super.onPostExecute(aVoid);
+        if (GlobalState.FETCH_STATUS.equals(Constants.ZERO_RESULTS)) {
             Toast.makeText(mContext, R.string.api_zero_results, Toast.LENGTH_SHORT).show();
         }
-        else {
+        else if (!GlobalState.FETCH_STATUS.equals(Constants.OK_STATUS)) {
             Toast.makeText(mContext, R.string.api_error, Toast.LENGTH_SHORT).show();
         }
     }
+
 }
