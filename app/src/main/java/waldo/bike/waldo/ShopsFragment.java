@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -184,6 +185,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     //loaders are initialised in onActivityCreated because their lifecycle is bound to the activity, not the fragment
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
+        //initiate loader to populate data in the Shops fragment
         getLoaderManager().initLoader(SHOPS_LOADER_ID,null,(android.app.LoaderManager.LoaderCallbacks<Cursor>) this);
         super.onActivityCreated(savedInstanceState);
     }
@@ -191,7 +193,14 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     //these three methods are required by the CursorLoader interface
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return null;
+        return new CursorLoader(
+                getActivity(),
+                ShopsContract.ShopsEntry.CONTENT_URI,
+                SHOPS_COLUMNS,
+                null,
+                null,
+                ShopsContract.ShopsEntry.SORT_ORDER
+        );
     }
 
     @Override
