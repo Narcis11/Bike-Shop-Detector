@@ -24,6 +24,7 @@ import Utilities.Constants;
 import Utilities.GlobalState;
 import Utilities.Utility;
 import data.ShopsContract;
+import sync.SyncAdapter;
 
 /**
  * Created by Narcis11 on 20.12.2014.
@@ -201,7 +202,8 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
         coordinates[0] = GlobalState.USER_LAT;
         coordinates[1] = GlobalState.USER_LNG;
         Log.i(LOG_TAG,"Lat/lng in updateShopList - " + coordinates[0] + "/" + coordinates[1]);
-        new FetchGooglePlaces(getActivity()).execute(coordinates);
+      //  new FetchGooglePlaces(getActivity()).execute(coordinates);
+        SyncAdapter.syncImmediately(getActivity());
     }
 
     //loaders are initialised in onActivityCreated because their lifecycle is bound to the activity, not the fragment
