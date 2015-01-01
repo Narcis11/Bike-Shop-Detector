@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.SyncResult;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -141,8 +142,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         final String API_COORD_LONG = "lng";
         int dummyDistance = 300;
         int dummyDuration = 3;
-
-
+        int distanceToShop = 0;
+        float distanceDuration = 0;
+        int intDistanceDuration = 0;
         try {
             JSONObject placesJson = new JSONObject(placesJsonStr);
             GlobalState.FETCH_STATUS = placesJson.getString(API_STATUS);
@@ -177,6 +179,15 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     }
                     //TODO: Remove dummy distance and duration data
                     //*************Creating dummy data********************
+                    Location userLocation = new Location(Constants.PROVIDER);
+                    userLocation.setLatitude(Double.valueOf(GlobalState.USER_LAT));
+                    userLocation.setLongitude(Double.valueOf(GlobalState.USER_LNG));
+                    Location shopLocation = new Location(Constants.PROVIDER);
+                    shopLocation.setLatitude(Double.valueOf(latitude));
+                    shopLocation.setLongitude(Double.valueOf(longitude));
+                    distanceToShop =(int) Math.round(userLocation.distanceTo(shopLocation));
+                    distanceDuration = Utility.calculateDistanceDuration(distanceToShop,getContext());
+                    intDistanceDuration = (int) Math.round(distanceDuration);
                     dummyDistance+=150 + i*20;
                     dummyDuration+=3;
                     //main info from the root object
@@ -199,8 +210,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     shopsValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_LONGITUDE,longitude);
                     shopsValues.put(ShopsContract.ShopsEntry.COLUMN_IS_OPEN, isShopOpen);
                     //TODO: Remove dummy data from the vector and add real data
-                    shopsValues.put(ShopsContract.ShopsEntry.COLUMN_DISTANCE_TO_USER,dummyDistance);
-                    shopsValues.put(ShopsContract.ShopsEntry.COLUMN_DISTANCE_DURATION,dummyDuration);
+                    shopsValues.put(ShopsContract.ShopsEntry.COLUMN_DISTANCE_TO_USER,distanceToShop);
+                    shopsValues.put(ShopsContract.ShopsEntry.COLUMN_DISTANCE_DURATION,intDistanceDuration);
                     cVVector.add(shopsValues);
                 }
                 if (cVVector.size() > 0) {
@@ -243,6 +254,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             Log.e(LOG_TAG,"Caught JSON Exception: " + e.getMessage());
             e.printStackTrace();
         }
+
+
     }
 
     public static void syncImmediately(Context context) {

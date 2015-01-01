@@ -40,6 +40,7 @@ public class Constants {
     //used in network communication
     public static final String HTTP_GET = "GET";
     public static final String HTTP_POST = "POST";
+    public static final String PROVIDER = "waldoprovider";
 
     //used in the list view from the main activity
     public static final String SHOP_OPEN = "Open";

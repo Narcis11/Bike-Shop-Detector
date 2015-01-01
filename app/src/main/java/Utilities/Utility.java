@@ -24,11 +24,59 @@ public class Utility {
                 context.getString(R.string.pref_unit_default));
     }
 
+    public static String getPrefferedSpeed (Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getString(context.getString(R.string.pref_speed_key),
+                context.getString(R.string.pref_speed_default));
+    }
+
     public static boolean getPreferredNotification(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         String displayNotificationsKey = context.getString(R.string.pref_enable_notifications_key);
         return prefs.getBoolean(displayNotificationsKey,
                Boolean.parseBoolean(context.getString(R.string.pref_enable_notifications_default)));
+    }
+
+    public static int formatPreferredSpeedMetric (Context context) {
+        String speed = getPrefferedSpeed(context);
+        final String fourteenKm = "14 km";
+        final String seventeenKm = "17 km";
+        final String twentyKm = "20 km";
+        final String twentyThreeKm = "23 km";
+        final String twentySixKm = "26 km";
+        final String twentyNineKm = "29 km";
+        final String thirtyTwoKm = "32 km";
+        final int returnFourteen = 14000;
+        final int returnSeventeen = 17000;
+        final int returnTwenty = 20000;
+        final int returnTwentyThree = 23000;
+        final int returnTwentySix = 26000;
+        final int returnTwentyNine = 29000;
+        final int returnThirtyTwo = 32000;
+        switch (speed) {
+            case fourteenKm: {
+                return returnFourteen;
+            }
+            case seventeenKm: {
+                return returnSeventeen;
+            }
+            case twentyKm: {
+                return returnTwenty;
+            }
+            case twentyThreeKm: {
+                return returnTwentyThree;
+            }
+            case twentySixKm: {
+                return returnTwentySix;
+            }
+            case twentyNineKm: {
+                return returnTwentyNine;
+            }
+            case thirtyTwoKm: {
+                return returnThirtyTwo;
+            }
+            default: return returnSeventeen;
+        }
     }
     //used for determining the radius used in the Nearby Search. Returns 10.000 if no range is selected
     public static String formatPreferredRange(Context context) {
@@ -84,5 +132,10 @@ public class Utility {
     {   //landscape = 2; portrait = 1;
         int orientation = context.getResources().getConfiguration().orientation;
         return orientation;
+    }
+
+    public static float calculateDistanceDuration (int distanceToShop, Context context) {
+        int formattedSpeed = formatPreferredSpeedMetric(context);
+        return (distanceToShop * 60)/formattedSpeed;
     }
 }
