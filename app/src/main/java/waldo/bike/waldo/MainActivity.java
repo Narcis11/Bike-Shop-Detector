@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
@@ -52,6 +53,7 @@ import Utilities.Constants;
 import Utilities.DeviceConnection;
 import Utilities.GlobalState;
 import Utilities.Utility;
+import data.ShopsContract;
 import slidermenu.SliderDrawerItem;
 import slidermenu.SliderDrawerListAdapter;
 
@@ -419,16 +421,25 @@ public class MainActivity extends Activity implements
     }
 
     public void openMap() {
-        if (GlobalState.ALL_SHOPS_INFO.length() > 0) {
-            Intent intent = new Intent(this, MapsActivity.class);
-/*        Bundle bundle = new Bundle();
-        bundle.putString(Constants.BUNDLE_USER_LAT,GlobalState.USER_LAT);
-        bundle.putString(Constants.BUNDLE_USER_LNG,GlobalState.USER_LNG);
-        intent.putExtras(bundle);*/
-            startActivity(intent);
+        Cursor cursor = mContext.getApplicationContext().getContentResolver().query(
+                ShopsContract.ShopsEntry.CONTENT_URI,
+                null,
+                null,
+                null,
+                null
+        );
+       /* if (GlobalState.ALL_SHOPS_INFO.length() > 0) {*/
+        if (GlobalState.USER_LAT.equals("") && GlobalState.USER_LNG.equals("")) {
+            Toast.makeText(mContext,R.string.no_user_location,Toast.LENGTH_SHORT).show();
         }
         else {
-            Toast.makeText(mContext,R.string.data_not_fetched,Toast.LENGTH_SHORT).show();
+            if (cursor.getCount() > 0) {
+                Intent intent = new Intent(this, MapsActivity.class);
+                startActivity(intent);
+            } else {
+                Toast.makeText(mContext, R.string.data_not_fetched, Toast.LENGTH_SHORT).show();
+            }
         }
+
     }
 }

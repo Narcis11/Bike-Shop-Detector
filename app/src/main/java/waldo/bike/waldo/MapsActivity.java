@@ -1,5 +1,6 @@
 package waldo.bike.waldo;
 
+import android.database.Cursor;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +13,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import Utilities.Constants;
 import Utilities.GlobalState;
+import data.ShopsContract;
 
 public class MapsActivity extends FragmentActivity {
 
@@ -74,6 +76,7 @@ public class MapsActivity extends FragmentActivity {
 
         //(fragmentCall = bundle.getString(Constants.BUNDLE_FRAGMENT) ) != null && fragmentCall.equals(Constants.CALLED_FROM_FRAGMENT)
         if ( bundle != null && !bundle.isEmpty() ) {
+            //call from fragment
             Log.i(LOG_TAG, "Preparing to extract bundles");
             Double shopLat = Double.valueOf(bundle.getString(Constants.BUNDLE_SHOP_LAT));
             Double shopLng = Double.valueOf(bundle.getString(Constants.BUNDLE_SHOP_LNG));
@@ -89,18 +92,27 @@ public class MapsActivity extends FragmentActivity {
         else {
             //if there's no bundle, then the call is from the main activity (View all shops button)
             Log.i(LOG_TAG, "GlobalState.ALL_SHOPS_INFO in maps activity: " + GlobalState.ALL_SHOPS_INFO);
-                String[] allShopsInfo = GlobalState.ALL_SHOPS_INFO.substring(1).split(Constants.HASH_SEPARATOR);
-                //ceva de genul "HyperSport,44.481649,26.09269|"
-                for (int i = 0; i < allShopsInfo.length; i++) {
-                    allShopsName = allShopsInfo[i].substring(0, allShopsInfo[i].indexOf(Constants.DOLLAR_SEPARATOR));
-                    allShopsLat = allShopsInfo[i].substring(allShopsInfo[i].indexOf(Constants.DOLLAR_SEPARATOR) + 1, allShopsInfo[i].lastIndexOf(Constants.DOLLAR_SEPARATOR));
-                    allShopsLng = allShopsInfo[i].substring(allShopsInfo[i].lastIndexOf(Constants.DOLLAR_SEPARATOR) + 1);
-
+            Cursor shopsCursor;
+            shopsCursor = getApplicationContext().getContentResolver().query(
+                    ShopsContract.ShopsEntry.CONTENT_URI,
+                    null,
+                    null,
+                    null,
+                    ShopsContract.ShopsEntry.SORT_ORDER
+            );
+            if (shopsCursor.moveToFirst()) {
+                Log.i(LOG_TAG,"Rows in cursor = " + shopsCursor.getCount());
+                for (int i = 0; i < shopsCursor.getCount(); i++) {
+                    shopsCursor.moveToPosition(i);//without it, the cursor would remain at the first position and retrieve the same shop in each iteration
+                    allShopsName = shopsCursor.getString(shopsCursor.getColumnIndex(ShopsContract.ShopsEntry.COLUMN_SHOP_NAME));
+                    allShopsLat = shopsCursor.getString(shopsCursor.getColumnIndex(ShopsContract.ShopsEntry.COLUMN_SHOP_LATITUDE));
+                    allShopsLng = shopsCursor.getString(shopsCursor.getColumnIndex(ShopsContract.ShopsEntry.COLUMN_SHOP_LONGITUDE));
+                    Log.i(LOG_TAG,"allShopsName = " + allShopsName);
                     mMap.addMarker(new MarkerOptions().position(new LatLng(Double.valueOf(allShopsLat), Double.valueOf(allShopsLng))).title(allShopsName));
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(Double.valueOf(GlobalState.USER_LAT), Double.valueOf(GlobalState.USER_LNG))));
                     mMap.animateCamera(CameraUpdateFactory.zoomTo(Constants.CITY_ZOOM));
                 }
-            GlobalState.ALL_SHOPS_INFO = "";
+            }
         }
     }
 }
