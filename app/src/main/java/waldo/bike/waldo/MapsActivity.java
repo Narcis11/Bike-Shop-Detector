@@ -80,8 +80,6 @@ public class MapsActivity extends FragmentActivity {
             Log.i(LOG_TAG, "Preparing to extract bundles");
             Double shopLat = Double.valueOf(bundle.getString(Constants.BUNDLE_SHOP_LAT));
             Double shopLng = Double.valueOf(bundle.getString(Constants.BUNDLE_SHOP_LNG));
-            Double userLat = Double.valueOf(GlobalState.USER_LAT);
-            Double userLng = Double.valueOf(GlobalState.USER_LNG);
             String shopName = bundle.getString(Constants.BUNDLE_SHOP_NAME);
             LatLng shopLatLng = new LatLng(shopLat, shopLng);
 
