@@ -77,8 +77,10 @@
         </activity>
 
         <provider
-            android:authorities="waldo.bike.waldo"
+            android:authorities="@string/content_authority"
             android:name="data.ShopsProvider"
+            android:syncable="true"
+            android:exported="false"
             android:enabled="true"
             />
         <!-- SyncAdapter's dummy authentication service -->

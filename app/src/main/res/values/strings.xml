@@ -94,7 +94,7 @@
     <string name="title_activity_maps">Map</string>
 
     <!-- SyncAdapter related -->
-    <string name="sync_account_type">waldo.bike.waldo</string>
-    <string name="content_authority">bike.waldo.android.waldo.app</string>
+    <string name="sync_account_type">waldo.bike.shopsapp</string>
+    <string name="content_authority">waldo.bike.waldo</string>
 
 </resources>
