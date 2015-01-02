@@ -151,10 +151,17 @@ public class Utility {
     }
 
     public static String formatDistanceDuration (String distanceDuration) {
-        String minute = distanceDuration.substring(0,distanceDuration.indexOf("."));
-        String decimals = distanceDuration.substring(distanceDuration.indexOf(".") + 1,4);
-        String seconds = String.valueOf((Integer.valueOf(decimals) * 60)/100);
-        return minute + "min " + seconds + "sec";
+        Log.i(LOG_TAG,"Duration input: " + distanceDuration);
+        String minute = distanceDuration.substring(0, distanceDuration.indexOf("."));
+        String decimals = "";
+        if ( distanceDuration.substring(distanceDuration.indexOf(".") +1).length() > 1) {
+            decimals = distanceDuration.substring(distanceDuration.indexOf(".") + 1, distanceDuration.indexOf(".") + 3);
+        }
+        else {
+            decimals = distanceDuration.substring(distanceDuration.indexOf(".") + 1, distanceDuration.indexOf(".") + 2);
+        }
+            String seconds = String.valueOf((Integer.valueOf(decimals) * 60) / 100);
+            return minute + "min " + seconds + "sec";
     }
 
     public static String formatDistance (String distance) {
@@ -162,7 +169,7 @@ public class Utility {
             if (distance.length() <=5) {
                 //for distances between 1000-9999
                 String km = distance.substring(0,1);
-                String meters =  distance.substring(1,3);
+                String meters =  distance.substring(1, 3);
             //    Log.i(LOG_TAG,"Distance/Km/m = " + distance + " / " + km + " / " + roundedMeters );
                 if (!meters.equals("00")) {
                     return km + Constants.COMMA_SEPARATOR + meters + " km";
