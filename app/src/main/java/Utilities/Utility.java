@@ -42,13 +42,13 @@ public class Utility {
 
     public static float formatPreferredSpeedMetric (Context context) {
         String speed = getPrefferedSpeed(context);
-        final String fourteenKm = "14 km";
-        final String seventeenKm = "17 km";
-        final String twentyKm = "20 km";
-        final String twentyThreeKm = "23 km";
-        final String twentySixKm = "26 km";
-        final String twentyNineKm = "29 km";
-        final String thirtyTwoKm = "32 km";
+        final String fourteenKm = "14 km/h";
+        final String seventeenKm = "17 km/h";
+        final String twentyKm = "20 km/h";
+        final String twentyThreeKm = "23 km/h";
+        final String twentySixKm = "26 km/h";
+        final String twentyNineKm = "29 km/h";
+        final String thirtyTwoKm = "32 km/h";
         final float returnFourteen = 14000;
         final float returnSeventeen = 17000;
         final float returnTwenty = 20000;
@@ -141,7 +141,6 @@ public class Utility {
         float formattedSpeed = formatPreferredSpeedMetric(context);
         float minutes = 60;
         float distance = distanceToShop;
-        Log.i(LOG_TAG, "Calculated duration = " + (distance * minutes)/formattedSpeed);
         float distanceDuration = (distance * minutes)/formattedSpeed;
         return distanceDuration;
     }
@@ -150,7 +149,6 @@ public class Utility {
         String minute = distanceDuration.substring(0,distanceDuration.indexOf("."));
         String decimals = distanceDuration.substring(distanceDuration.indexOf(".") + 1,4);
         String seconds = String.valueOf((Integer.valueOf(decimals) * 60)/100);
-        Log.i(LOG_TAG,minute + " / " + decimals + " / " + seconds);
         return minute + "' " + seconds + "''";
     }
 
