@@ -45,7 +45,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     private static final String LOG_TAG = SyncAdapter.class.getSimpleName();
     private ArrayAdapter<String> mShopsAdapter;
     private Context mContext;
-    private boolean DEBUG = true;
+    private boolean DEBUG = false;
     public SyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
         mContext = context;
@@ -63,7 +63,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         //used for querying the Google Places API
         final String types = "bicycle_store";
         final String key = Constants.API_KEY;
-        final String latLng = GlobalState.USER_LAT + Constants.COMMA_SEPARATOR + GlobalState.USER_LNG;
+      //  final String latLng = GlobalState.USER_LAT + Constants.COMMA_SEPARATOR + GlobalState.USER_LNG;
+        final String latLng = "44.4391463,26.1428946";//we'll hardcoded for now, don't wanna wait for the location every time
         final String output = "json";
         try {
             //the query parameters used in the call
@@ -140,10 +141,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         //children of location
         final String API_COORD_LAT = "lat";
         final String API_COORD_LONG = "lng";
-        int dummyDistance = 300;
-        int dummyDuration = 3;
-        int distanceToShop = 0;
-        float distanceDuration = 0;
+        int distanceToShop;
+        double distanceDuration;
         String apiCallStatus = "";
         int isShopOpen = 2; //means that this info is not available
         try {
@@ -177,15 +176,16 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     } catch (JSONException e) {
                         Log.e(LOG_TAG, "Opening Hours JSON Exception: " + e.getMessage());
                     }
+                    //44.4391463,26.1428946
                     Location userLocation = new Location(Constants.PROVIDER);
-                    userLocation.setLatitude(Double.valueOf(GlobalState.USER_LAT));
-                    userLocation.setLongitude(Double.valueOf(GlobalState.USER_LNG));
+                    userLocation.setLatitude(Double.valueOf("44.4391463"));
+                    userLocation.setLongitude(Double.valueOf("26.1428946"));
                     Location shopLocation = new Location(Constants.PROVIDER);
                     shopLocation.setLatitude(Double.valueOf(latitude));
                     shopLocation.setLongitude(Double.valueOf(longitude));
                     distanceToShop =(int) Math.round(userLocation.distanceTo(shopLocation));
                     distanceDuration = Utility.calculateDistanceDuration(distanceToShop,getContext());
-
+                  //  Log.i(LOG_TAG,"distanceDuration is " + distanceDuration);
                     //main info from the root object
                     id = placeDetails.getString(API_ID);
                     placeName = placeDetails.getString(API_NAME);

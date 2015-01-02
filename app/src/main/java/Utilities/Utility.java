@@ -3,6 +3,7 @@ package Utilities;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Display;
 import android.widget.Toast;
 
@@ -12,7 +13,7 @@ import waldo.bike.waldo.R;
  * Created by nmihai on 15.12.2014.
  */
 public class Utility {
-
+        private static final String LOG_TAG = Utility.class.getSimpleName();
         public static String getPreferredRange(Context context) {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             return prefs.getString(context.getString(R.string.pref_range_key),
@@ -38,7 +39,7 @@ public class Utility {
                Boolean.parseBoolean(context.getString(R.string.pref_enable_notifications_default)));
     }
 
-    public static int formatPreferredSpeedMetric (Context context) {
+    public static float formatPreferredSpeedMetric (Context context) {
         String speed = getPrefferedSpeed(context);
         final String fourteenKm = "14 km";
         final String seventeenKm = "17 km";
@@ -47,13 +48,13 @@ public class Utility {
         final String twentySixKm = "26 km";
         final String twentyNineKm = "29 km";
         final String thirtyTwoKm = "32 km";
-        final int returnFourteen = 14000;
-        final int returnSeventeen = 17000;
-        final int returnTwenty = 20000;
-        final int returnTwentyThree = 23000;
-        final int returnTwentySix = 26000;
-        final int returnTwentyNine = 29000;
-        final int returnThirtyTwo = 32000;
+        final float returnFourteen = 14000;
+        final float returnSeventeen = 17000;
+        final float returnTwenty = 20000;
+        final float returnTwentyThree = 23000;
+        final float returnTwentySix = 26000;
+        final float returnTwentyNine = 29000;
+        final float returnThirtyTwo = 32000;
         switch (speed) {
             case fourteenKm: {
                 return returnFourteen;
@@ -135,9 +136,13 @@ public class Utility {
         return orientation;
     }
 
-    public static float calculateDistanceDuration (int distanceToShop, Context context) {
-        int formattedSpeed = formatPreferredSpeedMetric(context);
-        return (distanceToShop * 60)/formattedSpeed;
+    public static double calculateDistanceDuration (int distanceToShop, Context context) {
+        float formattedSpeed = formatPreferredSpeedMetric(context);
+        float minutes = 60;
+        float distance = distanceToShop;
+        Log.i(LOG_TAG, "Calculated duration = " + (distance * minutes)/formattedSpeed);
+        float distanceDuration = (distance * minutes)/formattedSpeed;
+        return distanceDuration;
     }
 
     public static void displayStatus (String status, Context context) {
