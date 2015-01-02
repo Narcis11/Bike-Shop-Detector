@@ -38,6 +38,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     private String shopLongitude = "";
     private String shopName = "";
     private String formattedDuration = "";
+    private String formattedDistance = "";
     private static final int SHOPS_LOADER_ID = 0;//loader identifier
     public static final String[] SHOPS_COLUMNS = {
             ShopsContract.ShopsEntry.TABLE_NAME + "." + ShopsContract.ShopsEntry._ID,
@@ -100,7 +101,9 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                         ((TextView) view).setText(cursor.getString(COL_SHOP_NAME));
                         return true;
                     case COL_DISTANCE_TO_USER:
-                        ((TextView) view).setText(cursor.getString(COL_DISTANCE_TO_USER) + " m");
+                        Log.i(LOG_TAG,"Shopname / distance: " + cursor.getString(COL_SHOP_NAME) + " / " + cursor.getString(COL_DISTANCE_TO_USER));
+                        formattedDistance = Utility.formatDistance(cursor.getString(COL_DISTANCE_TO_USER));
+                        ((TextView) view).setText(formattedDistance);
                         return true;
                     case COL_DISTANCE_DURATION:
                         formattedDuration = Utility.formatDistanceDuration(cursor.getString(COL_DISTANCE_DURATION));

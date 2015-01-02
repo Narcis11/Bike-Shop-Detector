@@ -154,9 +154,39 @@ public class Utility {
         String minute = distanceDuration.substring(0,distanceDuration.indexOf("."));
         String decimals = distanceDuration.substring(distanceDuration.indexOf(".") + 1,4);
         String seconds = String.valueOf((Integer.valueOf(decimals) * 60)/100);
-        return minute + "' " + seconds + "''";
+        return minute + "min " + seconds + "sec";
     }
 
+    public static String formatDistance (String distance) {
+        if (Integer.valueOf(distance) >= 1000) {
+            if (distance.length() <=5) {
+                //for distances between 1000-9999
+                String km = distance.substring(0,1);
+                String meters =  distance.substring(1,3);
+            //    Log.i(LOG_TAG,"Distance/Km/m = " + distance + " / " + km + " / " + roundedMeters );
+                if (!meters.equals("00")) {
+                    return km + Constants.COMMA_SEPARATOR + meters + " km";
+                }
+                else {
+                    return km + " km";
+                }
+            }
+            else {
+                //distances of 10.000 and above. Improbable to encounter, but still...
+                String km = distance.substring(0,2);
+                int meters = Math.round(Integer.valueOf(distance.substring(2)));
+                if (meters > 0) {
+                    return km + Constants.COMMA_SEPARATOR + String.valueOf(meters) + " km";
+                }
+                else {
+                    return km + " km";
+                }
+            }
+        }
+        else {
+            return distance + " m";
+        }
+    }
     public static void displayStatus (String status, Context context) {
         if (status.equals(Constants.ZERO_RESULTS)) {
             Toast.makeText(context,R.string.api_zero_results,Toast.LENGTH_SHORT).show();
