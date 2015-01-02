@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.view.Display;
+import android.widget.Toast;
 
 import waldo.bike.waldo.R;
 
@@ -134,8 +135,18 @@ public class Utility {
         return orientation;
     }
 
-    public static float calculateDistanceDuration (int distanceToShop, Context context) {
+    public static int calculateDistanceDuration (int distanceToShop, Context context) {
         int formattedSpeed = formatPreferredSpeedMetric(context);
-        return (distanceToShop * 60)/formattedSpeed;
+        return (int) Math.round((distanceToShop * 60)/formattedSpeed);
     }
+
+    public static void displayStatus (String status, Context context) {
+        if (status.equals(Constants.ZERO_RESULTS)) {
+            Toast.makeText(context,R.string.api_zero_results,Toast.LENGTH_SHORT).show();
+        }
+        else {
+            Toast.makeText(context,R.string.api_error,Toast.LENGTH_SHORT).show();
+        }
+    }
+
 }

@@ -253,15 +253,5 @@ public class FetchGooglePlaces extends AsyncTask<String, Void, Void> {
         }
     }
 
-    @Override
-    protected void onPostExecute(Void aVoid) {
-        super.onPostExecute(aVoid);
-        if (GlobalState.FETCH_STATUS.equals(Constants.ZERO_RESULTS)) {
-            Toast.makeText(mContext, R.string.api_zero_results, Toast.LENGTH_SHORT).show();
-        }
-        else if (!GlobalState.FETCH_STATUS.equals(Constants.OK_STATUS)) {
-            Toast.makeText(mContext, R.string.api_error, Toast.LENGTH_SHORT).show();
-        }
-    }
 
 }

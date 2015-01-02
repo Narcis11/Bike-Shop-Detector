@@ -143,13 +143,13 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         int dummyDistance = 300;
         int dummyDuration = 3;
         int distanceToShop = 0;
-        float distanceDuration = 0;
-        int intDistanceDuration = 0;
+        int distanceDuration = 0;
+        String apiCallStatus = "";
         try {
             JSONObject placesJson = new JSONObject(placesJsonStr);
-            GlobalState.FETCH_STATUS = placesJson.getString(API_STATUS);
-            Log.i(LOG_TAG,"Status is " + GlobalState.FETCH_STATUS);
-            if ( GlobalState.FETCH_STATUS.equals(Constants.OK_STATUS)) { //we only parse if the result is OK
+            apiCallStatus = placesJson.getString(API_STATUS);
+            Log.i(LOG_TAG,"Status is " + apiCallStatus);
+            if ( apiCallStatus.equals(Constants.OK_STATUS)) { //we only parse if the result is OK
                 JSONArray placesArray = placesJson.getJSONArray(API_RESULT); //root node
                 Vector<ContentValues> cVVector = new Vector<ContentValues>(placesArray.length());
                 String[] resultStrs = new String[100];//we assume that we'll never get more than 100 results.
@@ -187,7 +187,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     shopLocation.setLongitude(Double.valueOf(longitude));
                     distanceToShop =(int) Math.round(userLocation.distanceTo(shopLocation));
                     distanceDuration = Utility.calculateDistanceDuration(distanceToShop,getContext());
-                    intDistanceDuration = (int) Math.round(distanceDuration);
                     dummyDistance+=150 + i*20;
                     dummyDuration+=3;
                     //main info from the root object
@@ -211,7 +210,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     shopsValues.put(ShopsContract.ShopsEntry.COLUMN_IS_OPEN, isShopOpen);
                     //TODO: Remove dummy data from the vector and add real data
                     shopsValues.put(ShopsContract.ShopsEntry.COLUMN_DISTANCE_TO_USER,distanceToShop);
-                    shopsValues.put(ShopsContract.ShopsEntry.COLUMN_DISTANCE_DURATION,intDistanceDuration);
+                    shopsValues.put(ShopsContract.ShopsEntry.COLUMN_DISTANCE_DURATION,distanceDuration);
                     cVVector.add(shopsValues);
                 }
                 if (cVVector.size() > 0) {
@@ -247,7 +246,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     }
                 }
             }
-
 
         }
         catch(JSONException e) {
