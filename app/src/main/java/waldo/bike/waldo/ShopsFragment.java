@@ -100,7 +100,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                         ((TextView) view).setText(cursor.getString(COL_SHOP_NAME));
                         return true;
                     case COL_DISTANCE_TO_USER:
-                        ((TextView) view).setText(cursor.getString(COL_DISTANCE_TO_USER) + "m");
+                        ((TextView) view).setText(cursor.getString(COL_DISTANCE_TO_USER) + " m");
                         return true;
                     case COL_DISTANCE_DURATION:
                         formattedDuration = Utility.formatDistanceDuration(cursor.getString(COL_DISTANCE_DURATION));

@@ -36,7 +36,7 @@
 
     <!-- Formatting for Settings/My speed preference in metric mode-->
     <string name="pref_speed_key">speed</string>
-    <string name="pref_speed_default">17 km</string>
+    <string name="pref_speed_default">14 km</string>
     <string name="pref_speed_label">My average speed</string>
     <!-- Formatting for Settings/My speed preference in imperial mode-->
     <string name="pref_speed_imperial_default">10 miles/h</string>
@@ -58,6 +58,7 @@
 
 
     <!-- Values for the Settings/My speed array in metric mode-->
+    <string name="speed_array_0">5 km/h</string>
     <string name="speed_array_1">14 km/h</string>
     <string name="speed_array_2">17 km/h</string>
     <string name="speed_array_3">20 km/h</string>
@@ -67,6 +68,7 @@
     <string name="speed_array_7">32 km/h</string>
 
     <!-- Values for the Settings/My speed array in imperial mode-->
+    <string name="speed_array_imperial_0">3 miles/h</string>
     <string name="speed_array_imperial_1">9 miles/h</string>
     <string name="speed_array_imperial_2">10 miles/h</string>
     <string name="speed_array_imperial_3">12 miles/h</string>

@@ -24,6 +24,7 @@
 
     <string-array
         name="speed_values_array">
+        <item>@string/speed_array_0</item>
         <item>@string/speed_array_1</item>
         <item>@string/speed_array_2</item>
         <item>@string/speed_array_3</item>
@@ -36,6 +37,7 @@
     <!--Used for imperial mode-->
     <string-array
         name="speed_values_imperial_array">
+        <item>@string/speed_array_imperial_0</item>
         <item>@string/speed_array_imperial_1</item>
         <item>@string/speed_array_imperial_2</item>
         <item>@string/speed_array_imperial_3</item>

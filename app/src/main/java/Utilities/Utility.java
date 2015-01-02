@@ -42,6 +42,7 @@ public class Utility {
 
     public static float formatPreferredSpeedMetric (Context context) {
         String speed = getPrefferedSpeed(context);
+        final String fiveKm = "5 km/h";
         final String fourteenKm = "14 km/h";
         final String seventeenKm = "17 km/h";
         final String twentyKm = "20 km/h";
@@ -49,6 +50,7 @@ public class Utility {
         final String twentySixKm = "26 km/h";
         final String twentyNineKm = "29 km/h";
         final String thirtyTwoKm = "32 km/h";
+        final float returnFive = 5000;
         final float returnFourteen = 14000;
         final float returnSeventeen = 17000;
         final float returnTwenty = 20000;
@@ -57,6 +59,9 @@ public class Utility {
         final float returnTwentyNine = 29000;
         final float returnThirtyTwo = 32000;
         switch (speed) {
+            case fiveKm: {
+                return returnFive;
+            }
             case fourteenKm: {
                 return returnFourteen;
             }
