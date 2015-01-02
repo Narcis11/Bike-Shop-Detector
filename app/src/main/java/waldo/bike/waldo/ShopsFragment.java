@@ -95,7 +95,6 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
         mShopsAdapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
             @Override
             public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
-              //  Log.i(LOG_TAG,"Column index is " + columnIndex);
                 switch (columnIndex) {
                     case COL_SHOP_NAME:
                         ((TextView) view).setText(cursor.getString(COL_SHOP_NAME));

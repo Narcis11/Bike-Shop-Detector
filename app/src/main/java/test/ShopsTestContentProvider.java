@@ -80,6 +80,7 @@ public class ShopsTestContentProvider extends AndroidTestCase {
         columnNames.add(ShopsContract.ShopsEntry.COLUMN_DISTANCE_DURATION);
    //     ShopsTest.validateCursor(contentCursor,columnNames);
 
+
         if (contentCursor.moveToFirst()) {
             for (int i = 0; i < columnNames.size(); i++) {
                 columnValue =  columnValue + " " + contentCursor.getString(contentCursor.getColumnIndex(columnNames.get(i))) + ",";

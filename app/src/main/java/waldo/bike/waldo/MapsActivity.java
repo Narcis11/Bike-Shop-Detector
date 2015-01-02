@@ -89,7 +89,6 @@ public class MapsActivity extends FragmentActivity {
         }
         else {
             //if there's no bundle, then the call is from the main activity (View all shops button)
-            Log.i(LOG_TAG, "GlobalState.ALL_SHOPS_INFO in maps activity: " + GlobalState.ALL_SHOPS_INFO);
             Cursor shopsCursor;
             shopsCursor = getApplicationContext().getContentResolver().query(
                     ShopsContract.ShopsEntry.CONTENT_URI,

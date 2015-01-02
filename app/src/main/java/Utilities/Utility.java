@@ -135,9 +135,9 @@ public class Utility {
         return orientation;
     }
 
-    public static int calculateDistanceDuration (int distanceToShop, Context context) {
+    public static float calculateDistanceDuration (int distanceToShop, Context context) {
         int formattedSpeed = formatPreferredSpeedMetric(context);
-        return (int) Math.round((distanceToShop * 60)/formattedSpeed);
+        return (distanceToShop * 60)/formattedSpeed;
     }
 
     public static void displayStatus (String status, Context context) {

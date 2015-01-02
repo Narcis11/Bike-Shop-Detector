@@ -143,8 +143,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         int dummyDistance = 300;
         int dummyDuration = 3;
         int distanceToShop = 0;
-        int distanceDuration = 0;
+        float distanceDuration = 0;
         String apiCallStatus = "";
+        int isShopOpen = 2; //means that this info is not available
         try {
             JSONObject placesJson = new JSONObject(placesJsonStr);
             apiCallStatus = placesJson.getString(API_STATUS);
@@ -152,7 +153,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             if ( apiCallStatus.equals(Constants.OK_STATUS)) { //we only parse if the result is OK
                 JSONArray placesArray = placesJson.getJSONArray(API_RESULT); //root node
                 Vector<ContentValues> cVVector = new Vector<ContentValues>(placesArray.length());
-                String[] resultStrs = new String[100];//we assume that we'll never get more than 100 results.
                 for (int i = 0; i < placesArray.length(); i++) {
                     // These are the values that will be collected.
                     String id;
@@ -177,8 +177,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     } catch (JSONException e) {
                         Log.e(LOG_TAG, "Opening Hours JSON Exception: " + e.getMessage());
                     }
-                    //TODO: Remove dummy distance and duration data
-                    //*************Creating dummy data********************
                     Location userLocation = new Location(Constants.PROVIDER);
                     userLocation.setLatitude(Double.valueOf(GlobalState.USER_LAT));
                     userLocation.setLongitude(Double.valueOf(GlobalState.USER_LNG));
@@ -187,28 +185,25 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     shopLocation.setLongitude(Double.valueOf(longitude));
                     distanceToShop =(int) Math.round(userLocation.distanceTo(shopLocation));
                     distanceDuration = Utility.calculateDistanceDuration(distanceToShop,getContext());
-                    dummyDistance+=150 + i*20;
-                    dummyDuration+=3;
+
                     //main info from the root object
                     id = placeDetails.getString(API_ID);
                     placeName = placeDetails.getString(API_NAME);
                     address = placeDetails.getString(API_ADDRESS);
-                    resultStrs[i] = placeName + Constants.COMMA_SEPARATOR + " " + address + ", open? " + openNow + Constants.PIPE_SEPARATOR + latitude + Constants.SLASH_SEPARATOR + longitude;
-                    //   Log.i(LOG_TAG, "Parsed result is: " + resultStrs[i]);
-                    GlobalState.ALL_SHOPS_INFO += Constants.HASH_SEPARATOR + placeName + Constants.DOLLAR_SEPARATOR + latitude + Constants.DOLLAR_SEPARATOR + longitude;
-                    //inserting the data
-                    ContentValues shopsValues = new ContentValues();
-                    int isShopOpen = 2; //means that this info is not available
+
                     if ( !openNow.equals(Constants.NOT_AVAILABLE) && openNow != null) {
                         isShopOpen = Boolean.valueOf(openNow) ? 1 : 0;
                     }
 
+                    ContentValues shopsValues = new ContentValues();
+
+
+                    //creating the vector and inserting the values
                     shopsValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_NAME,placeName);
                     shopsValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_ADDRESS,address);
                     shopsValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_LATITUDE,latitude);
                     shopsValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_LONGITUDE,longitude);
                     shopsValues.put(ShopsContract.ShopsEntry.COLUMN_IS_OPEN, isShopOpen);
-                    //TODO: Remove dummy data from the vector and add real data
                     shopsValues.put(ShopsContract.ShopsEntry.COLUMN_DISTANCE_TO_USER,distanceToShop);
                     shopsValues.put(ShopsContract.ShopsEntry.COLUMN_DISTANCE_DURATION,distanceDuration);
                     cVVector.add(shopsValues);
