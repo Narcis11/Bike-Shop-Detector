@@ -37,6 +37,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     private String shopLatitude = "";
     private String shopLongitude = "";
     private String shopName = "";
+    private String formattedDuration = "";
     private static final int SHOPS_LOADER_ID = 0;//loader identifier
     public static final String[] SHOPS_COLUMNS = {
             ShopsContract.ShopsEntry.TABLE_NAME + "." + ShopsContract.ShopsEntry._ID,
@@ -70,7 +71,6 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                              Bundle savedInstanceState) {
 
 
-        Log.i(LOG_TAG, "User's Lat/Lng in fragment = " + GlobalState.USER_LAT + "/" + GlobalState.USER_LNG);
         mShopsAdapter = new SimpleCursorAdapter(
                 getActivity(),
                 R.layout.list_item_shops,
@@ -100,10 +100,11 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                         ((TextView) view).setText(cursor.getString(COL_SHOP_NAME));
                         return true;
                     case COL_DISTANCE_TO_USER:
-                        ((TextView) view).setText(cursor.getString(COL_DISTANCE_TO_USER) + " m");
+                        ((TextView) view).setText(cursor.getString(COL_DISTANCE_TO_USER) + "m");
                         return true;
                     case COL_DISTANCE_DURATION:
-                        ((TextView) view).setText(cursor.getString(COL_DISTANCE_DURATION) + "'");
+                        formattedDuration = Utility.formatDistanceDuration(cursor.getString(COL_DISTANCE_DURATION));
+                        ((TextView) view).setText(formattedDuration);
                         return true;
                     case COL_IS_OPEN:
                         if (cursor.getInt(COL_IS_OPEN) == 1){

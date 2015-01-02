@@ -1,6 +1,7 @@
 package Utilities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -143,6 +144,14 @@ public class Utility {
         Log.i(LOG_TAG, "Calculated duration = " + (distance * minutes)/formattedSpeed);
         float distanceDuration = (distance * minutes)/formattedSpeed;
         return distanceDuration;
+    }
+
+    public static String formatDistanceDuration (String distanceDuration) {
+        String minute = distanceDuration.substring(0,distanceDuration.indexOf("."));
+        String decimals = distanceDuration.substring(distanceDuration.indexOf(".") + 1,4);
+        String seconds = String.valueOf((Integer.valueOf(decimals) * 60)/100);
+        Log.i(LOG_TAG,minute + " / " + decimals + " / " + seconds);
+        return minute + "' " + seconds + "''";
     }
 
     public static void displayStatus (String status, Context context) {
