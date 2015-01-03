@@ -21,12 +21,12 @@
     <string name="api_zero_results">No bike shops in the selected range</string>
     <string name="api_error">Error occurred while retrieving shops</string>
 
-    <!-- Formatting for Settings/Range preference in metric mode-->
+    <!-- Formatting for Settings/Range preference in metric mode -->
     <string name="pref_range_key">range</string>
     <string name="pref_range_default">3 km</string>
     <string name="pref_range_label">Range</string>
 
-    <!-- Formatting for Settings/Range preference in imperial mode-->
+    <!-- Formatting for Settings/Range preference in imperial mode -->
     <string name="pref_range_imperial_default">1 mile</string>
 
     <!-- Formatting for Settings/Unit preference -->
@@ -34,13 +34,13 @@
     <string name="pref_unit_default">Metric</string>
     <string name="pref_unit_label">Unit</string>
 
-    <!-- Formatting for Settings/My speed preference in metric mode-->
+    <!-- Formatting for Settings/My speed preference in metric mode -->
     <string name="pref_speed_key">speed</string>
     <string name="pref_speed_default">14 km</string>
     <string name="pref_speed_label">My average speed</string>
-    <!-- Formatting for Settings/My speed preference in imperial mode-->
+    <!-- Formatting for Settings/My speed preference in imperial mode -->
     <string name="pref_speed_imperial_default">10 miles/h</string>
-    <!-- Values for the Settings/Range array in metric mode-->
+    <!-- Values for the Settings/Range array in metric mode -->
     <string name="range_array_1">1 km</string>
     <string name="range_array_2">2 km</string>
     <string name="range_array_3">3 km</string>
@@ -48,7 +48,7 @@
     <string name="range_array_5">5 km</string>
     <string name="range_array_10">10 km</string>
 
-    <!-- Values for the Settings/Range array in imperial mode-->
+    <!-- Values for the Settings/Range array in imperial mode -->
     <string name="range_array_imperial_1">1 mile</string>
     <string name="range_array_imperial_2">2 miles</string>
     <string name="range_array_imperial_3">3 miles</string>
@@ -56,8 +56,7 @@
     <string name="range_array_imperial_5">5 miles</string>
     <string name="range_array_imperial_10">8 miles</string>
 
-
-    <!-- Values for the Settings/My speed array in metric mode-->
+    <!-- Values for the Settings/My speed array in metric mode -->
     <string name="speed_array_0">5 km/h</string>
     <string name="speed_array_1">14 km/h</string>
     <string name="speed_array_2">17 km/h</string>
@@ -67,7 +66,7 @@
     <string name="speed_array_6">29 km/h</string>
     <string name="speed_array_7">32 km/h</string>
 
-    <!-- Values for the Settings/My speed array in imperial mode-->
+    <!-- Values for the Settings/My speed array in imperial mode -->
     <string name="speed_array_imperial_0">3 miles/h</string>
     <string name="speed_array_imperial_1">9 miles/h</string>
     <string name="speed_array_imperial_2">10 miles/h</string>
@@ -98,5 +97,6 @@
     <!-- SyncAdapter related -->
     <string name="sync_account_type">waldo.bike.shopsapp</string>
     <string name="content_authority">waldo.bike.waldo</string>
+    <string name="title_activity_add_shop_map">Map</string>
 
 </resources>

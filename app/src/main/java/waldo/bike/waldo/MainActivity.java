@@ -76,6 +76,9 @@ public class MainActivity extends Activity implements
     private static boolean firstGPSConnection = true; //used to control fragment behaviour in onLocationChanged()
     private static boolean isGPSConnected = false;//used to control fragment behaviour in onResume()
 
+    private static String AllShopsMap = "MapsActivity";
+    private static String AddShopMap = "AddShopMap";
+
     private static String fragmentTag = "ShopsFragment";
     private TextView mLocationView;
     private GoogleApiClient mGoogleApiClient;
@@ -101,11 +104,11 @@ public class MainActivity extends Activity implements
      private ArrayList<SliderDrawerItem> navDrawerItems;
      private SliderDrawerListAdapter adapter;
 
-             @Override
-             protected void onDestroy() {
-                 super.onDestroy();
-          //       Log.i(LOG_TAG,"in onDestroy()");
-             }
+    @Override
+    protected void onDestroy() {
+         super.onDestroy();
+    //   Log.i(LOG_TAG,"in onDestroy()");
+    }
 
              @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -414,32 +417,46 @@ public class MainActivity extends Activity implements
                                 long id) {
             // display view for selected nav drawer item
             Log.i(LOG_TAG,"Button pressed at position " + position);
-            if (position == 1) {
-                openMap();
+            if (position == 0) { //add a shop
+                openMap(AddShopMap);
+            }
+            else if (position == 1) { //view all shops
+                openMap(AllShopsMap);
             }
         }
     }
 
-    public void openMap() {
-        Cursor cursor = mContext.getApplicationContext().getContentResolver().query(
-                ShopsContract.ShopsEntry.CONTENT_URI,
-                null,
-                null,
-                null,
-                null
-        );
+    public void openMap(String mapToOpen) {
+
+        if (mapToOpen.equals(AllShopsMap)) {
+            Cursor cursor = mContext.getApplicationContext().getContentResolver().query(
+                    ShopsContract.ShopsEntry.CONTENT_URI,
+                    null,
+                    null,
+                    null,
+                    null
+            );
        /* if (GlobalState.ALL_SHOPS_INFO.length() > 0) {*/
-        if (GlobalState.USER_LAT.equals("") && GlobalState.USER_LNG.equals("")) {
-            Toast.makeText(mContext,R.string.no_user_location,Toast.LENGTH_SHORT).show();
-        }
-        else {
-            if (cursor.getCount() > 0) {
-                Intent intent = new Intent(this, MapsActivity.class);
-                startActivity(intent);
+            if (GlobalState.USER_LAT.equals("") && GlobalState.USER_LNG.equals("")) {
+                Toast.makeText(mContext, R.string.no_user_location, Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(mContext, R.string.data_not_fetched, Toast.LENGTH_SHORT).show();
+                if (cursor.getCount() > 0) {
+                    Intent intent = new Intent(this, MapsActivity.class);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(mContext, R.string.data_not_fetched, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+        }
+        else if (mapToOpen.equals(AddShopMap)) {
+            if (GlobalState.USER_LAT.equals("") && GlobalState.USER_LNG.equals("")) {
+                Toast.makeText(mContext, R.string.no_user_location, Toast.LENGTH_SHORT).show();
+            }
+            else {
+                Intent intent = new Intent(mContext, AddShopMap.class);
+                startActivity(intent);
             }
         }
-
     }
 }
