@@ -104,4 +104,8 @@
     <!-- Button names in AddShopMap activity -->
     <string name="delete_shop_button">Delete</string>
     <string name="next_shop_button">Next--></string>
+    <string name="title_activity_add_shop_form">AddShopFormActivity</string>
+
+    <!-- Used in the AddShopFormActivity-->
+    <string name="form_title">Add a shop</string>
 </resources>

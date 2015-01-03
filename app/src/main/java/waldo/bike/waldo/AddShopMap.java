@@ -1,6 +1,7 @@
 package waldo.bike.waldo;
 
 import android.app.ActionBar;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.FragmentActivity;
@@ -23,6 +24,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import Utilities.Constants;
 import Utilities.GlobalState;
+import waldo.bike.form.AddShopFormActivity;
 
 public class AddShopMap extends FragmentActivity implements AdapterView.OnItemClickListener{
 
@@ -44,7 +46,6 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_shop_map);
-
         //creating the search view
         AutoCompleteTextView autoCompView = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView);
         autoCompView.setAdapter(new PlacesAutoCompleteAdapter(this, R.layout.list_item_places));
@@ -103,8 +104,8 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
             public void onMapLongClick(LatLng latLng) {
                 mMap.clear();
                 mMap.addMarker(new MarkerOptions()
-                .position(latLng)
-                .title(Constants.ADD_SHOP_TITLE)
+                                .position(latLng)
+                                .title(Constants.ADD_SHOP_TITLE)
                 );
                 mNewShopLat = latLng.latitude;
                 mNewShopLng = latLng.longitude;
@@ -180,10 +181,13 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                mMarker.lat
+                Bundle bundle = new Bundle();
+                bundle.putDouble(GlobalState.ADD_SHOP_BUNDLE_LAT_KEY,mNewShopLat);
+                bundle.putDouble(GlobalState.ADD_SHOP_BUNDLE_LNG_KEY,mNewShopLng);
                 Log.i(LOG_TAG,"NEXT button clicked");
-                //Intent i=new Intent(this,SecondActivity.class);
-                //startActivity(i);
+                Intent formIntent = new Intent(getApplicationContext(), AddShopFormActivity.class);
+                formIntent.putExtras(bundle);
+                startActivity(formIntent);
 
             }
         });
