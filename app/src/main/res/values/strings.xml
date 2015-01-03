@@ -101,4 +101,7 @@
 
     <!-- Used in the AddShopMap activity -->
     <string name="search_location">Search here</string>
+    <!-- Button names in AddShopMap activity -->
+    <string name="delete_shop_button">Delete</string>
+    <string name="next_shop_button">Next--></string>
 </resources>

@@ -1,11 +1,16 @@
 package waldo.bike.waldo;
 
+import android.app.ActionBar;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AbsoluteLayout;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -13,6 +18,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import Utilities.Constants;
@@ -22,6 +28,7 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private static final String LOG_TAG = AddShopMap.class.getSimpleName();
+    Marker mMarker;
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
         Log.i(LOG_TAG,"In onItemClick");
@@ -38,9 +45,10 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
         AutoCompleteTextView autoCompView = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView);
         autoCompView.setAdapter(new PlacesAutoCompleteAdapter(this, R.layout.list_item_places));
         autoCompView.setOnItemClickListener(this);
+
         //loading the map
         setUpMapIfNeeded();
-
+      //  displayButtons();
     }
 
     @Override
@@ -92,9 +100,22 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
                 mMap.clear();
                 mMap.addMarker(new MarkerOptions()
                 .position(latLng)
-                .title("New shop title")
+                .title(Constants.ADD_SHOP_TITLE)
                 );
+
                 Log.i(LOG_TAG,"Position is " + latLng.latitude + " / " + latLng.longitude);
+            }
+        });
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                Log.i(LOG_TAG,"in onMarkerClick");
+                if (marker != null) {
+                    mMarker = marker;
+                    Log.i(LOG_TAG,"MARKER != NULL");
+                    displayButtons();
+                }
+                return false;
             }
         });
         LatLng userLatLng = new LatLng(Double.valueOf(GlobalState.USER_LAT), Double.valueOf(GlobalState.USER_LNG));
@@ -103,6 +124,30 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
         //mMap.addMarker(new MarkerOptions().position(new LatLng(Double.valueOf(GlobalState.USER_LAT), Double.valueOf(GlobalState.USER_LNG))).title(Constants.USERS_NAME));
     }
 
+    private void displayButtons() {
+        Button deleteButton = new Button(this);
+        float deleteX = 200;
+        float deleteY = 10;
 
+        //(Button) findViewById(R.id.delete_shop_button);
+        //
+        // button.setText(Constants.ADD_SHOP_TITLE);
+        addContentView(deleteButton,new ActionBar.LayoutParams(AbsoluteLayout.LayoutParams.WRAP_CONTENT, AbsoluteLayout.LayoutParams.WRAP_CONTENT));
+        deleteButton.setLeft(100);
+        deleteButton.setText(getResources().getString(R.string.delete_shop_button));
+        deleteButton.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#1e85fb")));
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                mMap.clear();
+                Log.i(LOG_TAG,"Button clicked");
+                //Intent i=new Intent(this,SecondActivity.class);
+                //startActivity(i);
+
+            }
+        });
+    }
 
 }

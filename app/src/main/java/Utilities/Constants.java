@@ -46,4 +46,10 @@ public class Constants {
     public static final String SHOP_OPEN = "Open";
     public static final String SHOP_CLOSED = "Closed";
     public static final String SHOP_UNAVAILABLE = "";
+
+    //used in the AddShopMap
+    public static final String ADD_SHOP_TITLE = "New shop title";
+
+    //Colours
+    public static final String COLOR_BLUE_WALDO_DARK = "#1e85fb";
 }
