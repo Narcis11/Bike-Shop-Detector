@@ -29,6 +29,8 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private static final String LOG_TAG = AddShopMap.class.getSimpleName();
     Marker mMarker;
+    Button mDeleteButton;
+    Button mNextButton;
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
         Log.i(LOG_TAG,"In onItemClick");
@@ -113,6 +115,14 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
                 if (marker != null) {
                     mMarker = marker;
                     Log.i(LOG_TAG,"MARKER != NULL");
+                    if (mDeleteButton != null && mNextButton != null) {
+                        mDeleteButton.setVisibility(View.INVISIBLE);
+                        mNextButton.setVisibility(View.INVISIBLE);
+                        Log.i(LOG_TAG,"After delete of buttons");
+                    }
+                    else {
+                        Log.i(LOG_TAG,"Buttons are null");
+                    }
                     displayButtons();
                 }
                 return false;
@@ -142,12 +152,40 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
             public void onClick(View v) {
                 // TODO Auto-generated method stub
                 mMap.clear();
+                mDeleteButton.setVisibility(View.INVISIBLE);
+                mNextButton.setVisibility(View.INVISIBLE);
                 Log.i(LOG_TAG,"Button clicked");
                 //Intent i=new Intent(this,SecondActivity.class);
                 //startActivity(i);
 
             }
         });
+
+        Button nextButton = new Button(this);
+        float nextX = 200;
+        float nextY = 10;
+
+        //(Button) findViewById(R.id.next_shop_button);
+        //
+        // button.setText(Constants.ADD_SHOP_TITLE);
+        addContentView(nextButton,new ActionBar.LayoutParams(AbsoluteLayout.LayoutParams.WRAP_CONTENT, AbsoluteLayout.LayoutParams.WRAP_CONTENT));
+        nextButton.setText(getResources().getString(R.string.next_shop_button));
+        nextButton.setY(100);
+    //    nextButton.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#1e85fb")));
+        nextButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                Log.i(LOG_TAG,"NEXT button clicked");
+                //Intent i=new Intent(this,SecondActivity.class);
+                //startActivity(i);
+
+            }
+        });
+
+        mDeleteButton = deleteButton;
+        mNextButton = nextButton;
     }
 
 }
