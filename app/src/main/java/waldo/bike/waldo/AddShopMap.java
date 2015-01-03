@@ -2,6 +2,7 @@ package waldo.bike.waldo;
 
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
@@ -20,9 +21,10 @@ import Utilities.GlobalState;
 public class AddShopMap extends FragmentActivity implements AdapterView.OnItemClickListener{
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
-
+    private static final String LOG_TAG = AddShopMap.class.getSimpleName();
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+        Log.i(LOG_TAG,"In onItemClick");
         String str = (String) adapterView.getItemAtPosition(position);
         Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
     }
