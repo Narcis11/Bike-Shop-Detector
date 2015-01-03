@@ -331,22 +331,6 @@ public class MainActivity extends Activity implements
             mLatLng = Utility.getLatLngFromLocation(location.toString());
             GlobalState.USER_LAT = mLatLng[0];
             GlobalState.USER_LNG = mLatLng[1];
-      //      Log.i(LOG_TAG,"Lat/lng in onLocationChanged - " + mLatLng[0] + "/" + mLatLng[1]);
-            //getting the user's city
-            Location shopLocation = new Location("testShop");
-            shopLocation.setLatitude(44.430662);
-            shopLocation.setLongitude(26.108035);
-         //   Log.i(LOG_TAG,"Distance to BikeXpert Unirii is " + location.distanceTo(shopLocation));
-            try {
-                Geocoder geocoder = new Geocoder(mContext, Locale.getDefault());
-                List<Address> addresses = geocoder.getFromLocation(Double.valueOf(mLatLng[0]), Double.valueOf(mLatLng[1]), 1);
-                GlobalState.USERS_CITY = addresses.get(0).getLocality();//we need this to open correctly the map with all the shops
-            }
-            catch (IOException e) {
-                Log.e(LOG_TAG,"Exception in MainActivity! = " + e.getMessage());
-            }
-         //   ShopsFragment shopsFragment = new ShopsFragment();
-        //    shopsFragment.updateShopList();
         }
             firstGPSConnection = false;
     }
