@@ -265,6 +265,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             final String OUT_JSON = "/json";
 
             final String API_KEY = Constants.API_KEY;
+            final String COUNTRY = "ro";
             String input = GlobalState.INPUT;
 
             ArrayList<String> resultList = null;
@@ -275,7 +276,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 try {
                     StringBuilder sb = new StringBuilder(PLACES_API_BASE + TYPE_AUTOCOMPLETE + OUT_JSON);
                     sb.append("?key=" + API_KEY);
-                    sb.append("&components=country:uk");
+                    sb.append("&components=country:" + COUNTRY);
                     sb.append("&input=" + URLEncoder.encode(input, "utf8"));
 
                     URL url = new URL(sb.toString());

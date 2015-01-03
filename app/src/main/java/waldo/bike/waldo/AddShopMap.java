@@ -33,6 +33,7 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_shop_map);
+
         //creating the search view
         AutoCompleteTextView autoCompView = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView);
         autoCompView.setAdapter(new PlacesAutoCompleteAdapter(this, R.layout.list_item_places));
@@ -63,6 +64,7 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
      * stopped or paused), {@link #onCreate(Bundle)} may not be called again so we should call this
      * method in {@link #onResume()} to guarantee that it will be called.
      */
+    //TODO: Display the results from the API call in the UI and add onClick behaviour
     private void setUpMapIfNeeded() {
         // Do a null check to confirm that we have not already instantiated the map.
         if (mMap == null) {
