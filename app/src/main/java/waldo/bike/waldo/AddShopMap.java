@@ -86,11 +86,23 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
-
+        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+            @Override
+            public void onMapLongClick(LatLng latLng) {
+                mMap.clear();
+                mMap.addMarker(new MarkerOptions()
+                .position(latLng)
+                .title("New shop title")
+                );
+                Log.i(LOG_TAG,"Position is " + latLng.latitude + " / " + latLng.longitude);
+            }
+        });
         LatLng userLatLng = new LatLng(Double.valueOf(GlobalState.USER_LAT), Double.valueOf(GlobalState.USER_LNG));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(userLatLng));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(Constants.SHOP_ZOOM));
-        mMap.addMarker(new MarkerOptions().position(new LatLng(Double.valueOf(GlobalState.USER_LAT), Double.valueOf(GlobalState.USER_LNG))).title(Constants.USERS_NAME));
+        //mMap.addMarker(new MarkerOptions().position(new LatLng(Double.valueOf(GlobalState.USER_LAT), Double.valueOf(GlobalState.USER_LNG))).title(Constants.USERS_NAME));
     }
+
+
 
 }
