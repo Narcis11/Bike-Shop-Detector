@@ -2,6 +2,10 @@ package waldo.bike.waldo;
 
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -13,14 +17,25 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import Utilities.Constants;
 import Utilities.GlobalState;
 
-public class AddShopMap extends FragmentActivity {
+public class AddShopMap extends FragmentActivity implements AdapterView.OnItemClickListener{
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+        String str = (String) adapterView.getItemAtPosition(position);
+        Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_shop_map);
+        //creating the search view
+        AutoCompleteTextView autoCompView = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView);
+        autoCompView.setAdapter(new PlacesAutoCompleteAdapter(this, R.layout.list_item_places));
+        autoCompView.setOnItemClickListener(this);
+        //loading the map
         setUpMapIfNeeded();
 
     }

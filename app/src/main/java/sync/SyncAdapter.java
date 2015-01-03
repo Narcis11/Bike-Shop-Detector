@@ -29,7 +29,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Vector;
 
 import Utilities.Constants;
@@ -53,206 +56,272 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
-        Log.i(LOG_TAG, "Starting sync...");
-        String[] finalResult = new String[100];
-        mShopsAdapter = GlobalState.GLOBAL_ADAPTER;
-        String radius = Utility.formatPreferredRange(mContext);
-        HttpURLConnection urlConnection = null;
-        BufferedReader reader = null;
-        String placesJsonStr = "";//used for storing the response from the API call
-        //used for querying the Google Places API
-        final String types = "bicycle_store";
-        final String key = Constants.API_KEY;
-        final String latLng = GlobalState.USER_LAT + Constants.COMMA_SEPARATOR + GlobalState.USER_LNG;
-      //  final String latLng = "44.4391463,26.1428946";//we'll hardcoded for now, don't wanna wait for the location every time
-        final String output = "json";
-        try {
-            //the query parameters used in the call
-            final String BASE_URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/" + output + "?";
-            final String QUERY_LOCATION = "location";
-            final String QUERY_RADIUS = "radius";
-            final String QUERY_KEY = "key";
-            final String QUERY_TYPES = "types";
-            //build up the URI
-            Uri builtUri = Uri.parse(BASE_URL).buildUpon()
-                    .appendQueryParameter(QUERY_LOCATION, latLng)
-                    .appendQueryParameter(QUERY_RADIUS, radius)
-                    .appendQueryParameter(QUERY_KEY, key)
-                    .appendQueryParameter(QUERY_TYPES, types)
-                    .build();
-            Log.i(LOG_TAG, "Uri is: " + builtUri.toString());
 
-            URL url = new URL(builtUri.toString());
+        if (GlobalState.SYNC_SHOPS) {
+            Log.i(LOG_TAG, "Starting sync...");
+            String[] finalResult = new String[100];
+            mShopsAdapter = GlobalState.GLOBAL_ADAPTER;
+            String radius = Utility.formatPreferredRange(mContext);
+            HttpURLConnection urlConnection = null;
+            BufferedReader reader = null;
+            String placesJsonStr = "";//used for storing the response from the API call
+            //used for querying the Google Places API
+            final String types = "bicycle_store";
+            final String key = Constants.API_KEY;
+            final String latLng = GlobalState.USER_LAT + Constants.COMMA_SEPARATOR + GlobalState.USER_LNG;
+            //  final String latLng = "44.4391463,26.1428946";//we'll hardcoded for now, don't wanna wait for the location every time
+            final String output = "json";
+            try {
+                //the query parameters used in the call
+                final String BASE_URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/" + output + "?";
+                final String QUERY_LOCATION = "location";
+                final String QUERY_RADIUS = "radius";
+                final String QUERY_KEY = "key";
+                final String QUERY_TYPES = "types";
+                //build up the URI
+                Uri builtUri = Uri.parse(BASE_URL).buildUpon()
+                        .appendQueryParameter(QUERY_LOCATION, latLng)
+                        .appendQueryParameter(QUERY_RADIUS, radius)
+                        .appendQueryParameter(QUERY_KEY, key)
+                        .appendQueryParameter(QUERY_TYPES, types)
+                        .build();
+                Log.i(LOG_TAG, "Uri is: " + builtUri.toString());
 
-            //Create the request to Google, and open the connection
-            urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestMethod(Constants.HTTP_GET);
-            urlConnection.connect();
-            // Read the input stream into a String
-            InputStream inputStream = urlConnection.getInputStream();
-            StringBuffer buffer = new StringBuffer();
-            if (inputStream == null) {
-                // Nothing to do.
-                Log.i(LOG_TAG, "No input stream");
-            }
-            reader = new BufferedReader(new InputStreamReader(inputStream));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
-                // But it does make debugging a *lot* easier if you print out the completed
-                // buffer for debugging.
-                buffer.append(line + "\n");
-            }
-            if (buffer.length() == 0) {
-                // Stream was empty.  No point in parsing.
-                Log.i(LOG_TAG, "buffer.length() == 0");
-            }
-            placesJsonStr = buffer.toString();
-            //   Log.i(LOG_TAG,"Response is: " + placesJsonStr);
-        } catch (IOException e) {
-            Log.e(LOG_TAG, "Error in fetching places: " + e);
+                URL url = new URL(builtUri.toString());
 
-        } finally {
-            if (urlConnection != null) {
-                urlConnection.disconnect();
-            }
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (final IOException e) {
-                    Log.e(LOG_TAG, "Error closing stream", e);
+                //Create the request to Google, and open the connection
+                urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod(Constants.HTTP_GET);
+                urlConnection.connect();
+                // Read the input stream into a String
+                InputStream inputStream = urlConnection.getInputStream();
+                StringBuffer buffer = new StringBuffer();
+                if (inputStream == null) {
+                    // Nothing to do.
+                    Log.i(LOG_TAG, "No input stream");
+                }
+                reader = new BufferedReader(new InputStreamReader(inputStream));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
+                    // But it does make debugging a *lot* easier if you print out the completed
+                    // buffer for debugging.
+                    buffer.append(line + "\n");
+                }
+                if (buffer.length() == 0) {
+                    // Stream was empty.  No point in parsing.
+                    Log.i(LOG_TAG, "buffer.length() == 0");
+                }
+                placesJsonStr = buffer.toString();
+                //   Log.i(LOG_TAG,"Response is: " + placesJsonStr);
+            } catch (IOException e) {
+                Log.e(LOG_TAG, "Error in fetching places: " + e);
+
+            } finally {
+                if (urlConnection != null) {
+                    urlConnection.disconnect();
+                }
+                if (reader != null) {
+                    try {
+                        reader.close();
+                    } catch (final IOException e) {
+                        Log.e(LOG_TAG, "Error closing stream", e);
+                    }
                 }
             }
-        }
 
-        // This will only happen if there was an error getting or parsing the response.
-        final String API_RESULT = "results";//root
-        final String API_STATUS = "status";//we'll perform some checks on this one
-        // Location information
-        final String API_ID = "id";
-        final String API_NAME = "name";
-        final String API_OPENING_HOURS = "opening_hours";//root
-        final String API_OPEN_NOW = "open_now"; //child of opening_hours
-        final String API_ADDRESS = "vicinity";
+            // This will only happen if there was an error getting or parsing the response.
+            final String API_RESULT = "results";//root
+            final String API_STATUS = "status";//we'll perform some checks on this one
+            // Location information
+            final String API_ID = "id";
+            final String API_NAME = "name";
+            final String API_OPENING_HOURS = "opening_hours";//root
+            final String API_OPEN_NOW = "open_now"; //child of opening_hours
+            final String API_ADDRESS = "vicinity";
 
-        final String API_GEOMETRY = "geometry";
-        //child of geometry
-        final String API_LOCATION = "location";
-        //children of location
-        final String API_COORD_LAT = "lat";
-        final String API_COORD_LONG = "lng";
-        int distanceToShop;
-        double distanceDuration;
-        String apiCallStatus = "";
-        int isShopOpen = 2; //means that this info is not available
-        try {
-            JSONObject placesJson = new JSONObject(placesJsonStr);
-            apiCallStatus = placesJson.getString(API_STATUS);
-            Log.i(LOG_TAG,"Status is " + apiCallStatus);
-            if ( apiCallStatus.equals(Constants.OK_STATUS)) { //we only parse if the result is OK
-                JSONArray placesArray = placesJson.getJSONArray(API_RESULT); //root node
-                Vector<ContentValues> cVVector = new Vector<ContentValues>(placesArray.length());
-                for (int i = 0; i < placesArray.length(); i++) {
-                    // These are the values that will be collected.
-                    String id;
-                    String placeName;
-                    String address;
-                    String openNow = Constants.NOT_AVAILABLE;
-                    String latitude;
-                    String longitude;
+            final String API_GEOMETRY = "geometry";
+            //child of geometry
+            final String API_LOCATION = "location";
+            //children of location
+            final String API_COORD_LAT = "lat";
+            final String API_COORD_LONG = "lng";
+            int distanceToShop;
+            double distanceDuration;
+            String apiCallStatus = "";
+            int isShopOpen = 2; //means that this info is not available
+            try {
+                JSONObject placesJson = new JSONObject(placesJsonStr);
+                apiCallStatus = placesJson.getString(API_STATUS);
+                Log.i(LOG_TAG, "Status is " + apiCallStatus);
+                if (apiCallStatus.equals(Constants.OK_STATUS)) { //we only parse if the result is OK
+                    JSONArray placesArray = placesJson.getJSONArray(API_RESULT); //root node
+                    Vector<ContentValues> cVVector = new Vector<ContentValues>(placesArray.length());
+                    for (int i = 0; i < placesArray.length(); i++) {
+                        // These are the values that will be collected.
+                        String id;
+                        String placeName;
+                        String address;
+                        String openNow = Constants.NOT_AVAILABLE;
+                        String latitude;
+                        String longitude;
 
-                    // placeDetails is the whole object representing a shop
-                    JSONObject placeDetails = placesArray.getJSONObject(i);
-                    JSONObject geometry = placeDetails.getJSONObject(API_GEOMETRY); //geometry object
-                    JSONObject location = geometry.getJSONObject(API_LOCATION); //location object
-                    latitude = location.getString(API_COORD_LAT);
-                    longitude = location.getString(API_COORD_LONG);
-                    //   Log.i(LOG_TAG, "Lat/Lng = " + latitude + "/" + longitude);
-                    //getting info from opening_hours
-                    try {
-                        //some shops don't have opening hours, that's why we put this request into a try/catch
-                        JSONObject openingHours = placeDetails.getJSONObject(API_OPENING_HOURS);
-                        openNow = openingHours.getString(API_OPEN_NOW);
-                    } catch (JSONException e) {
-                        Log.e(LOG_TAG, "Opening Hours JSON Exception: " + e.getMessage());
-                    }
-                    //44.4391463,26.1428946
-                    Location userLocation = new Location(Constants.PROVIDER);
-                    Log.i(LOG_TAG,"User location = " + GlobalState.USER_LAT + "/" + GlobalState.USER_LNG);
+                        // placeDetails is the whole object representing a shop
+                        JSONObject placeDetails = placesArray.getJSONObject(i);
+                        JSONObject geometry = placeDetails.getJSONObject(API_GEOMETRY); //geometry object
+                        JSONObject location = geometry.getJSONObject(API_LOCATION); //location object
+                        latitude = location.getString(API_COORD_LAT);
+                        longitude = location.getString(API_COORD_LONG);
+                        //   Log.i(LOG_TAG, "Lat/Lng = " + latitude + "/" + longitude);
+                        //getting info from opening_hours
+                        try {
+                            //some shops don't have opening hours, that's why we put this request into a try/catch
+                            JSONObject openingHours = placeDetails.getJSONObject(API_OPENING_HOURS);
+                            openNow = openingHours.getString(API_OPEN_NOW);
+                        } catch (JSONException e) {
+                            Log.e(LOG_TAG, "Opening Hours JSON Exception: " + e.getMessage());
+                        }
+                        //44.4391463,26.1428946
+                        Location userLocation = new Location(Constants.PROVIDER);
+                        Log.i(LOG_TAG, "User location = " + GlobalState.USER_LAT + "/" + GlobalState.USER_LNG);
 /*                    userLocation.setLatitude(Double.valueOf("44.4391463"));
                     userLocation.setLongitude(Double.valueOf("26.1428946"));*/
-                    userLocation.setLatitude(Double.valueOf(GlobalState.USER_LAT));
-                    userLocation.setLongitude(Double.valueOf(GlobalState.USER_LNG));
-                    Location shopLocation = new Location(Constants.PROVIDER);
-                    shopLocation.setLatitude(Double.valueOf(latitude));
-                    shopLocation.setLongitude(Double.valueOf(longitude));
-                    distanceToShop =(int) Math.round(userLocation.distanceTo(shopLocation));
-                    distanceDuration = Utility.calculateDistanceDuration(distanceToShop,getContext());
-                  //  Log.i(LOG_TAG,"distanceDuration is " + distanceDuration);
-                    //main info from the root object
-                    id = placeDetails.getString(API_ID);
-                    placeName = placeDetails.getString(API_NAME);
-                    address = placeDetails.getString(API_ADDRESS);
+                        userLocation.setLatitude(Double.valueOf(GlobalState.USER_LAT));
+                        userLocation.setLongitude(Double.valueOf(GlobalState.USER_LNG));
+                        Location shopLocation = new Location(Constants.PROVIDER);
+                        shopLocation.setLatitude(Double.valueOf(latitude));
+                        shopLocation.setLongitude(Double.valueOf(longitude));
+                        distanceToShop = (int) Math.round(userLocation.distanceTo(shopLocation));
+                        distanceDuration = Utility.calculateDistanceDuration(distanceToShop, getContext());
+                        //  Log.i(LOG_TAG,"distanceDuration is " + distanceDuration);
+                        //main info from the root object
+                        id = placeDetails.getString(API_ID);
+                        placeName = placeDetails.getString(API_NAME);
+                        address = placeDetails.getString(API_ADDRESS);
 
-                    if ( !openNow.equals(Constants.NOT_AVAILABLE) && openNow != null) {
-                        isShopOpen = Boolean.valueOf(openNow) ? 1 : 0;
-                    }
-
-                    ContentValues shopsValues = new ContentValues();
-
-
-                    //creating the vector and inserting the values
-                    shopsValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_NAME,placeName);
-                    shopsValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_ADDRESS,address);
-                    shopsValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_LATITUDE,latitude);
-                    shopsValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_LONGITUDE,longitude);
-                    shopsValues.put(ShopsContract.ShopsEntry.COLUMN_IS_OPEN, isShopOpen);
-                    shopsValues.put(ShopsContract.ShopsEntry.COLUMN_DISTANCE_TO_USER,distanceToShop);
-                    shopsValues.put(ShopsContract.ShopsEntry.COLUMN_DISTANCE_DURATION,distanceDuration);
-                    cVVector.add(shopsValues);
-                }
-                if (cVVector.size() > 0) {
-                    //we empty the database before inserting the new data
-                    mContext.getContentResolver().delete(ShopsContract.ShopsEntry.CONTENT_URI,null,null);
-                    ContentValues[] cvArray = new ContentValues[cVVector.size()];
-                    cVVector.toArray(cvArray);
-                    int rowsInserted;
-                    rowsInserted = mContext.getContentResolver().bulkInsert(
-                            ShopsContract.ShopsEntry.CONTENT_URI,
-                            cvArray);
-                    Log.i(LOG_TAG,"No of bulk rows inserted = " + rowsInserted);
-                    if (DEBUG) {
-                        Cursor shopsCursor = mContext.getContentResolver().query(
-                                ShopsContract.ShopsEntry.CONTENT_URI,
-                                null,
-                                null,
-                                null,
-                                null
-                        );
-                        Log.i(LOG_TAG,"No of rows in shops = " + shopsCursor.getCount());
-                        if (shopsCursor.moveToFirst()) {
-                            ContentValues resultValues = new ContentValues();
-                            DatabaseUtils.cursorRowToContentValues(shopsCursor, resultValues);
-                            Log.i(LOG_TAG, "Query succeeded! **********");
-                            for (String loopKey : resultValues.keySet()) {
-                                Log.i(LOG_TAG, loopKey + ": " + resultValues.getAsString(loopKey));
-                            }
-                        } else {
-                            Log.i(LOG_TAG, "Query failed! :( **********");
+                        if (!openNow.equals(Constants.NOT_AVAILABLE) && openNow != null) {
+                            isShopOpen = Boolean.valueOf(openNow) ? 1 : 0;
                         }
-                        shopsCursor.close();
+
+                        ContentValues shopsValues = new ContentValues();
+
+
+                        //creating the vector and inserting the values
+                        shopsValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_NAME, placeName);
+                        shopsValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_ADDRESS, address);
+                        shopsValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_LATITUDE, latitude);
+                        shopsValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_LONGITUDE, longitude);
+                        shopsValues.put(ShopsContract.ShopsEntry.COLUMN_IS_OPEN, isShopOpen);
+                        shopsValues.put(ShopsContract.ShopsEntry.COLUMN_DISTANCE_TO_USER, distanceToShop);
+                        shopsValues.put(ShopsContract.ShopsEntry.COLUMN_DISTANCE_DURATION, distanceDuration);
+                        cVVector.add(shopsValues);
+                    }
+                    if (cVVector.size() > 0) {
+                        //we empty the database before inserting the new data
+                        mContext.getContentResolver().delete(ShopsContract.ShopsEntry.CONTENT_URI, null, null);
+                        ContentValues[] cvArray = new ContentValues[cVVector.size()];
+                        cVVector.toArray(cvArray);
+                        int rowsInserted;
+                        rowsInserted = mContext.getContentResolver().bulkInsert(
+                                ShopsContract.ShopsEntry.CONTENT_URI,
+                                cvArray);
+                        Log.i(LOG_TAG, "No of bulk rows inserted = " + rowsInserted);
+                        if (DEBUG) {
+                            Cursor shopsCursor = mContext.getContentResolver().query(
+                                    ShopsContract.ShopsEntry.CONTENT_URI,
+                                    null,
+                                    null,
+                                    null,
+                                    null
+                            );
+                            Log.i(LOG_TAG, "No of rows in shops = " + shopsCursor.getCount());
+                            if (shopsCursor.moveToFirst()) {
+                                ContentValues resultValues = new ContentValues();
+                                DatabaseUtils.cursorRowToContentValues(shopsCursor, resultValues);
+                                Log.i(LOG_TAG, "Query succeeded! **********");
+                                for (String loopKey : resultValues.keySet()) {
+                                    Log.i(LOG_TAG, loopKey + ": " + resultValues.getAsString(loopKey));
+                                }
+                            } else {
+                                Log.i(LOG_TAG, "Query failed! :( **********");
+                            }
+                            shopsCursor.close();
+                        }
                     }
                 }
+
+            } catch (JSONException e) {
+                Log.e(LOG_TAG, "Caught JSON Exception: " + e.getMessage());
+                e.printStackTrace();
             }
 
         }
-        catch(JSONException e) {
-            Log.e(LOG_TAG,"Caught JSON Exception: " + e.getMessage());
-            e.printStackTrace();
+        else {
+            Log.i(LOG_TAG, "*******Starting Places sync...**********");
+            final String LOG_TAG = SyncAdapter.class.getSimpleName();
+
+            final String PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place";
+            final String TYPE_AUTOCOMPLETE = "/autocomplete";
+            final String OUT_JSON = "/json";
+
+            final String API_KEY = Constants.API_KEY;
+            String input = GlobalState.INPUT;
+
+            ArrayList<String> resultList = null;
+
+            HttpURLConnection conn = null;
+            StringBuilder jsonResults = new StringBuilder();
+            if (!input.equals("")) {
+                try {
+                    StringBuilder sb = new StringBuilder(PLACES_API_BASE + TYPE_AUTOCOMPLETE + OUT_JSON);
+                    sb.append("?key=" + API_KEY);
+                    sb.append("&components=country:uk");
+                    sb.append("&input=" + URLEncoder.encode(input, "utf8"));
+
+                    URL url = new URL(sb.toString());
+                    conn = (HttpURLConnection) url.openConnection();
+                    InputStreamReader in = new InputStreamReader(conn.getInputStream());
+
+                    // Load the results into a StringBuilder
+                    int read;
+                    char[] buff = new char[1024];
+                    while ((read = in.read(buff)) != -1) {
+                        jsonResults.append(buff, 0, read);
+                    }
+                } catch (MalformedURLException e) {
+                    Log.e(LOG_TAG, "Error processing Places API URL", e);
+                    GlobalState.RESULT_LIST_GLOBAL = resultList;
+                } catch (IOException e) {
+                    Log.e(LOG_TAG, "Error connecting to Places API", e);
+                    GlobalState.RESULT_LIST_GLOBAL = resultList;
+                } finally {
+                    if (conn != null) {
+                        conn.disconnect();
+                    }
+                }
+
+                try {
+                    // Create a JSON object hierarchy from the results
+                    JSONObject jsonObj = new JSONObject(jsonResults.toString());
+                    JSONArray predsJsonArray = jsonObj.getJSONArray("predictions");
+
+                    // Extract the Place descriptions from the results
+                    resultList = new ArrayList<String>(predsJsonArray.length());
+                    for (int i = 0; i < predsJsonArray.length(); i++) {
+                        resultList.add(predsJsonArray.getJSONObject(i).getString("description"));
+                    }
+                } catch (JSONException e) {
+                    Log.e(LOG_TAG, "Cannot process JSON results", e);
+                }
+
+                GlobalState.RESULT_LIST_GLOBAL = resultList;
+                Log.i(LOG_TAG,"End of sync with resultList.size = " + resultList.size());
+                for (int i = 0; i < resultList.size(); i ++ ) {
+                    Log.i(LOG_TAG,resultList.get(i));
+                }
+            }
         }
-
-
-    }
+        }
 
     public static void syncImmediately(Context context) {
         Log.i(LOG_TAG, "In syncImmediately");

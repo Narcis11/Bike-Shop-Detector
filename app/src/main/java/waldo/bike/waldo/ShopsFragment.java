@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -211,6 +212,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
         coordinates[1] = GlobalState.USER_LNG;
         Log.i(LOG_TAG,"Lat/lng in updateShopList - " + coordinates[0] + "/" + coordinates[1]);
       //  new FetchGooglePlaces(getActivity()).execute(coordinates);
+        GlobalState.SYNC_SHOPS = true;
         SyncAdapter.syncImmediately(getActivity());
     }
 
