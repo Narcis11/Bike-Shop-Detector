@@ -31,6 +31,8 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
     Marker mMarker;
     Button mDeleteButton;
     Button mNextButton;
+    private static double mNewShopLat;
+    private static double mNewShopLng;
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
         Log.i(LOG_TAG,"In onItemClick");
@@ -104,7 +106,8 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
                 .position(latLng)
                 .title(Constants.ADD_SHOP_TITLE)
                 );
-
+                mNewShopLat = latLng.latitude;
+                mNewShopLng = latLng.longitude;
                 Log.i(LOG_TAG,"Position is " + latLng.latitude + " / " + latLng.longitude);
             }
         });
@@ -177,6 +180,7 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
+                mMarker.lat
                 Log.i(LOG_TAG,"NEXT button clicked");
                 //Intent i=new Intent(this,SecondActivity.class);
                 //startActivity(i);
