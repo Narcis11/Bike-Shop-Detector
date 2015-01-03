@@ -99,4 +99,6 @@
     <string name="content_authority">waldo.bike.waldo</string>
     <string name="title_activity_add_shop_map">Map</string>
 
+    <!-- Used in the AddShopMap activity -->
+    <string name="search_location">Search here</string>
 </resources>
