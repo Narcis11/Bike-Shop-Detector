@@ -40,13 +40,16 @@ public class SettingsActivity extends PreferenceActivity
         implements Preference.OnPreferenceChangeListener{
 
     private static final String LOG_TAG = SettingsActivity.class.getSimpleName();
+    private static Context mContext;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Add 'general' preferences, defined in the XML file
-        loadPreferenceScreen();
+        //loadPreferenceScreen();
+        addPreferencesFromResource(R.xml.pref_general);
         // For all preferences, attach an OnPreferenceChangeListener so the UI summary can be
         // updated when the preference changes.
+        mContext = getApplicationContext();
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_range_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_speed_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_unit_key)));
@@ -80,15 +83,19 @@ public class SettingsActivity extends PreferenceActivity
             int prefIndex = listPreference.findIndexOfValue(stringValue);
             if (prefIndex >= 0) {
                 preference.setSummary(listPreference.getEntries()[prefIndex]);
-                Log.i(LOG_TAG,"Modified preference is " + ((ListPreference) preference).getValue());
-                if (((ListPreference) preference).getValue().equals(getResources().getString(R.string.unit_array_metric))
-                        || ((ListPreference) preference).getValue().equals(getResources().getString(R.string.unit_array_imperial))) {
-                    loadPreferenceScreen();
+                Log.i(LOG_TAG, "Modified preference is " + ((ListPreference) preference).getValue());
+                if (((ListPreference) preference).getValue() != null) {
+                    if (((ListPreference) preference).getValue().equals(Utility.getPreferredUnit(mContext))) {
+                        addPreferencesFromResource(R.xml.pref_general);
+                    }
                 }
+            } else {
+                // For other preferences, set the summary to the value's simple string representation.
+                preference.setSummary(stringValue);
             }
-        } else {
-            // For other preferences, set the summary to the value's simple string representation.
-            preference.setSummary(stringValue);
+        }
+        else {
+            Log.i(LOG_TAG,"preference is NULL!");
         }
         return true;
     }

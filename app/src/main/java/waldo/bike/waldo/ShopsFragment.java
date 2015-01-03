@@ -39,6 +39,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     private String shopName = "";
     private String formattedDuration = "";
     private String formattedDistance = "";
+    private boolean firstLoad = true;
     private static final int SHOPS_LOADER_ID = 0;//loader identifier
     public static final String[] SHOPS_COLUMNS = {
             ShopsContract.ShopsEntry.TABLE_NAME + "." + ShopsContract.ShopsEntry._ID,
@@ -193,6 +194,10 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     @Override
     public void onResume() {
         super.onResume();
+        if (firstLoad) {
+            getActivity().getContentResolver().delete(ShopsContract.ShopsEntry.CONTENT_URI, null, null);
+        }
+        firstLoad = false;
     }
 
     @Override
