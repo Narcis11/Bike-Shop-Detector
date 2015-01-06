@@ -18,8 +18,9 @@ import sync.SyncAdapter;
 
 public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
     private ArrayList<String> resultList;
-    Calendar cal2 = Calendar.getInstance();
-    Long mSecondSyncDate = cal2.getTimeInMillis();
+    private boolean mFirstSync = true;
+    private long    mFirstSyncDate;
+    public static final int SYNC_INTERVAL = 1500;
 
     private static final String LOG_TAG = PlacesAutoCompleteAdapter.class.getSimpleName();
     public PlacesAutoCompleteAdapter(Context context, int textViewResourceId) {
@@ -46,21 +47,31 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
                     // Retrieve the autocomplete results.
                     GlobalState.SYNC_SHOPS = false;
                     GlobalState.INPUT = constraint.toString();
-                    Calendar cal = Calendar.getInstance();
-                    Long firstSyncDate = cal.getTimeInMillis();
-                    Log.i(LOG_TAG,"Difference is = " + Math.abs(Math.abs( Math.abs(mSecondSyncDate) -  Math.abs(firstSyncDate))) );
-                    SyncAdapter.syncImmediately(getContext());
-                    Log.i(LOG_TAG,"After sync call.");
-                    //TODO: Fix sync delay!
-                    /*if ((Math.abs(Math.abs( Math.abs(mSecondSyncDate) -  Math.abs(firstSyncDate))) > 20000)) {
+                   // Log.i(LOG_TAG,"Difference is = " + Math.abs(Math.abs( Math.abs(mSecondSyncDate) -  Math.abs(firstSyncDate))) );
 
+                    //TODO: Fix sync delay!
+                    SyncAdapter.syncImmediately(getContext());
+                    //we sync only when we have 1,5s between key inputs
+          /*          if (mFirstSync) {
+
+                        mFirstSyncDate = System.currentTimeMillis();
+                        mFirstSync = false;
                     }
                     else {
-                        Log.i(LOG_TAG,"////Too early to Sync!####");
-                    }
+                        Log.i(LOG_TAG,"Diff in time is " + (System.currentTimeMillis() - mFirstSyncDate));
+                        if (System.currentTimeMillis() - mFirstSyncDate > SYNC_INTERVAL) {
+                            SyncAdapter.syncImmediately(getContext());
+                        }
+                        else {
+                            Log.i(LOG_TAG,"Too early to sync");
+                        }
 
-                    mSecondSyncDate = cal2.getTimeInMillis();
-*/
+
+                    }*/
+
+                   // Log.i(LOG_TAG,"After sync call.");
+
+
                     // Assign the data to the FilterResults
                     filterResults.values = resultList;
                     try {
