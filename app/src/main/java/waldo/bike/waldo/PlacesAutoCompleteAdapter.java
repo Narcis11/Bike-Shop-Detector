@@ -69,14 +69,15 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
 
 
                     }
+                    Log.i(LOG_TAG,"Size of GlobalState.RESULT_LIST_GLOBAL = " + GlobalState.RESULT_LIST_GLOBAL.size());
 
-                   // Log.i(LOG_TAG,"After sync call.");
-
+                    resultList = GlobalState.RESULT_LIST_GLOBAL;
 
                     // Assign the data to the FilterResults
                     filterResults.values = resultList;
                     try {
                         filterResults.count = resultList.size();
+                        Log.i(LOG_TAG,"filterResults.count = " + filterResults.count);
                     }
                     catch (NullPointerException e) {
                         Log.e(LOG_TAG,"-------Null exception at line 52!------");
@@ -89,8 +90,10 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 if (results != null && results.count > 0) {
                     notifyDataSetChanged();
+                    Log.i(LOG_TAG,"notified DataSetChanged");
                 }
                 else {
+                    Log.i(LOG_TAG,"DataSetInvalidated()");
                     notifyDataSetInvalidated();
                 }
             }};

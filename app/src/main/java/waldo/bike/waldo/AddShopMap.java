@@ -35,10 +35,12 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
     Button mNextButton;
     private static double mNewShopLat;
     private static double mNewShopLng;
+
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
         Log.i(LOG_TAG,"In onItemClick");
         String str = (String) adapterView.getItemAtPosition(position);
+        Log.i(LOG_TAG,"str is " + str);
         Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
     }
 
@@ -195,5 +197,6 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
         mDeleteButton = deleteButton;
         mNextButton = nextButton;
     }
+
 
 }
