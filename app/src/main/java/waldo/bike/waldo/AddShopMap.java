@@ -35,6 +35,9 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
     Button mNextButton;
     private static double mNewShopLat;
     private static double mNewShopLng;
+    private static final String ADD_SHOP_BUNDLE_LAT_KEY = "lat_key";
+    private static final String ADD_SHOP_BUNDLE_LNG_KEY = "lng_key";
+
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
         Log.i(LOG_TAG,"In onItemClick");
@@ -102,6 +105,7 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
+                //delete all markers and add a new one when the map is long clicked
                 mMap.clear();
                 mMap.addMarker(new MarkerOptions()
                                 .position(latLng)
@@ -182,8 +186,8 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
             public void onClick(View v) {
                 // TODO Auto-generated method stub
                 Bundle bundle = new Bundle();
-                bundle.putDouble(GlobalState.ADD_SHOP_BUNDLE_LAT_KEY,mNewShopLat);
-                bundle.putDouble(GlobalState.ADD_SHOP_BUNDLE_LNG_KEY,mNewShopLng);
+                bundle.putDouble(ADD_SHOP_BUNDLE_LAT_KEY,mNewShopLat);
+                bundle.putDouble(ADD_SHOP_BUNDLE_LNG_KEY,mNewShopLng);
                 Log.i(LOG_TAG,"NEXT button clicked");
                 Intent formIntent = new Intent(getApplicationContext(), AddShopFormActivity.class);
                 formIntent.putExtras(bundle);

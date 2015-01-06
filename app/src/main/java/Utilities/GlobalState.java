@@ -18,6 +18,4 @@ public class GlobalState {
     public static boolean SYNC_SHOPS;
     public static String INPUT = "";
     public static ArrayList<String> RESULT_LIST_GLOBAL = null;
-    public static final String ADD_SHOP_BUNDLE_LAT_KEY = "lat_key";
-    public static final String ADD_SHOP_BUNDLE_LNG_KEY = "lng_key";
 }
