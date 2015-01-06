@@ -68,7 +68,6 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     }
 
 
-    //TODO: Sort the list depending on the distance of the user to the shop
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {

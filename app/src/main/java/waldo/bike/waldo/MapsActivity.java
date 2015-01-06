@@ -75,9 +75,8 @@ public class MapsActivity extends FragmentActivity {
         String allShopsLng = "";
 
         //(fragmentCall = bundle.getString(Constants.BUNDLE_FRAGMENT) ) != null && fragmentCall.equals(Constants.CALLED_FROM_FRAGMENT)
-        if ( bundle != null && !bundle.isEmpty() ) {
+        if ( bundle != null && !bundle.isEmpty() ) { //call for a shop
             //call from fragment
-            Log.i(LOG_TAG, "Preparing to extract bundles");
             Double shopLat = Double.valueOf(bundle.getString(Constants.BUNDLE_SHOP_LAT));
             Double shopLng = Double.valueOf(bundle.getString(Constants.BUNDLE_SHOP_LNG));
             String shopName = bundle.getString(Constants.BUNDLE_SHOP_NAME);
@@ -98,13 +97,11 @@ public class MapsActivity extends FragmentActivity {
                     ShopsContract.ShopsEntry.SORT_ORDER
             );
             if (shopsCursor.moveToFirst()) {
-                Log.i(LOG_TAG,"Rows in cursor = " + shopsCursor.getCount());
                 for (int i = 0; i < shopsCursor.getCount(); i++) {
                     shopsCursor.moveToPosition(i);//without it, the cursor would remain at the first position and retrieve the same shop in each iteration
                     allShopsName = shopsCursor.getString(shopsCursor.getColumnIndex(ShopsContract.ShopsEntry.COLUMN_SHOP_NAME));
                     allShopsLat = shopsCursor.getString(shopsCursor.getColumnIndex(ShopsContract.ShopsEntry.COLUMN_SHOP_LATITUDE));
                     allShopsLng = shopsCursor.getString(shopsCursor.getColumnIndex(ShopsContract.ShopsEntry.COLUMN_SHOP_LONGITUDE));
-                    Log.i(LOG_TAG,"allShopsName = " + allShopsName);
                     mMap.addMarker(new MarkerOptions().position(new LatLng(Double.valueOf(allShopsLat), Double.valueOf(allShopsLng))).title(allShopsName));
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(Double.valueOf(GlobalState.USER_LAT), Double.valueOf(GlobalState.USER_LNG))));
                     mMap.animateCamera(CameraUpdateFactory.zoomTo(Constants.CITY_ZOOM));
