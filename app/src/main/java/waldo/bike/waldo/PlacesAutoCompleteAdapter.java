@@ -19,7 +19,7 @@ import sync.SyncAdapter;
 public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
     private ArrayList<String> resultList;
     private boolean mFirstSync = true;
-    private long    mFirstSyncDate;
+    private long mLastSyncDate;
     public static final int SYNC_INTERVAL = 1500;
 
     private static final String LOG_TAG = PlacesAutoCompleteAdapter.class.getSimpleName();
@@ -52,22 +52,23 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
                     //TODO: Fix sync delay!
                     SyncAdapter.syncImmediately(getContext());
                     //we sync only when we have 1,5s between key inputs
-          /*          if (mFirstSync) {
-
-                        mFirstSyncDate = System.currentTimeMillis();
+                    if (mFirstSync) {
+                        SyncAdapter.syncImmediately(getContext());
+                        mLastSyncDate = System.currentTimeMillis();
                         mFirstSync = false;
                     }
                     else {
-                        Log.i(LOG_TAG,"Diff in time is " + (System.currentTimeMillis() - mFirstSyncDate));
-                        if (System.currentTimeMillis() - mFirstSyncDate > SYNC_INTERVAL) {
+                        Log.i(LOG_TAG,"Diff in time is " + (System.currentTimeMillis() - mLastSyncDate));
+                        if (System.currentTimeMillis() - mLastSyncDate > SYNC_INTERVAL) {
                             SyncAdapter.syncImmediately(getContext());
+                            mLastSyncDate = System.currentTimeMillis();
                         }
                         else {
                             Log.i(LOG_TAG,"Too early to sync");
                         }
 
 
-                    }*/
+                    }
 
                    // Log.i(LOG_TAG,"After sync call.");
 
