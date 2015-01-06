@@ -265,7 +265,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             final String OUT_JSON = "/json";
 
             final String API_KEY = Constants.API_KEY;
-            final String COUNTRY = "ro";
+            final String COUNTRY = Utility.getCountryCodeFromCoordinates(mContext);
             String input = GlobalState.INPUT;
 
             ArrayList<String> resultList = null;

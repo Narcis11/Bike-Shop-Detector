@@ -52,4 +52,7 @@ public class Constants {
 
     //Colours
     public static final String COLOR_BLUE_WALDO_DARK = "#1e85fb";
+
+    //used in every method that returns a String
+    public static final String RETURN_ERROR_STRING = "ERROR";
 }
