@@ -257,7 +257,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
         }
         else {
-            Log.i(LOG_TAG, "*******Starting Places sync...**********");
             final String LOG_TAG = SyncAdapter.class.getSimpleName();
 
             final String PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place";
@@ -265,7 +264,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             final String OUT_JSON = "/json";
 
             final String API_KEY = Constants.API_KEY;
-            final String COUNTRY = "ro";
+            final String COUNTRY = Utility.getCountryCodeFromCoordinates(mContext);
             String input = GlobalState.INPUT;
 
             ArrayList<String> resultList = null;

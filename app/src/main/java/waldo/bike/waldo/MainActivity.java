@@ -400,7 +400,7 @@ public class MainActivity extends Activity implements
         public void onItemClick(AdapterView<?> parent, View view, int position,
                                 long id) {
             // display view for selected nav drawer item
-            Log.i(LOG_TAG,"Button pressed at position " + position);
+       //     Log.i(LOG_TAG,"Button pressed at position " + position);
             if (position == 0) { //add a shop
                 openMap(AddShopMap);
             }

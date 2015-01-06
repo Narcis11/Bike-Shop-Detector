@@ -3,10 +3,15 @@ package Utilities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Address;
+import android.location.Geocoder;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Display;
 import android.widget.Toast;
+
+import java.io.IOException;
+import java.util.List;
 
 import waldo.bike.waldo.R;
 
@@ -201,6 +206,26 @@ public class Utility {
         else {
             Toast.makeText(context,R.string.api_error,Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public static String getCountryCodeFromCoordinates(Context context) {
+        String countryCode = "";
+        if (GlobalState.USER_LAT.equals("") || GlobalState.USER_LNG.equals("") ) {
+            return Constants.RETURN_ERROR_STRING;
+        }
+        else {
+            Geocoder geocoder = new Geocoder(context);
+            try {
+                List<Address> addressList = geocoder.getFromLocation(Double.valueOf(GlobalState.USER_LAT), Double.valueOf(GlobalState.USER_LNG), 1);
+                countryCode = addressList.get(0).getCountryName().substring(0,2).toLowerCase();
+                return countryCode;
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+        return Constants.RETURN_ERROR_STRING;
     }
 
 }

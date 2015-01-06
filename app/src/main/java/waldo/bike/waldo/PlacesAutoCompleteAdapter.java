@@ -18,8 +18,9 @@ import sync.SyncAdapter;
 
 public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
     private ArrayList<String> resultList;
-    Calendar cal2 = Calendar.getInstance();
-    Long mSecondSyncDate = cal2.getTimeInMillis();
+    private boolean mFirstSync = true;
+    private long mLastSyncDate;
+    public static final int SYNC_INTERVAL = 1500;
 
     private static final String LOG_TAG = PlacesAutoCompleteAdapter.class.getSimpleName();
     public PlacesAutoCompleteAdapter(Context context, int textViewResourceId) {
@@ -46,25 +47,37 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
                     // Retrieve the autocomplete results.
                     GlobalState.SYNC_SHOPS = false;
                     GlobalState.INPUT = constraint.toString();
-                    Calendar cal = Calendar.getInstance();
-                    Long firstSyncDate = cal.getTimeInMillis();
-                    Log.i(LOG_TAG,"Difference is = " + Math.abs(Math.abs( Math.abs(mSecondSyncDate) -  Math.abs(firstSyncDate))) );
-                    SyncAdapter.syncImmediately(getContext());
-                    Log.i(LOG_TAG,"After sync call.");
-                    //TODO: Fix sync delay!
-                    /*if ((Math.abs(Math.abs( Math.abs(mSecondSyncDate) -  Math.abs(firstSyncDate))) > 20000)) {
+                   // Log.i(LOG_TAG,"Difference is = " + Math.abs(Math.abs( Math.abs(mSecondSyncDate) -  Math.abs(firstSyncDate))) );
 
+                    //TODO: Fix sync delay!
+                    SyncAdapter.syncImmediately(getContext());
+                    //we sync only when we have 1,5s between key inputs
+                    if (mFirstSync) {
+                        SyncAdapter.syncImmediately(getContext());
+                        mLastSyncDate = System.currentTimeMillis();
+                        mFirstSync = false;
                     }
                     else {
-                        Log.i(LOG_TAG,"////Too early to Sync!####");
-                    }
+                        Log.i(LOG_TAG,"Diff in time is " + (System.currentTimeMillis() - mLastSyncDate));
+                        if (System.currentTimeMillis() - mLastSyncDate > SYNC_INTERVAL) {
+                            SyncAdapter.syncImmediately(getContext());
+                            mLastSyncDate = System.currentTimeMillis();
+                        }
+                        else {
+                            Log.i(LOG_TAG,"Too early to sync");
+                        }
 
-                    mSecondSyncDate = cal2.getTimeInMillis();
-*/
+
+                    }
+                    Log.i(LOG_TAG,"Size of GlobalState.RESULT_LIST_GLOBAL = " + GlobalState.RESULT_LIST_GLOBAL.size());
+
+                    resultList = GlobalState.RESULT_LIST_GLOBAL;
+
                     // Assign the data to the FilterResults
                     filterResults.values = resultList;
                     try {
                         filterResults.count = resultList.size();
+                        Log.i(LOG_TAG,"filterResults.count = " + filterResults.count);
                     }
                     catch (NullPointerException e) {
                         Log.e(LOG_TAG,"-------Null exception at line 52!------");
@@ -77,8 +90,10 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 if (results != null && results.count > 0) {
                     notifyDataSetChanged();
+                    Log.i(LOG_TAG,"notified DataSetChanged");
                 }
                 else {
+                    Log.i(LOG_TAG,"DataSetInvalidated()");
                     notifyDataSetInvalidated();
                 }
             }};

@@ -19,7 +19,6 @@ public class WaldoSyncService extends Service{
 
     @Override
     public void onCreate() {
-        Log.i(LOG_TAG, "onCreate - SunshineSyncService");
         synchronized (sSyncAdapterLock) {
             if (sWaldoSyncAdapter == null) {
                 sWaldoSyncAdapter = new SyncAdapter(getApplicationContext(), true);
