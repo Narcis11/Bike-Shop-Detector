@@ -46,7 +46,6 @@ import waldo.bike.waldo.R;
  */
 public class SyncAdapter extends AbstractThreadedSyncAdapter {
     private static final String LOG_TAG = SyncAdapter.class.getSimpleName();
-    private ArrayAdapter<String> mShopsAdapter;
     private Context mContext;
     private boolean DEBUG = false;
     public SyncAdapter(Context context, boolean autoInitialize) {
@@ -57,10 +56,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
 
-        if (GlobalState.SYNC_SHOPS) {
             Log.i(LOG_TAG, "Starting sync...");
             String[] finalResult = new String[100];
-            mShopsAdapter = GlobalState.GLOBAL_ADAPTER;
             String radius = Utility.formatPreferredRange(mContext);
             HttpURLConnection urlConnection = null;
             BufferedReader reader = null;
@@ -255,72 +252,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 e.printStackTrace();
             }
 
-        }
-        else {
-            final String LOG_TAG = SyncAdapter.class.getSimpleName();
-
-            final String PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place";
-            final String TYPE_AUTOCOMPLETE = "/autocomplete";
-            final String OUT_JSON = "/json";
-
-            final String API_KEY = Constants.API_KEY;
-            final String COUNTRY = Utility.getCountryCodeFromCoordinates(mContext);
-            String input = GlobalState.INPUT;
-
-            ArrayList<String> resultList = null;
-
-            HttpURLConnection conn = null;
-            StringBuilder jsonResults = new StringBuilder();
-            if (!input.equals("")) {
-                try {
-                    StringBuilder sb = new StringBuilder(PLACES_API_BASE + TYPE_AUTOCOMPLETE + OUT_JSON);
-                    sb.append("?key=" + API_KEY);
-                    sb.append("&components=country:" + COUNTRY);
-                    sb.append("&input=" + URLEncoder.encode(input, "utf8"));
-
-                    URL url = new URL(sb.toString());
-                    conn = (HttpURLConnection) url.openConnection();
-                    InputStreamReader in = new InputStreamReader(conn.getInputStream());
-
-                    // Load the results into a StringBuilder
-                    int read;
-                    char[] buff = new char[1024];
-                    while ((read = in.read(buff)) != -1) {
-                        jsonResults.append(buff, 0, read);
-                    }
-                } catch (MalformedURLException e) {
-                    Log.e(LOG_TAG, "Error processing Places API URL", e);
-                    GlobalState.RESULT_LIST_GLOBAL = resultList;
-                } catch (IOException e) {
-                    Log.e(LOG_TAG, "Error connecting to Places API", e);
-                    GlobalState.RESULT_LIST_GLOBAL = resultList;
-                } finally {
-                    if (conn != null) {
-                        conn.disconnect();
-                    }
-                }
-
-                try {
-                    // Create a JSON object hierarchy from the results
-                    JSONObject jsonObj = new JSONObject(jsonResults.toString());
-                    JSONArray predsJsonArray = jsonObj.getJSONArray("predictions");
-
-                    // Extract the Place descriptions from the results
-                    resultList = new ArrayList<String>(predsJsonArray.length());
-                    for (int i = 0; i < predsJsonArray.length(); i++) {
-                        resultList.add(predsJsonArray.getJSONObject(i).getString("description"));
-                    }
-                } catch (JSONException e) {
-                    Log.e(LOG_TAG, "Cannot process JSON results", e);
-                }
-
-                GlobalState.RESULT_LIST_GLOBAL = resultList;
-                Log.i(LOG_TAG,"End of sync with resultList.size = " + resultList.size());
-                for (int i = 0; i < resultList.size(); i ++ ) {
-                    Log.i(LOG_TAG,resultList.get(i));
-                }
-            }
-        }
         }
 
     public static void syncImmediately(Context context) {

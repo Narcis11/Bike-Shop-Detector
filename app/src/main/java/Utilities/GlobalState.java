@@ -13,8 +13,4 @@ public class GlobalState {
     public static String USER_LNG = "";
     public static String ALL_SHOPS_INFO = "";
     public static String FETCH_STATUS = "";
-    public static ArrayAdapter<String> GLOBAL_ADAPTER;
-    public static boolean SYNC_SHOPS;
-    public static String INPUT = "";
-    public static ArrayList<String> RESULT_LIST_GLOBAL = null;
 }

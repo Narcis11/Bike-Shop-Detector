@@ -9,6 +9,8 @@ import android.widget.Filterable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.lang.Math;
+
+import Places.FetchPlacesAutocomplete;
 import Utilities.GlobalState;
 import sync.SyncAdapter;
 
@@ -45,14 +47,15 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
                 FilterResults filterResults = new FilterResults();
                 if (constraint != null) {
                     // Retrieve the autocomplete results.
-                    GlobalState.SYNC_SHOPS = false;
-                    GlobalState.INPUT = constraint.toString();
+/*                    GlobalState.SYNC_SHOPS = false;
+                    GlobalState.INPUT = constraint.toString();*/
                    // Log.i(LOG_TAG,"Difference is = " + Math.abs(Math.abs( Math.abs(mSecondSyncDate) -  Math.abs(firstSyncDate))) );
-
+                    FetchPlacesAutocomplete fetchPlacesAutocomplete = new FetchPlacesAutocomplete(getContext());
+                    resultList = fetchPlacesAutocomplete.autocomplete(constraint.toString());
                     //TODO: Fix sync delay!
-                    SyncAdapter.syncImmediately(getContext());
+                    //SyncAdapter.syncImmediately(getContext());
                     //we sync only when we have 1,5s between key inputs
-                    if (mFirstSync) {
+/*                    if (mFirstSync) {
                         SyncAdapter.syncImmediately(getContext());
                         mLastSyncDate = System.currentTimeMillis();
                         mFirstSync = false;
@@ -68,10 +71,10 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
                         }
 
 
-                    }
-                    Log.i(LOG_TAG,"Size of GlobalState.RESULT_LIST_GLOBAL = " + GlobalState.RESULT_LIST_GLOBAL.size());
+                    }*/
+                    Log.i(LOG_TAG,"Size of resultList = " + resultList);
 
-                    resultList = GlobalState.RESULT_LIST_GLOBAL;
+                //    resultList = GlobalState.RESULT_LIST_GLOBAL;
 
                     // Assign the data to the FilterResults
                     filterResults.values = resultList;

@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AbsoluteLayout;
 import android.widget.AdapterView;
@@ -35,11 +36,8 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
     Button mNextButton;
     private static double mNewShopLat;
     private static double mNewShopLng;
-<<<<<<< HEAD
     private static final String ADD_SHOP_BUNDLE_LAT_KEY = "lat_key";
     private static final String ADD_SHOP_BUNDLE_LNG_KEY = "lng_key";
-=======
->>>>>>> 870f524d05bdf09598ca2e97c2cf8ef0ebb9665c
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
@@ -54,9 +52,17 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_shop_map);
         //creating the search view
-        AutoCompleteTextView autoCompView = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView);
+        final AutoCompleteTextView autoCompView = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView);
         autoCompView.setAdapter(new PlacesAutoCompleteAdapter(this, R.layout.list_item_places));
         autoCompView.setOnItemClickListener(this);
+/*        autoCompView.setOnTouchListener(new View.OnTouchListener(){
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                autoCompView.setThreshold(5);
+                autoCompView.showDropDown();
+                return false;
+            }
+        });*/
 
         //loading the map
         setUpMapIfNeeded();
