@@ -35,7 +35,7 @@ public class Constants {
     public static final float  SHOP_ZOOM = 18;
     public static final float  USER_SHOP_ZOOM = 13; //used when we have the shop's marker and the user's marker on the map
     public static final String USERS_NAME = "My location";
-    public static final String API_KEY="AIzaSyA2rM5Kq8ch0L-N0nALu9xx7O4GYgtMjow";
+    public static final String API_KEY="AIzaSyCHf4BobJQWDa39E_VJtUkwkuimFfsz7Z0";
 
     //used in network communication
     public static final String HTTP_GET = "GET";
