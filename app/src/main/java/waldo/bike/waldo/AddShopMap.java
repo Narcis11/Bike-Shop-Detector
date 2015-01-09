@@ -47,7 +47,8 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
         Log.i(LOG_TAG,"str is " + str);
         Double[] coordinatesArray = Utility.getCoordinatesFromAddressName(getApplicationContext(), str);
         Log.i(LOG_TAG,"Lat/lng of address " + str+ " = " + coordinatesArray[0] + "/" + coordinatesArray[1]);
-        //move the marker to the selected addres
+        
+        //move the marker to the selected address
         LatLng newUserLatLng = new LatLng(coordinatesArray[0], coordinatesArray[1]);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(newUserLatLng));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(Constants.SHOP_ZOOM));
