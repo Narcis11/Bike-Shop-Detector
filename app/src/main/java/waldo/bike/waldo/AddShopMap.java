@@ -25,6 +25,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import Utilities.Constants;
 import Utilities.GlobalState;
+import Utilities.Utility;
 import waldo.bike.form.AddShopFormActivity;
 
 public class AddShopMap extends FragmentActivity implements AdapterView.OnItemClickListener{
@@ -44,6 +45,8 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
         Log.i(LOG_TAG,"In onItemClick");
         String str = (String) adapterView.getItemAtPosition(position);
         Log.i(LOG_TAG,"str is " + str);
+        Double[] coordinatesArray = Utility.getCoordinatesFromAddressName(getApplicationContext(), str);
+        Log.i(LOG_TAG,"Lat/lng of address " + str+ " = " + coordinatesArray[0] + "/" + coordinatesArray[1]);
         Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
     }
 
@@ -149,7 +152,8 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
         LatLng userLatLng = new LatLng(Double.valueOf(GlobalState.USER_LAT), Double.valueOf(GlobalState.USER_LNG));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(userLatLng));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(Constants.SHOP_ZOOM));
-        //mMap.addMarker(new MarkerOptions().position(new LatLng(Double.valueOf(GlobalState.USER_LAT), Double.valueOf(GlobalState.USER_LNG))).title(Constants.USERS_NAME));
+        Marker userMarker = mMap.addMarker(new MarkerOptions().position(new LatLng(Double.valueOf(GlobalState.USER_LAT), Double.valueOf(GlobalState.USER_LNG))).title(Constants.USERS_NAME));
+        userMarker.showInfoWindow();//we always display the title of the user's marker
     }
 
     private void displayButtons() {

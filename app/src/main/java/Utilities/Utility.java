@@ -216,6 +216,7 @@ public class Utility {
         else {
             Geocoder geocoder = new Geocoder(context);
             try {
+
                 List<Address> addressList = geocoder.getFromLocation(Double.valueOf(GlobalState.USER_LAT), Double.valueOf(GlobalState.USER_LNG), 1);
                 countryCode = addressList.get(0).getCountryName().substring(0,2).toLowerCase();
                 return countryCode;
@@ -228,4 +229,18 @@ public class Utility {
         return Constants.RETURN_ERROR_STRING;
     }
 
+    public static Double[] getCoordinatesFromAddressName(Context context, String address) {
+        Geocoder geocoder = new Geocoder(context);
+        Double[] coordinatesArray = new Double[5];
+        try {
+            List<Address> coordinates = geocoder.getFromLocationName(address,1);
+            coordinatesArray[0] = coordinates.get(0).getLatitude();
+            coordinatesArray[1] = coordinates.get(0).getLongitude();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return coordinatesArray;
+    }
 }

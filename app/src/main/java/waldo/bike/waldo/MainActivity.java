@@ -434,13 +434,15 @@ public class MainActivity extends Activity implements
 
         }
         else if (mapToOpen.equals(AddShopMap)) {
-            if (GlobalState.USER_LAT.equals("") && GlobalState.USER_LNG.equals("")) {
+/*            if (GlobalState.USER_LAT.equals("") && GlobalState.USER_LNG.equals("")) {
                 Toast.makeText(mContext, R.string.no_user_location, Toast.LENGTH_SHORT).show();
             }
-            else {
+            else {*/
                 Intent intent = new Intent(mContext, AddShopMap.class);
                 startActivity(intent);
-            }
+            //TO BE REMOVED
+
+            //}
         }
     }
 }

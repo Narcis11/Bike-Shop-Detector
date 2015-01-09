@@ -12,6 +12,7 @@ import java.lang.Math;
 
 import Places.FetchPlacesAutocomplete;
 import Utilities.GlobalState;
+import Utilities.Utility;
 import sync.SyncAdapter;
 
 /**
@@ -72,7 +73,7 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
 
 
                     }*/
-                    Log.i(LOG_TAG,"Size of resultList = " + resultList);
+
 
                 //    resultList = GlobalState.RESULT_LIST_GLOBAL;
 

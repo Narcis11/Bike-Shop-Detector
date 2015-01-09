@@ -87,6 +87,7 @@ public class MapsActivity extends FragmentActivity {
             mMap.animateCamera(CameraUpdateFactory.zoomTo(Constants.SHOP_ZOOM));//*; //zoom to the position
         }
         else {
+            Log.i(LOG_TAG,"Loading all shops map");
             //if there's no bundle, then the call is from the main activity (View all shops button)
             Cursor shopsCursor;
             shopsCursor = getApplicationContext().getContentResolver().query(
