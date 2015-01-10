@@ -47,44 +47,13 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults filterResults = new FilterResults();
                 if (constraint != null) {
-                    // Retrieve the autocomplete results.
-/*                    GlobalState.SYNC_SHOPS = false;
-                    GlobalState.INPUT = constraint.toString();*/
-                   // Log.i(LOG_TAG,"Difference is = " + Math.abs(Math.abs( Math.abs(mSecondSyncDate) -  Math.abs(firstSyncDate))) );
-                    FetchPlacesAutocomplete fetchPlacesAutocomplete = new FetchPlacesAutocomplete(getContext());
-                    resultList = fetchPlacesAutocomplete.autocomplete(constraint.toString());
-                    //TODO: Fix sync delay!
-                    //SyncAdapter.syncImmediately(getContext());
-                    //we sync only when we have 1,5s between key inputs
-/*                    if (mFirstSync) {
-                        SyncAdapter.syncImmediately(getContext());
-                        mLastSyncDate = System.currentTimeMillis();
-                        mFirstSync = false;
-                    }
-                    else {
-                        Log.i(LOG_TAG,"Diff in time is " + (System.currentTimeMillis() - mLastSyncDate));
-                        if (System.currentTimeMillis() - mLastSyncDate > SYNC_INTERVAL) {
-                            SyncAdapter.syncImmediately(getContext());
-                            mLastSyncDate = System.currentTimeMillis();
-                        }
-                        else {
-                            Log.i(LOG_TAG,"Too early to sync");
-                        }
-
-
-                    }*/
-
-
-                //    resultList = GlobalState.RESULT_LIST_GLOBAL;
-
-                    // Assign the data to the FilterResults
+                    //we only sync if there are at least three letters
+                    if (constraint.toString().length() > 2) {
+                        Log.i(LOG_TAG, "Started syncing");
+                        FetchPlacesAutocomplete fetchPlacesAutocomplete = new FetchPlacesAutocomplete(getContext());
+                        resultList = fetchPlacesAutocomplete.autocomplete(constraint.toString());
                     filterResults.values = resultList;
-                    try {
-                        filterResults.count = resultList.size();
-                        Log.i(LOG_TAG,"filterResults.count = " + filterResults.count);
-                    }
-                    catch (NullPointerException e) {
-                        Log.e(LOG_TAG,"-------Null exception at line 52!------");
+                    filterResults.count = resultList.size();
                     }
                 }
                 return filterResults;

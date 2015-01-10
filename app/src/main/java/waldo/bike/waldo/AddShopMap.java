@@ -13,6 +13,7 @@ import android.widget.AbsoluteLayout;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -33,8 +34,8 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private static final String LOG_TAG = AddShopMap.class.getSimpleName();
     Marker mMarker;
-    Button mDeleteButton;
-    Button mNextButton;
+    ImageButton mDeleteButton;
+    ImageButton mNextButton;
     private static double mNewShopLat;
     private static double mNewShopLng;
     private static final String ADD_SHOP_BUNDLE_LAT_KEY = "lat_key";
@@ -128,7 +129,7 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
                 mMap.clear();
                 mMap.addMarker(new MarkerOptions()
                                 .position(latLng)
-                                .title(Constants.ADD_SHOP_TITLE)
+                                .title(Constants.NEW_SHOP_NAME)
                 );
                 mNewShopLat = latLng.latitude;
                 mNewShopLng = latLng.longitude;
@@ -163,59 +164,29 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
     }
 
     private void displayButtons() {
-        Button deleteButton = new Button(this);
-        float deleteX = 200;
-        float deleteY = 10;
-
-        //(Button) findViewById(R.id.delete_shop_button);
-        //
-        // button.setText(Constants.ADD_SHOP_TITLE);
-        addContentView(deleteButton,new ActionBar.LayoutParams(AbsoluteLayout.LayoutParams.WRAP_CONTENT, AbsoluteLayout.LayoutParams.WRAP_CONTENT));
-        deleteButton.setLeft(100);
-        deleteButton.setText(getResources().getString(R.string.delete_shop_button));
-        deleteButton.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#1e85fb")));
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                mMap.clear();
-                mDeleteButton.setVisibility(View.INVISIBLE);
-                mNextButton.setVisibility(View.INVISIBLE);
-                Log.i(LOG_TAG,"Button clicked");
-                //Intent i=new Intent(this,SecondActivity.class);
-                //startActivity(i);
-
-            }
-        });
-
-        Button nextButton = new Button(this);
-        float nextX = 200;
-        float nextY = 10;
-
-        addContentView(nextButton,new ActionBar.LayoutParams(AbsoluteLayout.LayoutParams.WRAP_CONTENT, AbsoluteLayout.LayoutParams.WRAP_CONTENT));
-        nextButton.setText(getResources().getString(R.string.next_shop_button));
-        nextButton.setY(100);
-    //    nextButton.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#1e85fb")));
-        nextButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                Bundle bundle = new Bundle();
-                bundle.putDouble(ADD_SHOP_BUNDLE_LAT_KEY,mNewShopLat);
-                bundle.putDouble(ADD_SHOP_BUNDLE_LNG_KEY,mNewShopLng);
-                Log.i(LOG_TAG,"NEXT button clicked");
-                Intent formIntent = new Intent(getApplicationContext(), AddShopFormActivity.class);
-                formIntent.putExtras(bundle);
-                startActivity(formIntent);
-
-            }
-        });
-
+        ImageButton deleteButton = (ImageButton) findViewById(R.id.deleteButton);
+        ImageButton nextButton = (ImageButton) findViewById(R.id.nextButton);
+        deleteButton.setVisibility(ImageButton.VISIBLE);
+        nextButton.setVisibility(ImageButton.VISIBLE);
         mDeleteButton = deleteButton;
         mNextButton = nextButton;
     }
 
+    public void openFormActivity(View view) {
+        Bundle bundle = new Bundle();
+        bundle.putDouble(ADD_SHOP_BUNDLE_LAT_KEY,mNewShopLat);
+        bundle.putDouble(ADD_SHOP_BUNDLE_LNG_KEY,mNewShopLng);
+        Log.i(LOG_TAG,"NEXT button clicked");
+        Intent formIntent = new Intent(getApplicationContext(), AddShopFormActivity.class);
+        formIntent.putExtras(bundle);
+        startActivity(formIntent);
+    }
 
+    public void deleteMarker(View view) {
+        mMap.clear();
+        if (mDeleteButton != null && mNextButton != null) {
+            mDeleteButton.setVisibility(ImageButton.INVISIBLE);
+            mNextButton.setVisibility(ImageButton.INVISIBLE);
+        }
+    }
 }

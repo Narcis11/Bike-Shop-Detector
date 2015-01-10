@@ -2,8 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:id="@+id/map"
     tools:context="waldo.bike.waldo.AddShopMap"
-    android:name="com.google.android.gms.maps.SupportMapFragment">
-
+    android:name="com.google.android.gms.maps.SupportMapFragment"
+    tools:layout="@layout/activity_add_shop_map">
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent" android:layout_height="match_parent">
 
@@ -16,9 +16,33 @@
             android:layout_marginTop="25dp"
             android:ems="7" />
 
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/deleteButton"
+            android:src="@drawable/delete_button"
+            android:onClick="deleteMarker"
+            android:visibility="invisible"
+            android:layout_alignParentBottom="true"
+            android:layout_alignRight="@+id/autoCompleteTextView"
+            android:layout_alignEnd="@+id/autoCompleteTextView"
+             />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/nextButton"
+            android:src="@drawable/next_button"
+            android:visibility="invisible"
+            android:onClick="openFormActivity"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
     </RelativeLayout>
 
 </fragment>
+
 
 
 

@@ -13,4 +13,6 @@ public class GlobalState {
     public static String USER_LNG="";
     public static String ALL_SHOPS_INFO = "";
     public static String FETCH_STATUS = "";
+    public static String NEW_SHOP_LAT = "";
+    public static String NEW_SHOP_LNG = "";
 }
