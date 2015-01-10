@@ -52,7 +52,7 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
         LatLng newUserLatLng = new LatLng(coordinatesArray[0], coordinatesArray[1]);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(newUserLatLng));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(Constants.SHOP_ZOOM));
-        Marker userMarker = mMap.addMarker(new MarkerOptions().position(new LatLng(coordinatesArray[0], coordinatesArray[1])).title(Constants.USERS_NAME));
+        Marker userMarker = mMap.addMarker(new MarkerOptions().position(new LatLng(coordinatesArray[0], coordinatesArray[1])).title(Constants.NEW_SHOP_NAME));
         userMarker.showInfoWindow();//we always display the title of the user's marker
     }
 
@@ -158,7 +158,7 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
         LatLng userLatLng = new LatLng(Double.valueOf(GlobalState.USER_LAT), Double.valueOf(GlobalState.USER_LNG));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(userLatLng));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(Constants.SHOP_ZOOM));
-        Marker userMarker = mMap.addMarker(new MarkerOptions().position(new LatLng(Double.valueOf(GlobalState.USER_LAT), Double.valueOf(GlobalState.USER_LNG))).title(Constants.USERS_NAME));
+        Marker userMarker = mMap.addMarker(new MarkerOptions().position(new LatLng(Double.valueOf(GlobalState.USER_LAT), Double.valueOf(GlobalState.USER_LNG))).title(Constants.NEW_SHOP_NAME));
         userMarker.showInfoWindow();//we always display the title of the user's marker
     }
 
