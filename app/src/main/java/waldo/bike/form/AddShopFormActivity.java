@@ -3,15 +3,22 @@ package waldo.bike.form;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
+import java.util.regex.Pattern;
 
 import waldo.bike.waldo.R;
 
 public class AddShopFormActivity extends ActionBarActivity {
 
     public static final String LOG_TAG = AddShopFormActivity.class.getSimpleName();
+    private static boolean mShopNameOk = false;
+    private static boolean mShopPhoneNumberOk = true;
+    private static boolean mShopWebsiteOk = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +41,36 @@ public class AddShopFormActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void checkShopName (View v) {
+        EditText shopName = (EditText) findViewById(R.id.new_shop_name);
+        TextView errorMessage = (TextView) findViewById(R.id.placeholder_text);
+        if (shopName.getText().toString().length() == 0) {
+            errorMessage.setText(getResources().getString(R.string.empty_shop_name));
+            mShopNameOk = false;
+        }
+        else {
+            errorMessage.setText("");
+            mShopNameOk = true;
+        }
+    }
+
+    public void checkPhoneNumber (View v) {
+        EditText shopPhoneNumber = (EditText) findViewById(R.id.new_shop_phone);
+        TextView errorMessage = (TextView) findViewById(R.id.placeholder_text);
+        
+    }
     public void addShop(View v) {
-        Log.i(LOG_TAG,"Pressed add shop button");
+        EditText shopName = (EditText) findViewById(R.id.new_shop_name);
+
+        EditText shopWebsiteAddress = (EditText) findViewById(R.id.new_shop_website);
+        TextView errorMessage = (TextView) findViewById(R.id.placeholder_text);
+        String wwwPrefix = "www";
+        if (shopName.getText().toString().length() == 0) {
+            errorMessage.setText(getResources().getString(R.string.empty_shop_name));
+        }
+/*        else if (shopWebsiteAddress.toString().indexOf(wwwPrefix) == 0 || !Patterns.WEB_URL.matcher(shopWebsiteAddress.getText()).matches()) {
+            Log.i(LOG_TAG,"Invalid web address");
+            errorMessage.setText(getResources().getString(R.string.invalid_url));
+        }*/
     }
 }

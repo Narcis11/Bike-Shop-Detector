@@ -26,6 +26,7 @@
             android:layout_alignParentBottom="true"
             android:layout_alignRight="@+id/autoCompleteTextView"
             android:layout_alignEnd="@+id/autoCompleteTextView"
+            android:background="@android:color/transparent"
              />
 
         <ImageButton
@@ -37,7 +38,8 @@
             android:onClick="openFormActivity"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:background="@android:color/transparent"/>
 
     </RelativeLayout>
 

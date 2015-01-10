@@ -32,6 +32,7 @@
         android:layout_height="wrap_content"
         android:hint="@string/form_shop_name"
         android:paddingTop="15dp"
+        android:onClick="checkShopName"
         android:inputType="textPersonName"
         android:layout_width="match_parent">
     </EditText>

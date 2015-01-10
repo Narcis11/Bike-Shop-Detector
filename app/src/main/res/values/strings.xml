@@ -112,4 +112,6 @@
     <string name="form_shop_phone">Phone number (recommended)</string>
     <string name="form_shop_website">Website (recommended)</string>
     <string name="form_shop_placeholder">Error message</string>
+    <string name="empty_shop_name">Please complete the shop\'s name</string>
+    <string name="invalid_url">Invalid website address</string>
 </resources>
