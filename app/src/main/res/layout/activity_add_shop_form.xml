@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:paddingTop="5dp"
         android:text="@string/form_shop_placeholder"
-        android:textSize="8pt"
+        android:textSize="3pt"
         android:layout_gravity="center_horizontal">
     </TextView>
 
