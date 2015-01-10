@@ -63,10 +63,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             BufferedReader reader = null;
             String placesJsonStr = "";//used for storing the response from the API call
             //used for querying the Google Places API
-            final String types = "bicycle_store";
+            final String types = Constants.PLACE_TYPE;
             final String key = Constants.API_KEY;
             final String latLng = GlobalState.USER_LAT + Constants.COMMA_SEPARATOR + GlobalState.USER_LNG;
-            //  final String latLng = "44.4391463,26.1428946";//we'll hardcoded for now, don't wanna wait for the location every time
             final String output = "json";
             try {
                 //the query parameters used in the call

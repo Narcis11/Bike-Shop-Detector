@@ -45,6 +45,7 @@ public class Constants {
     public static final String HTTP_GET = "GET";
     public static final String HTTP_POST = "POST";
     public static final String PROVIDER = "waldoprovider";
+    public static final String PLACE_TYPE = "bicycle_store";
 
     //used in the list view from the main activity
     public static final String SHOP_OPEN = "Open";
