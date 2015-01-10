@@ -51,6 +51,24 @@
         android:hint="@string/form_shop_website"
         android:paddingTop="15dp"
         android:inputType="textWebEmailAddress"
+        android:layout_weight="0"
         android:layout_width="match_parent">
     </EditText>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:gravity="center|bottom"
+        android:orientation="vertical" >
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/add_shop_button"
+        android:src="@drawable/add_shop"
+        android:onClick="addShop"
+        android:background="@android:color/transparent"
+         />
+    </LinearLayout>
 </LinearLayout>
