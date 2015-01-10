@@ -1,25 +1,17 @@
-package waldo.bike.waldo;
+package waldo.bike.form;
 
-import android.app.ActionBar;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AbsoluteLayout;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -27,7 +19,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import Utilities.Constants;
 import Utilities.GlobalState;
 import Utilities.Utility;
-import waldo.bike.form.AddShopFormActivity;
+import waldo.bike.waldo.R;
 
 public class AddShopMap extends FragmentActivity implements AdapterView.OnItemClickListener{
 
@@ -176,8 +168,8 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
     public void openFormActivity(View view) {
         Bundle bundle = new Bundle();
         bundle.putDouble(Constants.ADD_SHOP_BUNDLE_LAT_KEY,mNewShopLat);
-        bundle.putDouble(Constants.ADD_SHOP_BUNDLE_LNG_KEY,mNewShopLng);
-        bundle.putString(Constants.ADD_SHOP_BUNDLE_ADDRESS_KEY,mAddress);
+        bundle.putDouble(Constants.ADD_SHOP_BUNDLE_LNG_KEY, mNewShopLng);
+        bundle.putString(Constants.ADD_SHOP_BUNDLE_ADDRESS_KEY, mAddress);
         Intent formIntent = new Intent(getApplicationContext(), AddShopFormActivity.class);
         formIntent.putExtras(bundle);
         startActivity(formIntent);

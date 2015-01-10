@@ -2,35 +2,23 @@ package waldo.bike.waldo;
 
 import android.app.Activity;
 import android.app.ActionBar;
-import android.app.AlertDialog;
-import android.app.Fragment;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.GpsStatus;
 import android.location.Location;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
-import android.view.Display;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.os.Build;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,14 +29,8 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import java.util.zip.CheckedOutputStream;
 
-import Places.FetchGooglePlaces;
 import Utilities.Constants;
 import Utilities.DeviceConnection;
 import Utilities.GlobalState;
@@ -438,7 +420,7 @@ public class MainActivity extends Activity implements
                 Toast.makeText(mContext, R.string.no_user_location, Toast.LENGTH_SHORT).show();
             }
             else {
-                Intent intent = new Intent(mContext, AddShopMap.class);
+                Intent intent = new Intent(mContext, waldo.bike.form.AddShopMap.class);
                 startActivity(intent);
             //TO BE REMOVED
 

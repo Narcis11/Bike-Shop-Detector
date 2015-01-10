@@ -107,7 +107,7 @@
                 android:resource="@xml/syncadapter" />
         </service>
         <activity
-            android:name=".AddShopMap"
+            android:name="waldo.bike.form.AddShopMap"
             android:label="@string/title_activity_add_shop_map" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

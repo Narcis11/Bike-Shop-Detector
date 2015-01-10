@@ -1,4 +1,4 @@
-package waldo.bike.waldo;
+package waldo.bike.form;
 
 import android.content.Context;
 import android.util.Log;
@@ -7,13 +7,8 @@ import android.widget.Filter;
 import android.widget.Filterable;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.lang.Math;
 
 import Places.FetchPlacesAutocomplete;
-import Utilities.GlobalState;
-import Utilities.Utility;
-import sync.SyncAdapter;
 
 /**
  * Created by Narcis11 on 03.01.2015.

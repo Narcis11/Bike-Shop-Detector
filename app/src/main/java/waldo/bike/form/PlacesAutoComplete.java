@@ -1,4 +1,4 @@
-package waldo.bike.waldo;
+package waldo.bike.form;
 
 import android.content.Context;
 import android.util.AttributeSet;
