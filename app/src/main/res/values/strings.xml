@@ -108,4 +108,8 @@
 
     <!-- Used in the AddShopFormActivity-->
     <string name="form_title">This submission will be moderated by Google. Complete all of the fields to increase the chance of acceptance.</string>
+    <string name="form_shop_name">Shop name (mandatory)</string>
+    <string name="form_shop_phone">Phone number (recommended)</string>
+    <string name="form_shop_website">Website (recommended)</string>
+    <string name="form_shop_placeholder">Error message</string>
 </resources>
