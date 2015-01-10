@@ -13,6 +13,7 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.util.List;
 
+import waldo.bike.form.AddShopFormActivity;
 import waldo.bike.waldo.R;
 
 /**
@@ -242,5 +243,19 @@ public class Utility {
         }
 
         return coordinatesArray;
+    }
+
+    public static String getAddressNameFromCoordinates (Context context, double latitude, double longitude) {
+        Geocoder geocoder = new Geocoder(context);
+        String streetAddress;
+        try {
+            List<Address> address = geocoder.getFromLocation(latitude,longitude,1);
+            streetAddress =  address.get(0).getAddressLine(0);
+            return streetAddress;
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        return Constants.RETURN_ERROR_STRING;
     }
 }

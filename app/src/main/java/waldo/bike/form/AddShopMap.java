@@ -31,7 +31,7 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
     private static double mNewShopLat;
     private static double mNewShopLng;
     private static String mAddress;
-
+    private static String mTestAddress;
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
         Log.i(LOG_TAG,"In onItemClick");
@@ -150,6 +150,12 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
             }
         });
         LatLng userLatLng = new LatLng(Double.valueOf(GlobalState.USER_LAT), Double.valueOf(GlobalState.USER_LNG));
+        mNewShopLat = Double.valueOf(GlobalState.USER_LAT);
+        mNewShopLng = Double.valueOf(GlobalState.USER_LNG);
+        mTestAddress = Utility.getAddressNameFromCoordinates(getApplicationContext(),mNewShopLat,mNewShopLng);
+        if (mTestAddress != Constants.RETURN_ERROR_STRING) {
+            mAddress = mTestAddress;
+        }
         mMap.moveCamera(CameraUpdateFactory.newLatLng(userLatLng));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(Constants.SHOP_ZOOM));
         Marker userMarker = mMap.addMarker(new MarkerOptions().position(new LatLng(Double.valueOf(GlobalState.USER_LAT), Double.valueOf(GlobalState.USER_LNG))).title(Constants.NEW_SHOP_NAME));
