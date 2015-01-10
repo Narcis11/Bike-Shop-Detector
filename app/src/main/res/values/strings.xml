@@ -113,6 +113,7 @@
     <string name="form_shop_website">Website (recommended)</string>
     <string name="form_shop_placeholder"></string>
     <string name="empty_shop_name">Please complete the shop\'s name</string>
+    <string name="long_shop_name">The shop\'s name is too long</string>
     <string name="invalid_url">Invalid website address</string>
     <string name="invalid_phone">Invalid phone number</string>
     <string name="invalid_form">Please correct the highlighted field(s) below</string>

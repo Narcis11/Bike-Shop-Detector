@@ -114,6 +114,10 @@ public class AddShopFormActivity extends ActionBarActivity {
             mErrorMessage.setText(getResources().getString(R.string.empty_shop_name));
             mShopNameOk = false;
         }
+        else if (mShopName.getText().toString().length() > 254) {
+            mErrorMessage.setText(getResources().getString(R.string.long_shop_name));
+            mShopNameOk = false;
+        }
         else {
             mErrorMessage.setText("");
             mShopNameOk = true;
@@ -162,6 +166,7 @@ public class AddShopFormActivity extends ActionBarActivity {
             mShopName.setBackgroundColor(getResources().getColor(R.color.temporary_form_background));
             mShopWebsite.setBackgroundColor(getResources().getColor(R.color.temporary_form_background));
             mShopPhoneNumber.setBackgroundColor(getResources().getColor(R.color.temporary_form_background));
+
         }
         else {
             mErrorMessage.setText(getResources().getString(R.string.invalid_form));
