@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import java.util.regex.Pattern;
 
+import Utilities.Constants;
 import waldo.bike.waldo.R;
 
 public class AddShopFormActivity extends ActionBarActivity {
@@ -166,6 +167,26 @@ public class AddShopFormActivity extends ActionBarActivity {
             mShopName.setBackgroundColor(getResources().getColor(R.color.temporary_form_background));
             mShopWebsite.setBackgroundColor(getResources().getColor(R.color.temporary_form_background));
             mShopPhoneNumber.setBackgroundColor(getResources().getColor(R.color.temporary_form_background));
+            Bundle bundle = getIntent().getExtras();
+            Double latitude = bundle.getDouble(Constants.ADD_SHOP_BUNDLE_LAT_KEY);
+            Double longitude = bundle.getDouble(Constants.ADD_SHOP_BUNDLE_LNG_KEY);
+            String address = bundle.getString(Constants.ADD_SHOP_BUNDLE_ADDRESS_KEY);
+            String[] postParameters = new String[10];
+            //we follow the order of the parameters from the Google API request (https://developers.google.com/places/documentation/actions#adding_a_place)
+            postParameters[0] = String.valueOf(latitude);
+            postParameters[1] = String.valueOf(longitude);
+            postParameters[2] = mShopName.getText().toString();
+            if (mShopPhoneNumber.getText().toString() != null) {
+                postParameters[3] = mShopPhoneNumber.getText().toString();
+            }
+            postParameters[4] = address;
+            postParameters[5] = Constants.PLACE_TYPE;
+            if (mShopWebsite.getText().toString() != null) {
+                postParameters[6] = mShopWebsite.getText().toString();
+            }
+
+            PostForm postForm = new PostForm();
+            postForm.execute(postParameters);
 
         }
         else {
