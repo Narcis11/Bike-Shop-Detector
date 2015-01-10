@@ -38,8 +38,7 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
     ImageButton mNextButton;
     private static double mNewShopLat;
     private static double mNewShopLng;
-    private static final String ADD_SHOP_BUNDLE_LAT_KEY = "lat_key";
-    private static final String ADD_SHOP_BUNDLE_LNG_KEY = "lng_key";
+    private static String mAddress;
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
@@ -48,7 +47,9 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
         Log.i(LOG_TAG,"str is " + str);
         Double[] coordinatesArray = Utility.getCoordinatesFromAddressName(getApplicationContext(), str);
         Log.i(LOG_TAG,"Lat/lng of address " + str+ " = " + coordinatesArray[0] + "/" + coordinatesArray[1]);
-        
+        mNewShopLat = coordinatesArray[0];
+        mNewShopLng = coordinatesArray[1];
+        mAddress = str;
         //move the marker to the selected address
         LatLng newUserLatLng = new LatLng(coordinatesArray[0], coordinatesArray[1]);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(newUserLatLng));
@@ -174,9 +175,9 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
 
     public void openFormActivity(View view) {
         Bundle bundle = new Bundle();
-        bundle.putDouble(ADD_SHOP_BUNDLE_LAT_KEY,mNewShopLat);
-        bundle.putDouble(ADD_SHOP_BUNDLE_LNG_KEY,mNewShopLng);
-        Log.i(LOG_TAG,"NEXT button clicked");
+        bundle.putDouble(Constants.ADD_SHOP_BUNDLE_LAT_KEY,mNewShopLat);
+        bundle.putDouble(Constants.ADD_SHOP_BUNDLE_LNG_KEY,mNewShopLng);
+        bundle.putString(Constants.ADD_SHOP_BUNDLE_ADDRESS_KEY,mAddress);
         Intent formIntent = new Intent(getApplicationContext(), AddShopFormActivity.class);
         formIntent.putExtras(bundle);
         startActivity(formIntent);

@@ -29,6 +29,9 @@ public class Constants {
     public static final String BUNDLE_ACTIVITY = "activity_key";
     public static final String CALLED_FROM_FRAGMENT = "fragment_call";
     public static final String CALLED_FROM_MAIN_ACTIVITY = "activity_call";
+    public static final String ADD_SHOP_BUNDLE_LAT_KEY = "lat_key";
+    public static final String ADD_SHOP_BUNDLE_LNG_KEY = "lng_key";
+    public static final String ADD_SHOP_BUNDLE_ADDRESS_KEY = "address_key";
 
     //used in the Maps Activity
     public static final float  CITY_ZOOM = 11;
@@ -47,12 +50,6 @@ public class Constants {
     public static final String SHOP_OPEN = "Open";
     public static final String SHOP_CLOSED = "Closed";
     public static final String SHOP_UNAVAILABLE = "";
-
-    //used in the AddShopMap
-    public static final String ADD_SHOP_TITLE = "New shop title";
-
-    //Colours
-    public static final String COLOR_BLUE_WALDO_DARK = "#1e85fb";
 
     //used in every method that returns a String
     public static final String RETURN_ERROR_STRING = "ERROR";
