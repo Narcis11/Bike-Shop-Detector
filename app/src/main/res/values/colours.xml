@@ -8,4 +8,6 @@
         <color name="counter_text_bg">#626262</color>
         <color name="list_item_title">#fff</color>
         <color name="counter_text_color">#c5c4c4</color>
+        <color name="invalid_field_color">#ED2147</color>
+        <color name="temporary_form_background">#423E3F</color>
 </resources>

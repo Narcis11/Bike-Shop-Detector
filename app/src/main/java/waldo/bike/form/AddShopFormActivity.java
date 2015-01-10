@@ -1,5 +1,6 @@
 package waldo.bike.form;
 
+import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -20,10 +21,12 @@ import waldo.bike.waldo.R;
 public class AddShopFormActivity extends ActionBarActivity {
 
     public static final String LOG_TAG = AddShopFormActivity.class.getSimpleName();
-    private static boolean mShopNameOk = false;
-    private static boolean mShopWebsiteOk = true;
+    private static boolean mShopNameOk;
+    private static boolean mShopWebsiteOk;
+    private static boolean mShopPhoneNumberOk;
     EditText mShopName;
     EditText mShopWebsite;
+    EditText mShopPhoneNumber;
     TextView mErrorMessage;
 
     @Override
@@ -32,7 +35,11 @@ public class AddShopFormActivity extends ActionBarActivity {
         setContentView(R.layout.activity_add_shop_form);
         mShopName = (EditText) findViewById(R.id.new_shop_name);
         mShopWebsite = (EditText) findViewById(R.id.new_shop_website);
+        mShopPhoneNumber = (EditText) findViewById(R.id.new_shop_phone);
         mErrorMessage = (TextView) findViewById(R.id.placeholder_text);
+        mShopNameOk = false;
+        mShopWebsiteOk = true;
+        mShopPhoneNumberOk = true;
 
         mShopName.addTextChangedListener(new TextWatcher() {
             @Override
@@ -67,6 +74,23 @@ public class AddShopFormActivity extends ActionBarActivity {
                 checkShopWebsite();
             }
         });
+
+        mShopPhoneNumber.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                checkShopPhoneNumber();
+            }
+        });
     }
 
 
@@ -97,11 +121,8 @@ public class AddShopFormActivity extends ActionBarActivity {
     }
 
     public void checkShopWebsite() {
-        String wwwPrefix = "www";
-        //mShopWebsite.toString().indexOf(wwwPrefix) == 0 ||
         if (mShopWebsite.getText().toString().length() > 0) {
             if (!Patterns.WEB_URL.matcher(mShopWebsite.getText()).matches()) {
-                Log.i(LOG_TAG, "Invalid web address");
                 mErrorMessage.setText(getResources().getString(R.string.invalid_url));
                 mShopWebsiteOk = false;
             } else {
@@ -115,16 +136,54 @@ public class AddShopFormActivity extends ActionBarActivity {
         }
     }
 
+    public void checkShopPhoneNumber() {
+        if (mShopPhoneNumber.getText().toString().length() > 0) {
+            if (mShopPhoneNumber.getText().toString().length() < 7) {
+                mErrorMessage.setText(getResources().getString(R.string.invalid_phone));
+                mShopPhoneNumberOk = false;
+            } else {
+                mErrorMessage.setText("");
+                mShopPhoneNumberOk = true;
+            }
+        }
+        else {
+            mErrorMessage.setText("");
+            mShopPhoneNumberOk = true;
+        }
+    }
+
     public void addShop(View v) {
         if (mShopWebsite.getText().toString().length() == 0) {
             //this field is not mandatory
             mShopWebsiteOk = true;
         }
-        if (mShopWebsiteOk && mShopNameOk) {
+        if (mShopWebsiteOk && mShopNameOk && mShopPhoneNumberOk) {
             Log.i(LOG_TAG,"OK to submit form");
+            mShopName.setBackgroundColor(getResources().getColor(R.color.temporary_form_background));
+            mShopWebsite.setBackgroundColor(getResources().getColor(R.color.temporary_form_background));
+            mShopPhoneNumber.setBackgroundColor(getResources().getColor(R.color.temporary_form_background));
         }
         else {
             mErrorMessage.setText(getResources().getString(R.string.invalid_form));
+            if (!mShopNameOk) {
+                mShopName.setBackgroundColor(getResources().getColor(R.color.invalid_field_color));
+            }
+            else {
+                mShopName.setBackgroundColor(getResources().getColor(R.color.temporary_form_background));
+            }
+
+            if (!mShopWebsiteOk) {
+                mShopWebsite.setBackgroundColor(getResources().getColor(R.color.invalid_field_color));
+            }
+            else {
+                mShopWebsite.setBackgroundColor(getResources().getColor(R.color.temporary_form_background));
+            }
+            if (!mShopPhoneNumberOk) {
+                mShopPhoneNumber.setBackgroundColor(getResources().getColor(R.color.invalid_field_color));
+            }
+            else {
+                mShopPhoneNumber.setBackgroundColor(getResources().getColor(R.color.temporary_form_background));
+            }
         }
     }
 }
