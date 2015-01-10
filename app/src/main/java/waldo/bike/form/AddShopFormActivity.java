@@ -2,10 +2,14 @@ package waldo.bike.form;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Patterns;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -17,12 +21,29 @@ public class AddShopFormActivity extends ActionBarActivity {
 
     public static final String LOG_TAG = AddShopFormActivity.class.getSimpleName();
     private static boolean mShopNameOk = false;
-    private static boolean mShopPhoneNumberOk = true;
     private static boolean mShopWebsiteOk = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_shop_form);
+        EditText shopName = (EditText) findViewById(R.id.new_shop_name);
+        shopName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                Log.i(LOG_TAG,"In afterTextChanged Listener");
+                checkShopName();
+            }
+        });
     }
 
 
@@ -41,7 +62,7 @@ public class AddShopFormActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void checkShopName (View v) {
+    public void checkShopName () {
         EditText shopName = (EditText) findViewById(R.id.new_shop_name);
         TextView errorMessage = (TextView) findViewById(R.id.placeholder_text);
         if (shopName.getText().toString().length() == 0) {
@@ -54,11 +75,7 @@ public class AddShopFormActivity extends ActionBarActivity {
         }
     }
 
-    public void checkPhoneNumber (View v) {
-        EditText shopPhoneNumber = (EditText) findViewById(R.id.new_shop_phone);
-        TextView errorMessage = (TextView) findViewById(R.id.placeholder_text);
-        
-    }
+
     public void addShop(View v) {
         EditText shopName = (EditText) findViewById(R.id.new_shop_name);
 

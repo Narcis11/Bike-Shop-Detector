@@ -107,11 +107,12 @@
     <string name="title_activity_add_shop_form">AddShopFormActivity</string>
 
     <!-- Used in the AddShopFormActivity-->
-    <string name="form_title">This submission will be moderated by Google. Complete all of the fields to increase the chance of acceptance.</string>
+    <string name="form_title">This submission will be moderated by Google. Complete all fields to increase the chance of acceptance.</string>
     <string name="form_shop_name">Shop name (mandatory)</string>
     <string name="form_shop_phone">Phone number (recommended)</string>
     <string name="form_shop_website">Website (recommended)</string>
     <string name="form_shop_placeholder">Error message</string>
     <string name="empty_shop_name">Please complete the shop\'s name</string>
     <string name="invalid_url">Invalid website address</string>
+    <string name="invalid_phone">Invalid phone number</string>
 </resources>
