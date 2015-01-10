@@ -193,9 +193,6 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
         float nextX = 200;
         float nextY = 10;
 
-        //(Button) findViewById(R.id.next_shop_button);
-        //
-        // button.setText(Constants.ADD_SHOP_TITLE);
         addContentView(nextButton,new ActionBar.LayoutParams(AbsoluteLayout.LayoutParams.WRAP_CONTENT, AbsoluteLayout.LayoutParams.WRAP_CONTENT));
         nextButton.setText(getResources().getString(R.string.next_shop_button));
         nextButton.setY(100);
