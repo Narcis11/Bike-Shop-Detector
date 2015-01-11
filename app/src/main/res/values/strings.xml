@@ -67,14 +67,14 @@
     <string name="speed_array_7">32 km/h</string>
 
     <!-- Values for the Settings/My speed array in imperial mode -->
-    <string name="speed_array_imperial_0">3 miles/h</string>
-    <string name="speed_array_imperial_1">9 miles/h</string>
-    <string name="speed_array_imperial_2">10 miles/h</string>
-    <string name="speed_array_imperial_3">12 miles/h</string>
-    <string name="speed_array_imperial_4">14 miles/h</string>
-    <string name="speed_array_imperial_5">16 miles/h</string>
-    <string name="speed_array_imperial_6">18 miles/h</string>
-    <string name="speed_array_imperial_7">20 miles/h</string>
+    <string name="speed_array_imperial_0">3 mph</string>
+    <string name="speed_array_imperial_1">9 mph</string>
+    <string name="speed_array_imperial_2">10 mph</string>
+    <string name="speed_array_imperial_3">12 mph</string>
+    <string name="speed_array_imperial_4">14 mph</string>
+    <string name="speed_array_imperial_5">16 mph</string>
+    <string name="speed_array_imperial_6">18 mph</string>
+    <string name="speed_array_imperial_7">20 mph</string>
 
     <!-- Values for the Settings/Unit array -->
     <string name="unit_array_metric">Metric</string>

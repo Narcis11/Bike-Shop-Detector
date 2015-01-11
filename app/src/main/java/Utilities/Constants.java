@@ -18,6 +18,7 @@ public class Constants {
     public static final String COMMA_SEPARATOR = ",";
     public static final String HASH_SEPARATOR = "#";
     public static final String DOLLAR_SEPARATOR = "$";
+    public static final String DOT_SEPARATOR = ".";
 
     //keys used in bundle communication
     public static final String BUNDLE_SHOP_LAT = "bundle_shop_lat_key";

@@ -170,7 +170,7 @@ public class Utility {
             return minute + "min " + seconds + "sec";
     }
 
-    public static String formatDistance (String distance) {
+    public static String formatDistanceMetric (String distance) {
         if (Integer.valueOf(distance) >= 1000) {
             if (distance.length() <=5) {
                 //for distances between 1000-9999
@@ -198,6 +198,17 @@ public class Utility {
         }
         else {
             return distance + " m";
+        }
+    }
+
+    public static String formatDistanceImperial (String distance) {
+        if (Integer.valueOf(distance) > 1609) {
+            return "";
+        }
+        else {
+            double reference = 3.28;
+            Double feet = Double.valueOf(distance) * reference;
+            return String.valueOf(Math.round(feet)) + " ft";
         }
     }
     public static void displayStatus (String status, Context context) {

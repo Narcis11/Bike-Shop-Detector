@@ -103,7 +103,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                         return true;
                     case COL_DISTANCE_TO_USER:
                         Log.i(LOG_TAG,"Shopname / distance: " + cursor.getString(COL_SHOP_NAME) + " / " + cursor.getString(COL_DISTANCE_TO_USER));
-                        formattedDistance = Utility.formatDistance(cursor.getString(COL_DISTANCE_TO_USER));
+                        formattedDistance = Utility.formatDistanceMetric(cursor.getString(COL_DISTANCE_TO_USER));
                         ((TextView) view).setText(formattedDistance);
                         return true;
                     case COL_DISTANCE_DURATION:
@@ -112,13 +112,13 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                         return true;
                     case COL_IS_OPEN:
                         if (cursor.getInt(COL_IS_OPEN) == 1){
-                            ((TextView) view).setText(Constants.SHOP_OPEN);
+                            ((TextView) view).setText(Constants.SHOP_OPEN); //"Open"
                         }
                         else if (cursor.getInt(COL_IS_OPEN) == 1) {
-                            ((TextView) view).setText(Constants.SHOP_CLOSED);
+                            ((TextView) view).setText(Constants.SHOP_CLOSED);//"Closed"
                         }
                         else {
-                            ((TextView) view).setText(Constants.SHOP_UNAVAILABLE);
+                            ((TextView) view).setText(Constants.SHOP_UNAVAILABLE);//""
                         }
                         return  true;
                 }
