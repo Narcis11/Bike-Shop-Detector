@@ -40,6 +40,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     private String shopName = "";
     private String formattedDuration = "";
     private String formattedDistance = "";
+    private String preferredUnit = "";
     private boolean firstLoad = true;
     private static final int SHOPS_LOADER_ID = 0;//loader identifier
     public static final String[] SHOPS_COLUMNS = {
@@ -103,7 +104,15 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                         return true;
                     case COL_DISTANCE_TO_USER:
                         Log.i(LOG_TAG,"Shopname / distance: " + cursor.getString(COL_SHOP_NAME) + " / " + cursor.getString(COL_DISTANCE_TO_USER));
-                        formattedDistance = Utility.formatDistanceMetric(cursor.getString(COL_DISTANCE_TO_USER));
+                        preferredUnit = Utility.getPreferredUnit(getActivity());
+                        Log.i(LOG_TAG,"preferredUnit = " + preferredUnit);
+                        if (preferredUnit.equals(getResources().getString(R.string.unit_array_metric))) {
+                            formattedDistance = Utility.formatDistanceMetric(cursor.getString(COL_DISTANCE_TO_USER));
+                        }
+                        else {
+                            formattedDistance = Utility.formatDistanceImperial(cursor.getString(COL_DISTANCE_TO_USER));
+                        }
+
                         ((TextView) view).setText(formattedDistance);
                         return true;
                     case COL_DISTANCE_DURATION:

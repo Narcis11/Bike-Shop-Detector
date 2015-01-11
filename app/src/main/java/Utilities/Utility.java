@@ -21,6 +21,10 @@ import waldo.bike.waldo.R;
  */
 public class Utility {
         private static final String LOG_TAG = Utility.class.getSimpleName();
+        private static String mKmSign = "km";
+        private static String mMeterSign = "m";
+        private static String mMileSign = "mi";
+        private static String mFeetSign = "ft";
         public static String getPreferredRange(Context context) {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             return prefs.getString(context.getString(R.string.pref_range_key),
@@ -92,6 +96,58 @@ public class Utility {
             default: return returnSeventeen;
         }
     }
+
+    public static float formatPreferredSpeedImperial(Context context) {
+        String speed = getPrefferedSpeed(context);
+        final String threeMi = "3 mph";
+        final String nineMi = "9 mph";
+        final String tenMi = "10 mph";
+        final String twelveMi = "12 mph";
+        final String fourteenMi = "14 mph";
+        final String sixteenMi = "16 mph";
+        final String eighteenMi = "18 mph";
+        final String twentyMi = "20 mph";
+        //the return distances represent the equivalent of 3,9 etc. miles in meters
+        //we calculate in metric units, and display in imperial ones
+        final float returnThree = 5000;
+        final float returnNine = 14000;
+        final float returnTen = 17000;
+        final float returnTwelve = 20000;
+        final float returnFourteen = 23000;
+        final float returnSixteen = 26000;
+        final float returnEighteen = 29000;
+        final float returnTwenty = 32000;
+
+        switch(speed) {
+            case threeMi: {
+                return returnThree;
+            }
+            case nineMi: {
+                return returnNine;
+            }
+            case tenMi: {
+                return returnTen;
+            }
+            case twelveMi: {
+                return returnTwelve;
+            }
+            case fourteenMi: {
+                return returnFourteen;
+            }
+            case sixteenMi: {
+                return returnSixteen;
+            }
+            case eighteenMi: {
+                return returnEighteen;
+            }
+            case twentyMi: {
+                return returnTwenty;
+            }
+            default: return returnTen;
+        }
+
+    }
+
     //used for determining the radius used in the Nearby Search. Returns 10.000 if no range is selected
     public static String formatPreferredRange(Context context) {
         String range = getPreferredRange(context);
@@ -149,7 +205,15 @@ public class Utility {
     }
 
     public static double calculateDistanceDuration (int distanceToShop, Context context) {
-        float formattedSpeed = formatPreferredSpeedMetric(context);
+        String preferredUnit = getPreferredUnit(context);
+        float formattedSpeed;
+        String metric = "Metric";
+        if (preferredUnit.equals(metric)) {
+            formattedSpeed = formatPreferredSpeedMetric(context);
+        }
+        else {
+            formattedSpeed = formatPreferredSpeedImperial(context);
+        }
         float minutes = 60;
         float distance = distanceToShop;
         float distanceDuration = (distance * minutes)/formattedSpeed;
@@ -178,10 +242,10 @@ public class Utility {
                 String meters =  distance.substring(1, 3);
             //    Log.i(LOG_TAG,"Distance/Km/m = " + distance + " / " + km + " / " + roundedMeters );
                 if (!meters.equals("00")) {
-                    return km + Constants.COMMA_SEPARATOR + meters + " km";
+                    return km + Constants.COMMA_SEPARATOR + meters + " " + mKmSign;
                 }
                 else {
-                    return km + " km";
+                    return km + " " + mKmSign;
                 }
             }
             else {
@@ -189,26 +253,40 @@ public class Utility {
                 String km = distance.substring(0,2);
                 int meters = Math.round(Integer.valueOf(distance.substring(2)));
                 if (meters > 0) {
-                    return km + Constants.COMMA_SEPARATOR + String.valueOf(meters) + " km";
+                    return km + Constants.COMMA_SEPARATOR + String.valueOf(meters) + " " + mKmSign;
                 }
                 else {
-                    return km + " km";
+                    return km + " " + mKmSign;
                 }
             }
         }
         else {
-            return distance + " m";
+            return distance + " " + mMeterSign;
         }
     }
 
     public static String formatDistanceImperial (String distance) {
         if (Integer.valueOf(distance) > 1609) {
-            return "";
+            String doublezero = "00";
+            Double reference = 1610.0;
+            Double distanceDouble = Double.valueOf(distance);
+            Double miles = distanceDouble/reference;
+            String calculatedDistance = String.valueOf(miles);
+            String calculatedMiles = calculatedDistance.substring(0, 1);
+            String calculatedYards = calculatedDistance.substring(2, 4);
+            if (!calculatedYards.equals(doublezero)) {
+                return calculatedMiles + Constants.DOT_SEPARATOR + calculatedYards + " " + mMileSign;
+            }
+            else {
+                System.out.println(calculatedMiles +  " " + mMileSign);
+                return calculatedMiles +  " " + mMileSign;
+            }
+
         }
         else {
             double reference = 3.28;
             Double feet = Double.valueOf(distance) * reference;
-            return String.valueOf(Math.round(feet)) + " ft";
+            return String.valueOf(Math.round(feet)) + " " + mFeetSign;
         }
     }
     public static void displayStatus (String status, Context context) {
