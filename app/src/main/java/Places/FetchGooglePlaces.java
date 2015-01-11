@@ -45,7 +45,15 @@ public class FetchGooglePlaces extends AsyncTask<String, Void, Void> {
         if (params.length == 0) {
             return null;//no input, so we return null
         }
-        String radius = Utility.formatPreferredRange(mContext);
+        String preferredUnit = Utility.getPreferredUnit(mContext);
+        String metric = "Metric";
+        String radius = "";
+        if (preferredUnit.equals(metric)) {
+            radius = Utility.formatPreferredRangeMetric(mContext);
+        }
+        else {
+            radius = Utility.formatPreferredRangeImperial(mContext);
+        }
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
         String placesJsonStr = "";//used for storing the response from the API call

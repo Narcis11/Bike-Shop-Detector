@@ -54,7 +54,7 @@
     <string name="range_array_imperial_3">3 miles</string>
     <string name="range_array_imperial_4">4 miles</string>
     <string name="range_array_imperial_5">5 miles</string>
-    <string name="range_array_imperial_10">8 miles</string>
+    <string name="range_array_imperial_10">6 miles</string>
 
     <!-- Values for the Settings/My speed array in metric mode -->
     <string name="speed_array_0">5 km/h</string>

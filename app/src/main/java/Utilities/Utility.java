@@ -149,7 +149,7 @@ public class Utility {
     }
 
     //used for determining the radius used in the Nearby Search. Returns 10.000 if no range is selected
-    public static String formatPreferredRange(Context context) {
+    public static String formatPreferredRangeMetric(Context context) {
         String range = getPreferredRange(context);
         // we can't use getResources().getString(), because the switch statement requires constant expressions
         final String oneKilometer = "1 km";
@@ -185,6 +185,45 @@ public class Utility {
             }
             default: return returnTenKm;
 
+        }
+    }
+
+    public static String formatPreferredRangeImperial(Context context) {
+        String range = getPreferredRange(context);
+        final String oneMi = "1 mile";
+        final String twoMi = "2 miles";
+        final String threeMi = "3 miles";
+        final String fourMi = "4 miles";
+        final String fiveMi = "5 miles";
+        final String sixMi = "6 miles";
+        //the equivalent in meters
+        final String returnOne = "1609";
+        final String returnTwo = "3218";
+        final String returnThree = "4828";
+        final String returnFour = "6437";
+        final String returnFive = "8046";
+        final String returnSix = "10000";
+
+        switch(range) {
+            case oneMi: {
+                return returnOne;
+            }
+            case twoMi: {
+                return returnTwo;
+            }
+            case threeMi: {
+                return returnThree;
+            }
+            case fourMi: {
+                return returnFour;
+            }
+            case fiveMi: {
+                return returnFive;
+            }
+            case sixMi: {
+                return returnSix;
+            }
+            default: return returnSix;
         }
     }
     //this method parses the location String ang extracts the latitude and longitude
