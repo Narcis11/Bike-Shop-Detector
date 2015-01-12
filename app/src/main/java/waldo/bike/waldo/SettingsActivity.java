@@ -1,29 +1,16 @@
 package waldo.bike.waldo;
 
-import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.preference.RingtonePreference;
-import android.text.TextUtils;
 import android.util.Log;
-import android.view.MenuItem;
-import android.support.v4.app.NavUtils;
 
 
-import java.util.List;
 import java.util.prefs.PreferenceChangeListener;
 
 import Utilities.Utility;
@@ -54,6 +41,7 @@ public class SettingsActivity extends PreferenceActivity implements
         super.onCreate(savedInstanceState);
         // Add 'general' preferences, defined in the XML file
         loadPreferenceScreen();
+     //   addPreferencesFromResource(R.xml.pref_general);
        // addPreferencesFromResource(R.xml.pref_general);
     //    loadPreferenceScreen();
         // For all preferences, attach an OnPreferenceChangeListener so the UI summary can be
@@ -97,7 +85,9 @@ public class SettingsActivity extends PreferenceActivity implements
             int prefIndex = listPreference.findIndexOfValue(stringValue);
             if (prefIndex >= 0) {
                 preference.setSummary(listPreference.getEntries()[prefIndex]);
-                Log.i(LOG_TAG, "Modified preference is " + ((ListPreference) preference).getValue());
+                Log.i(LOG_TAG,"New preference: " + listPreference.getEntries()[prefIndex]);
+                Log.i(LOG_TAG, "Old preference: " + ((ListPreference) preference).getValue());
+                Log.i(LOG_TAG,"prefIndex = " + prefIndex);
  /*               if (((ListPreference) preference).getValue() != null) {
                     if (((ListPreference) preference).getValue().equals(Utility.getPreferredUnit(mContext))) {
                         addPreferencesFromResource(R.xml.pref_general);
@@ -117,10 +107,22 @@ public class SettingsActivity extends PreferenceActivity implements
 
     private void loadPreferenceScreen() {
         String preferredUnit = Utility.getPreferredUnit(getApplicationContext());
+
         Log.i(LOG_TAG,"Preferred unit is " + preferredUnit);
         if (preferredUnit.equals(getResources().getString(R.string.unit_array_metric))) {
             addPreferencesFromResource(R.xml.pref_general);
             Log.i(LOG_TAG, "Loaded pref_general");
+            Preference preferenceMetricSpeed = findPreference(getString(R.string.pref_speed_key));
+            ListPreference listPreference = (ListPreference) preferenceMetricSpeed;
+            int prefIndex = listPreference.findIndexOfValue(getResources().getString(R.string.pref_speed_default_metric));
+            Log.i(LOG_TAG,"prefIndex in loadPreferenceScreen = " + prefIndex);
+            try {
+                preferenceMetricSpeed.setDefaultValue("17 km/h");
+                preferenceMetricSpeed.setSummary(listPreference.getEntries()[prefIndex]);
+            }
+            catch (ArrayIndexOutOfBoundsException e) {
+                e.printStackTrace();
+            }
         }
         else {
             addPreferencesFromResource(R.xml.pref_imperial_general);

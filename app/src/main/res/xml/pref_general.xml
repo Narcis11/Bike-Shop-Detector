@@ -11,9 +11,9 @@
 
     <ListPreference
         android:title="@string/pref_speed_label"
-        android:summary="@string/pref_speed_default"
+        android:summary="@string/pref_speed_default_metric"
         android:key="@string/pref_speed_key"
-        android:defaultValue="@string/pref_speed_default"
+        android:defaultValue="@string/pref_speed_default_metric"
         android:entries="@array/speed_values_array"
         android:entryValues="@array/speed_values_array" />
 
