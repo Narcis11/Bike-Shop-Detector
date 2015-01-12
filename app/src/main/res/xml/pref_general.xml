@@ -4,6 +4,7 @@
         android:title="@string/pref_range_label"
         android:summary="@string/pref_range_default"
         android:key="@string/pref_range_key"
+        android:defaultValue="@string/pref_range_default"
         android:entries="@array/range_values_array"
         android:entryValues="@array/range_values_array" /> <!--Te the same for the API call as the ones (android:entries) displayed to the user-->
 
@@ -12,6 +13,7 @@
         android:title="@string/pref_speed_label"
         android:summary="@string/pref_speed_default"
         android:key="@string/pref_speed_key"
+        android:defaultValue="@string/pref_speed_default"
         android:entries="@array/speed_values_array"
         android:entryValues="@array/speed_values_array" />
 
@@ -19,6 +21,7 @@
         android:title="@string/pref_unit_label"
         android:summary="@string/pref_unit_default"
         android:key="@string/pref_unit_key"
+        android:defaultValue="@string/pref_unit_default"
         android:entries="@array/unit_values_array"
         android:entryValues="@array/unit_values_array" />
 

@@ -85,11 +85,11 @@ public class SettingsActivity extends PreferenceActivity
             if (prefIndex >= 0) {
                 preference.setSummary(listPreference.getEntries()[prefIndex]);
                 Log.i(LOG_TAG, "Modified preference is " + ((ListPreference) preference).getValue());
-                if (((ListPreference) preference).getValue() != null) {
+ /*               if (((ListPreference) preference).getValue() != null) {
                     if (((ListPreference) preference).getValue().equals(Utility.getPreferredUnit(mContext))) {
                         addPreferencesFromResource(R.xml.pref_general);
                     }
-                }
+                }*///ce am adăugat eu
             } else {
                 // For other preferences, set the summary to the value's simple string representation.
                 preference.setSummary(stringValue);
@@ -114,4 +114,5 @@ public class SettingsActivity extends PreferenceActivity
             Log.i(LOG_TAG, "Loaded pref_imperial_general");
         }
     }
+
 }
