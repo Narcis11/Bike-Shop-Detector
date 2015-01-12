@@ -33,6 +33,8 @@ public class SettingsActivity extends PreferenceActivity implements
     private static final String LOG_TAG = SettingsActivity.class.getSimpleName();
     private static Context mContext;
     private static final String KEY_PREF_SYNC_CONN = "speed";
+    //private boolean loadedPrefGeneral = false;
+    //private boolean loadedPrefGeneral = false;
     SharedPreferences.OnSharedPreferenceChangeListener listener;
     SharedPreferences mPrefs;
     PreferenceChangeListener mPreferenceListener;
@@ -95,7 +97,12 @@ public class SettingsActivity extends PreferenceActivity implements
                 }*/ //ce am adăugat eu
             } else {
                 // For other preferences, set the summary to the value's simple string representation.
-                preference.setSummary(stringValue);
+                //stringValue represents the values that do not correspond to the selected unit. e.g if it is imperial, it holds the range/speed in km
+                Log.i(LOG_TAG,"stringValue is " + stringValue);
+/*                if (preference.toString().indexOf(getResources().getString(R.string.pref_range_label)) > 0) {
+                    Log.i(LOG_TAG, "preference is " + preference);
+                    preference.setSummary(getResources().getString(R.string.pref_range_imperial_default));
+                }*/
             }
         }
         else {
@@ -107,7 +114,6 @@ public class SettingsActivity extends PreferenceActivity implements
 
     private void loadPreferenceScreen() {
         String preferredUnit = Utility.getPreferredUnit(getApplicationContext());
-
         Log.i(LOG_TAG,"Preferred unit is " + preferredUnit);
         if (preferredUnit.equals(getResources().getString(R.string.unit_array_metric))) {
             addPreferencesFromResource(R.xml.pref_general);
@@ -117,8 +123,9 @@ public class SettingsActivity extends PreferenceActivity implements
             int prefIndex = listPreference.findIndexOfValue(getResources().getString(R.string.pref_speed_default_metric));
             Log.i(LOG_TAG,"prefIndex in loadPreferenceScreen = " + prefIndex);
             try {
-                preferenceMetricSpeed.setDefaultValue("17 km/h");
-                preferenceMetricSpeed.setSummary(listPreference.getEntries()[prefIndex]);
+               // preferenceMetricSpeed.setDefaultValue("17 km/h");
+                Log.i(LOG_TAG,preferenceMetricSpeed.toString());
+                preferenceMetricSpeed.setSummary("17 km/h");
             }
             catch (ArrayIndexOutOfBoundsException e) {
                 e.printStackTrace();
