@@ -1,7 +1,9 @@
 package waldo.bike.waldo;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -22,6 +24,7 @@ import android.support.v4.app.NavUtils;
 
 
 import java.util.List;
+import java.util.prefs.PreferenceChangeListener;
 
 import Utilities.Utility;
 
@@ -36,21 +39,31 @@ import Utilities.Utility;
  * href="http://developer.android.com/guide/topics/ui/settings.html">Settings
  * API Guide</a> for more information on developing a Settings UI.
  */
-public class SettingsActivity extends PreferenceActivity
-        implements Preference.OnPreferenceChangeListener{
+public class SettingsActivity extends PreferenceActivity implements
+        Preference.OnPreferenceChangeListener
+        {
 
     private static final String LOG_TAG = SettingsActivity.class.getSimpleName();
     private static Context mContext;
+    private static final String KEY_PREF_SYNC_CONN = "speed";
+    SharedPreferences.OnSharedPreferenceChangeListener listener;
+    SharedPreferences mPrefs;
+    PreferenceChangeListener mPreferenceListener;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Add 'general' preferences, defined in the XML file
-        //loadPreferenceScreen();
-       // addPreferencesFromResource(R.xml.pref_general);
         loadPreferenceScreen();
+       // addPreferencesFromResource(R.xml.pref_general);
+    //    loadPreferenceScreen();
         // For all preferences, attach an OnPreferenceChangeListener so the UI summary can be
         // updated when the preference changes.
         mContext = getApplicationContext();
+/*        getFragmentManager().beginTransaction()
+                .replace(android.R.id.content, new PrefFragment())
+                .commit();*/
+
+       // prefs.registerOnSharedPreferenceChangeListener(listener);
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_range_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_speed_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_unit_key)));
@@ -89,7 +102,7 @@ public class SettingsActivity extends PreferenceActivity
                     if (((ListPreference) preference).getValue().equals(Utility.getPreferredUnit(mContext))) {
                         addPreferencesFromResource(R.xml.pref_general);
                     }
-                }*///ce am adăugat eu
+                }*/ //ce am adăugat eu
             } else {
                 // For other preferences, set the summary to the value's simple string representation.
                 preference.setSummary(stringValue);
@@ -115,4 +128,31 @@ public class SettingsActivity extends PreferenceActivity
         }
     }
 
+/*
+
+            public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+
+               Log.i(LOG_TAG,"Key is " + key);
+                if (key.equals(KEY_PREF_SYNC_CONN)) {
+                    Preference connectionPref = findPreference(key);
+                    // Set summary to be the user-description for the selected value
+                    Log.i(LOG_TAG,"sharedPreferences = " + sharedPreferences.getString(key, ""));
+                    Log.i(LOG_TAG,"connectionPref = " + connectionPref.toString());
+                    connectionPref.setSummary(sharedPreferences.getString(key, ""));
+                    //sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+                    Log.i(LOG_TAG,"sharedPreferences = " + sharedPreferences.getString(key, ""));
+                }
+            }
+*/
+
+
+        public static class PrefFragment extends PreferenceFragment{
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            Log.i(LOG_TAG, "Arguments: " + getArguments());
+            addPreferencesFromResource(R.xml.pref_general);
+
+        }
+        }
 }
