@@ -37,7 +37,7 @@ public class Utility {
     public static String getPreferredUnit(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getString(context.getString(R.string.pref_unit_key),
-                context.getString(R.string.pref_unit_default));
+                context.getString(R.string.pref_unit_default_metric));
     }
 
     public static String getPreferredSpeed (Context context) {

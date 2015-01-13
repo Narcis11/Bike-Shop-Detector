@@ -31,7 +31,8 @@
 
     <!-- Formatting for Settings/Unit preference -->
     <string name="pref_unit_key">unit</string>
-    <string name="pref_unit_default">Metric</string>
+    <string name="pref_unit_default_metric">Metric</string>
+    <string name="pref_unit_default_imperial">Imperial</string>
     <string name="pref_unit_label">Unit</string>
 
     <!-- Formatting for Settings/My speed preference in metric mode -->

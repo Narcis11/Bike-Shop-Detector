@@ -3,7 +3,6 @@ package waldo.bike.waldo;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -13,8 +12,10 @@ import android.preference.PreferenceScreen;
 import android.util.Log;
 
 
+import java.util.List;
 import java.util.prefs.PreferenceChangeListener;
 
+import Utilities.GlobalState;
 import Utilities.Utility;
 
 /**
@@ -39,7 +40,6 @@ public class SettingsActivity extends PreferenceActivity implements
     private PreferenceScreen mPreferenceScreen;
     private static final String KEY_METRIC_SCREEN = "metric_settings";
     private static final String KEY_IMPERIAL_SCREEN = "imperial_settings";
-    private static boolean mFirstLoad;
     private static String mOldMetricRange = "";
     private static String mOldImperialRange = "";
     //private boolean loadedPrefGeneral = false;
@@ -51,10 +51,7 @@ public class SettingsActivity extends PreferenceActivity implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Add 'general' preferences, defined in the XML file
-        mFirstLoad = true;
-        loadPreferenceScreen(mFirstLoad);
-     //   addPreferencesFromResource(R.xml.pref_general);
-       // addPreferencesFromResource(R.xml.pref_general);
+
     //    loadPreferenceScreen();
         // For all preferences, attach an OnPreferenceChangeListener so the UI summary can be
         // updated when the preference changes.
@@ -64,9 +61,12 @@ public class SettingsActivity extends PreferenceActivity implements
                 .commit();*/
 
        // prefs.registerOnSharedPreferenceChangeListener(listener);
+        GlobalState.FIRST_LOAD = true;
+        loadPreferenceScreen(GlobalState.FIRST_LOAD);
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_range_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_speed_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_unit_key)));
+
     }
 
     /**
@@ -96,18 +96,18 @@ public class SettingsActivity extends PreferenceActivity implements
             ListPreference listPreference = (ListPreference) preference;
             int prefIndex = listPreference.findIndexOfValue(stringValue);
             if (prefIndex >= 0) {
-                preference.setSummary(listPreference.getEntries()[prefIndex]);
-                Log.i(LOG_TAG,"***PREFERENCE IS*** = " + preference.toString());
+            //    preference.setSummary(listPreference.getEntries()[prefIndex]);
+         //       Log.i(LOG_TAG,"***PREFERENCE IS*** = " + preference.toString());
                 Log.i(LOG_TAG,"New preference: " + listPreference.getEntries()[prefIndex]);
                 Log.i(LOG_TAG, "Old preference: " + ((ListPreference) preference).getValue());
-                Log.i(LOG_TAG,"prefIndex = " + prefIndex);
+          //      Log.i(LOG_TAG,"prefIndex = " + prefIndex);
                 mOldPreferenceUnit = ((ListPreference) preference).getValue().toString();
                 mNewPreferenceUnit = listPreference.getEntries()[prefIndex].toString();
                 //if the old pref!=new pref && (new pref is Imperial or Metric)
                 if (!mOldPreferenceUnit.equals(mNewPreferenceUnit) && (mNewPreferenceUnit.indexOf(getResources().getString(R.string.unit_array_metric))== 0
                         || mNewPreferenceUnit.indexOf(getResources().getString(R.string.unit_array_imperial)) ==0)) {
-                        mFirstLoad = false;
-                        loadPreferenceScreen(mFirstLoad);
+                        GlobalState.FIRST_LOAD = false;
+                        loadPreferenceScreen(GlobalState.FIRST_LOAD);
                 }
 
             } else {
@@ -128,33 +128,50 @@ public class SettingsActivity extends PreferenceActivity implements
 
 
     private void loadPreferenceScreen(boolean firstLoad) {
-        String preferredUnit = Utility.getPreferredUnit(getApplicationContext());
-     //   Log.i(LOG_TAG,"Preferred unit is " + preferredUnit);
-            if (mNewPreferenceUnit.equals(getResources().getString(R.string.unit_array_metric))) {
+        String oldPreferredUnit = Utility.getPreferredUnit(getApplicationContext());
+        Log.i(LOG_TAG,"mNewPreferenceUnit in LoadPreference: " + mNewPreferenceUnit);
+        Log.i(LOG_TAG,"oldPreferredUnit in LoadPreference: " + oldPreferredUnit);
+        String toUsePreferredUnit = "";
+            if (!mNewPreferenceUnit.equals("")) {
+                toUsePreferredUnit = mNewPreferenceUnit;
+            } else {
+                toUsePreferredUnit = oldPreferredUnit;
+            }
+        Log.i(LOG_TAG,"toUsePreferredUnit = " + toUsePreferredUnit );
+            if (toUsePreferredUnit.equals(getResources().getString(R.string.unit_array_metric))) {
                 if (firstLoad) {
-                    addPreferencesFromResource(R.xml.pref_general);
-                    Log.i(LOG_TAG, "Loaded pref_general");
+                    addPreferencesFromResource(R.xml.pref_metric_general);
+                    Log.i(LOG_TAG, "Loaded pref_metric_general");
                 }
                 else {
                     //setting up the Range option
                     ListPreference rangeListPreference = (ListPreference) findPreference(getResources().getString(R.string.pref_range_key));
                     rangeListPreference.setEntries(R.array.range_values_array);
-                    rangeListPreference.setSummary(Utility.getPreferredRangeMetric(getApplicationContext()));
+                  //  rangeListPreference.setSummary(Utility.getPreferredRangeMetric(getApplicationContext()));
+                    rangeListPreference.setSummary(getResources().getString(R.string.pref_range_default));
                     Log.i(LOG_TAG,"Preferred range metric = " + Utility.getPreferredRangeMetric(getApplicationContext()));
 
                     //setting up the Speed option
                     ListPreference speedListPreference = (ListPreference) findPreference(getResources().getString(R.string.pref_speed_key));
                     speedListPreference.setEntries(R.array.speed_values_array);
-                    speedListPreference.setSummary(Utility.getPreferredSpeed(getApplicationContext()));
+                    //speedListPreference.setSummary(Utility.getPreferredSpeed(getApplicationContext()));
+                    speedListPreference.setSummary(getResources().getString(R.string.pref_speed_default_metric));
                     Log.i(LOG_TAG,"Preferred speed metric: " + Utility.getPreferredSpeed(getApplicationContext()));
                     Log.i(LOG_TAG,"Changed metric range&speed");
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                    Log.i(LOG_TAG,"HARDCORE RANGE = " + prefs.getString("range","3 km"));
+      //              Log.i(LOG_TAG,"HARDCORE RANGE = " + prefs.getString("range","3 km"));
+
+                    //the metric unit is displayed incorrectly, so we'll change it
+                    ListPreference unitListPreference = (ListPreference) findPreference(getResources().getString(R.string.pref_unit_key));
+                    unitListPreference.setSummary(getResources().getString(R.string.unit_array_metric));
                 }
 
             } else {
                 if (firstLoad) {
                     addPreferencesFromResource(R.xml.pref_imperial_general);
+                    ListPreference unitListPreference = (ListPreference) findPreference(getResources().getString(R.string.pref_unit_key));
+                    unitListPreference.setDefaultValue("Imperial");
+                    unitListPreference.setSummary("Imperial");
                     Log.i(LOG_TAG, "Loaded pref_imperial_general");
 
                 }
@@ -219,7 +236,7 @@ public class SettingsActivity extends PreferenceActivity implements
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             Log.i(LOG_TAG, "Arguments: " + getArguments());
-            addPreferencesFromResource(R.xml.pref_general);
+            addPreferencesFromResource(R.xml.pref_metric_general);
 
         }
         }
