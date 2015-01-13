@@ -107,7 +107,6 @@ public class SettingsActivity extends PreferenceActivity implements
                 if (!mOldPreferenceUnit.equals(mNewPreferenceUnit) && (mNewPreferenceUnit.indexOf(getResources().getString(R.string.unit_array_metric))== 0
                         || mNewPreferenceUnit.indexOf(getResources().getString(R.string.unit_array_imperial)) ==0)) {
                         mFirstLoad = false;
-                        Log.i(LOG_TAG,"loaded preference screen");
                         loadPreferenceScreen(mFirstLoad);
                 }
 
@@ -140,10 +139,17 @@ public class SettingsActivity extends PreferenceActivity implements
                     //setting up the Range option
                     ListPreference rangeListPreference = (ListPreference) findPreference(getResources().getString(R.string.pref_range_key));
                     rangeListPreference.setEntries(R.array.range_values_array);
-                    Log.i(LOG_TAG,Utility.getPreferredRangeMetric(getApplicationContext()));
                     rangeListPreference.setSummary(Utility.getPreferredRangeMetric(getApplicationContext()));
-                    Log.i(LOG_TAG,"Changed metric range");
+                    Log.i(LOG_TAG,"Preferred range metric = " + Utility.getPreferredRangeMetric(getApplicationContext()));
+
                     //setting up the Speed option
+                    ListPreference speedListPreference = (ListPreference) findPreference(getResources().getString(R.string.pref_speed_key));
+                    speedListPreference.setEntries(R.array.speed_values_array);
+                    speedListPreference.setSummary(Utility.getPreferredSpeed(getApplicationContext()));
+                    Log.i(LOG_TAG,"Preferred speed metric: " + Utility.getPreferredSpeed(getApplicationContext()));
+                    Log.i(LOG_TAG,"Changed metric range&speed");
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    Log.i(LOG_TAG,"HARDCORE RANGE = " + prefs.getString("range","3 km"));
                 }
 
             } else {
@@ -156,8 +162,14 @@ public class SettingsActivity extends PreferenceActivity implements
                     ListPreference rangeListPreference = (ListPreference) findPreference(getResources().getString(R.string.pref_range_key));
                     rangeListPreference.setEntries(R.array.range_values_imperial_array);
                     rangeListPreference.setSummary(Utility.getPreferredRangeImperial(getApplicationContext()));
-                    Log.i(LOG_TAG,Utility.getPreferredRangeImperial(getApplicationContext()));
-                    Log.i(LOG_TAG,"Changed imperial range");
+                    Log.i(LOG_TAG,"Preferred range imperial = " + Utility.getPreferredRangeImperial(getApplicationContext()));
+
+                    //setting up the Speed option
+                    ListPreference speedListPreference = (ListPreference) findPreference(getResources().getString(R.string.pref_speed_key));
+                    speedListPreference.setEntries(R.array.speed_values_array);
+                    speedListPreference.setSummary(Utility.getPreferredSpeed(getApplicationContext()));
+                    Log.i(LOG_TAG,"Preferred speed imperial: " + Utility.getPreferredSpeed(getApplicationContext()));
+                    Log.i(LOG_TAG,"Changed imperial range&speed");
                 }
             }
     }

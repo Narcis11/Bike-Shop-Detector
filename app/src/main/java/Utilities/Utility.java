@@ -40,7 +40,7 @@ public class Utility {
                 context.getString(R.string.pref_unit_default));
     }
 
-    public static String getPrefferedSpeed (Context context) {
+    public static String getPreferredSpeed (Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getString(context.getString(R.string.pref_speed_key),
                 context.getString(R.string.pref_speed_default_metric));
@@ -54,7 +54,7 @@ public class Utility {
     }
 
     public static float formatPreferredSpeedMetric (Context context) {
-        String speed = getPrefferedSpeed(context);
+        String speed = getPreferredSpeed(context);
         final String fiveKm = "5 km/h";
         final String fourteenKm = "14 km/h";
         final String seventeenKm = "17 km/h";
@@ -101,7 +101,7 @@ public class Utility {
     }
 
     public static float formatPreferredSpeedImperial(Context context) {
-        String speed = getPrefferedSpeed(context);
+        String speed = getPreferredSpeed(context);
         final String threeMi = "3 mph";
         final String nineMi = "9 mph";
         final String tenMi = "10 mph";
