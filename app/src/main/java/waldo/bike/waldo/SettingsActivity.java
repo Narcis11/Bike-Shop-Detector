@@ -172,6 +172,7 @@ public class SettingsActivity extends PreferenceActivity implements
                 }
                 else { //Imperial
                     //***Range option***
+                    //TODO: Metric to imperial is working, but not imperial to metric (I tested only range). Write a function to convert the imperial range to metric range
                     ListPreference rangeListPreference = (ListPreference) findPreference(getResources().getString(R.string.pref_range_key));
                     rangeListPreference.setEntries(R.array.range_values_imperial_array);
                     String correctSummary = Utility.formatPreferredSpeedImperial(Utility.getPreferredRangeImperial(getApplicationContext()));
