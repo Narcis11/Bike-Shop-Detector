@@ -42,6 +42,11 @@ public class SettingsActivity extends PreferenceActivity implements
     private static final String KEY_IMPERIAL_SCREEN = "imperial_settings";
     private static String mOldMetricRange = "";
     private static String mOldImperialRange = "";
+    private static boolean mFirstLoad;
+    private static String mMetric = "Metric";
+    private static String mImperial = "Imperial";
+    private static String[] metricPreferences = new String[5];
+    private static String[] imperialPreferences = new String[5];
     //private boolean loadedPrefGeneral = false;
     //private boolean loadedPrefGeneral = false;
     SharedPreferences.OnSharedPreferenceChangeListener listener;
@@ -60,16 +65,15 @@ public class SettingsActivity extends PreferenceActivity implements
                 .replace(android.R.id.content, new PrefFragment())
                 .commit();*/
 
-       // prefs.registerOnSharedPreferenceChangeListener(listener);
-        GlobalState.FIRST_LOAD = true;
-        loadPreferenceScreen(GlobalState.FIRST_LOAD);
+        mFirstLoad = true;
+        loadPreferenceScreen(mFirstLoad);
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_range_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_speed_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_unit_key)));
-
     }
 
-    /**
+
+            /**
      * Attaches a listener so the summary is always updated with the preference value.
      * Also fires the listener once, to initialize the summary (so it shows up before the value
      * is changed.)
@@ -96,7 +100,7 @@ public class SettingsActivity extends PreferenceActivity implements
             ListPreference listPreference = (ListPreference) preference;
             int prefIndex = listPreference.findIndexOfValue(stringValue);
             if (prefIndex >= 0) {
-            //    preference.setSummary(listPreference.getEntries()[prefIndex]);
+                preference.setSummary(listPreference.getEntries()[prefIndex]);
          //       Log.i(LOG_TAG,"***PREFERENCE IS*** = " + preference.toString());
                 Log.i(LOG_TAG,"New preference: " + listPreference.getEntries()[prefIndex]);
                 Log.i(LOG_TAG, "Old preference: " + ((ListPreference) preference).getValue());
@@ -106,8 +110,8 @@ public class SettingsActivity extends PreferenceActivity implements
                 //if the old pref!=new pref && (new pref is Imperial or Metric)
                 if (!mOldPreferenceUnit.equals(mNewPreferenceUnit) && (mNewPreferenceUnit.indexOf(getResources().getString(R.string.unit_array_metric))== 0
                         || mNewPreferenceUnit.indexOf(getResources().getString(R.string.unit_array_imperial)) ==0)) {
-                        GlobalState.FIRST_LOAD = false;
-                        loadPreferenceScreen(GlobalState.FIRST_LOAD);
+                        mFirstLoad = false;
+                        loadPreferenceScreen(mFirstLoad);
                 }
 
             } else {
@@ -129,8 +133,6 @@ public class SettingsActivity extends PreferenceActivity implements
 
     private void loadPreferenceScreen(boolean firstLoad) {
         String oldPreferredUnit = Utility.getPreferredUnit(getApplicationContext());
-        Log.i(LOG_TAG,"mNewPreferenceUnit in LoadPreference: " + mNewPreferenceUnit);
-        Log.i(LOG_TAG,"oldPreferredUnit in LoadPreference: " + oldPreferredUnit);
         String toUsePreferredUnit = "";
             if (!mNewPreferenceUnit.equals("")) {
                 toUsePreferredUnit = mNewPreferenceUnit;
@@ -143,50 +145,48 @@ public class SettingsActivity extends PreferenceActivity implements
                     addPreferencesFromResource(R.xml.pref_metric_general);
                     Log.i(LOG_TAG, "Loaded pref_metric_general");
                 }
-                else {
-                    //setting up the Range option
+                else { //Metric
+                    //****Range option***
                     ListPreference rangeListPreference = (ListPreference) findPreference(getResources().getString(R.string.pref_range_key));
                     rangeListPreference.setEntries(R.array.range_values_array);
-                  //  rangeListPreference.setSummary(Utility.getPreferredRangeMetric(getApplicationContext()));
-                    rangeListPreference.setSummary(getResources().getString(R.string.pref_range_default));
+                    rangeListPreference.setSummary(Utility.getPreferredRangeMetric(getApplicationContext()));
                     Log.i(LOG_TAG,"Preferred range metric = " + Utility.getPreferredRangeMetric(getApplicationContext()));
-
-                    //setting up the Speed option
+                    //***Speed option***
                     ListPreference speedListPreference = (ListPreference) findPreference(getResources().getString(R.string.pref_speed_key));
                     speedListPreference.setEntries(R.array.speed_values_array);
-                    //speedListPreference.setSummary(Utility.getPreferredSpeed(getApplicationContext()));
                     speedListPreference.setSummary(getResources().getString(R.string.pref_speed_default_metric));
                     Log.i(LOG_TAG,"Preferred speed metric: " + Utility.getPreferredSpeed(getApplicationContext()));
                     Log.i(LOG_TAG,"Changed metric range&speed");
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-      //              Log.i(LOG_TAG,"HARDCORE RANGE = " + prefs.getString("range","3 km"));
-
-                    //the metric unit is displayed incorrectly, so we'll change it
+                    //***Unit option***
                     ListPreference unitListPreference = (ListPreference) findPreference(getResources().getString(R.string.pref_unit_key));
                     unitListPreference.setSummary(getResources().getString(R.string.unit_array_metric));
+                    unitListPreference.setDefaultValue(getResources().getString(R.string.unit_array_metric));
                 }
 
             } else {
                 if (firstLoad) {
                     addPreferencesFromResource(R.xml.pref_imperial_general);
-                    ListPreference unitListPreference = (ListPreference) findPreference(getResources().getString(R.string.pref_unit_key));
-                    unitListPreference.setDefaultValue("Imperial");
-                    unitListPreference.setSummary("Imperial");
                     Log.i(LOG_TAG, "Loaded pref_imperial_general");
 
                 }
-                else {
+                else { //Imperial
+                    //***Range option***
                     ListPreference rangeListPreference = (ListPreference) findPreference(getResources().getString(R.string.pref_range_key));
                     rangeListPreference.setEntries(R.array.range_values_imperial_array);
+                    String correctSummary = Utility.formatPreferredSpeedImperial(Utility.getPreferredRangeImperial(getApplicationContext()));
                     rangeListPreference.setSummary(Utility.getPreferredRangeImperial(getApplicationContext()));
-                    Log.i(LOG_TAG,"Preferred range imperial = " + Utility.getPreferredRangeImperial(getApplicationContext()));
-
-                    //setting up the Speed option
+                    Log.i(LOG_TAG,"Preferred range/correctSummary imperial = " + Utility.getPreferredRangeImperial(getApplicationContext()) + "/" + correctSummary);
+                    //***Speed option***
                     ListPreference speedListPreference = (ListPreference) findPreference(getResources().getString(R.string.pref_speed_key));
                     speedListPreference.setEntries(R.array.speed_values_array);
                     speedListPreference.setSummary(Utility.getPreferredSpeed(getApplicationContext()));
                     Log.i(LOG_TAG,"Preferred speed imperial: " + Utility.getPreferredSpeed(getApplicationContext()));
                     Log.i(LOG_TAG,"Changed imperial range&speed");
+                    //***Range option***
+                    ListPreference unitListPreference = (ListPreference) findPreference(getResources().getString(R.string.pref_unit_key));
+                    unitListPreference.setSummary(getResources().getString(R.string.unit_array_imperial));
+                    unitListPreference.setDefaultValue(getResources().getString(R.string.unit_array_imperial));
                 }
             }
     }

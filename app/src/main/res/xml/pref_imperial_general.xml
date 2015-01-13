@@ -12,10 +12,10 @@
 
     <ListPreference
         android:title="@string/pref_speed_label"
-        android:summary="@string/pref_speed_imperial_default"
         android:key="@string/pref_speed_key"
-        android:defaultValue="@string/pref_speed_imperial_default"
+        android:summary="@string/pref_speed_imperial_default"
         android:entries="@array/speed_values_imperial_array"
+        android:defaultValue="@string/pref_speed_imperial_default"
         android:entryValues="@array/speed_values_imperial_array" />
 
     <ListPreference

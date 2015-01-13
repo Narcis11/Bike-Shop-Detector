@@ -40,6 +40,24 @@ public class Utility {
                 context.getString(R.string.pref_unit_default_metric));
     }
 
+    public static String formatPreferredSpeedImperial(String metricSpeed) {
+        Log.i(LOG_TAG,"metricSpeed = " +metricSpeed);
+        final String oneKilometer = "1 km";
+        final String twoKilometers = "2 km";
+        final String threeKilometers = "3 km";
+        final String fourKilometers = "4 km";
+        final String fiveKilometers = "5 km";
+        final String tenKilometers = "10 km";
+        if (metricSpeed.equals(oneKilometer)) {
+            return "1 mile";
+        }
+        else if (metricSpeed.equals(twoKilometers)) {
+            return "2 miles";
+        }
+        else {
+            return "";
+        }
+    }
     public static String getPreferredSpeed (Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getString(context.getString(R.string.pref_speed_key),
