@@ -22,12 +22,18 @@ public class Utility {
         private static String mMeterSign = "m";
         private static String mMileSign = "mi";
         private static String mFeetSign = "ft";
-        public static String getPreferredRange(Context context) {
+
+        public static String getPreferredRangeMetric(Context context) {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             return prefs.getString(context.getString(R.string.pref_range_key),
                     context.getString(R.string.pref_range_default));
         }
 
+    public static String getPreferredRangeImperial(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getString(context.getString(R.string.pref_range_key),
+                context.getString(R.string.pref_range_imperial_default));
+    }
     public static String getPreferredUnit(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getString(context.getString(R.string.pref_unit_key),
@@ -147,7 +153,7 @@ public class Utility {
 
     //used for determining the radius used in the Nearby Search. Returns 10.000 if no range is selected
     public static String formatPreferredRangeMetric(Context context) {
-        String range = getPreferredRange(context);
+        String range = getPreferredRangeMetric(context);
         // we can't use getResources().getString(), because the switch statement requires constant expressions
         final String oneKilometer = "1 km";
         final String twoKilometers = "2 km";
@@ -186,7 +192,7 @@ public class Utility {
     }
 
     public static String formatPreferredRangeImperial(Context context) {
-        String range = getPreferredRange(context);
+        String range = getPreferredRangeImperial(context);
         final String oneMi = "1 mile";
         final String twoMi = "2 miles";
         final String threeMi = "3 miles";

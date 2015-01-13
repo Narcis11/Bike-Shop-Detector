@@ -187,7 +187,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                         }
                         //44.4391463,26.1428946
                         Location userLocation = new Location(Constants.PROVIDER);
-                        Log.i(LOG_TAG, "User location = " + GlobalState.USER_LAT + "/" + GlobalState.USER_LNG);
+                  //      Log.i(LOG_TAG, "User location = " + GlobalState.USER_LAT + "/" + GlobalState.USER_LNG);
 /*                    userLocation.setLatitude(Double.valueOf("44.4391463"));
                     userLocation.setLongitude(Double.valueOf("26.1428946"));*/
                         userLocation.setLatitude(Double.valueOf(GlobalState.USER_LAT));
