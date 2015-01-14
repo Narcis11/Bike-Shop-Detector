@@ -108,6 +108,7 @@ public class MapsActivity extends FragmentActivity {
                     mMap.animateCamera(CameraUpdateFactory.zoomTo(Constants.CITY_ZOOM));
                 }
             }
+            shopsCursor.close();
         }
     }
 }
