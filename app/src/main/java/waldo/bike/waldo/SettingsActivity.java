@@ -44,24 +44,14 @@ public class SettingsActivity extends PreferenceActivity implements
     String mImperialRangeValue = "";
     String mMetricSpeedValue = "";
     String mImperialSpeedValue = "";
-    //private boolean loadedPrefGeneral = false;
-    //private boolean loadedPrefGeneral = false;
-    SharedPreferences.OnSharedPreferenceChangeListener listener;
-    SharedPreferences mPrefs;
-    PreferenceChangeListener mPreferenceListener;
+    private String mRange = "Range";
+    private String mSpeed = "speed";
+    private boolean mIsMetricLoaded;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Add 'general' preferences, defined in the XML file
-
-    //    loadPreferenceScreen();
-        // For all preferences, attach an OnPreferenceChangeListener so the UI summary can be
-        // updated when the preference changes.
         mContext = getApplicationContext();
-/*        getFragmentManager().beginTransaction()
-                .replace(android.R.id.content, new PrefFragment())
-                .commit();*/
-
         mFirstLoad = true;
         loadPreferenceScreen(mFirstLoad);
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_range_key)));
@@ -90,7 +80,8 @@ public class SettingsActivity extends PreferenceActivity implements
     @Override
     public boolean onPreferenceChange(Preference preference, Object value) {
         String stringValue = value.toString();
-
+        String range = "";
+        String speed = "";
         if (preference instanceof ListPreference) {
             // For list preferences, look up the correct display value in
             // the preference's 'entries' list (since they have separate labels/values).
@@ -98,10 +89,6 @@ public class SettingsActivity extends PreferenceActivity implements
             int prefIndex = listPreference.findIndexOfValue(stringValue);
             if (prefIndex >= 0) {
                 preference.setSummary(listPreference.getEntries()[prefIndex]);
-         //       Log.i(LOG_TAG,"***PREFERENCE IS*** = " + preference.toString());
-        //        Log.i(LOG_TAG,"New preference: " + listPreference.getEntries()[prefIndex]);
-        //        Log.i(LOG_TAG, "Old preference: " + ((ListPreference) preference).getValue());
-          //      Log.i(LOG_TAG,"prefIndex = " + prefIndex);
                 mOldPreferenceUnit = ((ListPreference) preference).getValue().toString();
                 mNewPreferenceUnit = listPreference.getEntries()[prefIndex].toString();
                 //if the old pref!=new pref && (new pref is Imperial or Metric)
@@ -114,70 +101,33 @@ public class SettingsActivity extends PreferenceActivity implements
             } else {
                 // For other preferences, set the summary to the value's simple string representation.
                 //stringValue represents the values that do not correspond to the selected unit. e.g if it is imperial, it holds the range/speed in km
-                Log.i(LOG_TAG,"stringValue is " + stringValue);
-                Log.i(LOG_TAG,"preference in ELSE is " + preference.toString());
-                ArrayList<String> metricRangesList = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.range_values_array)));
-                ArrayList<String> imperialRangesList = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.range_values_imperial_array)));
-                ArrayList<String> metricSpeedList = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.speed_values_array)));
-                ArrayList<String> imperialSpeedList = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.speed_values_imperial_array)));
-                for (int i = 0; i < metricRangesList.size(); i ++) {
-                    if (stringValue.equals(metricRangesList.get(i))) {
-                        mMetricRangeValue = stringValue;
+               // Log.i(LOG_TAG,"stringValue is " + stringValue);
+               // Log.i(LOG_TAG,"preference is " + preference.toString());
+                if (mIsMetricLoaded) {
+                    if (preference.toString().indexOf(mRange) >= 0 && stringValue != null && !stringValue.equals("")) {
+                        range = Utility.formatPreferredRangeImperialToMetric(stringValue);
+                        ((ListPreference) preference).setValue(range);
+                        preference.setSummary(range);
                     }
-                }
-                for (int i = 0; i < imperialRangesList.size(); i ++) {
-                    if (stringValue.equals(imperialRangesList.get(i))) {
-                        mImperialRangeValue = stringValue;
+                    if (preference.toString().indexOf(mSpeed) >= 0 && stringValue != null && !stringValue.equals("")) {
+                        speed = Utility.formatPreferredSpeedImperialToMetric(stringValue);
+                        ((ListPreference) preference).setValue(speed);
+                        preference.setSummary(speed);
                     }
-                }
-                for (int i = 0; i < metricSpeedList.size(); i ++) {
-                    if (stringValue.equals(metricSpeedList.get(i))) {
-                        mMetricSpeedValue = stringValue;
-                    }
-                }
-                for (int i = 0; i < imperialSpeedList.size(); i ++) {
-                    if (stringValue.equals(imperialSpeedList.get(i)) ) {
-                        mImperialSpeedValue = stringValue;
-                    }
-                }
-                //the string value contains the values of the preceding screen. e.g. if the last screen was imperial, the speed will be in km
-       /*         if (!GlobalState.IS_METRIC_LOADED) {
-                    ListPreference rangeListPreference = (ListPreference) findPreference(getResources().getString(R.string.pref_range_key));
-                    rangeListPreference.setValue((Utility.formatPreferredRangeMetricToImperial(mMetricRangeValue)));
-                    rangeListPreference.setSummary(Utility.formatPreferredRangeMetricToImperial(mMetricRangeValue));
-                    Log.i(LOG_TAG,"Corrected mMetricRange = " + (Utility.formatPreferredRangeMetricToImperial(mMetricRangeValue)));
                 }
                 else {
-                    ListPreference rangeListPreference = (ListPreference) findPreference(getResources().getString(R.string.pref_range_key));
-                    rangeListPreference.setValue((Utility.formatPreferredSpeedImperialToMetric(mImperialRangeValue)));
-                    rangeListPreference.setSummary((Utility.formatPreferredSpeedImperialToMetric(mImperialRangeValue)));
-                    Log.i(LOG_TAG,"Corrected mImperialRange = " + (Utility.formatPreferredRangeMetricToImperial(mImperialRangeValue)));
+                    if (preference.toString().indexOf(mRange) >= 0 && stringValue != null && !stringValue.equals("")) {
+                        range = Utility.formatPreferredRangeMetricToImperial(stringValue);
+                        ((ListPreference) preference).setValue(range);
+                        preference.setSummary(range);
+                    }
+                    if (preference.toString().indexOf(mSpeed) >= 0 && stringValue != null && !stringValue.equals("")) {
+                        speed = Utility.formatPreferredSpeedMetricToImperial(stringValue);
+                        ((ListPreference) preference).setValue(speed);
+                        preference.setSummary(speed);
+                    }
                 }
 
-                if (mMetricRangeValue != null && !mMetricRangeValue.equals("")) {
-                    Log.i(LOG_TAG,"mMetricRangeValue = " + mMetricRangeValue);
-                    ListPreference rangeListPreference = (ListPreference) findPreference(getResources().getString(R.string.pref_range_key));
-                    rangeListPreference.setValue(mMetricRangeValue);
-                }
-                if (mMetricSpeedValue != null && !mMetricSpeedValue.equals("")) {
-                    Log.i(LOG_TAG,"mMetricSpeedValue = " + mMetricSpeedValue);
-                    ListPreference speedListPreference = (ListPreference) findPreference(getResources().getString(R.string.pref_speed_key));
-                    speedListPreference.setValue(mMetricSpeedValue);
-                }
-                if (mImperialRangeValue != null && !mImperialRangeValue.equals("")) {
-                    Log.i(LOG_TAG,"mImperialRangeValue = " + mImperialRangeValue);
-                    ListPreference rangeListPreference = (ListPreference) findPreference(getResources().getString(R.string.pref_range_key));
-                    rangeListPreference.setValue(mImperialRangeValue);
-                }
-                if (mImperialSpeedValue != null && !mImperialSpeedValue.equals("")) {
-                    Log.i(LOG_TAG,"mImperialSpeedValue = " + mImperialSpeedValue);
-                    ListPreference speedListPreference = (ListPreference) findPreference(getResources().getString(R.string.pref_speed_key));
-                    speedListPreference.setValue(mImperialSpeedValue);
-                }*/
-/*                if (preference.toString().indexOf(getResources().getString(R.string.pref_range_label)) > 0) {
-                    Log.i(LOG_TAG, "preference is " + preference);
-                    preference.setSummary(getResources().getString(R.string.pref_range_imperial_default));
-                }*/
             }
         }
         else {
@@ -191,7 +141,6 @@ public class SettingsActivity extends PreferenceActivity implements
         String oldPreferredUnit = Utility.getPreferredUnit(getApplicationContext());
         String toUsePreferredUnit = "";
         String formattedSummaryRange = "";
-        String formattedummarySpeed = "";
         String correctSummaryRange = "";
         String correctSummarySpeed = "";
             if (!mNewPreferenceUnit.equals("")) {
@@ -200,14 +149,14 @@ public class SettingsActivity extends PreferenceActivity implements
                 toUsePreferredUnit = oldPreferredUnit;
             }
         Log.i(LOG_TAG,"toUsePreferredUnit = " + toUsePreferredUnit );
-            if (toUsePreferredUnit.equals(getResources().getString(R.string.unit_array_metric))) {
+            if (toUsePreferredUnit.equals(getResources().getString(R.string.unit_array_metric))) { //metric screen formatting
                 if (firstLoad) {
                     addPreferencesFromResource(R.xml.pref_metric_general);
                     Log.i(LOG_TAG, "Loaded pref_metric_general");
-                    GlobalState.IS_METRIC_LOADED = true;
+                    mIsMetricLoaded = true;
                 }
                 else { //Metric
-                    GlobalState.IS_METRIC_LOADED = true;
+                    mIsMetricLoaded = true;
                     //****Range option***
                     ListPreference rangeListPreference = (ListPreference) findPreference(getResources().getString(R.string.pref_range_key));
                     rangeListPreference.setEntries(R.array.range_values_array);
@@ -215,14 +164,11 @@ public class SettingsActivity extends PreferenceActivity implements
                     //if the formated range is null, we assign the default value
                     correctSummaryRange = (formattedSummaryRange != null && !formattedSummaryRange.equals("")) ? formattedSummaryRange : getResources().getString(R.string.pref_range_default);
                     rangeListPreference.setSummary(correctSummaryRange);
-                    Log.i(LOG_TAG,"Preferred range formatted/correct metric = " + formattedSummaryRange + "/" + correctSummaryRange);
                     //***Speed option***
                     ListPreference speedListPreference = (ListPreference) findPreference(getResources().getString(R.string.pref_speed_key));
                     speedListPreference.setEntries(R.array.speed_values_array);
                     correctSummarySpeed = Utility.formatPreferredSpeedImperialToMetric(Utility.getPreferredSpeed(getApplicationContext()));
                     speedListPreference.setSummary(correctSummarySpeed);
-                    Log.i(LOG_TAG,"Preferred speed/correct metric: " + Utility.getPreferredSpeed(getApplicationContext()) + "/" + correctSummarySpeed);
-                    Log.i(LOG_TAG,"***Changed metric range&speed***");
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                     //***Unit option***
                     ListPreference unitListPreference = (ListPreference) findPreference(getResources().getString(R.string.pref_unit_key));
@@ -230,31 +176,28 @@ public class SettingsActivity extends PreferenceActivity implements
                     unitListPreference.setDefaultValue(getResources().getString(R.string.unit_array_metric));
                 }
 
-            } else {
+            } else { //imperial screen formatting
                 if (firstLoad) {
                     addPreferencesFromResource(R.xml.pref_imperial_general);
                     Log.i(LOG_TAG, "Loaded pref_imperial_general");
-                    GlobalState.IS_METRIC_LOADED = false;
+                    mIsMetricLoaded = false;
 
                 }
                 else { //Imperial
-                    GlobalState.IS_METRIC_LOADED = false;
+                    mIsMetricLoaded = false;
                     //***Range option***
                     ListPreference rangeListPreference = (ListPreference) findPreference(getResources().getString(R.string.pref_range_key));
                     rangeListPreference.setEntries(R.array.range_values_imperial_array);
                     formattedSummaryRange = Utility.formatPreferredRangeMetricToImperial(Utility.getPreferredRangeImperial(getApplicationContext()));
-                    //if the formated range is null, we assign the default value
+                    //if the formated range is null, we use the default value
                     correctSummaryRange = (formattedSummaryRange != null && !formattedSummaryRange.equals("")) ? formattedSummaryRange : getResources().getString(R.string.pref_range_imperial_default);
                     rangeListPreference.setSummary(correctSummaryRange);
-                    Log.i(LOG_TAG,"Preferred range/correctSummary imperial = " + Utility.getPreferredRangeImperial(getApplicationContext()) + "/" + correctSummaryRange);
                     //***Speed option***
                     ListPreference speedListPreference = (ListPreference) findPreference(getResources().getString(R.string.pref_speed_key));
                     speedListPreference.setEntries(R.array.speed_values_imperial_array);
                     correctSummarySpeed = Utility.formatPreferredSpeedMetricToImperial(Utility.getPreferredSpeed(getApplicationContext()));
                     speedListPreference.setSummary(correctSummarySpeed);
-                    Log.i(LOG_TAG,"Preferred speed/correct imperial: " + Utility.getPreferredSpeed(getApplicationContext()) + "/" + correctSummarySpeed);
-                    Log.i(LOG_TAG,"***Changed imperial range&speed***");
-                    //***Range option***
+                    //***Unit option***
                     ListPreference unitListPreference = (ListPreference) findPreference(getResources().getString(R.string.pref_unit_key));
                     unitListPreference.setSummary(getResources().getString(R.string.unit_array_imperial));
                     unitListPreference.setDefaultValue(getResources().getString(R.string.unit_array_imperial));
