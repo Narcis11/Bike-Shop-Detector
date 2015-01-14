@@ -41,7 +41,6 @@ public class Utility {
     }
 
     public static String formatPreferredRangeImperialToMetric(String imperialRange) {
-        Log.i(LOG_TAG,"metricSpeed = " +imperialRange);
         final String oneKilometer = "1 km";
         final String twoKilometers = "2 km";
         final String threeKilometers = "3 km";
@@ -77,6 +76,44 @@ public class Utility {
             default: return imperialRange;
         }
     }
+
+    public static String formatPreferredRangeMetricToImperial(String metricRange) {
+        final String oneKilometer = "1 km";
+        final String twoKilometers = "2 km";
+        final String threeKilometers = "3 km";
+        final String fourKilometers = "4 km";
+        final String fiveKilometers = "5 km";
+        final String tenKilometers = "10 km";
+        final String oneMi = "1 mile";
+        final String twoMi = "2 miles";
+        final String threeMi = "3 miles";
+        final String fourMi = "4 miles";
+        final String fiveMi = "5 miles";
+        final String sixMi = "6 miles";
+        switch (metricRange){
+            case(oneKilometer): {
+                return oneMi;
+            }
+            case(twoKilometers): {
+                return twoMi;
+            }
+            case(threeKilometers): {
+                return threeMi;
+            }
+            case(fourKilometers): {
+                return fourMi;
+            }
+            case(fiveKilometers): {
+                return fiveMi;
+            }
+            case(tenKilometers): {
+                return sixMi;
+            }
+            //sometimes, the input is correct
+            default: return metricRange;
+        }
+    }
+
     public static String getPreferredSpeed (Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getString(context.getString(R.string.pref_speed_key),
