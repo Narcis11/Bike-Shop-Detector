@@ -135,6 +135,7 @@ public class SettingsActivity extends PreferenceActivity implements
         String oldPreferredUnit = Utility.getPreferredUnit(getApplicationContext());
         String toUsePreferredUnit = "";
         String correctSummaryRange = "";
+        String correctSummarySpeed = "";
             if (!mNewPreferenceUnit.equals("")) {
                 toUsePreferredUnit = mNewPreferenceUnit;
             } else {
@@ -156,8 +157,9 @@ public class SettingsActivity extends PreferenceActivity implements
                     //***Speed option***
                     ListPreference speedListPreference = (ListPreference) findPreference(getResources().getString(R.string.pref_speed_key));
                     speedListPreference.setEntries(R.array.speed_values_array);
-                    speedListPreference.setSummary(getResources().getString(R.string.pref_speed_default_metric));
-                    Log.i(LOG_TAG,"Preferred speed metric: " + Utility.getPreferredSpeed(getApplicationContext()));
+                    correctSummarySpeed = Utility.formatPreferredSpeedImperialToMetric(Utility.getPreferredSpeed(getApplicationContext()));
+                    speedListPreference.setSummary(correctSummarySpeed);
+                    Log.i(LOG_TAG,"Preferred speed/correct metric: " + Utility.getPreferredSpeed(getApplicationContext()) + "/" + correctSummarySpeed);
                     Log.i(LOG_TAG,"Changed metric range&speed");
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                     //***Unit option***
@@ -182,7 +184,7 @@ public class SettingsActivity extends PreferenceActivity implements
                     Log.i(LOG_TAG,"Preferred range/correctSummary imperial = " + Utility.getPreferredRangeImperial(getApplicationContext()) + "/" + correctSummaryRange);
                     //***Speed option***
                     ListPreference speedListPreference = (ListPreference) findPreference(getResources().getString(R.string.pref_speed_key));
-                    speedListPreference.setEntries(R.array.speed_values_array);
+                    speedListPreference.setEntries(R.array.speed_values_imperial_array);
                     speedListPreference.setSummary(Utility.getPreferredSpeed(getApplicationContext()));
                     Log.i(LOG_TAG,"Preferred speed imperial: " + Utility.getPreferredSpeed(getApplicationContext()));
                     Log.i(LOG_TAG,"Changed imperial range&speed");

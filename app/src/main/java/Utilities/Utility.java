@@ -77,6 +77,53 @@ public class Utility {
         }
     }
 
+    public static String formatPreferredSpeedImperialToMetric (String imperialSpeed) {
+        final String fiveKm = "5 km/h";
+        final String fourteenKm = "14 km/h";
+        final String seventeenKm = "17 km/h";
+        final String twentyKm = "20 km/h";
+        final String twentyThreeKm = "23 km/h";
+        final String twentySixKm = "26 km/h";
+        final String twentyNineKm = "29 km/h";
+        final String thirtyTwoKm = "32 km/h";
+        final String threeMi = "3 mph";
+        final String nineMi = "9 mph";
+        final String tenMi = "10 mph";
+        final String twelveMi = "12 mph";
+        final String fourteenMi = "14 mph";
+        final String sixteenMi = "16 mph";
+        final String eighteenMi = "18 mph";
+        final String twentyMi = "20 mph";
+
+        switch(imperialSpeed) {
+            case (threeMi): {
+                return fiveKm;
+            }
+            case (nineMi): {
+                return fourteenKm;
+            }
+            case (tenMi): {
+                return seventeenKm;
+            }
+            case (twelveMi): {
+                return twentyKm;
+            }
+            case (fourteenMi): {
+                return twentyThreeKm;
+            }
+            case (sixteenMi): {
+                return twentySixKm;
+            }
+            case (eighteenMi): {
+                return twentyNineKm;
+            }
+            case (twentyMi): {
+                return thirtyTwoKm;
+            }
+            default: return imperialSpeed;
+
+        }
+    }
     public static String formatPreferredRangeMetricToImperial(String metricRange) {
         final String oneKilometer = "1 km";
         final String twoKilometers = "2 km";
