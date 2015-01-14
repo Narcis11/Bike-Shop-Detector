@@ -40,22 +40,41 @@ public class Utility {
                 context.getString(R.string.pref_unit_default_metric));
     }
 
-    public static String formatPreferredSpeedImperial(String metricSpeed) {
-        Log.i(LOG_TAG,"metricSpeed = " +metricSpeed);
+    public static String formatPreferredRangeImperialToMetric(String imperialRange) {
+        Log.i(LOG_TAG,"metricSpeed = " +imperialRange);
         final String oneKilometer = "1 km";
         final String twoKilometers = "2 km";
         final String threeKilometers = "3 km";
         final String fourKilometers = "4 km";
         final String fiveKilometers = "5 km";
         final String tenKilometers = "10 km";
-        if (metricSpeed.equals(oneKilometer)) {
-            return "1 mile";
-        }
-        else if (metricSpeed.equals(twoKilometers)) {
-            return "2 miles";
-        }
-        else {
-            return "";
+        final String oneMi = "1 mile";
+        final String twoMi = "2 miles";
+        final String threeMi = "3 miles";
+        final String fourMi = "4 miles";
+        final String fiveMi = "5 miles";
+        final String sixMi = "6 miles";
+        switch (imperialRange){
+            case(oneMi): {
+                return oneKilometer;
+            }
+            case(twoMi): {
+                return twoKilometers;
+            }
+            case(threeMi): {
+                return threeKilometers;
+            }
+            case(fourMi): {
+                return fourKilometers;
+            }
+            case(fiveMi): {
+                return fiveKilometers;
+            }
+            case(sixMi): {
+                return tenKilometers;
+            }
+            //sometimes, the input is correct
+            default: return imperialRange;
         }
     }
     public static String getPreferredSpeed (Context context) {
