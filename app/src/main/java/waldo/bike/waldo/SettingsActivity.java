@@ -98,7 +98,7 @@ public class SettingsActivity extends PreferenceActivity implements
                         loadPreferenceScreen(mFirstLoad);
                 }
 
-            } else {
+            } else { //here we control the display when the user exists the Settings screen and the returns
                 // For other preferences, set the summary to the value's simple string representation.
                 //stringValue represents the values that do not correspond to the selected unit. e.g if it is imperial, it holds the range/speed in km
                // Log.i(LOG_TAG,"stringValue is " + stringValue);

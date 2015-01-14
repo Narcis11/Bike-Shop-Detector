@@ -114,7 +114,7 @@ public class AddShopFormActivity extends ActionBarActivity {
         if (mShopName.getText().toString().length() == 0) {
             mErrorMessage.setText(getResources().getString(R.string.empty_shop_name));
             mShopNameOk = false;
-        }
+        } //255 is maximum allowed length by Google for the shop's name
         else if (mShopName.getText().toString().length() > 254) {
             mErrorMessage.setText(getResources().getString(R.string.long_shop_name));
             mShopNameOk = false;
