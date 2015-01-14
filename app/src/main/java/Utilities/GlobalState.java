@@ -14,5 +14,5 @@ public class GlobalState {
     public static String ALL_SHOPS_INFO = "";
     public static String FETCH_STATUS = "";
     //used in the Settings activity
-    public static boolean FIRST_LOAD;
+    public static boolean IS_METRIC_LOADED;
 }
