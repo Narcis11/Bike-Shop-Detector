@@ -61,12 +61,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             String preferredUnit = Utility.getPreferredUnit(mContext);
             String metric = "Metric";
             String radius = "";
-            if (preferredUnit.equals(metric)) {
-                radius = Utility.formatPreferredRangeMetric(mContext);
-            }
-            else {
-                radius = Utility.formatPreferredRangeImperial(mContext);
-            }
+            radius = (preferredUnit.equals(metric)) ? Utility.formatPreferredRangeMetric(mContext) : Utility.formatPreferredRangeImperial(mContext);
             HttpURLConnection urlConnection = null;
             BufferedReader reader = null;
             String placesJsonStr = "";//used for storing the response from the API call

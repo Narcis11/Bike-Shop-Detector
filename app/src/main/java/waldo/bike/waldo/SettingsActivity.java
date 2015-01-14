@@ -99,8 +99,8 @@ public class SettingsActivity extends PreferenceActivity implements
             if (prefIndex >= 0) {
                 preference.setSummary(listPreference.getEntries()[prefIndex]);
          //       Log.i(LOG_TAG,"***PREFERENCE IS*** = " + preference.toString());
-                Log.i(LOG_TAG,"New preference: " + listPreference.getEntries()[prefIndex]);
-                Log.i(LOG_TAG, "Old preference: " + ((ListPreference) preference).getValue());
+        //        Log.i(LOG_TAG,"New preference: " + listPreference.getEntries()[prefIndex]);
+        //        Log.i(LOG_TAG, "Old preference: " + ((ListPreference) preference).getValue());
           //      Log.i(LOG_TAG,"prefIndex = " + prefIndex);
                 mOldPreferenceUnit = ((ListPreference) preference).getValue().toString();
                 mNewPreferenceUnit = listPreference.getEntries()[prefIndex].toString();
@@ -214,6 +214,7 @@ public class SettingsActivity extends PreferenceActivity implements
                     formattedSummaryRange = Utility.formatPreferredRangeImperialToMetric(Utility.getPreferredRangeMetric(getApplicationContext()));
                     //if the formated range is null, we assign the default value
                     correctSummaryRange = (formattedSummaryRange != null && !formattedSummaryRange.equals("")) ? formattedSummaryRange : getResources().getString(R.string.pref_range_default);
+                    rangeListPreference.setSummary(correctSummaryRange);
                     Log.i(LOG_TAG,"Preferred range formatted/correct metric = " + formattedSummaryRange + "/" + correctSummaryRange);
                     //***Speed option***
                     ListPreference speedListPreference = (ListPreference) findPreference(getResources().getString(R.string.pref_speed_key));
