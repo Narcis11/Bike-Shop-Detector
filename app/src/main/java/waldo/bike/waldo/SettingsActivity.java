@@ -185,8 +185,9 @@ public class SettingsActivity extends PreferenceActivity implements
                     //***Speed option***
                     ListPreference speedListPreference = (ListPreference) findPreference(getResources().getString(R.string.pref_speed_key));
                     speedListPreference.setEntries(R.array.speed_values_imperial_array);
-                    speedListPreference.setSummary(Utility.getPreferredSpeed(getApplicationContext()));
-                    Log.i(LOG_TAG,"Preferred speed imperial: " + Utility.getPreferredSpeed(getApplicationContext()));
+                    correctSummarySpeed = Utility.formatPreferredSpeedMetricToImperial(Utility.getPreferredSpeed(getApplicationContext()));
+                    speedListPreference.setSummary(correctSummarySpeed);
+                    Log.i(LOG_TAG,"Preferred speed/correct imperial: " + Utility.getPreferredSpeed(getApplicationContext()) + "/" + correctSummarySpeed);
                     Log.i(LOG_TAG,"Changed imperial range&speed");
                     //***Range option***
                     ListPreference unitListPreference = (ListPreference) findPreference(getResources().getString(R.string.pref_unit_key));
