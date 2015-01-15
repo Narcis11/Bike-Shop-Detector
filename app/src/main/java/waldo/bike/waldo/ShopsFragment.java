@@ -41,6 +41,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     private String mFormattedDuration = "";
     private String mFormattedDistance = "";
     private String mPreferredUnit = "";
+    private String mRange = "";
     private static final int SHOPS_LOADER_ID = 0;//loader identifier
     public static final String[] SHOPS_COLUMNS = {
             ShopsContract.ShopsEntry.TABLE_NAME + "." + ShopsContract.ShopsEntry._ID,
@@ -102,9 +103,9 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                         ((TextView) view).setText(cursor.getString(COL_SHOP_NAME));
                         return true;
                     case COL_DISTANCE_TO_USER:
-                        Log.i(LOG_TAG,"Shopname / distance: " + cursor.getString(COL_SHOP_NAME) + " / " + cursor.getString(COL_DISTANCE_TO_USER));
+                    //    Log.i(LOG_TAG,"Shopname / distance: " + cursor.getString(COL_SHOP_NAME) + " / " + cursor.getString(COL_DISTANCE_TO_USER));
                         mPreferredUnit = Utility.getPreferredUnit(getActivity());
-                        Log.i(LOG_TAG,"preferredUnit = " + mPreferredUnit);
+                    //    Log.i(LOG_TAG,"preferredUnit = " + mPreferredUnit);
                         if (mPreferredUnit.equals(getResources().getString(R.string.unit_array_metric))) {
                             mFormattedDistance = Utility.formatDistanceMetric(cursor.getString(COL_DISTANCE_TO_USER));
                         }
@@ -202,7 +203,11 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     @Override
     public void onResume() {
         super.onResume();
-        Log.i(LOG_TAG,"In onResume().");
+        Log.i(LOG_TAG,"Preferred range In onResume() = " + Utility.getPreferredRangeMetric(getActivity()));
+        if (mRange != null && !mRange.equals(Utility.getPreferredRangeMetric(getActivity()))) {
+            Log.i(LOG_TAG,"****UPDATED SHOP LIST****");
+            updateShopList();
+        }
         //TODO: test if the sync succeeds even if the phone is rotated while syncing. Check if onLoadFinished is called. The commented code below might prove useful.
 /*        LoaderManager lm = getLoaderManager();
         if (lm.getLoader(SHOPS_LOADER_ID) != null) {
@@ -214,6 +219,8 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     @Override
     public void onStop() {
         super.onStop();
+        mRange = Utility.getPreferredRangeImperial(getActivity());
+        Log.i(LOG_TAG,"mRange in onStop() = " + mRange);
     }
 
     public void updateShopList() {
