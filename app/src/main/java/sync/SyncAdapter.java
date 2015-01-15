@@ -68,8 +68,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             //used for querying the Google Places API
             final String types = Constants.PLACE_TYPE;
             final String key = Constants.API_KEY;
-            //final String latLng = GlobalState.USER_LAT + Constants.COMMA_SEPARATOR + GlobalState.USER_LNG;
-            final String latLng = "44.4391463,26.1428946";
+            final String latLng = GlobalState.USER_LAT + Constants.COMMA_SEPARATOR + GlobalState.USER_LNG;
+            //final String latLng = "44.4391463,26.1428946";
             final String output = "json";
             try {
                 //the query parameters used in the call
@@ -184,10 +184,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                         //44.4391463,26.1428946
                         Location userLocation = new Location(Constants.PROVIDER);
                   //      Log.i(LOG_TAG, "User location = " + GlobalState.USER_LAT + "/" + GlobalState.USER_LNG);
-                    userLocation.setLatitude(Double.valueOf("44.4391463"));
-                    userLocation.setLongitude(Double.valueOf("26.1428946"));
-/*                        userLocation.setLatitude(Double.valueOf(GlobalState.USER_LAT));
-                        userLocation.setLongitude(Double.valueOf(GlobalState.USER_LNG));*/
+              /*        userLocation.setLatitude(Double.valueOf("44.4391463"));
+                        userLocation.setLongitude(Double.valueOf("26.1428946"));*/
+                        userLocation.setLatitude(Double.valueOf(GlobalState.USER_LAT));
+                        userLocation.setLongitude(Double.valueOf(GlobalState.USER_LNG));
                         Location shopLocation = new Location(Constants.PROVIDER);
                         shopLocation.setLatitude(Double.valueOf(latitude));
                         shopLocation.setLongitude(Double.valueOf(longitude));

@@ -233,8 +233,6 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
         super.onStop();
         GlobalState.FRAGMENT_RANGE = Utility.getPreferredRangeImperial(getActivity());
         GlobalState.FRAGMENT_SPEED = Utility.getPreferredSpeed(getActivity());
-        Log.i(LOG_TAG,"Utilities.GlobalState.FRAGMENT_RANGE in onStop: " + GlobalState.FRAGMENT_RANGE);
-        Log.i(LOG_TAG,"Utilities.GlobalState.FRAGMENT_SPEED in onStop: " + GlobalState.FRAGMENT_SPEED);
     }
 
     public void updateShopList() {
