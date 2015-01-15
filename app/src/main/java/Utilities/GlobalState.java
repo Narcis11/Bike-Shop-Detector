@@ -13,6 +13,8 @@ public class GlobalState {
     public static String USER_LNG="";
     public static String ALL_SHOPS_INFO = "";
     public static String FETCH_STATUS = "";
+    public static String FRAGMENT_RANGE;
+    public static String FRAGMENT_SPEED;
     //used in the Settings activity
     public static boolean IS_METRIC_LOADED;
 }

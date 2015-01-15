@@ -25,6 +25,7 @@ import Utilities.Constants;
 import Utilities.GlobalState;
 import Utilities.Utility;
 import data.ShopsContract;
+import data.ShopsProvider;
 import sync.SyncAdapter;
 
 /**
@@ -41,7 +42,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     private String mFormattedDuration = "";
     private String mFormattedDistance = "";
     private String mPreferredUnit = "";
-    private String mRange = "";
+    private boolean mIsListRefreshed;
     private static final int SHOPS_LOADER_ID = 0;//loader identifier
     public static final String[] SHOPS_COLUMNS = {
             ShopsContract.ShopsEntry.TABLE_NAME + "." + ShopsContract.ShopsEntry._ID,
@@ -73,7 +74,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
 
-
+        
         mShopsAdapter = new SimpleCursorAdapter(
                 getActivity(),
                 R.layout.list_item_shops,
@@ -195,7 +196,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
 
     @Override
     public void onStart() {
-        super.onStart();
+        super.onStart(); 
        // Log.i(LOG_TAG, "In fragment onStart()");
        // updateShopList();
     }
@@ -203,10 +204,21 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     @Override
     public void onResume() {
         super.onResume();
-        Log.i(LOG_TAG,"Preferred range In onResume() = " + Utility.getPreferredRangeMetric(getActivity()));
-        if (mRange != null && !mRange.equals(Utility.getPreferredRangeMetric(getActivity()))) {
+        mIsListRefreshed = false;
+        Log.i(LOG_TAG,"Preferred range In onResume() = " + Utility.getPreferredRangeImperial(getActivity()));
+        Log.i(LOG_TAG,"Preferred speed In onResume() = " + Utility.getPreferredSpeed(getActivity()));
+        Log.i(LOG_TAG,"Utilities.GlobalState.FRAGMENT_RANGE In onResume() = " + GlobalState.FRAGMENT_RANGE);
+        Log.i(LOG_TAG,"Utilities.GlobalState.FRAGMENT_SPEED In onResume() = " + GlobalState.FRAGMENT_SPEED);
+        if (GlobalState.FRAGMENT_RANGE != null && !GlobalState.FRAGMENT_RANGE.equals(Utility.getPreferredRangeImperial(getActivity()))) {
             Log.i(LOG_TAG,"****UPDATED SHOP LIST****");
             updateShopList();
+            mIsListRefreshed = true;
+        }
+        //we only restart the loader if the refresh caused by the change of range hasn't been performed. If it has, we already have an updated list
+        if (GlobalState.FRAGMENT_SPEED != null && !GlobalState.FRAGMENT_SPEED.equals(Utility.getPreferredSpeed(getActivity())) && !mIsListRefreshed) {
+            Log.i(LOG_TAG,"****NEW SPEED IN SHOP LIST****");
+            //TODO: restarting the Loader doesn't mean that the speed is refreshed. Find another way to refresh the speed.
+            getLoaderManager().restartLoader(SHOPS_LOADER_ID,null,this);
         }
         //TODO: test if the sync succeeds even if the phone is rotated while syncing. Check if onLoadFinished is called. The commented code below might prove useful.
 /*        LoaderManager lm = getLoaderManager();
@@ -219,8 +231,10 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     @Override
     public void onStop() {
         super.onStop();
-        mRange = Utility.getPreferredRangeImperial(getActivity());
-        Log.i(LOG_TAG,"mRange in onStop() = " + mRange);
+        GlobalState.FRAGMENT_RANGE = Utility.getPreferredRangeImperial(getActivity());
+        GlobalState.FRAGMENT_SPEED = Utility.getPreferredSpeed(getActivity());
+        Log.i(LOG_TAG,"Utilities.GlobalState.FRAGMENT_RANGE in onStop: " + GlobalState.FRAGMENT_RANGE);
+        Log.i(LOG_TAG,"Utilities.GlobalState.FRAGMENT_SPEED in onStop: " + GlobalState.FRAGMENT_SPEED);
     }
 
     public void updateShopList() {
@@ -242,7 +256,6 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
 
     @Override
     public void onLoadFinished(android.content.Loader<Cursor> loader, Cursor data) {
-        Log.i(LOG_TAG,"Finished loading");
         mShopsAdapter.swapCursor(data);
     }
 
