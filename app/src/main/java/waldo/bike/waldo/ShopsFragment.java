@@ -35,13 +35,12 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     public SimpleCursorAdapter mShopsAdapter;
     private String mRadius;
     private static final String LOG_TAG = ShopsFragment.class.getSimpleName();
-    private String shopLatitude = "";
-    private String shopLongitude = "";
-    private String shopName = "";
-    private String formattedDuration = "";
-    private String formattedDistance = "";
-    private String preferredUnit = "";
-    private boolean firstLoad = true;
+    private String mShopLatitude = "";
+    private String mShopLongitude = "";
+    private String mShopName = "";
+    private String mFormattedDuration = "";
+    private String mFormattedDistance = "";
+    private String mPreferredUnit = "";
     private static final int SHOPS_LOADER_ID = 0;//loader identifier
     public static final String[] SHOPS_COLUMNS = {
             ShopsContract.ShopsEntry.TABLE_NAME + "." + ShopsContract.ShopsEntry._ID,
@@ -104,20 +103,20 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                         return true;
                     case COL_DISTANCE_TO_USER:
                         Log.i(LOG_TAG,"Shopname / distance: " + cursor.getString(COL_SHOP_NAME) + " / " + cursor.getString(COL_DISTANCE_TO_USER));
-                        preferredUnit = Utility.getPreferredUnit(getActivity());
-                        Log.i(LOG_TAG,"preferredUnit = " + preferredUnit);
-                        if (preferredUnit.equals(getResources().getString(R.string.unit_array_metric))) {
-                            formattedDistance = Utility.formatDistanceMetric(cursor.getString(COL_DISTANCE_TO_USER));
+                        mPreferredUnit = Utility.getPreferredUnit(getActivity());
+                        Log.i(LOG_TAG,"preferredUnit = " + mPreferredUnit);
+                        if (mPreferredUnit.equals(getResources().getString(R.string.unit_array_metric))) {
+                            mFormattedDistance = Utility.formatDistanceMetric(cursor.getString(COL_DISTANCE_TO_USER));
                         }
                         else {
-                            formattedDistance = Utility.formatDistanceImperial(cursor.getString(COL_DISTANCE_TO_USER));
+                            mFormattedDistance = Utility.formatDistanceImperial(cursor.getString(COL_DISTANCE_TO_USER));
                         }
 
-                        ((TextView) view).setText(formattedDistance);
+                        ((TextView) view).setText(mFormattedDistance);
                         return true;
                     case COL_DISTANCE_DURATION:
-                        formattedDuration = Utility.formatDistanceDuration(cursor.getString(COL_DISTANCE_DURATION));
-                        ((TextView) view).setText(formattedDuration);
+                        mFormattedDuration = Utility.formatDistanceDuration(cursor.getString(COL_DISTANCE_DURATION));
+                        ((TextView) view).setText(mFormattedDuration);
                         return true;
                     case COL_IS_OPEN:
                         if (cursor.getInt(COL_IS_OPEN) == 1){
@@ -147,14 +146,14 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Cursor cursor = mShopsAdapter.getCursor();
                 if (cursor != null && cursor.moveToPosition(position)) {
-                    shopName = cursor.getString(COL_SHOP_NAME);
-                    shopLatitude = cursor.getString(COL_SHOP_LATITUDE);
-                    shopLongitude = cursor.getString(COL_SHOP_LONGITUDE);
+                    mShopName = cursor.getString(COL_SHOP_NAME);
+                    mShopLatitude = cursor.getString(COL_SHOP_LATITUDE);
+                    mShopLongitude = cursor.getString(COL_SHOP_LONGITUDE);
                     Intent openMap = new Intent(getActivity().getApplicationContext(),MapsActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putString(Constants.BUNDLE_SHOP_LAT,shopLatitude);
-                    bundle.putString(Constants.BUNDLE_SHOP_LNG,shopLongitude);
-                    bundle.putString(Constants.BUNDLE_SHOP_NAME,shopName);
+                    bundle.putString(Constants.BUNDLE_SHOP_LAT,mShopLatitude);
+                    bundle.putString(Constants.BUNDLE_SHOP_LNG,mShopLongitude);
+                    bundle.putString(Constants.BUNDLE_SHOP_NAME,mShopName);
                     bundle.putString(Constants.BUNDLE_FRAGMENT,Constants.CALLED_FROM_FRAGMENT);
                     openMap.putExtras(bundle);
                     startActivity(openMap);
@@ -203,10 +202,13 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     @Override
     public void onResume() {
         super.onResume();
-        if (firstLoad) {
-            getActivity().getContentResolver().delete(ShopsContract.ShopsEntry.CONTENT_URI, null, null);
-        }
-        firstLoad = false;
+        Log.i(LOG_TAG,"In onResume().");
+        //TODO: test if the sync succeeds even if the phone is rotated while syncing. Check if onLoadFinished is called. The commented code below might prove useful.
+/*        LoaderManager lm = getLoaderManager();
+        if (lm.getLoader(SHOPS_LOADER_ID) != null) {
+            Log.i(LOG_TAG,"******init loader in onResume()*****");
+            lm.initLoader(SHOPS_LOADER_ID, null, this);
+        }*/
     }
 
     @Override
@@ -233,6 +235,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
 
     @Override
     public void onLoadFinished(android.content.Loader<Cursor> loader, Cursor data) {
+        Log.i(LOG_TAG,"Finished loading");
         mShopsAdapter.swapCursor(data);
     }
 
