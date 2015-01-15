@@ -103,6 +103,7 @@ public class MainActivity extends Activity implements
          }
     //    Log.i(LOG_TAG,"in onCreate()");
         //instantiante the action bar
+        //TODO: Load the action bar from the XML resource
         ActionBar actionBar = getActionBar();
         actionBar.setIcon(R.drawable.waldo_action_bar);
         actionBar.setTitle("");
@@ -227,7 +228,7 @@ public class MainActivity extends Activity implements
         DeviceConnection deviceConnection = new DeviceConnection(mContext);
         //checking if the user has disabled GPS
             if (!deviceConnection.checkGpsEnabled()) {
-            Log.i(LOG_TAG,"GPS not enabled!");
+            Toast.makeText(mContext,"Please activate GPS",Toast.LENGTH_LONG).show();
         }
         ShopsFragment shopsFragment = (ShopsFragment) getFragmentManager().findFragmentByTag(fragmentTag);
 /*        if (isGPSConnected && shopsFragment == null) { //only display the fragment if it's not already visible and the GPS is connected
@@ -268,7 +269,7 @@ public class MainActivity extends Activity implements
     }
 
 
-
+    //used to monitor the state of the network
     public static class MainNetworkReceiver extends BroadcastReceiver {
         public MainNetworkReceiver() {
 
@@ -280,7 +281,7 @@ public class MainActivity extends Activity implements
             if (!firstLoad) { //if this is the first load of the Activity, we need to ignore network changes
           //      Log.i(LOG_TAG, "Main Activity: Network state changed!");
                 //we don't display the message if the user turns on wifi when data connection is turned on or viceversa
-                if (deviceConnection.checkInternetConnected() && (!previousNetworkState.equals("CONNECTED"))) {
+                if (deviceConnection.checkInternetConnected() && (!previousNetworkState.equals(Constants.PREVIOUS_STATE_CONNECTED))) {
                     Toast.makeText(context, "Reconnected!", Toast.LENGTH_SHORT).show();
                     previousNetworkState = Constants.PREVIOUS_STATE_CONNECTED;
                 }

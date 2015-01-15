@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="48dp"
     android:background="@drawable/list_selector">
-<!--Used for formatting the each row from the list view in the slider menu-->
+<!--Used for formatting each row from the list view in the slider menu-->
     <ImageView
         android:id="@+id/icon"
         android:layout_width="25dp"
