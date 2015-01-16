@@ -124,7 +124,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                         if (cursor.getInt(COL_IS_OPEN) == 1){
                             ((TextView) view).setText(Constants.SHOP_OPEN); //"Open"
                         }
-                        else if (cursor.getInt(COL_IS_OPEN) == 1) {
+                        else if (cursor.getInt(COL_IS_OPEN) == 0) {
                             ((TextView) view).setText(Constants.SHOP_CLOSED);//"Closed"
                         }
                         else {
