@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
@@ -45,6 +46,8 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     private boolean mIsListRefreshed;
     private Double mNewSpeedDistanceToShop;
     private static final int SHOPS_LOADER_ID = 0;//loader identifier
+    ListView mListView;
+    private boolean mIsSpeedChanged;
     public static final String[] SHOPS_COLUMNS = {
             ShopsContract.ShopsEntry.TABLE_NAME + "." + ShopsContract.ShopsEntry._ID,
             ShopsContract.ShopsEntry.COLUMN_SHOP_NAME,
@@ -113,12 +116,20 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                         else {
                             mFormattedDistance = Utility.formatDistanceImperial(cursor.getString(COL_DISTANCE_TO_USER));
                         }
-                        Log.i(LOG_TAG,"Classic mFormattedDistance/columnIndex = " + mFormattedDistance + "/" + columnIndex);
                         ((TextView) view).setText(mFormattedDistance);
                         return true;
                     case COL_DISTANCE_DURATION:
-                        mFormattedDuration = Utility.formatDistanceDuration(cursor.getString(COL_DISTANCE_DURATION));
-                        ((TextView) view).setText(mFormattedDuration);
+                        if (!mIsSpeedChanged) {
+                            mFormattedDuration = Utility.formatDistanceDuration(cursor.getString(COL_DISTANCE_DURATION));
+                            ((TextView) view).setText(mFormattedDuration);
+                        }
+                        else {
+                            int distanceToShop = Integer.valueOf(cursor.getString(COL_DISTANCE_TO_USER));
+                            mNewSpeedDistanceToShop = Utility.calculateDistanceDuration(distanceToShop,getActivity());
+                            mFormattedDuration = Utility.formatDistanceDuration(String.valueOf(mNewSpeedDistanceToShop));
+                            ((TextView) view).setText(mFormattedDuration);
+                            return true;
+                        }
                         return true;
                     case COL_IS_OPEN:
                         if (cursor.getInt(COL_IS_OPEN) == 1){
@@ -140,6 +151,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
         // Get a reference to the ListView, and attach this adapter to it.
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         ListView listView = (ListView) rootView.findViewById(R.id.listview_shops);
+        mListView = listView;
         listView.setAdapter(mShopsAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -204,7 +216,9 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     @Override
     public void onResume() {
         super.onResume();
+        //onResume is called before the loader, so it's safe (read "doesn't affect the logic") to assign values to the booleans here
         mIsListRefreshed = false;
+        mIsSpeedChanged = false;
         if (GlobalState.FRAGMENT_RANGE != null && !GlobalState.FRAGMENT_RANGE.equals(Utility.getPreferredRangeImperial(getActivity()))) {
             Log.i(LOG_TAG,"****UPDATED SHOP LIST****");
             updateShopList();
@@ -212,12 +226,26 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
         }
         //we only restart the loader if the refresh caused by the change of range hasn't been performed. If it has, we already have an updated list
         if (GlobalState.FRAGMENT_SPEED != null && !GlobalState.FRAGMENT_SPEED.equals(Utility.getPreferredSpeed(getActivity())) && !mIsListRefreshed) {
-            Log.i(LOG_TAG,"****NEW SPEED IN SHOP LIST****");
+            mIsSpeedChanged = true;
+            getLoaderManager().restartLoader(SHOPS_LOADER_ID,null,this);
             //TODO: restarting the Loader doesn't mean that the speed is refreshed. Find another way to refresh the speed.
-            mShopsAdapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
+           /* mShopsAdapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
                 @Override
                 public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
+                    Log.i(LOG_TAG,"columnIndex is: " + columnIndex);
                     switch (columnIndex){
+                        case COL_DISTANCE_TO_USER:
+                            //    Log.i(LOG_TAG,"Shopname / distance: " + cursor.getString(COL_SHOP_NAME) + " / " + cursor.getString(COL_DISTANCE_TO_USER));
+                            mPreferredUnit = Utility.getPreferredUnit(getActivity());
+                            if (mPreferredUnit.equals(getResources().getString(R.string.unit_array_metric))) {
+                                mFormattedDistance = Utility.formatDistanceMetric(cursor.getString(COL_DISTANCE_TO_USER));
+                            }
+                            else {
+                                mFormattedDistance = Utility.formatDistanceImperial(cursor.getString(COL_DISTANCE_TO_USER));
+                            }
+                            Log.i(LOG_TAG,"Classic mFormattedDistance/columnIndex = " + mFormattedDistance + "/" + columnIndex);
+                            ((TextView) view).setText(mFormattedDistance);
+                            return true;
                         case COL_DISTANCE_DURATION:
                             Log.i(LOG_TAG,"****NEW SET VIEW BINDER VALUES***");
                             Log.i(LOG_TAG,"columnIndex is: " + columnIndex);
@@ -229,11 +257,22 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                             Log.i(LOG_TAG,"New mFormattedDuration = " + mFormattedDuration);
                             ((TextView) view).setText(mFormattedDuration);
                             return true;
+                        case COL_IS_OPEN:
+                            if (cursor.getInt(COL_IS_OPEN) == 1){
+                                ((TextView) view).setText(Constants.SHOP_OPEN); //"Open"
+                            }
+                            else if (cursor.getInt(COL_IS_OPEN) == 0) {
+                                ((TextView) view).setText(Constants.SHOP_CLOSED);//"Closed"
+                            }
+                            else {
+                                ((TextView) view).setText(Constants.SHOP_UNAVAILABLE);//""
+                            }
+                            return  true;
                     }
                     return false;
                 }
             });
-           // getLoaderManager().restartLoader(SHOPS_LOADER_ID,null,this);
+           // */
         }
         //TODO: test if the sync succeeds even if the phone is rotated while syncing. Check if onLoadFinished is called. The commented code below might prove useful.
 /*        LoaderManager lm = getLoaderManager();
