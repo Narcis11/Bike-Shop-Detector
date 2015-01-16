@@ -43,6 +43,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     private String mFormattedDistance = "";
     private String mPreferredUnit = "";
     private boolean mIsListRefreshed;
+    private Double mNewSpeedDistanceToShop;
     private static final int SHOPS_LOADER_ID = 0;//loader identifier
     public static final String[] SHOPS_COLUMNS = {
             ShopsContract.ShopsEntry.TABLE_NAME + "." + ShopsContract.ShopsEntry._ID,
@@ -106,14 +107,13 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                     case COL_DISTANCE_TO_USER:
                     //    Log.i(LOG_TAG,"Shopname / distance: " + cursor.getString(COL_SHOP_NAME) + " / " + cursor.getString(COL_DISTANCE_TO_USER));
                         mPreferredUnit = Utility.getPreferredUnit(getActivity());
-                    //    Log.i(LOG_TAG,"preferredUnit = " + mPreferredUnit);
                         if (mPreferredUnit.equals(getResources().getString(R.string.unit_array_metric))) {
                             mFormattedDistance = Utility.formatDistanceMetric(cursor.getString(COL_DISTANCE_TO_USER));
                         }
                         else {
                             mFormattedDistance = Utility.formatDistanceImperial(cursor.getString(COL_DISTANCE_TO_USER));
                         }
-
+                        Log.i(LOG_TAG,"Classic mFormattedDistance/columnIndex = " + mFormattedDistance + "/" + columnIndex);
                         ((TextView) view).setText(mFormattedDistance);
                         return true;
                     case COL_DISTANCE_DURATION:
@@ -205,10 +205,6 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     public void onResume() {
         super.onResume();
         mIsListRefreshed = false;
-        Log.i(LOG_TAG,"Preferred range In onResume() = " + Utility.getPreferredRangeImperial(getActivity()));
-        Log.i(LOG_TAG,"Preferred speed In onResume() = " + Utility.getPreferredSpeed(getActivity()));
-        Log.i(LOG_TAG,"Utilities.GlobalState.FRAGMENT_RANGE In onResume() = " + GlobalState.FRAGMENT_RANGE);
-        Log.i(LOG_TAG,"Utilities.GlobalState.FRAGMENT_SPEED In onResume() = " + GlobalState.FRAGMENT_SPEED);
         if (GlobalState.FRAGMENT_RANGE != null && !GlobalState.FRAGMENT_RANGE.equals(Utility.getPreferredRangeImperial(getActivity()))) {
             Log.i(LOG_TAG,"****UPDATED SHOP LIST****");
             updateShopList();
@@ -218,7 +214,26 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
         if (GlobalState.FRAGMENT_SPEED != null && !GlobalState.FRAGMENT_SPEED.equals(Utility.getPreferredSpeed(getActivity())) && !mIsListRefreshed) {
             Log.i(LOG_TAG,"****NEW SPEED IN SHOP LIST****");
             //TODO: restarting the Loader doesn't mean that the speed is refreshed. Find another way to refresh the speed.
-            getLoaderManager().restartLoader(SHOPS_LOADER_ID,null,this);
+            mShopsAdapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
+                @Override
+                public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
+                    switch (columnIndex){
+                        case COL_DISTANCE_DURATION:
+                            Log.i(LOG_TAG,"****NEW SET VIEW BINDER VALUES***");
+                            Log.i(LOG_TAG,"columnIndex is: " + columnIndex);
+                            int distanceToShop = Integer.valueOf(cursor.getString(COL_DISTANCE_TO_USER));
+                            Log.i(LOG_TAG,"distanceToShop: " + distanceToShop);
+                            mNewSpeedDistanceToShop = Utility.calculateDistanceDuration(distanceToShop,getActivity());
+                            Log.i(LOG_TAG,"mNewSpeedDistanceToShop: " + mNewSpeedDistanceToShop);
+                            mFormattedDuration = Utility.formatDistanceDuration(String.valueOf(mNewSpeedDistanceToShop));
+                            Log.i(LOG_TAG,"New mFormattedDuration = " + mFormattedDuration);
+                            ((TextView) view).setText(mFormattedDuration);
+                            return true;
+                    }
+                    return false;
+                }
+            });
+           // getLoaderManager().restartLoader(SHOPS_LOADER_ID,null,this);
         }
         //TODO: test if the sync succeeds even if the phone is rotated while syncing. Check if onLoadFinished is called. The commented code below might prove useful.
 /*        LoaderManager lm = getLoaderManager();
@@ -231,6 +246,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     @Override
     public void onStop() {
         super.onStop();
+        //used to determine of a refresh of the displayed speed or range is necessary
         GlobalState.FRAGMENT_RANGE = Utility.getPreferredRangeImperial(getActivity());
         GlobalState.FRAGMENT_SPEED = Utility.getPreferredSpeed(getActivity());
     }

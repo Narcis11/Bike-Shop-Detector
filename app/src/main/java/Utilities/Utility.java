@@ -432,26 +432,32 @@ public class Utility {
     }
 
     public static String formatDistanceDuration (String distanceDuration) {
-        String minute = distanceDuration.substring(0, distanceDuration.indexOf("."));
-        String decimals = "";
-        if ( distanceDuration.substring(distanceDuration.indexOf(".") +1).length() > 1) {
-            decimals = distanceDuration.substring(distanceDuration.indexOf(".") + 1, distanceDuration.indexOf(".") + 3);
-        }
-        else {
-            decimals = distanceDuration.substring(distanceDuration.indexOf(".") + 1, distanceDuration.indexOf(".") + 2);
-        }
+        Log.i(LOG_TAG,"distanceDuration: " + distanceDuration);
+        if (distanceDuration.indexOf(".") > 0) {
+            String minute = distanceDuration.substring(0, distanceDuration.indexOf("."));
+            String decimals = "";
+            if (distanceDuration.substring(distanceDuration.indexOf(".") + 1).length() > 1) {
+                decimals = distanceDuration.substring(distanceDuration.indexOf(".") + 1, distanceDuration.indexOf(".") + 3);
+            } else {
+                decimals = distanceDuration.substring(distanceDuration.indexOf(".") + 1, distanceDuration.indexOf(".") + 2);
+            }
             String seconds = String.valueOf((Integer.valueOf(decimals) * 60) / 100);
             return minute + "min " + seconds + "sec";
+        }
+        else {
+            return distanceDuration + "min ";
+        }
     }
 
     public static String formatDistanceMetric (String distance) {
+        String doublezero = "00";
         if (Integer.valueOf(distance) >= 1000) {
             if (distance.length() <=5) {
                 //for distances between 1000-9999
                 String km = distance.substring(0,1);
                 String meters =  distance.substring(1, 3);
             //    Log.i(LOG_TAG,"Distance/Km/m = " + distance + " / " + km + " / " + roundedMeters );
-                if (!meters.equals("00")) {
+                if (!meters.equals(doublezero)) {
                     return km + Constants.COMMA_SEPARATOR + meters + " " + mKmSign;
                 }
                 else {
