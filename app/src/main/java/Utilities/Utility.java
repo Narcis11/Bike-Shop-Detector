@@ -432,7 +432,6 @@ public class Utility {
     }
 
     public static String formatDistanceDuration (String distanceDuration) {
-        Log.i(LOG_TAG,"distanceDuration: " + distanceDuration);
         if (distanceDuration.indexOf(".") > 0) {
             String minute = distanceDuration.substring(0, distanceDuration.indexOf("."));
             String decimals = "";

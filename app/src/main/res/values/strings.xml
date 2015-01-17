@@ -120,4 +120,11 @@
     <string name="invalid_url">Invalid website address</string>
     <string name="invalid_phone">Invalid phone number</string>
     <string name="invalid_form">Please correct the highlighted field(s) below</string>
+
+    <!--Warning messages from the Main Activity-->
+    <string name="no_internet">No Internet connection</string>
+    <string name="internet_connected">Connected</string>
+    <string name="internet_is_connecting">Reconnecting...</string>
+    <string name="no_gps">GPS is deactivated</string>
+    <string name="gps_reactivated">GPS reactivated</string>
 </resources>

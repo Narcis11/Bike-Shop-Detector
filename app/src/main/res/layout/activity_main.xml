@@ -9,7 +9,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    tools:ignore="MergeRootFrame" />
+    tools:ignore="MergeRootFrame" >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:id="@+id/info_textview"
+        android:gravity="center"
+        android:visibility="visible"
+        android:textIsSelectable="false"
+        android:textStyle="normal" />
+</FrameLayout>
     <!-- Listview to display slider menu -->
     <ListView
         android:id="@+id/list_slidermenu"

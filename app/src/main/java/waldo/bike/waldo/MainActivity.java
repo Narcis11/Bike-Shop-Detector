@@ -12,14 +12,21 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.IBinder;
+import android.support.annotation.InterpolatorRes;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +37,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import Utilities.Constants;
 import Utilities.DeviceConnection;
@@ -50,24 +58,25 @@ public class MainActivity extends Activity implements
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private static Context mContext;
     //state variables, used to control application behaviour
-    private static boolean firstLoad = true;
-    private static boolean firstLoadForGPS = true;
-    private static String previousNetworkState = "CONNECTED"; //main activity only loads if there's Internet connection, so it's safe to assign this value
+    private static boolean mFirstLoad = true;
+    private static boolean mFirstLoadForGPS = true;
+    private static String mNetworkState = "CONNECTED"; //main activity only loads if there's Internet connection, so it's safe to assign this value
     private boolean orientationChanged = false;
     private static int previousOrientation = 0;
     private static boolean firstGPSConnection = true; //used to control fragment behaviour in onLocationChanged()
     private static boolean isGPSConnected = false;//used to control fragment behaviour in onResume()
-
     private static String AllShopsMap = "MapsActivity";
     private static String AddShopMap = "AddShopMap";
-
+    Animation mAnimation;
     private static String fragmentTag = "ShopsFragment";
-    private TextView mLocationView;
+    static TextView mInfoTextView;
+    TextView mLocationView;
+    private static MainActivity mainActivity;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     //used to store the user's coordinates
     private static String[] mLatLng = new String[2];
-
+    private static long delayTextViewRemove = 3000;
      //these variables are used for the slider menu
      private DrawerLayout mDrawerLayout;
      private ListView mDrawerList;
@@ -119,7 +128,7 @@ public class MainActivity extends Activity implements
                 .addOnConnectionFailedListener(this)
                 .build();
         mContext = getApplicationContext();
-        if (firstLoadForGPS) {
+        if (mFirstLoadForGPS) {
             previousOrientation = Utility.getScreenOrientation(mContext);
         }
 
@@ -181,6 +190,9 @@ public class MainActivity extends Activity implements
                      // on first time display view for first nav item
                      displayView(0);
                  }*/
+                 mAnimation = AnimationUtils.loadAnimation(mContext,R.anim.internet_connected);
+                 mInfoTextView = (TextView) findViewById(R.id.info_textview);
+                 mainActivity = this;
     }
 
 
@@ -203,7 +215,7 @@ public class MainActivity extends Activity implements
         //random value used to prevent the GPS from disconnecting
         //at every orientation change (onPause() is called before onStop())
         previousOrientation = 4;
-        firstLoadForGPS = false;
+        mFirstLoadForGPS = false;
     }
 
              @Override
@@ -224,22 +236,33 @@ public class MainActivity extends Activity implements
     @Override
     protected void onResume() {
         super.onResume();
-     //   Log.i(LOG_TAG,"in onResume()");
         DeviceConnection deviceConnection = new DeviceConnection(mContext);
-        //checking if the user has disabled GPS
+        Log.i(LOG_TAG,"****in on resume****");
+        Log.i(LOG_TAG,"mNetworkState = " + mNetworkState);
+        //onResume is called by the system from onReceive whenever there's a network change
+        if (mNetworkState.equals(Constants.PREVIOUS_STATE_CONNECTED)) {
+            mInfoTextView.setText(mContext.getResources().getString(R.string.internet_connected));
+            mInfoTextView.setTextColor(Color.WHITE);
+            mInfoTextView.setBackgroundColor(Color.GREEN);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mInfoTextView.setVisibility(View.INVISIBLE);
+                }
+            },delayTextViewRemove);
+
+
+            //checking if the user has disabled GPS
             if (!deviceConnection.checkGpsEnabled()) {
-            Toast.makeText(mContext,"Please activate GPS",Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, "Please activate GPS", Toast.LENGTH_LONG).show();
+            }
+
         }
-        ShopsFragment shopsFragment = (ShopsFragment) getFragmentManager().findFragmentByTag(fragmentTag);
-/*        if (isGPSConnected && shopsFragment == null) { //only display the fragment if it's not already visible and the GPS is connected
-        //    getFragmentManager().beginTransaction().remove(shopsFragment).commit();
-            getFragmentManager().beginTransaction()
-                    .add(R.id.container, new ShopsFragment(),fragmentTag)
-                    .commit();
-            Log.i(LOG_TAG,"Fragment created in onResume");
-        }*/
-
-
+        else {
+            mInfoTextView.setText(mContext.getResources().getString(R.string.no_internet));
+            mInfoTextView.setTextColor(Color.WHITE);
+            mInfoTextView.setBackgroundColor(Color.RED);
+        }
     }
 
     @Override
@@ -268,29 +291,28 @@ public class MainActivity extends Activity implements
         return super.onOptionsItemSelected(item);
     }
 
-
     //used to monitor the state of the network
     public static class MainNetworkReceiver extends BroadcastReceiver {
+      //  private static TextView mInfoTextView;
         public MainNetworkReceiver() {
-
             super();
         }
+
         @Override
         public void onReceive(Context context, Intent intent) {
             DeviceConnection deviceConnection = new DeviceConnection(context);
-            if (!firstLoad) { //if this is the first load of the Activity, we need to ignore network changes
+            if (!mFirstLoad) { //if this is the first load of the Activity, we need to ignore network changes
           //      Log.i(LOG_TAG, "Main Activity: Network state changed!");
                 //we don't display the message if the user turns on wifi when data connection is turned on or viceversa
-                if (deviceConnection.checkInternetConnected() && (!previousNetworkState.equals(Constants.PREVIOUS_STATE_CONNECTED))) {
-                    Toast.makeText(context, "Reconnected!", Toast.LENGTH_SHORT).show();
-                    previousNetworkState = Constants.PREVIOUS_STATE_CONNECTED;
+                if (deviceConnection.checkInternetConnected() && (!mNetworkState.equals(Constants.PREVIOUS_STATE_CONNECTED))) {
+                    Log.i(LOG_TAG, "Reconnected");
+                    mNetworkState = Constants.PREVIOUS_STATE_CONNECTED;
                 }
                 if (deviceConnection.checkInternetDisConnected() && !(deviceConnection.checkInternetConnected() || deviceConnection.checkInternetConnecting())) {
-                    Toast.makeText(context, "Lost Internet Connection!", Toast.LENGTH_SHORT).show();
-                    previousNetworkState = Constants.PREVIOUS_STATE_DISCONNECTED;
+                    mNetworkState = Constants.PREVIOUS_STATE_DISCONNECTED;
                 }
             }
-            firstLoad = false;
+            mFirstLoad = false;
         }
 
     }
