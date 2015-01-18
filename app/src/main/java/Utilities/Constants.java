@@ -6,8 +6,8 @@ package Utilities;
 public class Constants {
 
     //statuses
-    public static final String PREVIOUS_STATE_CONNECTED="CONNECTED";
-    public static final String PREVIOUS_STATE_DISCONNECTED="DISCONNECTED";
+    public static final String NETWORK_STATE_CONNECTED="CONNECTED";
+    public static final String NETWORK_STATE_DISCONNECTED="DISCONNECTED";
     public static final String OK_STATUS = "OK";
     public static final String ZERO_RESULTS = "ZERO_RESULTS";
     public static final String NOT_AVAILABLE="NOT AVAILABLE";

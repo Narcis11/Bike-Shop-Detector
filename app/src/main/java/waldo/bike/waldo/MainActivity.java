@@ -60,7 +60,7 @@ public class MainActivity extends Activity implements
     //state variables, used to control application behaviour
     private static boolean mFirstLoad = true;
     private static boolean mFirstLoadForGPS = true;
-    private static String mNetworkState = "CONNECTED"; //main activity only loads if there's Internet connection, so it's safe to assign this value
+    private static String mNetworkState = Constants.NETWORK_STATE_CONNECTED; //main activity only loads if there's Internet connection, so it's safe to assign this value
     private boolean orientationChanged = false;
     private static int previousOrientation = 0;
     private static boolean firstGPSConnection = true; //used to control fragment behaviour in onLocationChanged()
@@ -117,7 +117,6 @@ public class MainActivity extends Activity implements
         actionBar.setIcon(R.drawable.waldo_action_bar);
         actionBar.setTitle("");
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFFFFF")));
-
         mLocationView = new TextView(this);
 
        // setContentView(mLocationView); CRASHES BECAUSE OF THIS LINE
@@ -192,7 +191,6 @@ public class MainActivity extends Activity implements
                  }*/
                  mAnimation = AnimationUtils.loadAnimation(mContext,R.anim.internet_connected);
                  mInfoTextView = (TextView) findViewById(R.id.info_textview);
-                 mainActivity = this;
     }
 
 
@@ -237,32 +235,40 @@ public class MainActivity extends Activity implements
     protected void onResume() {
         super.onResume();
         DeviceConnection deviceConnection = new DeviceConnection(mContext);
-        Log.i(LOG_TAG,"****in on resume****");
-        Log.i(LOG_TAG,"mNetworkState = " + mNetworkState);
+        Log.i(LOG_TAG,"onResume()|mFirstLoad = " + mFirstLoad);
+        Log.i(LOG_TAG,"onResume()|mNetworkState = " + mNetworkState);
         //onResume is called by the system from onReceive whenever there's a network change
-        if (mNetworkState.equals(Constants.PREVIOUS_STATE_CONNECTED)) {
-            mInfoTextView.setText(mContext.getResources().getString(R.string.internet_connected));
-            mInfoTextView.setTextColor(Color.WHITE);
-            mInfoTextView.setBackgroundColor(Color.GREEN);
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mInfoTextView.setVisibility(View.INVISIBLE);
+        //we don't display the message if the user turns on wifi when data connection is turned on or viceversa
+        if (!mFirstLoad) {
+            if (deviceConnection.checkInternetConnected() && (!mNetworkState.equals(Constants.NETWORK_STATE_CONNECTED))) {
+                Log.i(LOG_TAG,"onResume()|Connected");
+                mNetworkState = Constants.NETWORK_STATE_CONNECTED;
+                mInfoTextView.setText(mContext.getResources().getString(R.string.internet_connected));
+                mInfoTextView.setTextColor(Color.WHITE);
+                mInfoTextView.setBackgroundColor(Color.GREEN);
+                //remove the message after three seconds
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mInfoTextView.setVisibility(View.INVISIBLE);
+                    }
+                }, delayTextViewRemove);
+
+
+                //checking if the user has disabled GPS
+                if (!deviceConnection.checkGpsEnabled()) {
+                    Toast.makeText(mContext, "Please activate GPS", Toast.LENGTH_LONG).show();
                 }
-            },delayTextViewRemove);
 
-
-            //checking if the user has disabled GPS
-            if (!deviceConnection.checkGpsEnabled()) {
-                Toast.makeText(mContext, "Please activate GPS", Toast.LENGTH_LONG).show();
+            } else if (deviceConnection.checkInternetDisConnected() && !(deviceConnection.checkInternetConnected() || deviceConnection.checkInternetConnecting())) {
+                Log.i(LOG_TAG,"onResume()|Disconnected");
+                mNetworkState = Constants.NETWORK_STATE_DISCONNECTED;
+                mInfoTextView.setText(mContext.getResources().getString(R.string.no_internet));
+                mInfoTextView.setTextColor(Color.WHITE);
+                mInfoTextView.setBackgroundColor(Color.RED);
             }
-
         }
-        else {
-            mInfoTextView.setText(mContext.getResources().getString(R.string.no_internet));
-            mInfoTextView.setTextColor(Color.WHITE);
-            mInfoTextView.setBackgroundColor(Color.RED);
-        }
+        mFirstLoad = false;
     }
 
     @Override
@@ -301,18 +307,8 @@ public class MainActivity extends Activity implements
         @Override
         public void onReceive(Context context, Intent intent) {
             DeviceConnection deviceConnection = new DeviceConnection(context);
-            if (!mFirstLoad) { //if this is the first load of the Activity, we need to ignore network changes
-          //      Log.i(LOG_TAG, "Main Activity: Network state changed!");
-                //we don't display the message if the user turns on wifi when data connection is turned on or viceversa
-                if (deviceConnection.checkInternetConnected() && (!mNetworkState.equals(Constants.PREVIOUS_STATE_CONNECTED))) {
-                    Log.i(LOG_TAG, "Reconnected");
-                    mNetworkState = Constants.PREVIOUS_STATE_CONNECTED;
-                }
-                if (deviceConnection.checkInternetDisConnected() && !(deviceConnection.checkInternetConnected() || deviceConnection.checkInternetConnecting())) {
-                    mNetworkState = Constants.PREVIOUS_STATE_DISCONNECTED;
-                }
-            }
-            mFirstLoad = false;
+            Log.i(LOG_TAG,"In onReceive");
+            //onResume is called by the system from onReceive. We moved the code there.
         }
 
     }
