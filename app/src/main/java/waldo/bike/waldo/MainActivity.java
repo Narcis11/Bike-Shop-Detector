@@ -61,9 +61,10 @@ public class MainActivity extends Activity implements
     private static boolean mFirstLoad = true;
     private static boolean mFirstLoadForGPS = true;
     private static String mNetworkState = Constants.NETWORK_STATE_CONNECTED; //main activity only loads if there's Internet connection, so it's safe to assign this value
-    private boolean orientationChanged = false;
-    private static int previousOrientation = 0;
-    private static boolean firstGPSConnection = true; //used to control fragment behaviour in onLocationChanged()
+    private static int mPreviousOrientation = 0;
+    private static boolean mIsGpsMessageDisplayed;
+    private static boolean mIsInternetMessageDisplayed;
+    private static boolean mFirstGPSConnection = true; //used to control fragment behaviour in onLocationChanged()
     private static boolean isGPSConnected = false;//used to control fragment behaviour in onResume()
     private static String AllShopsMap = "MapsActivity";
     private static String AddShopMap = "AddShopMap";
@@ -71,7 +72,6 @@ public class MainActivity extends Activity implements
     private static String fragmentTag = "ShopsFragment";
     static TextView mInfoTextView;
     TextView mLocationView;
-    private static MainActivity mainActivity;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     //used to store the user's coordinates
@@ -128,7 +128,7 @@ public class MainActivity extends Activity implements
                 .build();
         mContext = getApplicationContext();
         if (mFirstLoadForGPS) {
-            previousOrientation = Utility.getScreenOrientation(mContext);
+            mPreviousOrientation = Utility.getScreenOrientation(mContext);
         }
 
      //this piece of code is used for creating the slider menu
@@ -199,7 +199,7 @@ public class MainActivity extends Activity implements
     protected void onStart() {
         super.onStart();
       //  Log.i(LOG_TAG,"in onStart()");
-        if (previousOrientation  != 4 ) {
+        if (mPreviousOrientation  != 4 ) {
             mGoogleApiClient.connect();
         }
 
@@ -212,14 +212,14 @@ public class MainActivity extends Activity implements
     //    Log.i(LOG_TAG,"in onPause");
         //random value used to prevent the GPS from disconnecting
         //at every orientation change (onPause() is called before onStop())
-        previousOrientation = 4;
+        mPreviousOrientation = 4;
         mFirstLoadForGPS = false;
     }
 
              @Override
     protected void onStop() {
         super.onStop();
-        if (previousOrientation != 4 ) {
+        if (mPreviousOrientation != 4 ) {
             mGoogleApiClient.disconnect();
         }
     }
@@ -236,38 +236,44 @@ public class MainActivity extends Activity implements
         super.onResume();
         DeviceConnection deviceConnection = new DeviceConnection(mContext);
         Log.i(LOG_TAG,"onResume()|mFirstLoad = " + mFirstLoad);
-        Log.i(LOG_TAG,"onResume()|mNetworkState = " + mNetworkState);
+      //  Log.i(LOG_TAG,"onResume()|mNetworkState = " + mNetworkState);
         //onResume is called by the system from onReceive whenever there's a network change
         //we don't display the message if the user turns on wifi when data connection is turned on or viceversa
         if (!mFirstLoad) {
             if (deviceConnection.checkInternetConnected() && (!mNetworkState.equals(Constants.NETWORK_STATE_CONNECTED))) {
                 Log.i(LOG_TAG,"onResume()|Connected");
-                mNetworkState = Constants.NETWORK_STATE_CONNECTED;
-                mInfoTextView.setText(mContext.getResources().getString(R.string.internet_connected));
-                mInfoTextView.setTextColor(Color.WHITE);
-                mInfoTextView.setBackgroundColor(Color.GREEN);
-                //remove the message after three seconds
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mInfoTextView.setVisibility(View.INVISIBLE);
-                    }
-                }, delayTextViewRemove);
-
-
-                //checking if the user has disabled GPS
-                if (!deviceConnection.checkGpsEnabled()) {
-                    Toast.makeText(mContext, "Please activate GPS", Toast.LENGTH_LONG).show();
+                mIsInternetMessageDisplayed = false;
+                if (!mIsGpsMessageDisplayed) {
+                    mInfoTextView.setVisibility(View.INVISIBLE);
                 }
-
-            } else if (deviceConnection.checkInternetDisConnected() && !(deviceConnection.checkInternetConnected() || deviceConnection.checkInternetConnecting())) {
+            } else if (deviceConnection.checkInternetDisConnected() && !(deviceConnection.checkInternetConnected()
+                    || deviceConnection.checkInternetConnecting())) {
                 Log.i(LOG_TAG,"onResume()|Disconnected");
                 mNetworkState = Constants.NETWORK_STATE_DISCONNECTED;
+                mIsInternetMessageDisplayed = true;
+                mInfoTextView.setVisibility(View.VISIBLE);
                 mInfoTextView.setText(mContext.getResources().getString(R.string.no_internet));
                 mInfoTextView.setTextColor(Color.WHITE);
                 mInfoTextView.setBackgroundColor(Color.RED);
             }
-        }
+            //checking if GPS is enabled
+            if (!deviceConnection.checkGpsEnabled()) {
+                Log.i(LOG_TAG,"onResume()|GPS disabled");
+                mIsGpsMessageDisplayed = true;
+                mInfoTextView.setVisibility(View.VISIBLE);
+                mInfoTextView.setText(mContext.getResources().getString(R.string.no_gps));
+                mInfoTextView.setTextColor(Color.WHITE);
+                mInfoTextView.setBackgroundColor(Color.RED);
+            }
+            else if (deviceConnection.checkGpsEnabled() ) {
+                Log.i(LOG_TAG,"onResume()|GPS enabled");
+                mIsGpsMessageDisplayed = false;
+                if (!mIsInternetMessageDisplayed) {
+                    mInfoTextView.setVisibility(View.INVISIBLE);
+                }
+            }
+            }
+
         mFirstLoad = false;
     }
 
@@ -328,14 +334,14 @@ public class MainActivity extends Activity implements
            GlobalState.longitude = mLatLng[1];
         }*/
 
-        if (firstGPSConnection) {
+        if (mFirstGPSConnection) {
             mLatLng = Utility.getLatLngFromLocation(location.toString());
             GlobalState.USER_LAT = mLatLng[0];
             GlobalState.USER_LNG = mLatLng[1];
             //ShopsFragment shopsFragment = new ShopsFragment();
             //shopsFragment.updateShopList();
         }
-            firstGPSConnection = false;
+            mFirstGPSConnection = false;
     }
 
     @Override
