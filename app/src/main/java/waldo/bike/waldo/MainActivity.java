@@ -306,7 +306,7 @@ public class MainActivity extends Activity implements
                     if (!mIsGpsMessageDisplayed) {
                         mInfoTextView.setVisibility(View.INVISIBLE);
                     }
-                    else {
+                    else { //if both GPS and Internet are turned off, and the user turns on only the Internet, we still have to display the message for the GPS
                         mInfoTextView.setVisibility(View.VISIBLE);
                         mInfoTextView.setText(mContext.getResources().getString(R.string.no_gps));
                         mInfoTextView.setTextColor(Color.WHITE);
