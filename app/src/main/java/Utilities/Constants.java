@@ -55,6 +55,7 @@ public class Constants {
 
     //used in every method that returns a String
     public static final String RETURN_ERROR_STRING = "ERROR";
-
+    //used by the activities that listen to network changes
+    public static final String BROADCAST_ACTION = "android.net.conn.CONNECTIVITY_CHANGE";
 
 }

@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ public class SplashScreen extends Activity{
     static AlertDialog staticDialog = null;
     private static final String LOG_TAG = SplashScreen.class.getSimpleName();
     private static Context mContext;
+    private IntentFilter mIntentFilter;
     private static boolean isGPSEnabled = false;
     private static boolean isInternetEnabled = false;
     @Override
@@ -38,20 +40,26 @@ public class SplashScreen extends Activity{
             }
         }, Constants.SPLASH_TIME_OUT);*/
         mContext = getApplicationContext(); //needed to start the Main Activity
+        //instantiate the filter and assign a value
+        mIntentFilter = new IntentFilter();
+        mIntentFilter.addAction(Constants.BROADCAST_ACTION);
         //instantiante the action bar
         ActionBar actionBar = getActionBar();
         actionBar.setIcon(R.drawable.waldo_action_bar);
         actionBar.setTitle("");
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFFFFF")));
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        registerReceiver(mBroadcastReceiver, mIntentFilter);
+        Log.i(LOG_TAG,"Registered receiver in onResume()");
         DeviceConnection deviceConnection = new DeviceConnection(getApplicationContext());
         //check if there's Internet Connection
+        Log.i(LOG_TAG,"in onResume");
         if (!deviceConnection.checkGpsEnabled()) {
-           // Log.i(LOG_TAG, "in OnResume() GPS");
             showGPSDisabledAlertToUser();
         }
         else {
@@ -59,14 +67,27 @@ public class SplashScreen extends Activity{
         }
 
         if (!deviceConnection.checkInternetConnected()){
-            Log.i(LOG_TAG, "in OnResume() Internet");
+            Log.i(LOG_TAG,"Internet disabled in splash screen");
             showInternetDisabledAlertToUser();
+            isInternetEnabled = false;
         }
         else {
+            Log.i(LOG_TAG,"Internet enabled in splash screen");
             isInternetEnabled = true;
         }
         //Log.i(LOG_TAG,"Outside if in onResume()");
         if (isGPSEnabled && isInternetEnabled) {
+            Log.i(LOG_TAG,"Started main activity in onResume");
+            startMainActivity(mContext);
+        }
+
+        if ((staticDialog != null) && staticDialog.isShowing()) {
+            staticDialog.cancel();
+            isInternetEnabled = true;
+        }
+        //onReceive is also called whenever we register the receiver in onResume, so we also have to double-check that the Internet is on
+        if (isGPSEnabled && isInternetEnabled) {
+            Log.i(LOG_TAG,"Started main activity in onReceive");
             startMainActivity(mContext);
         }
     }
@@ -94,6 +115,35 @@ public class SplashScreen extends Activity{
 
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        try {
+            if (mBroadcastReceiver != null) {
+                unregisterReceiver(mBroadcastReceiver);
+            }
+        }
+        catch (IllegalArgumentException e) {
+            Log.e(LOG_TAG,e.toString());
+        }
+    }
+
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.i(LOG_TAG,"***onReceive from Splash Screen***");
+/*                if ((staticDialog != null) && staticDialog.isShowing()) {
+                    staticDialog.cancel();
+                    isInternetEnabled = true;
+                }
+            //onReceive is also called whenever we register the receiver in onResume, so we also have to double-check that the Internet is on
+            if (isGPSEnabled && isInternetEnabled) {
+                Log.i(LOG_TAG,"Started main activity in onReceive");
+                startMainActivity(mContext);
+            }*/
+        }
+    };
+
     private void showGPSDisabledAlertToUser(){
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setMessage(R.string.gps_is_disabled)
@@ -111,12 +161,13 @@ public class SplashScreen extends Activity{
     }
 
 
-    public static class NetworkChangeReceiver extends BroadcastReceiver {
+/*    public static class NetworkChangeReceiver extends BroadcastReceiver {
         public NetworkChangeReceiver() {
             super();
         }
         @Override
         public void onReceive(Context context, Intent intent) {
+            Log.i(LOG_TAG,"***onReceive from Splash Screen***");
             if ((staticDialog != null) && staticDialog.isShowing()) {
                 staticDialog.cancel();
             }
@@ -124,7 +175,7 @@ public class SplashScreen extends Activity{
                 startMainActivity(mContext);
             }
         }
-    }
+    }*/
 
     public static void startMainActivity(Context c) {
         Intent MainActivityIntent = new Intent(c,MainActivity.class);

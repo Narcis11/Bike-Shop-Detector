@@ -5,6 +5,7 @@ import android.app.ActionBar;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.database.Cursor;
@@ -64,6 +65,7 @@ public class MainActivity extends Activity implements
     private static int mPreviousOrientation = 0;
     private static boolean mIsGpsMessageDisplayed;
     private static boolean mIsInternetMessageDisplayed;
+    private IntentFilter mIntentFilter;
     private static boolean mFirstGPSConnection = true; //used to control fragment behaviour in onLocationChanged()
     private static boolean isGPSConnected = false;//used to control fragment behaviour in onResume()
     private static String AllShopsMap = "MapsActivity";
@@ -120,13 +122,16 @@ public class MainActivity extends Activity implements
         mLocationView = new TextView(this);
 
        // setContentView(mLocationView); CRASHES BECAUSE OF THIS LINE
-
+        //register the Google Api Client
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(LocationServices.API)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .build();
         mContext = getApplicationContext();
+        //instantiate the intent filter used by the broadcast receiver
+        mIntentFilter = new IntentFilter();
+        mIntentFilter.addAction(Constants.BROADCAST_ACTION);
         if (mFirstLoadForGPS) {
             mPreviousOrientation = Utility.getScreenOrientation(mContext);
         }
@@ -209,6 +214,7 @@ public class MainActivity extends Activity implements
     @Override
     protected void onPause() {
         super.onPause();
+        unregisterReceiver(mBroadcastReceiver);
     //    Log.i(LOG_TAG,"in onPause");
         //random value used to prevent the GPS from disconnecting
         //at every orientation change (onPause() is called before onStop())
@@ -234,28 +240,14 @@ public class MainActivity extends Activity implements
     @Override
     protected void onResume() {
         super.onResume();
+        //register the broadcast receiver
+        registerReceiver(mBroadcastReceiver,mIntentFilter);
         DeviceConnection deviceConnection = new DeviceConnection(mContext);
         Log.i(LOG_TAG,"onResume()|mFirstLoad = " + mFirstLoad);
       //  Log.i(LOG_TAG,"onResume()|mNetworkState = " + mNetworkState);
         //onResume is called by the system from onReceive whenever there's a network change
         //we don't display the message if the user turns on wifi when data connection is turned on or viceversa
-        if (!mFirstLoad) {
-            if (deviceConnection.checkInternetConnected() && (!mNetworkState.equals(Constants.NETWORK_STATE_CONNECTED))) {
-                Log.i(LOG_TAG,"onResume()|Connected");
-                mIsInternetMessageDisplayed = false;
-                if (!mIsGpsMessageDisplayed) {
-                    mInfoTextView.setVisibility(View.INVISIBLE);
-                }
-            } else if (deviceConnection.checkInternetDisConnected() && !(deviceConnection.checkInternetConnected()
-                    || deviceConnection.checkInternetConnecting())) {
-                Log.i(LOG_TAG,"onResume()|Disconnected");
-                mNetworkState = Constants.NETWORK_STATE_DISCONNECTED;
-                mIsInternetMessageDisplayed = true;
-                mInfoTextView.setVisibility(View.VISIBLE);
-                mInfoTextView.setText(mContext.getResources().getString(R.string.no_internet));
-                mInfoTextView.setTextColor(Color.WHITE);
-                mInfoTextView.setBackgroundColor(Color.RED);
-            }
+        //if (!mFirstLoad) {
             //checking if GPS is enabled
             if (!deviceConnection.checkGpsEnabled()) {
                 Log.i(LOG_TAG,"onResume()|GPS disabled");
@@ -272,7 +264,7 @@ public class MainActivity extends Activity implements
                     mInfoTextView.setVisibility(View.INVISIBLE);
                 }
             }
-            }
+          //  }
 
         mFirstLoad = false;
     }
@@ -303,8 +295,38 @@ public class MainActivity extends Activity implements
         return super.onOptionsItemSelected(item);
     }
 
+     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+             public void onReceive(Context context, Intent intent) {
+                Log.i(LOG_TAG,"In new onReceive");
+                DeviceConnection deviceConnection = new DeviceConnection(mContext);
+                if (deviceConnection.checkInternetConnected() && (!mNetworkState.equals(Constants.NETWORK_STATE_CONNECTED))) {
+                    Log.i(LOG_TAG,"---onReceive()|Connected---");
+                    mIsInternetMessageDisplayed = false;
+                    if (!mIsGpsMessageDisplayed) {
+                        mInfoTextView.setVisibility(View.INVISIBLE);
+                    }
+                    else {
+                        mInfoTextView.setVisibility(View.VISIBLE);
+                        mInfoTextView.setText(mContext.getResources().getString(R.string.no_gps));
+                        mInfoTextView.setTextColor(Color.WHITE);
+                        mInfoTextView.setBackgroundColor(Color.RED);
+                    }
+                }
+                else if (deviceConnection.checkInternetDisConnected() && !(deviceConnection.checkInternetConnected()
+                        || deviceConnection.checkInternetConnecting())) {
+                    Log.i(LOG_TAG,"---onReceive()|Disconnected---");
+                    mNetworkState = Constants.NETWORK_STATE_DISCONNECTED;
+                    mIsInternetMessageDisplayed = true;
+                    mInfoTextView.setVisibility(View.VISIBLE);
+                    mInfoTextView.setText(mContext.getResources().getString(R.string.no_internet));
+                    mInfoTextView.setTextColor(Color.WHITE);
+                    mInfoTextView.setBackgroundColor(Color.RED);
+                }
+             }
+     };
     //used to monitor the state of the network
-    public static class MainNetworkReceiver extends BroadcastReceiver {
+/*    public static class MainNetworkReceiver extends BroadcastReceiver {
       //  private static TextView mInfoTextView;
         public MainNetworkReceiver() {
             super();
@@ -314,10 +336,11 @@ public class MainActivity extends Activity implements
         public void onReceive(Context context, Intent intent) {
             DeviceConnection deviceConnection = new DeviceConnection(context);
             Log.i(LOG_TAG,"In onReceive");
+            //TODO: FInd out why the app is brought to the foreground whenever the network state changes and STOP THIS BEVAHIOUR!
             //onResume is called by the system from onReceive. We moved the code there.
         }
 
-    }
+    }*/
     //required methods for managing the location
     @Override
     public void onLocationChanged(Location location) {

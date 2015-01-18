@@ -45,16 +45,8 @@
             android:theme="@style/Theme.AppCompat"
             android:label="@string/app_name" >
         </activity>
-        <receiver android:name=".SplashScreen$NetworkChangeReceiver" >
-            <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-            </intent-filter>
-        </receiver>
-        <receiver android:name=".MainActivity$MainNetworkReceiver" >
-            <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-            </intent-filter>
-        </receiver>
+
+
 
         <activity
             android:name=".SettingsActivity"
