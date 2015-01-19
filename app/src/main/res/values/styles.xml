@@ -4,7 +4,7 @@
     <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="android:itemTextAppearance">@color/waldo_light_blue</item>
-        <item name="android:actionOverflowButtonStyle">@style/OverFlow</item>
+        <item name="android:actionOverflowButtonStyle">@color/waldo_light_blue</item>
        <!-- <item name="android:background">@color/white</item>
         <item name="android:title"></item>
         <item name="android:icon">@drawable/waldo_action_bar</item> -->
