@@ -48,8 +48,6 @@ public class SliderDrawerListAdapter extends BaseAdapter {
                     mContext.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
             convertView = mInflater.inflate(R.layout.drawer_list_item, null);
         }
-        Log.i(LOG_TAG,"In getView");
-        Log.i(LOG_TAG,"Title is: " + navDrawerItems.get(position).getTitle());
         ImageView imgIcon = (ImageView) convertView.findViewById(R.id.icon);
         TextView txtTitle = (TextView) convertView.findViewById(R.id.title);
         TextView txtCount = (TextView) convertView.findViewById(R.id.counter);

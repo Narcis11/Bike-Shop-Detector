@@ -131,4 +131,5 @@
     <string name="internet_is_connecting">Reconnecting...</string>
     <string name="no_gps">GPS is deactivated</string>
     <string name="gps_reactivated">GPS reactivated</string>
+    <string name="no_app_available">No installed application to service this request</string>
 </resources>

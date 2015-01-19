@@ -6,12 +6,15 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -38,6 +41,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import Utilities.Constants;
@@ -151,9 +155,9 @@ public class MainActivity extends Activity implements
 
                  // adding nav drawer items to array
                  // Add a shop
-                 navDrawerItems.add(new SliderDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
+                 navDrawerItems.add(new SliderDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0,-1)));
                  // View all shops
-                 navDrawerItems.add(new SliderDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1)));
+                 navDrawerItems.add(new SliderDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1,-1)));
                  //About
                  navDrawerItems.add(new SliderDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2,-1)));
                  //Website
@@ -424,10 +428,36 @@ public class MainActivity extends Activity implements
             else if (position == 1) { //view all shops
                 openMap(AllShopsMap);
             }
+            else if (position == 4) {
+                openFacebookApp();
+            }
         }
     }
 
-    public void openMap(String mapToOpen) {
+    private void openFacebookApp() {
+        String url = "https://www.facebook.com/waldotheknight";
+        //367189063436001 is the profile id of Waldo
+        String uri = "fb://page/367189063436001";
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        // If a Facebook app is installed, use it. Otherwise, launch
+        // a browser
+        intent.setData(Uri.parse(uri));
+        final PackageManager packageManager = getPackageManager();
+        List<ResolveInfo> list =
+                packageManager.queryIntentActivities(intent,
+                        PackageManager.MATCH_DEFAULT_ONLY);
+        if (list.size() == 0) {
+            intent.setData(Uri.parse(url));
+        }
+        try {
+            startActivity(intent);
+        }
+        catch (Exception e) {//no app is installed to service this request
+            Toast.makeText(mContext,getResources().getString(R.string.no_app_available),Toast.LENGTH_SHORT).show();
+        }
+    }
+
+             public void openMap(String mapToOpen) {
 
         if (mapToOpen.equals(AllShopsMap)) {
             Cursor cursor = mContext.getApplicationContext().getContentResolver().query(
