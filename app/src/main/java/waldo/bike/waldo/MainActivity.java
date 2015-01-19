@@ -78,7 +78,6 @@ public class MainActivity extends Activity implements
     private LocationRequest mLocationRequest;
     //used to store the user's coordinates
     private static String[] mLatLng = new String[2];
-    private static long delayTextViewRemove = 3000;
      //these variables are used for the slider menu
      private DrawerLayout mDrawerLayout;
      private ListView mDrawerList;
@@ -112,7 +111,6 @@ public class MainActivity extends Activity implements
                       .add(R.id.container, new ShopsFragment(),fragmentTag)
                       .commit();
          }
-    //    Log.i(LOG_TAG,"in onCreate()");
         //instantiante the action bar
         //TODO: Load the action bar from the XML resource
         ActionBar actionBar = getActionBar();
@@ -156,7 +154,8 @@ public class MainActivity extends Activity implements
                  navDrawerItems.add(new SliderDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
                  // Find Communities
                  navDrawerItems.add(new SliderDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1)));
-
+                 //About
+                 navDrawerItems.add(new SliderDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2,-1)));
 
                  // Recycle the typed array
                  navMenuIcons.recycle();
@@ -243,14 +242,12 @@ public class MainActivity extends Activity implements
         //register the broadcast receiver
         registerReceiver(mBroadcastReceiver,mIntentFilter);
         DeviceConnection deviceConnection = new DeviceConnection(mContext);
-        Log.i(LOG_TAG,"onResume()|mFirstLoad = " + mFirstLoad);
       //  Log.i(LOG_TAG,"onResume()|mNetworkState = " + mNetworkState);
         //onResume is called by the system from onReceive whenever there's a network change
         //we don't display the message if the user turns on wifi when data connection is turned on or viceversa
         //if (!mFirstLoad) {
             //checking if GPS is enabled
             if (!deviceConnection.checkGpsEnabled()) {
-                Log.i(LOG_TAG,"onResume()|GPS disabled");
                 mIsGpsMessageDisplayed = true;
                 mInfoTextView.setVisibility(View.VISIBLE);
                 mInfoTextView.setText(mContext.getResources().getString(R.string.no_gps));
@@ -258,7 +255,6 @@ public class MainActivity extends Activity implements
                 mInfoTextView.setBackgroundColor(Color.RED);
             }
             else if (deviceConnection.checkGpsEnabled() ) {
-                Log.i(LOG_TAG,"onResume()|GPS enabled");
                 mIsGpsMessageDisplayed = false;
                 if (!mIsInternetMessageDisplayed) {
                     mInfoTextView.setVisibility(View.INVISIBLE);
@@ -298,10 +294,8 @@ public class MainActivity extends Activity implements
      private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
             @Override
              public void onReceive(Context context, Intent intent) {
-                Log.i(LOG_TAG,"In new onReceive");
                 DeviceConnection deviceConnection = new DeviceConnection(mContext);
                 if (deviceConnection.checkInternetConnected() && (!mNetworkState.equals(Constants.NETWORK_STATE_CONNECTED))) {
-                    Log.i(LOG_TAG,"---onReceive()|Connected---");
                     mIsInternetMessageDisplayed = false;
                     if (!mIsGpsMessageDisplayed) {
                         mInfoTextView.setVisibility(View.INVISIBLE);
@@ -315,7 +309,6 @@ public class MainActivity extends Activity implements
                 }
                 else if (deviceConnection.checkInternetDisConnected() && !(deviceConnection.checkInternetConnected()
                         || deviceConnection.checkInternetConnecting())) {
-                    Log.i(LOG_TAG,"---onReceive()|Disconnected---");
                     mNetworkState = Constants.NETWORK_STATE_DISCONNECTED;
                     mIsInternetMessageDisplayed = true;
                     mInfoTextView.setVisibility(View.VISIBLE);
@@ -325,22 +318,6 @@ public class MainActivity extends Activity implements
                 }
              }
      };
-    //used to monitor the state of the network
-/*    public static class MainNetworkReceiver extends BroadcastReceiver {
-      //  private static TextView mInfoTextView;
-        public MainNetworkReceiver() {
-            super();
-        }
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            DeviceConnection deviceConnection = new DeviceConnection(context);
-            Log.i(LOG_TAG,"In onReceive");
-            //TODO: FInd out why the app is brought to the foreground whenever the network state changes and STOP THIS BEVAHIOUR!
-            //onResume is called by the system from onReceive. We moved the code there.
-        }
-
-    }*/
     //required methods for managing the location
     @Override
     public void onLocationChanged(Location location) {

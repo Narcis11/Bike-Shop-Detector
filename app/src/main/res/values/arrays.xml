@@ -57,6 +57,7 @@
     <string-array name="nav_drawer_items_array">
         <item>@string/add_a_shop</item>
         <item>@string/view_all_shops</item>
+        <item>@string/about</item>
     </string-array>
 
     <!-- Nav Drawer List Item Icons -->
@@ -65,6 +66,7 @@
     <array name="nav_drawer_icons_array">
         <item>@drawable/ic_home</item>
         <item>@drawable/ic_communities</item>
+        <item>@drawable/twitter_icon</item>
     </array>
 
 </resources>

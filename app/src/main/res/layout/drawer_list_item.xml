@@ -22,10 +22,11 @@
         android:layout_toRightOf="@id/icon"
         android:minHeight="?android:attr/listPreferredItemHeightSmall"
         android:textAppearance="?android:attr/textAppearanceListItemSmall"
-        android:textColor="@color/list_item_title"
+        android:textColor="@color/white"
         android:gravity="center_vertical"
         android:paddingRight="40dp"/>
 
+<!--This is a counter, we may not use it. We'll leave it here for the moment-->
     <TextView android:id="@+id/counter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -33,5 +34,6 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="8dp"
-        android:textColor="@color/counter_text_color"/>
+        android:textColor="@color/invalid_field_color"/>
+
 </RelativeLayout>

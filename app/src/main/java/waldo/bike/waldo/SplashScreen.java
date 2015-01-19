@@ -32,7 +32,6 @@ public class SplashScreen extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         mContext = getApplicationContext(); //needed to start the Main Activity
-        Log.i(LOG_TAG,"mContext in onCreate " + mContext.toString());
         //instantiate the filter and assign a value
         mIntentFilter = new IntentFilter();
         mIntentFilter.addAction(Constants.BROADCAST_ACTION);
@@ -58,11 +57,9 @@ public class SplashScreen extends Activity{
         }
         //Log.i(LOG_TAG,"Outside if in onResume()");
         if (isGPSEnabled && isInternetEnabled) {
-            Log.i(LOG_TAG,"Started main activity in onResume");
             startMainActivity(mContext);
         }
         registerReceiver(mBroadcastReceiver, mIntentFilter);
-        Log.i(LOG_TAG,"Registered receiver in onResume()");
     }
 
     @Override
@@ -105,17 +102,14 @@ public class SplashScreen extends Activity{
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.i(LOG_TAG, "***onReceive from Splash Screen***");
             //onReceive is called every time the receiver is registered in onResume. We check for the internet connectivity here and for the GPS
             //in onResume.
             if (mContext != null) {
                 DeviceConnection deviceConnection = new DeviceConnection(mContext);
                 if (!deviceConnection.checkInternetConnected()) {
-                    Log.i(LOG_TAG, "Internet disabled in splash screen");
                     showInternetDisabledAlertToUser();
                     isInternetEnabled = false;
                 } else {
-                    Log.i(LOG_TAG, "Internet enabled in splash screen");
                     isInternetEnabled = true;
                     if ((staticDialog != null) && staticDialog.isShowing()) {
                         staticDialog.cancel();
@@ -123,7 +117,6 @@ public class SplashScreen extends Activity{
                     }
                     //onReceive is also called whenever we register the receiver in onResume, so we also have to double-check that the Internet is on
                     if (isGPSEnabled && isInternetEnabled) {
-                        Log.i(LOG_TAG, "Started main activity in onReceive");
                         startMainActivity(mContext);
                     }
                 }
@@ -149,22 +142,6 @@ public class SplashScreen extends Activity{
         alert.show();
     }
 
-
-/*    public static class NetworkChangeReceiver extends BroadcastReceiver {
-        public NetworkChangeReceiver() {
-            super();
-        }
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Log.i(LOG_TAG,"***onReceive from Splash Screen***");
-            if ((staticDialog != null) && staticDialog.isShowing()) {
-                staticDialog.cancel();
-            }
-            if (isGPSEnabled) {
-                startMainActivity(mContext);
-            }
-        }
-    }*/
 
     public static void startMainActivity(Context c) {
         Intent MainActivityIntent = new Intent(c,MainActivity.class);

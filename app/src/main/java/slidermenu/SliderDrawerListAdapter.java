@@ -2,6 +2,7 @@ package slidermenu;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,7 @@ import waldo.bike.waldo.R;
 public class SliderDrawerListAdapter extends BaseAdapter {
     private Context mContext;
     private ArrayList<SliderDrawerItem> navDrawerItems;
-
+    private static final String LOG_TAG = SliderDrawerListAdapter.class.getSimpleName();
     public SliderDrawerListAdapter(Context context, ArrayList<SliderDrawerItem> navDrawerItems){
         this.mContext = context;
         this.navDrawerItems = navDrawerItems;
@@ -47,10 +48,12 @@ public class SliderDrawerListAdapter extends BaseAdapter {
                     mContext.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
             convertView = mInflater.inflate(R.layout.drawer_list_item, null);
         }
-
+        Log.i(LOG_TAG,"In getView");
+        Log.i(LOG_TAG,"Title is: " + navDrawerItems.get(position).getTitle());
         ImageView imgIcon = (ImageView) convertView.findViewById(R.id.icon);
         TextView txtTitle = (TextView) convertView.findViewById(R.id.title);
         TextView txtCount = (TextView) convertView.findViewById(R.id.counter);
+
 
         imgIcon.setImageResource(navDrawerItems.get(position).getIcon());
         txtTitle.setText(navDrawerItems.get(position).getTitle());
@@ -59,6 +62,7 @@ public class SliderDrawerListAdapter extends BaseAdapter {
         // check whether it set visible or not
         if(navDrawerItems.get(position).getCounterVisibility()){
             txtCount.setText(navDrawerItems.get(position).getCount());
+            Log.i(LOG_TAG,"Text is: " + navDrawerItems.get(position).getCount());
         }else{
             // hide the counter view
             txtCount.setVisibility(View.GONE);
