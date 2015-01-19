@@ -150,12 +150,18 @@ public class MainActivity extends Activity implements
                  navDrawerItems = new ArrayList<SliderDrawerItem>();
 
                  // adding nav drawer items to array
-                 // Home
+                 // Add a shop
                  navDrawerItems.add(new SliderDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
-                 // Find Communities
+                 // View all shops
                  navDrawerItems.add(new SliderDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1)));
                  //About
                  navDrawerItems.add(new SliderDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2,-1)));
+                 //Website
+                 navDrawerItems.add(new SliderDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3,-1)));
+                 //Facebook
+                 navDrawerItems.add(new SliderDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(4,-1)));
+                 //Twitter
+                 navDrawerItems.add(new SliderDrawerItem(navMenuTitles[5], navMenuIcons.getResourceId(5,-1)));
 
                  // Recycle the typed array
                  navMenuIcons.recycle();
