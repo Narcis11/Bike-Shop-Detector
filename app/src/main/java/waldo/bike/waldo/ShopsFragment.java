@@ -228,51 +228,6 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
         if (GlobalState.FRAGMENT_SPEED != null && !GlobalState.FRAGMENT_SPEED.equals(Utility.getPreferredSpeed(getActivity())) && !mIsListRefreshed) {
             mIsSpeedChanged = true;
             getLoaderManager().restartLoader(SHOPS_LOADER_ID,null,this);
-            //TODO: restarting the Loader doesn't mean that the speed is refreshed. Find another way to refresh the speed.
-           /* mShopsAdapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
-                @Override
-                public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
-                    Log.i(LOG_TAG,"columnIndex is: " + columnIndex);
-                    switch (columnIndex){
-                        case COL_DISTANCE_TO_USER:
-                            //    Log.i(LOG_TAG,"Shopname / distance: " + cursor.getString(COL_SHOP_NAME) + " / " + cursor.getString(COL_DISTANCE_TO_USER));
-                            mPreferredUnit = Utility.getPreferredUnit(getActivity());
-                            if (mPreferredUnit.equals(getResources().getString(R.string.unit_array_metric))) {
-                                mFormattedDistance = Utility.formatDistanceMetric(cursor.getString(COL_DISTANCE_TO_USER));
-                            }
-                            else {
-                                mFormattedDistance = Utility.formatDistanceImperial(cursor.getString(COL_DISTANCE_TO_USER));
-                            }
-                            Log.i(LOG_TAG,"Classic mFormattedDistance/columnIndex = " + mFormattedDistance + "/" + columnIndex);
-                            ((TextView) view).setText(mFormattedDistance);
-                            return true;
-                        case COL_DISTANCE_DURATION:
-                            Log.i(LOG_TAG,"****NEW SET VIEW BINDER VALUES***");
-                            Log.i(LOG_TAG,"columnIndex is: " + columnIndex);
-                            int distanceToShop = Integer.valueOf(cursor.getString(COL_DISTANCE_TO_USER));
-                            Log.i(LOG_TAG,"distanceToShop: " + distanceToShop);
-                            mNewSpeedDistanceToShop = Utility.calculateDistanceDuration(distanceToShop,getActivity());
-                            Log.i(LOG_TAG,"mNewSpeedDistanceToShop: " + mNewSpeedDistanceToShop);
-                            mFormattedDuration = Utility.formatDistanceDuration(String.valueOf(mNewSpeedDistanceToShop));
-                            Log.i(LOG_TAG,"New mFormattedDuration = " + mFormattedDuration);
-                            ((TextView) view).setText(mFormattedDuration);
-                            return true;
-                        case COL_IS_OPEN:
-                            if (cursor.getInt(COL_IS_OPEN) == 1){
-                                ((TextView) view).setText(Constants.SHOP_OPEN); //"Open"
-                            }
-                            else if (cursor.getInt(COL_IS_OPEN) == 0) {
-                                ((TextView) view).setText(Constants.SHOP_CLOSED);//"Closed"
-                            }
-                            else {
-                                ((TextView) view).setText(Constants.SHOP_UNAVAILABLE);//""
-                            }
-                            return  true;
-                    }
-                    return false;
-                }
-            });
-           // */
         }
         //TODO: test if the sync succeeds even if the phone is rotated while syncing. Check if onLoadFinished is called. The commented code below might prove useful.
 /*        LoaderManager lm = getLoaderManager();
