@@ -22,6 +22,7 @@ import android.os.IBinder;
 import android.support.annotation.InterpolatorRes;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -58,7 +59,8 @@ import slidermenu.SliderDrawerListAdapter;
 public class MainActivity extends Activity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener
+        LocationListener,
+        SwipeRefreshLayout.OnRefreshListener
          {
 
 
@@ -82,6 +84,7 @@ public class MainActivity extends Activity implements
     TextView mLocationView;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
+    private SwipeRefreshLayout swipeLayout;
     //used to store the user's coordinates
     private static String[] mLatLng = new String[2];
      //these variables are used for the slider menu
@@ -204,6 +207,14 @@ public class MainActivity extends Activity implements
                  }*/
                  mAnimation = AnimationUtils.loadAnimation(mContext,R.anim.internet_connected);
                  mInfoTextView = (TextView) findViewById(R.id.info_textview);
+                 //pull-to-refresh related
+                 swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+                 swipeLayout.setOnRefreshListener(this);
+                 swipeLayout.setColorSchemeResources(R.color.waldo_light_blue);
+                         /*.setColorScheme(android.R.color.holo_blue_bright,
+                         android.R.color.holo_green_light,
+                         android.R.color.holo_orange_light,
+                         android.R.color.holo_red_light);*/
     }
 
 
@@ -374,7 +385,20 @@ public class MainActivity extends Activity implements
     public void onConnectionFailed(ConnectionResult connectionResult) {
         Log.i(LOG_TAG, "GoogleApiClient connection has failed");
     }
-    /**
+
+    @Override
+         public void onRefresh() {
+            Log.i(LOG_TAG,"In onRefresh()");
+            ShopsFragment shopsFragment = new ShopsFragment();
+            shopsFragment.updateShopList(mContext);
+            new Handler().postDelayed(new Runnable() {
+                 @Override public void run() {
+                     swipeLayout.setRefreshing(false);
+                 }
+            }, 3000);
+    }
+
+             /**
      * These methods are used for the Slider Menu
      */
 

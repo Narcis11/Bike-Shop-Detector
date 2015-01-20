@@ -3,11 +3,13 @@ package waldo.bike.waldo;
 import android.app.Fragment;
 import android.app.LoaderManager;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 
 import android.provider.Settings;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -178,10 +180,12 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
 
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true); //tells the system that we have button(s) in the menu
+
     }
 
     @Override
@@ -194,7 +198,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_refresh) {
-            updateShopList();
+            updateShopList(getActivity());
           //  GlobalState.GLOBAL_ADAPTER = mShopsAdapter;
           //  SyncAdapter.syncImmediately(getActivity());
             return true;
@@ -221,7 +225,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
         mIsSpeedChanged = false;
         if (GlobalState.FRAGMENT_RANGE != null && !GlobalState.FRAGMENT_RANGE.equals(Utility.getPreferredRangeImperial(getActivity()))) {
             Log.i(LOG_TAG,"****UPDATED SHOP LIST****");
-            updateShopList();
+            updateShopList(getActivity());
             mIsListRefreshed = true;
         }
         //we only restart the loader if the refresh caused by the change of range hasn't been performed. If it has, we already have an updated list
@@ -245,13 +249,13 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
         GlobalState.FRAGMENT_SPEED = Utility.getPreferredSpeed(getActivity());
     }
 
-    public void updateShopList() {
+    public void updateShopList(Context context) {
         String[] coordinates = new String[2];
         coordinates[0] = GlobalState.USER_LAT;
         coordinates[1] = GlobalState.USER_LNG;
         Log.i(LOG_TAG,"Lat/lng in updateShopList - " + coordinates[0] + "/" + coordinates[1]);
       //  new FetchGooglePlaces(getActivity()).execute(coordinates);
-        SyncAdapter.syncImmediately(getActivity());
+        SyncAdapter.syncImmediately(context);
     }
 
     //loaders are initialised in onActivityCreated because their lifecycle is bound to the activity, not the fragment
