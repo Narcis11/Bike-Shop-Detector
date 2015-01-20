@@ -31,8 +31,8 @@
         android:layout_gravity="start"
         android:choiceMode="singleChoice"
         android:divider="@color/white"
-        android:dividerHeight="2dp"
+        android:dividerHeight="1dp"
         android:listSelector="@drawable/list_selector"
-        android:background="@color/list_background"/>
+        android:background="@color/list_background_transparent"/>
 
 </android.support.v4.widget.DrawerLayout>
