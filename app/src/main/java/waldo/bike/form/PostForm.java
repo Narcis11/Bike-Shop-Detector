@@ -1,5 +1,7 @@
 package waldo.bike.form;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -13,6 +15,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import Utilities.Constants;
+import waldo.bike.waldo.MainActivity;
+import waldo.bike.waldo.SettingsActivity;
 
 /**
  * Created by Narcis11 on 10.01.2015.
@@ -20,10 +24,12 @@ import Utilities.Constants;
 public class PostForm extends AsyncTask<String, Void, String> {
 
     private static final String LOG_TAG = PostForm.class.getSimpleName();
+    Context mContext;
     @Override
     protected String doInBackground(String... params) {
         String jsonString = createJSONObject(params);
-        String url = "https://maps.googleapis.com/maps/api/place/add/json?key=" + Constants.API_KEY;
+       // String url = "https://maps.googleapis.com/maps/api/place/add/json?key=" + Constants.API_KEY;
+        String url = "http://hapciu.go.ro:8880/places";
         HttpPost httpPost = new HttpPost(url);
         HttpClient httpClient = new DefaultHttpClient();
         try {
@@ -31,6 +37,7 @@ public class PostForm extends AsyncTask<String, Void, String> {
             httpPost.setEntity(stringEntity);
             HttpResponse response = httpClient.execute(httpPost);
             Log.i(LOG_TAG,"Response is " + response.toString());
+            //TODO: Add a onPostExecute method that returns a message to the AddShopForm activity so as to open the MainActivity afterwards.
         }
         catch (Exception e){
             e.printStackTrace();

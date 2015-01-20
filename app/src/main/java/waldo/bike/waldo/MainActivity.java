@@ -2,6 +2,7 @@ package waldo.bike.waldo;
 
 import android.app.Activity;
 import android.app.ActionBar;
+import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -34,6 +35,7 @@ import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -428,13 +430,19 @@ public class MainActivity extends Activity implements
             else if (position == 1) { //view all shops
                 openMap(AllShopsMap);
             }
+            else if (position == 3) {
+                openWebsite();
+            }
             else if (position == 4) {
-                openFacebookApp();
+                openFacebook();
+            }
+            else if (position == 5) {
+                openTwitter();
             }
         }
     }
 
-    private void openFacebookApp() {
+    private void openFacebook() {
         String url = "https://www.facebook.com/waldotheknight";
         //367189063436001 is the profile id of Waldo
         String uri = "fb://page/367189063436001";
@@ -451,13 +459,42 @@ public class MainActivity extends Activity implements
         }
         try {
             startActivity(intent);
+        } catch (ActivityNotFoundException e) {//no app is installed to service this request
+            Toast.makeText(mContext, getResources().getString(R.string.no_app_available), Toast.LENGTH_SHORT).show();
         }
-        catch (Exception e) {//no app is installed to service this request
-            Toast.makeText(mContext,getResources().getString(R.string.no_app_available),Toast.LENGTH_SHORT).show();
+    }
+    private void openTwitter() {
+        String url = "http://www.twitter.com/waldotheknight";
+        //2846625313 is Waldo's twitter id
+        String uri = "twitter://user?user_id=2846625313";
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(uri));
+        final PackageManager packageManager = getPackageManager();
+        List<ResolveInfo> list =
+                packageManager.queryIntentActivities(intent,
+                        PackageManager.MATCH_DEFAULT_ONLY);
+        if (list.size() == 0) {
+            intent.setData(Uri.parse(url));
+        }
+        try {
+            startActivity(intent);
+        } catch (ActivityNotFoundException e) {//no app is installed to service this request
+            Toast.makeText(mContext, getResources().getString(R.string.no_app_available), Toast.LENGTH_SHORT).show();
         }
     }
 
-             public void openMap(String mapToOpen) {
+    private void openWebsite() {
+        String url = "http://www.waldo.bike/";
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        try {
+            startActivity(intent);
+        }
+        catch (ActivityNotFoundException e) {
+            Toast.makeText(mContext, getResources().getString(R.string.no_app_available), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void openMap(String mapToOpen) {
 
         if (mapToOpen.equals(AllShopsMap)) {
             Cursor cursor = mContext.getApplicationContext().getContentResolver().query(
@@ -487,8 +524,6 @@ public class MainActivity extends Activity implements
             else {
                 Intent intent = new Intent(mContext, waldo.bike.form.AddShopMap.class);
                 startActivity(intent);
-            //TO BE REMOVED
-
             }
         }
     }

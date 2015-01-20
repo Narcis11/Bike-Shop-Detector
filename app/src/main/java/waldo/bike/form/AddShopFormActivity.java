@@ -187,7 +187,6 @@ public class AddShopFormActivity extends ActionBarActivity {
 
             PostForm postForm = new PostForm();
             postForm.execute(postParameters);
-
         }
         else {
             mErrorMessage.setText(getResources().getString(R.string.invalid_form));
