@@ -57,7 +57,6 @@
     <string-array name="nav_drawer_items_array">
         <item>@string/add_a_shop</item>
         <item>@string/view_all_shops</item>
-        <item>@string/about</item>
         <item>@string/website</item>
         <item>@string/facebook</item>
         <item>@string/twitter</item>
@@ -69,7 +68,6 @@
     <array name="nav_drawer_icons_array">
         <item>@drawable/ic_home</item>
         <item>@drawable/ic_communities</item>
-        <item>@drawable/checkbox_green</item>
         <item>@drawable/web</item>
         <item>@drawable/facebook_icon</item>
         <item>@drawable/twitter_icon</item>

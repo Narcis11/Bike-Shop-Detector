@@ -90,13 +90,14 @@
     <string name="pref_enable_notifications_false">Disabled</string>
     <string name="pref_enable_notifications_default" translatable="false">true</string>
 
-    <!-- Names of slider menu options -->
+    <!-- Names of slider menu options/headers -->
     <string name="add_a_shop">Add a shop</string>
     <string name="view_all_shops">View all shops</string>
     <string name="about">About</string>
     <string name="facebook">Facebook</string>
     <string name="twitter">Twitter</string>
     <string name="website">Our website</string>
+    <string name="header_slider">My options</string>
     <!-- Content Description -->
     <string name="desc_list_item_icon">Item Icon</string>
     <string name="title_activity_maps">Map</string>

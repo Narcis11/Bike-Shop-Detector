@@ -74,7 +74,7 @@ public class MainActivity extends Activity implements
     private IntentFilter mIntentFilter;
     private static boolean mFirstGPSConnection = true; //used to control fragment behaviour in onLocationChanged()
     private static boolean isGPSConnected = false;//used to control fragment behaviour in onResume()
-    private static String AllShopsMap = "MapsActivity";
+    private static String ViewAllShopsMap = "MapsActivity";
     private static String AddShopMap = "AddShopMap";
     Animation mAnimation;
     private static String fragmentTag = "ShopsFragment";
@@ -88,7 +88,7 @@ public class MainActivity extends Activity implements
      private DrawerLayout mDrawerLayout;
      private ListView mDrawerList;
      private ActionBarDrawerToggle mDrawerToggle;
-
+     private View mHeaderView;
      // nav drawer title
      private CharSequence mDrawerTitle;
 
@@ -152,7 +152,7 @@ public class MainActivity extends Activity implements
 
                  mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
                  mDrawerList = (ListView) findViewById(R.id.list_slidermenu);
-
+                 mHeaderView = getLayoutInflater().inflate(R.layout.header_sliding,null);
                  navDrawerItems = new ArrayList<SliderDrawerItem>();
 
                  // adding nav drawer items to array
@@ -160,23 +160,20 @@ public class MainActivity extends Activity implements
                  navDrawerItems.add(new SliderDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0,-1)));
                  // View all shops
                  navDrawerItems.add(new SliderDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1,-1)));
-                 //About
-                 navDrawerItems.add(new SliderDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2,-1)));
                  //Website
-                 navDrawerItems.add(new SliderDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3,-1)));
+                 navDrawerItems.add(new SliderDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2,-1)));
                  //Facebook
-                 navDrawerItems.add(new SliderDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(4,-1)));
+                 navDrawerItems.add(new SliderDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3,-1)));
                  //Twitter
-                 navDrawerItems.add(new SliderDrawerItem(navMenuTitles[5], navMenuIcons.getResourceId(5,-1)));
+                 navDrawerItems.add(new SliderDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(4,-1)));
 
                  // Recycle the typed array
                  navMenuIcons.recycle();
-
+                 mDrawerList.addHeaderView(mHeaderView);//in pre-KitKat versions, we have to add the header before the setAdapter is called;
                  // setting the nav drawer list adapter
                  adapter = new SliderDrawerListAdapter(getApplicationContext(),
                          navDrawerItems);
                  mDrawerList.setAdapter(adapter);
-
                  // enabling action bar app icon and behaving it as toggle button
                  getActionBar().setDisplayHomeAsUpEnabled(true);
                  getActionBar().setHomeButtonEnabled(true);
@@ -424,11 +421,11 @@ public class MainActivity extends Activity implements
                                 long id) {
             // display view for selected nav drawer item
        //     Log.i(LOG_TAG,"Button pressed at position " + position);
-            if (position == 0) { //add a shop
+            if (position == 1) { //add a shop
                 openMap(AddShopMap);
             }
-            else if (position == 1) { //view all shops
-                openMap(AllShopsMap);
+            else if (position == 2) { //view all shops
+                openMap(ViewAllShopsMap);
             }
             else if (position == 3) {
                 openWebsite();
@@ -496,7 +493,7 @@ public class MainActivity extends Activity implements
 
     public void openMap(String mapToOpen) {
 
-        if (mapToOpen.equals(AllShopsMap)) {
+        if (mapToOpen.equals(ViewAllShopsMap)) {
             Cursor cursor = mContext.getApplicationContext().getContentResolver().query(
                     ShopsContract.ShopsEntry.CONTENT_URI,
                     null,
@@ -504,7 +501,7 @@ public class MainActivity extends Activity implements
                     null,
                     null
             );
-       /* if (GlobalState.ALL_SHOPS_INFO.length() > 0) {*/
+       /* Because we open the map's view according to the user's location*/
             if (GlobalState.USER_LAT.equals("") && GlobalState.USER_LNG.equals("")) {
                 Toast.makeText(mContext, R.string.no_user_location, Toast.LENGTH_SHORT).show();
             } else {
