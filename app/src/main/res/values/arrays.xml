@@ -66,7 +66,7 @@
     <!-- Keep them in order as the titles are in -->
     <!--Placeholder icons, will be replaced-->
     <array name="nav_drawer_icons_array">
-        <item>@drawable/ic_home</item>
+        <item>@drawable/add_shop_slider_menu</item>
         <item>@drawable/ic_communities</item>
         <item>@drawable/web</item>
         <item>@drawable/facebook_icon</item>
