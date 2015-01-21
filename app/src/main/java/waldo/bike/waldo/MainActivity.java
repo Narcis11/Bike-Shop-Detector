@@ -208,6 +208,7 @@ public class MainActivity extends Activity implements
                  mAnimation = AnimationUtils.loadAnimation(mContext,R.anim.internet_connected);
                  mInfoTextView = (TextView) findViewById(R.id.info_textview);
                  //pull-to-refresh related
+                 //TODO: The app refreshes each time the list is scrolled upwards, not only when it's at the top. Fix it!
                  swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
                  swipeLayout.setOnRefreshListener(this);
                  swipeLayout.setColorSchemeResources(R.color.waldo_light_blue);
