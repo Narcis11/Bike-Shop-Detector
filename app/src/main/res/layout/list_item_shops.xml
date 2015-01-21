@@ -8,12 +8,14 @@
 <!--Define the layout for a row in the ListView-->
     <FrameLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        >
 
         <ImageView
             android:id="@+id/list_item_icon"
             android:layout_gravity="center"
             android:src="@drawable/bicycle_icon"
+            android:requiresFadingEdge="vertical"
             android:layout_width="wrap_content"
             android:paddingRight="15dp"
             android:layout_height="wrap_content"/>
