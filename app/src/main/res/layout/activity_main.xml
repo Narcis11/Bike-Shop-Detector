@@ -17,15 +17,15 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity"
     tools:ignore="MergeRootFrame" >
-
+    <!--Text View used to display messages regarding the GPS/Internet status-->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
         android:id="@+id/info_textview"
         android:gravity="center"
-        android:paddingTop="1dp"
-        android:paddingBottom="1dp"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
         android:visibility="visible"
         android:textIsSelectable="false"
         android:textStyle="normal" />

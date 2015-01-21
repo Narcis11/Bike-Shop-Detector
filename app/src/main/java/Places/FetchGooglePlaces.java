@@ -39,7 +39,6 @@ public class FetchGooglePlaces extends AsyncTask<String, Void, Void> {
     public FetchGooglePlaces (Context context) {
             mContext = context;
     }
-    //TODO: initiate a Google Directions API call to retrieve the distance between the user and each shop
     @Override
     protected Void doInBackground(String... params) {
         if (params.length == 0) {
@@ -191,7 +190,7 @@ public class FetchGooglePlaces extends AsyncTask<String, Void, Void> {
                 } catch (JSONException e) {
                     Log.e(LOG_TAG, "Opening Hours JSON Exception: " + e.getMessage());
                 }
-                //TODO: Remove dummy distance and duration data
+                //TODO: Remove dummy distance and duration data //not necessary any more, we don't use this function
                 //*************Creating dummy data********************
                 dummyDistance+=150 + i*20;
                 dummyDuration+=3;

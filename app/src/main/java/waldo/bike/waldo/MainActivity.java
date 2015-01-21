@@ -353,7 +353,7 @@ public class MainActivity extends Activity implements
            GlobalState.latitude = mLatLng[0];
            GlobalState.longitude = mLatLng[1];
         }*/
-
+        //TODO: Find another logic for the user's positioning. We need to collect the coordinates more often.
         if (mFirstGPSConnection) {
             mLatLng = Utility.getLatLngFromLocation(location.toString());
             GlobalState.USER_LAT = mLatLng[0];
