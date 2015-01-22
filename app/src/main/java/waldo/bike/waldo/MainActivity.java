@@ -55,7 +55,6 @@ import data.ShopsContract;
 import slidermenu.SliderDrawerItem;
 import slidermenu.SliderDrawerListAdapter;
 
-
 public class MainActivity extends Activity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
@@ -92,6 +91,8 @@ public class MainActivity extends Activity implements
      private ListView mDrawerList;
      private ActionBarDrawerToggle mDrawerToggle;
      private View mHeaderView;
+     private View mFooterView;
+     private View mDividerFooterView;
      // nav drawer title
      private CharSequence mDrawerTitle;
 
@@ -155,7 +156,9 @@ public class MainActivity extends Activity implements
 
                  mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
                  mDrawerList = (ListView) findViewById(R.id.list_slidermenu);
-                 mHeaderView = getLayoutInflater().inflate(R.layout.header_sliding,null);
+               //  mHeaderView = getLayoutInflater().inflate(R.layout.header_sliding_menu,null);
+                 mFooterView = getLayoutInflater().inflate(R.layout.footer_sliding_menu,null);
+                 mDividerFooterView = getLayoutInflater().inflate(R.layout.list_divider_view,null);
                  navDrawerItems = new ArrayList<SliderDrawerItem>();
 
                  // adding nav drawer items to array
@@ -166,13 +169,15 @@ public class MainActivity extends Activity implements
                  //Website
                  navDrawerItems.add(new SliderDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2,-1)));
                  //Facebook
-                 navDrawerItems.add(new SliderDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3,-1)));
+               //  navDrawerItems.add(new SliderDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3,-1)));
                  //Twitter
-                 navDrawerItems.add(new SliderDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(4,-1)));
+              //   navDrawerItems.add(new SliderDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(4,-1)));
 
                  // Recycle the typed array
                  navMenuIcons.recycle();
-                 mDrawerList.addHeaderView(mHeaderView);//in pre-KitKat versions, we have to add the header before the setAdapter is called;
+               //  mDrawerList.addHeaderView(mHeaderView);//in pre-KitKat versions, we have to add the header before the setAdapter is called;
+                 mDrawerList.addFooterView(mDividerFooterView);
+                 mDrawerList.addFooterView(mFooterView);
                  // setting the nav drawer list adapter
                  adapter = new SliderDrawerListAdapter(getApplicationContext(),
                          navDrawerItems);
@@ -455,12 +460,12 @@ public class MainActivity extends Activity implements
             else if (position == 3) {
                 openWebsite();
             }
-            else if (position == 4) {
+ /*           else if (position == 4) {
                 openFacebook();
             }
             else if (position == 5) {
                 openTwitter();
-            }
+            }*/
         }
     }
 

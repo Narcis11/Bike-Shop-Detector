@@ -58,8 +58,6 @@
         <item>@string/add_a_shop</item>
         <item>@string/view_all_shops</item>
         <item>@string/website</item>
-        <item>@string/facebook</item>
-        <item>@string/twitter</item>
     </string-array>
 
     <!-- Nav Drawer List Item Icons -->
@@ -69,8 +67,6 @@
         <item>@drawable/add_shop_slider_menu</item>
         <item>@drawable/ic_communities</item>
         <item>@drawable/web</item>
-        <item>@drawable/facebook_icon</item>
-        <item>@drawable/twitter_icon</item>
     </array>
 
 </resources>

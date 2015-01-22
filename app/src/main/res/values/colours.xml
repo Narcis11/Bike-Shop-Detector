@@ -3,10 +3,10 @@
          <!--In #80303030, 80 stands for the opacity, and the rest is the hex code of the colour-->
         <color name="white">#FFFFFF</color>
         <color name="waldo_light_blue">#00afef</color>
-        <color name="list_divider">#272727</color>
-        <color name="list_background">#303030</color>
+        <color name="list_divider">#AFB3B1</color>
+        <color name="list_background">#818583</color>
         <color name="list_background_transparent">#80303030</color>
-        <color name="list_background_pressed">#992416</color>
+        <color name="list_background_pressed">#00afef</color>
         <color name="counter_text_bg">#626262</color>
         <color name="list_item_title">#fff</color>
         <color name="counter_text_color">#c5c4c4</color>
