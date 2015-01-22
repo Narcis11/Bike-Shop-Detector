@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
          <!--In #80303030, 80 stands for the opacity, and the rest is the hex code of the colour-->
+         <!--For the background colour, we could also try #6C8087 - it's from the logo-->
         <color name="white">#FFFFFF</color>
         <color name="waldo_light_blue">#00afef</color>
         <color name="list_divider">#AFB3B1</color>

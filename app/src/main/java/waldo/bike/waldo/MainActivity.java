@@ -451,13 +451,13 @@ public class MainActivity extends Activity implements
                                 long id) {
             // display view for selected nav drawer item
        //     Log.i(LOG_TAG,"Button pressed at position " + position);
-            if (position == 1) { //add a shop
+            if (position == 0) { //add a shop
                 openMap(AddShopMap);
             }
-            else if (position == 2) { //view all shops
+            else if (position == 1) { //view all shops
                 openMap(ViewAllShopsMap);
             }
-            else if (position == 3) {
+            else if (position == 2) {
                 openWebsite();
             }
  /*           else if (position == 4) {
