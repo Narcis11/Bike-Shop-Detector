@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 
+import android.os.Handler;
 import android.provider.Settings;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -17,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -34,7 +36,7 @@ import sync.SyncAdapter;
 /**
  * Created by Narcis11 on 20.12.2014.
  */
-public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
+public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, SwipeRefreshLayout.OnRefreshListener{
 
     public SimpleCursorAdapter mShopsAdapter;
     private String mRadius;
@@ -48,8 +50,9 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     private boolean mIsListRefreshed;
     private Double mNewSpeedDistanceToShop;
     private static final int SHOPS_LOADER_ID = 0;//loader identifier
-    ListView mListView;
+    private ListView mListView;
     private boolean mIsSpeedChanged;
+    private SwipeRefreshLayout swipeLayout;
     public static final String[] SHOPS_COLUMNS = {
             ShopsContract.ShopsEntry.TABLE_NAME + "." + ShopsContract.ShopsEntry._ID,
             ShopsContract.ShopsEntry.COLUMN_SHOP_NAME,
@@ -153,6 +156,8 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
         // Get a reference to the ListView, and attach this adapter to it.
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         ListView listView = (ListView) rootView.findViewById(R.id.listview_shops);
+        swipeLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_container);
+        swipeLayout.setOnRefreshListener(this);
         mListView = listView;
         listView.setAdapter(mShopsAdapter);
 
@@ -173,6 +178,22 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                     bundle.putString(Constants.BUNDLE_FRAGMENT,Constants.CALLED_FROM_FRAGMENT);
                     openMap.putExtras(bundle);
                     startActivity(openMap);
+                }
+            }
+        });
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if (firstVisibleItem == 0 ) { //we only refresh when the user is at the top of the list
+                    swipeLayout.setEnabled(true);
+                }
+                else {
+                    swipeLayout.setEnabled(false);
                 }
             }
         });
@@ -287,5 +308,20 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                 ShopsContract.ShopsEntry.SORT_ORDER
         );
     }
+
+    @Override
+    public void onRefresh() {
+        ListView listView = (ListView) mListView.findViewById(R.id.listview_shops);
+            Log.i(LOG_TAG, "In onRefresh()");
+            swipeLayout.setColorSchemeResources(R.color.waldo_light_blue);
+            ShopsFragment shopsFragment = new ShopsFragment();
+            shopsFragment.updateShopList(getActivity());
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    swipeLayout.setRefreshing(false);
+                }
+            }, 3000);
+        }
 }
 

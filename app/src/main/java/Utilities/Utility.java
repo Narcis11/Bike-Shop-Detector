@@ -6,6 +6,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -561,5 +562,10 @@ public class Utility {
             e.printStackTrace();
         }
         return Constants.RETURN_ERROR_STRING;
+    }
+
+    public static boolean isListAtTop(ListView listView)   {
+        if(listView.getChildCount() == 0) return true;
+        return listView.getChildAt(0).getTop() == 0;
     }
 }

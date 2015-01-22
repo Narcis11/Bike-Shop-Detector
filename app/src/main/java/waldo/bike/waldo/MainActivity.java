@@ -58,8 +58,7 @@ import slidermenu.SliderDrawerListAdapter;
 public class MainActivity extends Activity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener,
-        SwipeRefreshLayout.OnRefreshListener
+        LocationListener
          {
 
 
@@ -185,7 +184,6 @@ public class MainActivity extends Activity implements
                  // enabling action bar app icon and behaving it as toggle button
                  getActionBar().setDisplayHomeAsUpEnabled(true);
                  getActionBar().setHomeButtonEnabled(true);
-
                  mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
                          R.drawable.ic_drawer, //nav menu toggle icon
                          R.string.app_name, // nav drawer open - description for accessibility
@@ -214,9 +212,9 @@ public class MainActivity extends Activity implements
                  mInfoTextView = (TextView) findViewById(R.id.info_textview);
                  //pull-to-refresh related
                  //TODO: The app refreshes each time the list is scrolled upwards, not only when it's at the top. Fix it!
-                 swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
-                 swipeLayout.setOnRefreshListener(this);
-                 swipeLayout.setColorSchemeResources(R.color.waldo_light_blue);
+                // swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+              //   swipeLayout.setOnRefreshListener(this);
+
                          /*.setColorScheme(android.R.color.holo_blue_bright,
                          android.R.color.holo_green_light,
                          android.R.color.holo_orange_light,
@@ -392,17 +390,26 @@ public class MainActivity extends Activity implements
         Log.i(LOG_TAG, "GoogleApiClient connection has failed");
     }
 
-    @Override
+/*    @Override
          public void onRefresh() {
-            Log.i(LOG_TAG,"In onRefresh()");
-            ShopsFragment shopsFragment = new ShopsFragment();
-            shopsFragment.updateShopList(mContext);
-            new Handler().postDelayed(new Runnable() {
-                 @Override public void run() {
-                     swipeLayout.setRefreshing(false);
-                 }
-            }, 3000);
-    }
+            ListView listView = (ListView) findViewById(R.id.listview_shops);
+            if (Utility.isListAtTop(listView)) {
+                Log.i(LOG_TAG, "In onRefresh()");
+                swipeLayout.setColorSchemeResources(R.color.waldo_light_blue);
+                ShopsFragment shopsFragment = new ShopsFragment();
+                shopsFragment.updateShopList(mContext);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeLayout.setRefreshing(false);
+                    }
+                }, 3000);
+            }
+        else {
+                Log.i(LOG_TAG,"List is not at the top");
+                swipeLayout.setRefreshing(false);
+            }
+    }*/
 
              /**
      * These methods are used for the Slider Menu
