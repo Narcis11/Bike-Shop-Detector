@@ -24,6 +24,7 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -522,6 +523,8 @@ public class MainActivity extends Activity implements
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         try {
             startActivity(intent);
+            //close the drawer only when we are ready to open the browser
+            mDrawerLayout.closeDrawer(Gravity.LEFT);
         }
         catch (ActivityNotFoundException e) {
             Toast.makeText(mContext, getResources().getString(R.string.no_app_available), Toast.LENGTH_SHORT).show();
@@ -543,6 +546,8 @@ public class MainActivity extends Activity implements
                 Toast.makeText(mContext, R.string.no_user_location, Toast.LENGTH_SHORT).show();
             } else {
                 if (cursor.getCount() > 0) {
+                    //close the drawer only when we are ready to open the map
+                    mDrawerLayout.closeDrawer(Gravity.LEFT);
                     Intent intent = new Intent(this, MapsActivity.class);
                     startActivity(intent);
                 } else {
@@ -556,6 +561,8 @@ public class MainActivity extends Activity implements
                 Toast.makeText(mContext, R.string.no_user_location, Toast.LENGTH_SHORT).show();
             }
             else {
+                //close the drawer only when we are ready to open the map
+                mDrawerLayout.closeDrawer(Gravity.LEFT);
                 Intent intent = new Intent(mContext, waldo.bike.form.AddShopMap.class);
                 startActivity(intent);
             }
