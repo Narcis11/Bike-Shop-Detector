@@ -83,7 +83,6 @@ public class MainActivity extends Activity implements
     TextView mLocationView;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
-    private SwipeRefreshLayout swipeLayout;
     //used to store the user's coordinates
     private static String[] mLatLng = new String[2];
      //these variables are used for the slider menu
@@ -109,7 +108,6 @@ public class MainActivity extends Activity implements
     @Override
     protected void onDestroy() {
          super.onDestroy();
-    //   Log.i(LOG_TAG,"in onDestroy()");
     }
 
              @Override
@@ -211,15 +209,6 @@ public class MainActivity extends Activity implements
                  }*/
                  mAnimation = AnimationUtils.loadAnimation(mContext,R.anim.internet_connected);
                  mInfoTextView = (TextView) findViewById(R.id.info_textview);
-                 //pull-to-refresh related
-                 //TODO: The app refreshes each time the list is scrolled upwards, not only when it's at the top. Fix it!
-                // swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
-              //   swipeLayout.setOnRefreshListener(this);
-
-                         /*.setColorScheme(android.R.color.holo_blue_bright,
-                         android.R.color.holo_green_light,
-                         android.R.color.holo_orange_light,
-                         android.R.color.holo_red_light);*/
     }
 
 
@@ -390,27 +379,6 @@ public class MainActivity extends Activity implements
     public void onConnectionFailed(ConnectionResult connectionResult) {
         Log.i(LOG_TAG, "GoogleApiClient connection has failed");
     }
-
-/*    @Override
-         public void onRefresh() {
-            ListView listView = (ListView) findViewById(R.id.listview_shops);
-            if (Utility.isListAtTop(listView)) {
-                Log.i(LOG_TAG, "In onRefresh()");
-                swipeLayout.setColorSchemeResources(R.color.waldo_light_blue);
-                ShopsFragment shopsFragment = new ShopsFragment();
-                shopsFragment.updateShopList(mContext);
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        swipeLayout.setRefreshing(false);
-                    }
-                }, 3000);
-            }
-        else {
-                Log.i(LOG_TAG,"List is not at the top");
-                swipeLayout.setRefreshing(false);
-            }
-    }*/
 
              /**
      * These methods are used for the Slider Menu

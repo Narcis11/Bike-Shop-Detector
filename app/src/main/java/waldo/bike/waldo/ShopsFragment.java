@@ -218,12 +218,6 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_refresh) {
-            updateShopList(getActivity());
-          //  GlobalState.GLOBAL_ADAPTER = mShopsAdapter;
-          //  SyncAdapter.syncImmediately(getActivity());
-            return true;
-        }
         return super.onOptionsItemSelected(item);
     }
 
