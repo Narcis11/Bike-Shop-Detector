@@ -25,6 +25,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -536,4 +537,13 @@ public class MainActivity extends Activity implements
             }
         }
     }
-}
+
+             @Override
+             public boolean onKeyDown(int keyCode, KeyEvent event) {
+                 if ((keyCode == KeyEvent.KEYCODE_BACK) && mDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
+                     mDrawerLayout.closeDrawer(Gravity.LEFT);
+                     Log.d(LOG_TAG, "back button pressed");
+                 }
+                 return super.onKeyDown(keyCode, event);
+             }
+         }
