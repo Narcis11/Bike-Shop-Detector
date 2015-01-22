@@ -523,7 +523,7 @@ public class MainActivity extends Activity implements
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         try {
             startActivity(intent);
-            //close the drawer only when we are ready to open the browser
+            //close the drawer only when we are ready to open the browser (no exception thrown)
             mDrawerLayout.closeDrawer(Gravity.LEFT);
         }
         catch (ActivityNotFoundException e) {
