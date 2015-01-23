@@ -53,6 +53,8 @@ import Utilities.Utility;
 import data.ShopsContract;
 import slidermenu.SliderDrawerItem;
 import slidermenu.SliderDrawerListAdapter;
+import socialmedia.TwitterAsyncTask;
+
 public class MainActivity extends Activity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
@@ -535,12 +537,23 @@ public class MainActivity extends Activity implements
         }
     }
 
-             @Override
-             public boolean onKeyDown(int keyCode, KeyEvent event) {
-                 if ((keyCode == KeyEvent.KEYCODE_BACK) && mDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
-                     mDrawerLayout.closeDrawer(Gravity.LEFT);
-                     Log.d(LOG_TAG, "back button pressed");
-                 }
-                 return super.onKeyDown(keyCode, event);
-             }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+         if ((keyCode == KeyEvent.KEYCODE_BACK) && mDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
+             mDrawerLayout.closeDrawer(Gravity.LEFT);
          }
+         return super.onKeyDown(keyCode, event);
+    }
+
+    public void followTask (View v) {
+        DeviceConnection deviceConnection = new DeviceConnection(mContext);
+        if (deviceConnection.checkInternetConnected()) {
+            new TwitterAsyncTask().execute();
+            mDrawerLayout.closeDrawer(Gravity.LEFT);
+        }
+        else {
+            Toast.makeText(mContext,getResources().getString(R.string.no_internet),Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    }
