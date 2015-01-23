@@ -53,7 +53,6 @@ import Utilities.Utility;
 import data.ShopsContract;
 import slidermenu.SliderDrawerItem;
 import slidermenu.SliderDrawerListAdapter;
-
 public class MainActivity extends Activity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,

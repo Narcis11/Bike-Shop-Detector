@@ -25,5 +25,7 @@ dependencies {
     compile 'com.android.support:support-v4:21.0.3'
     compile 'com.android.support:appcompat-v7:21.0.3'
     compile files('twitter4j-async-4.0.2.jar')
+    compile files('twitter4j-core-4.0.2.jar')
+    compile files('D:/web/Android/Waldo/libs/twitter4j-core-4.0.2.jar')
     compile files('D:/web/Android/Waldo/libs/twitter4j-async-4.0.2.jar')
 }
