@@ -336,7 +336,6 @@ public class MainActivity extends Activity implements
     @Override
     public void onLocationChanged(Location location) {
         //mLocationView.setText("Location received: " + location.toString());
-       // Log.i(LOG_TAG,"Location is " + location.toString());
       //  Log.i(LOG_TAG,"firstGPSConnection is " + firstGPSConnection);
  /*      if (firstGPSConnection) { //only display the fragment if it's the first GPS connection
            getFragmentManager().beginTransaction()
@@ -352,17 +351,19 @@ public class MainActivity extends Activity implements
             mLatLng = Utility.getLatLngFromLocation(location.toString());
             GlobalState.USER_LAT = mLatLng[0];
             GlobalState.USER_LNG = mLatLng[1];
-            ShopsFragment shopsFragment = new ShopsFragment();
-            shopsFragment.updateShopList(mContext);
+            Log.i(LOG_TAG,"Location in GPS is " + location.toString());
+            //ShopsFragment shopsFragment = new ShopsFragment();
+            //shopsFragment.updateShopList(mContext);
         }
             mFirstGPSConnection = false;
     }
 
     @Override
     public void onConnected(Bundle bundle) {
+        Log.i(LOG_TAG,"in onConnected GPS");
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mLocationRequest.setInterval(1000); // Update location every second
+        mLocationRequest.setInterval(1000); // Update the location every second
         isGPSConnected = true;
         LocationServices.FusedLocationApi.requestLocationUpdates(
                 mGoogleApiClient, mLocationRequest, this);

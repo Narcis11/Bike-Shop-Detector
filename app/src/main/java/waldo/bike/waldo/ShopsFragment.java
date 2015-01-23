@@ -241,8 +241,12 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
         //onResume is called before the loader, so it's safe (read "doesn't affect the logic") to assign values to the booleans here
         mIsListRefreshed = false;
         mIsSpeedChanged = false;
-        if (GlobalState.FRAGMENT_RANGE != null && !GlobalState.FRAGMENT_RANGE.equals(Utility.getPreferredRangeImperial(getActivity()))) {
+        DeviceConnection deviceConnection = new DeviceConnection(getActivity());
+        //refresh if the range has changed, we have an internet connection and the user's last location
+        if (GlobalState.FRAGMENT_RANGE != null && !GlobalState.FRAGMENT_RANGE.equals(Utility.getPreferredRangeImperial(getActivity()))
+                && deviceConnection.checkInternetConnected() && !GlobalState.USER_LAT.equals("") && !GlobalState.USER_LNG.equals("") ) {
             Log.i(LOG_TAG,"****UPDATED SHOP LIST****");
+            Log.i(LOG_TAG,GlobalState.USER_LAT + " / " + GlobalState.USER_LNG);
             updateShopList(getActivity());
             mIsListRefreshed = true;
         }
