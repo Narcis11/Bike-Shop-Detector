@@ -3,6 +3,7 @@ package waldo.bike.waldo;
 import android.app.Fragment;
 import android.app.LoaderManager;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.bluetooth.BluetoothClass;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -27,6 +28,7 @@ import android.widget.TextView;
 
 import Places.FetchGooglePlaces;
 import Utilities.Constants;
+import Utilities.DeviceConnection;
 import Utilities.GlobalState;
 import Utilities.Utility;
 import data.ShopsContract;
@@ -188,7 +190,9 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                if (firstVisibleItem == 0 ) { //we only refresh when the user is at the top of the list
+                DeviceConnection deviceConnection = new DeviceConnection(getActivity());
+                //we only refresh when the user is at the top of the list and the Internet is connected and we have the last user's location
+                if (firstVisibleItem == 0 && deviceConnection.checkInternetConnected() && !GlobalState.USER_LAT.equals("") && !GlobalState.USER_LNG.equals("")) {
                     swipeLayout.setEnabled(true);
                 }
                 else {
@@ -304,7 +308,6 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
 
     @Override
     public void onRefresh() {
-        ListView listView = (ListView) mListView.findViewById(R.id.listview_shops);
             Log.i(LOG_TAG, "In onRefresh()");
             swipeLayout.setColorSchemeResources(R.color.waldo_light_blue);
             ShopsFragment shopsFragment = new ShopsFragment();

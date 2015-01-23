@@ -58,4 +58,6 @@ public class Constants {
     //used by the activities that listen to network changes
     public static final String BROADCAST_ACTION = "android.net.conn.CONNECTIVITY_CHANGE";
 
+    //used for the Twitter authentification
+
 }

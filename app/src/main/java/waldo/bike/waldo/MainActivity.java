@@ -352,8 +352,8 @@ public class MainActivity extends Activity implements
             mLatLng = Utility.getLatLngFromLocation(location.toString());
             GlobalState.USER_LAT = mLatLng[0];
             GlobalState.USER_LNG = mLatLng[1];
-            //ShopsFragment shopsFragment = new ShopsFragment();
-            //shopsFragment.updateShopList();
+            ShopsFragment shopsFragment = new ShopsFragment();
+            shopsFragment.updateShopList(mContext);
         }
             mFirstGPSConnection = false;
     }
