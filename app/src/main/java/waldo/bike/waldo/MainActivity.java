@@ -37,18 +37,15 @@ import android.widget.ListView;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
 import Utilities.Constants;
 import Utilities.DeviceConnection;
 import Utilities.GlobalState;
@@ -429,13 +426,13 @@ public class MainActivity extends Activity implements
                                 long id) {
             // display view for selected nav drawer item
        //     Log.i(LOG_TAG,"Button pressed at position " + position);
-            if (position == 0) { //add a shop
+            if (position == 1) { //add a shop
                 openMap(AddShopMap);
             }
-            else if (position == 1) { //view all shops
+            else if (position == 2) { //view all shops
                 openMap(ViewAllShopsMap);
             }
-            else if (position == 2) {
+            else if (position == 3) {
                 openWebsite();
             }
  /*           else if (position == 4) {

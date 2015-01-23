@@ -32,7 +32,6 @@ import Utilities.Utility;
 import data.ShopsContract;
 import data.ShopsProvider;
 import sync.SyncAdapter;
-
 /**
  * Created by Narcis11 on 20.12.2014.
  */
