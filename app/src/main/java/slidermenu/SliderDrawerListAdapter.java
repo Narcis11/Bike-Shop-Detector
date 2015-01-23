@@ -55,6 +55,7 @@ public class SliderDrawerListAdapter extends BaseAdapter {
 
         imgIcon.setImageResource(navDrawerItems.get(position).getIcon());
         txtTitle.setText(navDrawerItems.get(position).getTitle());
+        txtTitle.setTextColor(mContext.getResources().getColor(R.color.item_slider));
 
         // displaying count
         // check whether it set visible or not

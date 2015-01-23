@@ -97,7 +97,7 @@
     <string name="facebook">Facebook</string>
     <string name="twitter">Twitter</string>
     <string name="website">About us</string>
-    <string name="header_slider">My options</string>
+    <string name="header_slider">Menu</string>
     <!-- Content Description -->
     <string name="desc_list_item_icon">Item Icon</string>
     <string name="title_activity_maps">Map</string>

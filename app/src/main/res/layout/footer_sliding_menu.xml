@@ -1,25 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:paddingTop="270dp"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:paddingTop="10dp"
+    android:paddingBottom="6dp"
     android:layout_height="match_parent">
-
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/like_button"
-        android:paddingLeft="12dp"
-        android:src="@drawable/like_button"/>
-
+        android:id="@+id/logo_footer"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/logo_footer"
+        />
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/follow_button"
-        android:paddingRight="12dp"
-        android:layout_alignParentRight="true"
-        android:src="@drawable/follow_button"/>
+        android:paddingLeft="12dp"
+        android:paddingTop="12dp"
+        android:src="@drawable/follow_button"
+        />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/like_button"
+        android:paddingTop="12dp"
+        android:paddingLeft="12dp"
+        android:layout_above="@+id/follow_button"
+        android:src="@drawable/like_button"/>
 
 
-</RelativeLayout>
+</LinearLayout>

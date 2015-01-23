@@ -155,7 +155,7 @@ public class MainActivity extends Activity implements
 
                  mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
                  mDrawerList = (ListView) findViewById(R.id.list_slidermenu);
-               //  mHeaderView = getLayoutInflater().inflate(R.layout.header_sliding_menu,null);
+                 mHeaderView = getLayoutInflater().inflate(R.layout.header_sliding_menu,null);
                  mFooterView = getLayoutInflater().inflate(R.layout.footer_sliding_menu,null);
                  mDividerFooterView = getLayoutInflater().inflate(R.layout.list_divider_view,null);
                  navDrawerItems = new ArrayList<SliderDrawerItem>();
@@ -174,7 +174,8 @@ public class MainActivity extends Activity implements
 
                  // Recycle the typed array
                  navMenuIcons.recycle();
-               //  mDrawerList.addHeaderView(mHeaderView);//in pre-KitKat versions, we have to add the header before the setAdapter is called;
+                 mHeaderView.setBackgroundColor(getResources().getColor(R.color.header_background));
+                 mDrawerList.addHeaderView(mHeaderView);//in pre-KitKat versions, we must add the header before the setAdapter is called;
                  mDrawerList.addFooterView(mDividerFooterView);
                  mDrawerList.addFooterView(mFooterView);
                  // setting the nav drawer list adapter

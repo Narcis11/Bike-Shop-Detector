@@ -7,9 +7,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/header_slider"
-        android:textColor="@color/white"
+        android:textColor="@color/header_text"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
-        android:textSize="18dp"
+        android:textSize="20sp"
         android:id="@+id/header_sliding_view" />
 </LinearLayout>
