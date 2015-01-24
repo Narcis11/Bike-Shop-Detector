@@ -7,8 +7,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.pm.Signature;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.database.Cursor;
@@ -17,35 +19,33 @@ import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.IBinder;
-import android.support.annotation.InterpolatorRes;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.google.android.gms.appindexing.Action;
+
+import com.facebook.AppEventsLogger;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import Utilities.Constants;
 import Utilities.DeviceConnection;
 import Utilities.GlobalState;
@@ -54,6 +54,7 @@ import data.ShopsContract;
 import slidermenu.SliderDrawerItem;
 import slidermenu.SliderDrawerListAdapter;
 import socialmedia.TwitterAsyncTask;
+import com.facebook.Session;
 
 public class MainActivity extends Activity implements
         GoogleApiClient.ConnectionCallbacks,
@@ -209,6 +210,22 @@ public class MainActivity extends Activity implements
                  }*/
                  mAnimation = AnimationUtils.loadAnimation(mContext,R.anim.internet_connected);
                  mInfoTextView = (TextView) findViewById(R.id.info_textview);
+
+                 try {
+                     PackageInfo info = getPackageManager().getPackageInfo(
+                             "waldo.bike.waldo",
+                             PackageManager.GET_SIGNATURES);
+                     for (Signature signature : info.signatures) {
+                         MessageDigest md = MessageDigest.getInstance("SHA");
+                         md.update(signature.toByteArray());
+                         Log.i(LOG_TAG,"KeyHash: " + Base64.encodeToString(md.digest(), Base64.DEFAULT));
+                     }
+                 }
+                 catch (PackageManager.NameNotFoundException e) {
+                        e.printStackTrace();
+                 } catch (NoSuchAlgorithmException e) {
+                        e.printStackTrace();
+                 }
     }
 
 
@@ -227,6 +244,8 @@ public class MainActivity extends Activity implements
     @Override
     protected void onPause() {
         super.onPause();
+        // Logs 'app deactivate' App Event.
+        AppEventsLogger.deactivateApp(this);
         unregisterReceiver(mBroadcastReceiver);
     //    Log.i(LOG_TAG,"in onPause");
         //random value used to prevent the GPS from disconnecting
@@ -253,6 +272,8 @@ public class MainActivity extends Activity implements
     @Override
     protected void onResume() {
         super.onResume();
+        // Logs 'install' and 'app activate' App Events.
+        AppEventsLogger.activateApp(this);
         //register the broadcast receiver
         registerReceiver(mBroadcastReceiver,mIntentFilter);
         DeviceConnection deviceConnection = new DeviceConnection(mContext);
@@ -546,7 +567,7 @@ public class MainActivity extends Activity implements
          return super.onKeyDown(keyCode, event);
     }
 
-    public void followTask (View v) {
+    public void twitterFollowTask (View v) {
         DeviceConnection deviceConnection = new DeviceConnection(mContext);
         if (deviceConnection.checkInternetConnected()) {
             new TwitterAsyncTask().execute();
