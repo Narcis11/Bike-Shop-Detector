@@ -210,22 +210,6 @@ public class MainActivity extends Activity implements
                  }*/
                  mAnimation = AnimationUtils.loadAnimation(mContext,R.anim.internet_connected);
                  mInfoTextView = (TextView) findViewById(R.id.info_textview);
-
-                 try {
-                     PackageInfo info = getPackageManager().getPackageInfo(
-                             "waldo.bike.waldo",
-                             PackageManager.GET_SIGNATURES);
-                     for (Signature signature : info.signatures) {
-                         MessageDigest md = MessageDigest.getInstance("SHA");
-                         md.update(signature.toByteArray());
-                         Log.i(LOG_TAG,"KeyHash: " + Base64.encodeToString(md.digest(), Base64.DEFAULT));
-                     }
-                 }
-                 catch (PackageManager.NameNotFoundException e) {
-                        e.printStackTrace();
-                 } catch (NoSuchAlgorithmException e) {
-                        e.printStackTrace();
-                 }
     }
 
 
@@ -245,7 +229,6 @@ public class MainActivity extends Activity implements
     protected void onPause() {
         super.onPause();
         // Logs 'app deactivate' App Event.
-        AppEventsLogger.deactivateApp(this);
         unregisterReceiver(mBroadcastReceiver);
     //    Log.i(LOG_TAG,"in onPause");
         //random value used to prevent the GPS from disconnecting
@@ -273,7 +256,6 @@ public class MainActivity extends Activity implements
     protected void onResume() {
         super.onResume();
         // Logs 'install' and 'app activate' App Events.
-        AppEventsLogger.activateApp(this);
         //register the broadcast receiver
         registerReceiver(mBroadcastReceiver,mIntentFilter);
         DeviceConnection deviceConnection = new DeviceConnection(mContext);
@@ -373,8 +355,8 @@ public class MainActivity extends Activity implements
             GlobalState.USER_LAT = mLatLng[0];
             GlobalState.USER_LNG = mLatLng[1];
             Log.i(LOG_TAG,"Location in GPS is " + location.toString());
-            //ShopsFragment shopsFragment = new ShopsFragment();
-            //shopsFragment.updateShopList(mContext);
+            ShopsFragment shopsFragment = new ShopsFragment();
+            shopsFragment.updateShopList(mContext);
         }
             mFirstGPSConnection = false;
     }

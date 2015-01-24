@@ -11,11 +11,9 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
 
-import com.facebook.AppEventsLogger;
 
 import Utilities.Constants;
 import Utilities.DeviceConnection;
@@ -49,8 +47,6 @@ public class SplashScreen extends Activity{
     @Override
     protected void onResume() {
         super.onResume();
-        // Logs 'install' and 'app activate' App Events (facebook sdk).
-        AppEventsLogger.activateApp(this);
         DeviceConnection deviceConnection = new DeviceConnection(mContext);
         Log.i(LOG_TAG,"in onResume");
         if (!deviceConnection.checkGpsEnabled()) {

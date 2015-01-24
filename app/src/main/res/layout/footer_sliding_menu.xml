@@ -13,6 +13,14 @@
         android:src="@drawable/logo_footer"
         />
 
+    <com.facebook.widget.LikeView
+        android:id="@+id/like_view"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp">
+    </com.facebook.widget.LikeView>
+
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
