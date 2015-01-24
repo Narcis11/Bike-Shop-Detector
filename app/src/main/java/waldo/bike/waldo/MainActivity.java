@@ -16,6 +16,7 @@ import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -31,6 +32,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -86,9 +88,10 @@ public class MainActivity extends Activity implements
     TextView mLocationView;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
-    //used for the "Like" button
+    //used for the social media buttons
     private UiLifecycleHelper mUiHelper;
     private LikeView mLikeView;
+    private ImageView mFollowView;
     //used to store the user's coordinates
     private static String[] mLatLng = new String[2];
      //these variables are used for the slider menu
@@ -220,7 +223,25 @@ public class MainActivity extends Activity implements
                  Settings.sdkInitialize(mContext);
                  mLikeView = (LikeView) findViewById(R.id.like_button);
                  mLikeView.setObjectId("https://www.facebook.com/waldotheknight");
-                 Log.i(LOG_TAG,"Width onCreate: " + String.valueOf(mLikeView.getWidth()));
+                 mFollowView = (ImageView) findViewById(R.id.follow_button);
+                 mFollowView.setOnClickListener(new View.OnClickListener() {
+                 @Override
+                 public void onClick(View v) {
+                         Log.i(LOG_TAG,"Drawable is " + mFollowView.getDrawable().toString());
+                         Drawable followDrawable = getResources().getDrawable(R.drawable.twitter_follow);
+                         Log.i(LOG_TAG,"Follow drawable is " + followDrawable.toString());
+                         Drawable followingDrawable = getResources().getDrawable(R.drawable.twitter_following);
+
+                         if (mFollowView.getDrawable().getConstantState().equals(followDrawable.getConstantState())) {
+                             mFollowView.setImageResource(R.drawable.twitter_following);
+                             Log.i(LOG_TAG,"Changed image to following");
+                         }
+                         else if (mFollowView.getDrawable().getConstantState().equals(followingDrawable.getConstantState())) {
+                             mFollowView.setImageResource(R.drawable.twitter_follow);
+                             Log.i(LOG_TAG,"Changed image to follow");
+                         }
+                     }
+                 });
     }
 
 
@@ -303,10 +324,10 @@ public class MainActivity extends Activity implements
     //called when a new like is given on taken back
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.i(LOG_TAG,"in onActivityResult");
+        Log.i(LOG_TAG, "in onActivityResult");
         super.onActivityResult(requestCode, resultCode, data);
-        mLikeView.handleOnActivityResult(mContext,requestCode, resultCode,data);
-        mLikeView.setPadding(0,0,230,0);
+        mLikeView.handleOnActivityResult(mContext, requestCode, resultCode, data);
+        mLikeView.setPadding(0, 0, 230, 0);
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

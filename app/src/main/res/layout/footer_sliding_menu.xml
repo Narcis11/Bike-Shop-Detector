@@ -40,7 +40,7 @@
         android:paddingEnd="12dp"
         android:paddingBottom="15dp"
         android:onClick="twitterFollowTask"
-        android:src="@drawable/follow_button_test"
+        android:src="@drawable/twitter_follow"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_gravity="end" />
