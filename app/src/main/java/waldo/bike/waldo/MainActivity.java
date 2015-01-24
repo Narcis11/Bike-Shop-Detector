@@ -36,6 +36,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.AppEventsLogger;
+import com.facebook.Settings;
+import com.facebook.UiLifecycleHelper;
+import com.facebook.widget.LikeView;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -83,6 +86,9 @@ public class MainActivity extends Activity implements
     TextView mLocationView;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
+    //used for the "Like" button
+    private UiLifecycleHelper mUiHelper;
+    private LikeView mLikeView;
     //used to store the user's coordinates
     private static String[] mLatLng = new String[2];
      //these variables are used for the slider menu
@@ -210,9 +216,19 @@ public class MainActivity extends Activity implements
                  }*/
                  mAnimation = AnimationUtils.loadAnimation(mContext,R.anim.internet_connected);
                  mInfoTextView = (TextView) findViewById(R.id.info_textview);
+                 //configuring the "Like" button
+                 Settings.sdkInitialize(mContext);
+                 mLikeView = (LikeView) findViewById(R.id.like_button);
+                 mLikeView.setObjectId("https://www.facebook.com/waldotheknight");
+
     }
 
-
+             @Override
+             protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+                 Log.i(LOG_TAG,"in onActivityResult");
+                 super.onActivityResult(requestCode, resultCode, data);
+                 mLikeView.handleOnActivityResult(mContext,requestCode, resultCode,data);
+             }
 
     @Override
     protected void onStart() {
