@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:paddingTop="10dp"
-    android:paddingBottom="15dp"
+    android:paddingBottom="10dp"
     android:layout_height="match_parent">
 
     <ImageView
@@ -12,39 +12,38 @@
         android:layout_height="wrap_content"
         android:id="@+id/logo_footer"
         android:layout_gravity="center_horizontal"
-        android:paddingBottom="25dp"
+        android:paddingBottom="12dp"
         android:src="@drawable/logo_footer"
         />
 
     <RelativeLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-
     <com.facebook.widget.LikeView
-            android:id="@+id/like_button"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:layout_gravity="start"
-            android:paddingLeft="5dp"
-            >
+        android:id="@+id/like_button"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:paddingRight="157dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_gravity="start"
+        >
     </com.facebook.widget.LikeView>
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/follow_button"
-        android:layout_gravity="right"
         android:paddingRight="12dp"
+        android:paddingEnd="12dp"
         android:paddingBottom="15dp"
         android:onClick="twitterFollowTask"
-        android:src="@drawable/follow_button"
-        android:layout_below="@+id/like_button"
+        android:src="@drawable/follow_button_test"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="end" />
     </RelativeLayout>
-
 
 </LinearLayout>

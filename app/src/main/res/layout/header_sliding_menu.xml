@@ -10,6 +10,6 @@
         android:textColor="@color/header_text"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:id="@+id/header_sliding_view" />
 </LinearLayout>

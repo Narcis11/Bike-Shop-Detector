@@ -220,20 +220,14 @@ public class MainActivity extends Activity implements
                  Settings.sdkInitialize(mContext);
                  mLikeView = (LikeView) findViewById(R.id.like_button);
                  mLikeView.setObjectId("https://www.facebook.com/waldotheknight");
-
+                 Log.i(LOG_TAG,"Width onCreate: " + String.valueOf(mLikeView.getWidth()));
     }
 
-             @Override
-             protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-                 Log.i(LOG_TAG,"in onActivityResult");
-                 super.onActivityResult(requestCode, resultCode, data);
-                 mLikeView.handleOnActivityResult(mContext,requestCode, resultCode,data);
-             }
+
 
     @Override
     protected void onStart() {
         super.onStart();
-      //  Log.i(LOG_TAG,"in onStart()");
         if (mPreviousOrientation  != 4 ) {
             mGoogleApiClient.connect();
         }
@@ -245,6 +239,7 @@ public class MainActivity extends Activity implements
     protected void onPause() {
         super.onPause();
         // Logs 'app deactivate' App Event.
+        AppEventsLogger.deactivateApp(mContext);
         unregisterReceiver(mBroadcastReceiver);
     //    Log.i(LOG_TAG,"in onPause");
         //random value used to prevent the GPS from disconnecting
@@ -272,6 +267,7 @@ public class MainActivity extends Activity implements
     protected void onResume() {
         super.onResume();
         // Logs 'install' and 'app activate' App Events.
+        AppEventsLogger.activateApp(mContext);
         //register the broadcast receiver
         registerReceiver(mBroadcastReceiver,mIntentFilter);
         DeviceConnection deviceConnection = new DeviceConnection(mContext);
@@ -304,6 +300,14 @@ public class MainActivity extends Activity implements
         this.finish();
     }
 
+    //called when a new like is given on taken back
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.i(LOG_TAG,"in onActivityResult");
+        super.onActivityResult(requestCode, resultCode, data);
+        mLikeView.handleOnActivityResult(mContext,requestCode, resultCode,data);
+        mLikeView.setPadding(0,0,230,0);
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -367,10 +371,10 @@ public class MainActivity extends Activity implements
         }*/
         //TODO: Find another logic for the user's positioning. We need to collect the coordinates more often.
         if (mFirstGPSConnection) {
+            DeviceConnection deviceConnection = new DeviceConnection(mContext);
             mLatLng = Utility.getLatLngFromLocation(location.toString());
             GlobalState.USER_LAT = mLatLng[0];
             GlobalState.USER_LNG = mLatLng[1];
-            Log.i(LOG_TAG,"Location in GPS is " + location.toString());
             ShopsFragment shopsFragment = new ShopsFragment();
             shopsFragment.updateShopList(mContext);
         }

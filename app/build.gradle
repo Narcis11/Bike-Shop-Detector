@@ -23,7 +23,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.google.android.gms:play-services:6.5.87'
     compile 'com.android.support:support-v4:21.0.3'
     compile 'com.android.support:appcompat-v7:21.0.3'
@@ -32,4 +32,5 @@ dependencies {
     compile files('twitter4j-core-4.0.2.jar')
     compile files('D:/StudioWorkspace/Waldo/libs/twitter4j-core-4.0.2.jar')
     compile files('D:/StudioWorkspace/libs/twitter4j-async-4.0.2.jar')
+    compile files('D:/StudioWorkspace/Waldo/libs/AndroidDesignPreview-0.3.2.jar')
 }
