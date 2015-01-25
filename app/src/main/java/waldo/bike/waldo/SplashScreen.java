@@ -17,6 +17,8 @@ import android.util.Log;
 
 import Utilities.Constants;
 import Utilities.DeviceConnection;
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by nmihai on 09.12.2014.
@@ -31,6 +33,7 @@ public class SplashScreen extends Activity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_splash);
         mContext = getApplicationContext(); //needed to start the Main Activity
         //instantiate the filter and assign a value

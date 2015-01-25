@@ -59,5 +59,7 @@ public class Constants {
     public static final String BROADCAST_ACTION = "android.net.conn.CONNECTIVITY_CHANGE";
 
     //used for the Twitter authentification
+    public static final String CONSUMER_KEY = "amGg88FlHOkWJwFdxcZuwNCNd";
+    public static final String CONSUMER_SECRET = "npKv9jr06nWfCCNNbixntIxeZmcuLgQSlebZOYJ82jytuLWHrl";
 
 }

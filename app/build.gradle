@@ -1,4 +1,19 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.+'
+    }
+}
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
+
 
 android {
     compileSdkVersion 21
@@ -36,4 +51,8 @@ dependencies {
     compile files('D:/StudioWorkspace/Waldo/libs/twitter4j-core-4.0.2.jar')
     compile files('D:/StudioWorkspace/libs/twitter4j-async-4.0.2.jar')
     compile files('D:/StudioWorkspace/Waldo/libs/AndroidDesignPreview-0.3.2.jar')
+    compile files('D:/StudioWorkspace/Waldo/libs/CrashlyticsPlugin.jar')
+    compile('com.crashlytics.sdk.android:crashlytics:2.2.0@aar') {
+        transitive = true;
+    }
 }

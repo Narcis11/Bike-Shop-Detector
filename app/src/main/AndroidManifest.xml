@@ -109,6 +109,9 @@
             android:label="@string/title_activity_add_shop_map"
             android:parentActivityName=".MainActivity">
         </activity>
+        <meta-data
+            android:name="com.crashlytics.ApiKey"
+            android:value="3599dce40899e3fa9ad2896a46b28d2d17edd499" />
     </application>
 
 </manifest>

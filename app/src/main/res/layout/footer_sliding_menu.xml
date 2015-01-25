@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:paddingTop="10dp"
-    android:paddingBottom="10dp"
+    android:paddingBottom="1dp"
     android:layout_height="match_parent">
 
     <ImageView
@@ -12,8 +12,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/logo_footer"
         android:layout_gravity="center_horizontal"
-        android:paddingBottom="12dp"
-        android:src="@drawable/logo_footer"
+        android:paddingBottom="2dp"
+        android:src="@drawable/waldo_baza"
         />
 
     <RelativeLayout
@@ -25,7 +25,7 @@
         android:id="@+id/like_button"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
-        android:paddingRight="157dp"
+        android:paddingLeft="12dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_gravity="start"
@@ -39,11 +39,18 @@
         android:paddingRight="12dp"
         android:paddingEnd="12dp"
         android:paddingBottom="15dp"
-        android:onClick="twitterFollowTask"
         android:src="@drawable/twitter_follow"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_gravity="end" />
+
+        <com.twitter.sdk.android.core.identity.TwitterLoginButton
+            android:id="@+id/twitter_login_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
     </RelativeLayout>
+
 
 </LinearLayout>

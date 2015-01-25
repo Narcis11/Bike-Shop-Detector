@@ -2,6 +2,7 @@ package waldo.bike.waldo;
 
 import android.app.Activity;
 import android.app.ActionBar;
+import android.app.Application;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -36,6 +37,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.crashlytics.android.Crashlytics;
 import com.facebook.AppEventsLogger;
 import com.facebook.Settings;
 import com.facebook.UiLifecycleHelper;
@@ -52,15 +55,22 @@ import Utilities.DeviceConnection;
 import Utilities.GlobalState;
 import Utilities.Utility;
 import data.ShopsContract;
+import io.fabric.sdk.android.Fabric;
+import io.fabric.sdk.android.services.common.Crash;
 import slidermenu.SliderDrawerItem;
 import slidermenu.SliderDrawerListAdapter;
 import socialmedia.TwitterAsyncTask;
 import com.facebook.Session;
+import com.twitter.sdk.android.Twitter;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.core.TwitterAuthToken;
+import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.identity.TwitterAuthClient;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
 public class MainActivity extends Activity implements
         GoogleApiClient.ConnectionCallbacks,
@@ -94,6 +104,8 @@ public class MainActivity extends Activity implements
     private LikeView mLikeView;
     private ImageView mFollowView;
     private TwitterAuthClient mTwitterAuthClient;
+    private TwitterAuthConfig mTwitterAuthConfig;
+    private TwitterLoginButton mTwitterLoginButton;
     //used to store the user's coordinates
     private static String[] mLatLng = new String[2];
      //these variables are used for the slider menu
@@ -183,7 +195,7 @@ public class MainActivity extends Activity implements
 
                  // Recycle the typed array
                  navMenuIcons.recycle();
-                 mHeaderView.setBackgroundColor(getResources().getColor(R.color.header_background));
+                 //mHeaderView.setBackgroundColor(getResources().getColor(R.color.header_background));
                  mDrawerList.addHeaderView(mHeaderView);//in pre-KitKat versions, we must add the header before the setAdapter is called;
                  mDrawerList.addFooterView(mDividerFooterView);
                  mDrawerList.addFooterView(mFooterView);
@@ -225,8 +237,12 @@ public class MainActivity extends Activity implements
                  mLikeView = (LikeView) findViewById(R.id.like_button);
                  mLikeView.setObjectId("https://www.facebook.com/waldotheknight");
                  mFollowView = (ImageView) findViewById(R.id.follow_button);
+                 mTwitterLoginButton = (TwitterLoginButton) findViewById(R.id.twitter_login_button);
+                 TwitterAuthConfig authConfig =
+                         new TwitterAuthConfig(Constants.CONSUMER_KEY,
+                                 Constants.CONSUMER_SECRET);
+                 Fabric.with(this, new Twitter(authConfig));
                  setUpFollowButton();
-
 
     }
 
@@ -315,7 +331,8 @@ public class MainActivity extends Activity implements
         super.onActivityResult(requestCode, resultCode, data);
         mLikeView.handleOnActivityResult(mContext, requestCode, resultCode, data);
         mLikeView.setPadding(0, 0, 230, 0);
-        mTwitterAuthClient.onActivityResult(requestCode,resultCode,data);
+        //TODO: Decomment the line below after you fix the follow button
+        //mTwitterAuthClient.onActivityResult(requestCode,resultCode,data);
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -589,16 +606,49 @@ public class MainActivity extends Activity implements
         }
     }
 
+    public class TwitterAuth extends Application {
+        @Override
+        public void onCreate() {
+            super.onCreate();
+        }
+        public void muieTwitter() {
+            Fabric.with(mContext, new Twitter(new TwitterAuthConfig(Constants.CONSUMER_KEY,Constants.CONSUMER_SECRET)), new TwitterCore(new TwitterAuthConfig(Constants.CONSUMER_KEY,Constants.CONSUMER_SECRET))
+            , new Crashlytics());
+        }
+    }
     private void setUpFollowButton() {
+        //we have placed the twitter login button as gone (==invisible+doesn't take up space) and we call it whenever our button (mFollowView) is clicked
+        TwitterAuth twitterAuth = new TwitterAuth();
+        twitterAuth.muieTwitter();
         mFollowView.setOnClickListener(new View.OnClickListener() {
                      @Override
                      public void onClick(View v) {
+        mTwitterLoginButton.performClick();
+        mTwitterLoginButton.setCallback(new Callback<TwitterSession>() {
+            @Override
+            public void success(Result<TwitterSession> twitterSessionResult) {
+                Log.i(LOG_TAG,"Logged in with twitter!");
+                TwitterSession session =
+                        Twitter.getSessionManager().getActiveSession();
+                TwitterAuthToken authToken = session.getAuthToken();
+                String token = authToken.token;
+                String secret = authToken.secret;
+                Log.i(LOG_TAG,"Twitter id: " + token);
+                Log.i(LOG_TAG,"Auth token: " + secret);
+            }
+
+            @Override
+            public void failure(TwitterException e) {
+                Log.i(LOG_TAG,"Login Failed!" + e.toString());
+            }
+        });
         Log.i(LOG_TAG,"Drawable is " + mFollowView.getDrawable().toString());
         Drawable followDrawable = getResources().getDrawable(R.drawable.twitter_follow);
         Log.i(LOG_TAG,"Follow drawable is " + followDrawable.toString());
         Drawable followingDrawable = getResources().getDrawable(R.drawable.twitter_following);
 
             if (mFollowView.getDrawable().getConstantState().equals(followDrawable.getConstantState())) {
+               // authenticateTwitter();
                 mFollowView.setImageResource(R.drawable.twitter_following);
                 Log.i(LOG_TAG,"Changed image to following");
                 }
@@ -611,13 +661,23 @@ public class MainActivity extends Activity implements
     }
 
     private void authenticateTwitter() {
+        //we need to initialise a Fabric Kit before authenticating
+        mTwitterAuthConfig = new TwitterAuthConfig(Constants.CONSUMER_KEY, Constants.CONSUMER_SECRET);
+        Fabric.with(mContext, new Twitter(mTwitterAuthConfig));
+        //begin authenticating
         mTwitterAuthClient = new TwitterAuthClient();
         MainActivity mainActivity = new MainActivity();
-        mTwitterAuthClient.authorize(mainActivity, new Callback<TwitterSession>() {
+        mTwitterAuthClient.authorize(this, new Callback<TwitterSession>() {
             @Override
             public void success(Result<TwitterSession> twitterSessionResult) {
             Log.i(LOG_TAG,"Logged in with twitter!");
-
+                TwitterSession session =
+                        Twitter.getSessionManager().getActiveSession();
+                TwitterAuthToken authToken = session.getAuthToken();
+                String token = authToken.token;
+                String secret = authToken.secret;
+                Log.i(LOG_TAG,"Twitter id: " + token);
+                Log.i(LOG_TAG,"Auth token: " + secret);
             }
 
             @Override

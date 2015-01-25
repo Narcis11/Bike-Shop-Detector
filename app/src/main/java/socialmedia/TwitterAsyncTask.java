@@ -1,8 +1,10 @@
 package socialmedia;
 
+import android.app.Application;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import Utilities.Constants;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
@@ -15,16 +17,14 @@ public class TwitterAsyncTask extends AsyncTask<String[],Void,Void> {
     private static final String LOG_TAG = TwitterAsyncTask.class.getSimpleName();
     @Override
     protected Void doInBackground(String[]... params) {
-        String screenName = "startupkitio";
+        String screenName = "waldotheknight";
         //TODO: Replace Twitter keys with those of Waldo
-        final String WALDO_CONSUMER_KEY = "amGg88FlHOkWJwFdxcZuwNCNd";
-        final String WALDO_CONSUMER_SECRET_KEY = "npKv9jr06nWfCCNNbixntIxeZmcuLgQSlebZOYJ82jytuLWHrl";
         final String USER_TOKEN = params[0].toString();
         final String USER_SECRET_TOKEN = params[0].toString();
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setDebugEnabled(true)
-                .setOAuthConsumerKey(WALDO_CONSUMER_KEY)
-                .setOAuthConsumerSecret(WALDO_CONSUMER_SECRET_KEY)
+                .setOAuthConsumerKey(Constants.CONSUMER_KEY)
+                .setOAuthConsumerSecret(Constants.CONSUMER_SECRET)
                 .setOAuthAccessToken(USER_TOKEN)
                 .setOAuthAccessTokenSecret(USER_SECRET_TOKEN);
         TwitterFactory tf = new TwitterFactory(cb.build());
