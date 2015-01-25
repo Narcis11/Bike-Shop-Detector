@@ -11,22 +11,22 @@ import twitter4j.conf.ConfigurationBuilder;
 /**
  * Created by nmihai on 23.01.2015.
  */
-public class TwitterAsyncTask extends AsyncTask<Void,Void,Void> {
+public class TwitterAsyncTask extends AsyncTask<String[],Void,Void> {
     private static final String LOG_TAG = TwitterAsyncTask.class.getSimpleName();
     @Override
-    protected Void doInBackground(Void... params) {
+    protected Void doInBackground(String[]... params) {
         String screenName = "startupkitio";
         //TODO: Replace Twitter keys with those of Waldo
-        final String CONSUMER_KEY = "Z5ubamevMWzVb8rqfnSBzN0dR";
-        final String CONSUMER_SECRET_KEY = "bn8w8ibPjH56KfpC5LAj9CwZmyOUEtKQJohfps5PmwTJARvsJU";
-        final String TOKEN = "2246081588-9YS4Y4hJDIOoCroeDhPYR4PmDSwFxSr1wnN9bcn";
-        final String SECRET_TOKEN = "iHIfv0jz7WticHhrXjEtKu1m5ogZb5jiQQthtfHDCRrhn";
+        final String WALDO_CONSUMER_KEY = "amGg88FlHOkWJwFdxcZuwNCNd";
+        final String WALDO_CONSUMER_SECRET_KEY = "npKv9jr06nWfCCNNbixntIxeZmcuLgQSlebZOYJ82jytuLWHrl";
+        final String USER_TOKEN = params[0].toString();
+        final String USER_SECRET_TOKEN = params[0].toString();
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setDebugEnabled(true)
-                .setOAuthConsumerKey(CONSUMER_KEY)
-                .setOAuthConsumerSecret(CONSUMER_SECRET_KEY)
-                .setOAuthAccessToken(TOKEN)
-                .setOAuthAccessTokenSecret(SECRET_TOKEN);
+                .setOAuthConsumerKey(WALDO_CONSUMER_KEY)
+                .setOAuthConsumerSecret(WALDO_CONSUMER_SECRET_KEY)
+                .setOAuthAccessToken(USER_TOKEN)
+                .setOAuthAccessTokenSecret(USER_SECRET_TOKEN);
         TwitterFactory tf = new TwitterFactory(cb.build());
         Twitter twitter = tf.getInstance();
 

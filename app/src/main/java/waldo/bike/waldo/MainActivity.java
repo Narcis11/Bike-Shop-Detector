@@ -57,6 +57,10 @@ import slidermenu.SliderDrawerListAdapter;
 import socialmedia.TwitterAsyncTask;
 import com.facebook.Session;
 import com.twitter.sdk.android.core.identity.TwitterAuthClient;
+import com.twitter.sdk.android.core.Callback;
+import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.TwitterException;
+import com.twitter.sdk.android.core.TwitterSession;
 
 public class MainActivity extends Activity implements
         GoogleApiClient.ConnectionCallbacks,
@@ -89,6 +93,7 @@ public class MainActivity extends Activity implements
     private UiLifecycleHelper mUiHelper;
     private LikeView mLikeView;
     private ImageView mFollowView;
+    private TwitterAuthClient mTwitterAuthClient;
     //used to store the user's coordinates
     private static String[] mLatLng = new String[2];
      //these variables are used for the slider menu
@@ -220,31 +225,15 @@ public class MainActivity extends Activity implements
                  mLikeView = (LikeView) findViewById(R.id.like_button);
                  mLikeView.setObjectId("https://www.facebook.com/waldotheknight");
                  mFollowView = (ImageView) findViewById(R.id.follow_button);
-                 mFollowView.setOnClickListener(new View.OnClickListener() {
-                 @Override
-                 public void onClick(View v) {
-                         Log.i(LOG_TAG,"Drawable is " + mFollowView.getDrawable().toString());
-                         Drawable followDrawable = getResources().getDrawable(R.drawable.twitter_follow);
-                         Log.i(LOG_TAG,"Follow drawable is " + followDrawable.toString());
-                         Drawable followingDrawable = getResources().getDrawable(R.drawable.twitter_following);
+                 setUpFollowButton();
 
-                         if (mFollowView.getDrawable().getConstantState().equals(followDrawable.getConstantState())) {
-                             mFollowView.setImageResource(R.drawable.twitter_following);
-                             Log.i(LOG_TAG,"Changed image to following");
-                         }
-                         else if (mFollowView.getDrawable().getConstantState().equals(followingDrawable.getConstantState())) {
-                             mFollowView.setImageResource(R.drawable.twitter_follow);
-                             Log.i(LOG_TAG,"Changed image to follow");
-                         }
-                     }
-                 });
-                 TwitterAuthClient client = new TwitterAuthClient();
 
     }
 
 
 
-    @Override
+
+             @Override
     protected void onStart() {
         super.onStart();
         if (mPreviousOrientation  != 4 ) {
@@ -326,6 +315,7 @@ public class MainActivity extends Activity implements
         super.onActivityResult(requestCode, resultCode, data);
         mLikeView.handleOnActivityResult(mContext, requestCode, resultCode, data);
         mLikeView.setPadding(0, 0, 230, 0);
+        mTwitterAuthClient.onActivityResult(requestCode,resultCode,data);
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -598,5 +588,43 @@ public class MainActivity extends Activity implements
             Toast.makeText(mContext,getResources().getString(R.string.no_internet),Toast.LENGTH_SHORT).show();
         }
     }
+
+    private void setUpFollowButton() {
+        mFollowView.setOnClickListener(new View.OnClickListener() {
+                     @Override
+                     public void onClick(View v) {
+        Log.i(LOG_TAG,"Drawable is " + mFollowView.getDrawable().toString());
+        Drawable followDrawable = getResources().getDrawable(R.drawable.twitter_follow);
+        Log.i(LOG_TAG,"Follow drawable is " + followDrawable.toString());
+        Drawable followingDrawable = getResources().getDrawable(R.drawable.twitter_following);
+
+            if (mFollowView.getDrawable().getConstantState().equals(followDrawable.getConstantState())) {
+                mFollowView.setImageResource(R.drawable.twitter_following);
+                Log.i(LOG_TAG,"Changed image to following");
+                }
+            else if (mFollowView.getDrawable().getConstantState().equals(followingDrawable.getConstantState())) {
+                mFollowView.setImageResource(R.drawable.twitter_follow);
+                Log.i(LOG_TAG,"Changed image to follow");
+                }
+                }
+                 });
+    }
+
+    private void authenticateTwitter() {
+        mTwitterAuthClient = new TwitterAuthClient();
+        MainActivity mainActivity = new MainActivity();
+        mTwitterAuthClient.authorize(mainActivity, new Callback<TwitterSession>() {
+            @Override
+            public void success(Result<TwitterSession> twitterSessionResult) {
+            Log.i(LOG_TAG,"Logged in with twitter!");
+
+            }
+
+            @Override
+            public void failure(TwitterException e) {
+            Log.i(LOG_TAG,"Login Failed!" + e.toString());
+            }
+        });
+        }
 
     }
