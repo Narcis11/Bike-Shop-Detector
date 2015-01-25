@@ -65,8 +65,8 @@
     <!--Placeholder icons, will be replaced-->
     <array name="nav_drawer_icons_array">
         <item>@drawable/add_shop_slider_menu</item>
-        <item>@drawable/ic_communities</item>
-        <item>@drawable/web</item>
+        <item>@drawable/view_all_shops</item>
+        <item>@drawable/about</item>
     </array>
 
 </resources>
