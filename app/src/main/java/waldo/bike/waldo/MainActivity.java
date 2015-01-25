@@ -36,7 +36,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.facebook.AppEventsLogger;
 import com.facebook.Settings;
 import com.facebook.UiLifecycleHelper;
@@ -46,9 +45,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import Utilities.Constants;
@@ -60,6 +56,7 @@ import slidermenu.SliderDrawerItem;
 import slidermenu.SliderDrawerListAdapter;
 import socialmedia.TwitterAsyncTask;
 import com.facebook.Session;
+import com.twitter.sdk.android.core.identity.TwitterAuthClient;
 
 public class MainActivity extends Activity implements
         GoogleApiClient.ConnectionCallbacks,
@@ -135,7 +132,6 @@ public class MainActivity extends Activity implements
         actionBar.setTitle("");
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFFFFF")));
         mLocationView = new TextView(this);
-
        // setContentView(mLocationView); CRASHES BECAUSE OF THIS LINE
         //register the Google Api Client
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -242,6 +238,8 @@ public class MainActivity extends Activity implements
                          }
                      }
                  });
+                 TwitterAuthClient client = new TwitterAuthClient();
+
     }
 
 
