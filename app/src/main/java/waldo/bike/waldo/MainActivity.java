@@ -245,6 +245,8 @@ public class MainActivity extends Activity implements
                  Settings.sdkInitialize(mContext);
                  mLikeView = (LikeView) findViewById(R.id.like_button);
                  mLikeView.setObjectId(mFacebookLikePage);
+                 //we also have to set the right padding here, otherwise the LikeD button will move to the right on app launch
+                 mLikeView.setPadding(0, 0, 230, 0);
                  mFollowView = (ImageView) findViewById(R.id.follow_button);
                  mTwitterLoginButton = (TwitterLoginButton) findViewById(R.id.twitter_login_button);
                  mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
@@ -625,7 +627,6 @@ public class MainActivity extends Activity implements
             String following = mSharedPrefs.getString(FOLLOW_BUTTON_KEY, "");
             if (following.equals(followingButtonActivated)) {
                 mFollowView.setImageResource(R.drawable.twitter_following);
-                Log.i(LOG_TAG,"***FOLLOWING***");
             }
         }
     }
@@ -634,7 +635,6 @@ public class MainActivity extends Activity implements
         mTwitterLoginButton.setCallback(new Callback<TwitterSession>() {
             @Override
             public void success(Result<TwitterSession> twitterSessionResult) {
-                Log.i(LOG_TAG,"Logged in with twitter!");
                 mFollowView.setImageResource(R.drawable.twitter_following);
                 Log.i(LOG_TAG,"Changed image to following");
                 TwitterSession session =
