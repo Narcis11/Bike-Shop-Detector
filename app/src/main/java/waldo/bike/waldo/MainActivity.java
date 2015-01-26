@@ -8,6 +8,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -21,6 +22,7 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Base64;
@@ -101,12 +103,18 @@ public class MainActivity extends Activity implements
     private LocationRequest mLocationRequest;
     //used for the social media buttons
     private final String mFacebookLikePage = "https://www.facebook.com/waldotheknight";
-    private UiLifecycleHelper mUiHelper;
+    private String mTwitterToken = "";
+    private String mTwitterSecret = "";
     private LikeView mLikeView;
     private ImageView mFollowView;
     private TwitterAuthClient mTwitterAuthClient;
     private TwitterAuthConfig mTwitterAuthConfig;
     private TwitterLoginButton mTwitterLoginButton;
+    //used to determine the state of the follow button (follow/following) at app launch
+    private SharedPreferences mSharedPrefs;
+    private final String FOLLOW_BUTTON_KEY = "follow_key";
+    private String followButtonActivated = "follow";
+    private String followingButtonActivated = "following";
     //used to store the user's coordinates
     private static String[] mLatLng = new String[2];
      //these variables are used for the slider menu
@@ -239,11 +247,11 @@ public class MainActivity extends Activity implements
                  mLikeView.setObjectId(mFacebookLikePage);
                  mFollowView = (ImageView) findViewById(R.id.follow_button);
                  mTwitterLoginButton = (TwitterLoginButton) findViewById(R.id.twitter_login_button);
-                 Log.i(LOG_TAG,"In onCreate, before setUpFollow()");
+                 mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
                  setUpFollowButton();
+                 loadCorrectFollowButton();
 
     }
-
 
 
 
@@ -612,17 +620,28 @@ public class MainActivity extends Activity implements
         }
     }
 
+    private void loadCorrectFollowButton() {
+        if (mSharedPrefs.contains(FOLLOW_BUTTON_KEY)) {
+            String following = mSharedPrefs.getString(FOLLOW_BUTTON_KEY, "");
+            if (following.equals(followingButtonActivated)) {
+                mFollowView.setImageResource(R.drawable.twitter_following);
+                Log.i(LOG_TAG,"***FOLLOWING***");
+            }
+        }
+    }
     private void setUpFollowButton() {
         Log.i(LOG_TAG,"in setUpFollowButton()");
         mTwitterLoginButton.setCallback(new Callback<TwitterSession>() {
             @Override
             public void success(Result<TwitterSession> twitterSessionResult) {
                 Log.i(LOG_TAG,"Logged in with twitter!");
+                mFollowView.setImageResource(R.drawable.twitter_following);
+                Log.i(LOG_TAG,"Changed image to following");
                 TwitterSession session =
                         Twitter.getSessionManager().getActiveSession();
                 TwitterAuthToken authToken = session.getAuthToken();
-                String token = authToken.token;
-                String secret = authToken.secret;
+                mTwitterToken = authToken.token;
+                mTwitterSecret = authToken.secret;
                 String[] loginData = new String[2];
                 loginData[0] = authToken.token;
                 loginData[1] = authToken.secret;
@@ -642,15 +661,16 @@ public class MainActivity extends Activity implements
                      public void onClick(View v) {
         Drawable followDrawable = getResources().getDrawable(R.drawable.twitter_follow);
         Drawable followingDrawable = getResources().getDrawable(R.drawable.twitter_following);
-
+        SharedPreferences.Editor editor = mSharedPrefs.edit();
             if (mFollowView.getDrawable().getConstantState().equals(followDrawable.getConstantState())) {
-               // authenticateTwitter();
-                mFollowView.setImageResource(R.drawable.twitter_following);
                 mTwitterLoginButton.performClick();
-                Log.i(LOG_TAG,"Changed image to following");
+                editor.putString(FOLLOW_BUTTON_KEY,followingButtonActivated);
+                editor.commit();
                 }
             else if (mFollowView.getDrawable().getConstantState().equals(followingDrawable.getConstantState())) {
                 mFollowView.setImageResource(R.drawable.twitter_follow);
+                editor.putString(FOLLOW_BUTTON_KEY,followButtonActivated);
+                editor.commit();
                 Log.i(LOG_TAG,"Changed image to follow");
                 }
                 }
