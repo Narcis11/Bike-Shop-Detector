@@ -623,13 +623,18 @@ public class MainActivity extends Activity implements
                 TwitterAuthToken authToken = session.getAuthToken();
                 String token = authToken.token;
                 String secret = authToken.secret;
-                Log.i(LOG_TAG,"Twitter id: " + token);
-                Log.i(LOG_TAG,"Auth token: " + secret);
+                String[] loginData = new String[2];
+                loginData[0] = authToken.token;
+                loginData[1] = authToken.secret;
+                TwitterAsyncTask twitterAsyncTask = new TwitterAsyncTask();
+                twitterAsyncTask.execute(loginData);
             }
 
             @Override
             public void failure(TwitterException e) {
                 Log.i(LOG_TAG,"Login Failed!" + e.toString());
+                Toast.makeText(mContext,getResources().getString(R.string.twitter_follow_failed),Toast.LENGTH_SHORT).show();
+                Crashlytics.logException(e);
             }
         });
         mFollowView.setOnClickListener(new View.OnClickListener() {
@@ -666,10 +671,8 @@ public class MainActivity extends Activity implements
                 TwitterSession session =
                         Twitter.getSessionManager().getActiveSession();
                 TwitterAuthToken authToken = session.getAuthToken();
-                String token = authToken.token;
-                String secret = authToken.secret;
-                Log.i(LOG_TAG,"Twitter id: " + token);
-                Log.i(LOG_TAG,"Auth token: " + secret);
+
+
             }
 
             @Override
