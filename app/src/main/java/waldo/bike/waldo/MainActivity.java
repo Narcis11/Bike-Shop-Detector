@@ -100,6 +100,7 @@ public class MainActivity extends Activity implements
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     //used for the social media buttons
+    private final String mFacebookLikePage = "https://www.facebook.com/waldotheknight";
     private UiLifecycleHelper mUiHelper;
     private LikeView mLikeView;
     private ImageView mFollowView;
@@ -235,13 +236,10 @@ public class MainActivity extends Activity implements
                  //configuring the "Like" button
                  Settings.sdkInitialize(mContext);
                  mLikeView = (LikeView) findViewById(R.id.like_button);
-                 mLikeView.setObjectId("https://www.facebook.com/waldotheknight");
+                 mLikeView.setObjectId(mFacebookLikePage);
                  mFollowView = (ImageView) findViewById(R.id.follow_button);
                  mTwitterLoginButton = (TwitterLoginButton) findViewById(R.id.twitter_login_button);
-                 TwitterAuthConfig authConfig =
-                         new TwitterAuthConfig(Constants.CONSUMER_KEY,
-                                 Constants.CONSUMER_SECRET);
-                 Fabric.with(this, new Twitter(authConfig));
+                 Log.i(LOG_TAG,"In onCreate, before setUpFollow()");
                  setUpFollowButton();
 
     }
@@ -330,9 +328,17 @@ public class MainActivity extends Activity implements
         Log.i(LOG_TAG, "in onActivityResult");
         super.onActivityResult(requestCode, resultCode, data);
         mLikeView.handleOnActivityResult(mContext, requestCode, resultCode, data);
-        mLikeView.setPadding(0, 0, 230, 0);
-        //TODO: Decomment the line below after you fix the follow button
-        //mTwitterAuthClient.onActivityResult(requestCode,resultCode,data);
+        mLikeView.setPadding(0, 0, 230, 0);//reposition the button after a Like action
+        if (mTwitterLoginButton != null) {
+            try {
+                Log.i(LOG_TAG, requestCode + ", " + resultCode + ", " + data.toString());
+                mTwitterLoginButton.onActivityResult(requestCode, resultCode, data);
+            }
+            catch (NullPointerException e){
+                e.printStackTrace();
+            }
+        }
+        else {Log.i(LOG_TAG,"mTwitterLoginButton ieste NULL");}
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -606,24 +612,8 @@ public class MainActivity extends Activity implements
         }
     }
 
-    public class TwitterAuth extends Application {
-        @Override
-        public void onCreate() {
-            super.onCreate();
-        }
-        public void muieTwitter() {
-            Fabric.with(mContext, new Twitter(new TwitterAuthConfig(Constants.CONSUMER_KEY,Constants.CONSUMER_SECRET)), new TwitterCore(new TwitterAuthConfig(Constants.CONSUMER_KEY,Constants.CONSUMER_SECRET))
-            , new Crashlytics());
-        }
-    }
     private void setUpFollowButton() {
-        //we have placed the twitter login button as gone (==invisible+doesn't take up space) and we call it whenever our button (mFollowView) is clicked
-/*        TwitterAuth twitterAuth = new TwitterAuth();
-        twitterAuth.muieTwitter();*/
-        mFollowView.setOnClickListener(new View.OnClickListener() {
-                     @Override
-                     public void onClick(View v) {
-        mTwitterLoginButton.performClick();
+        Log.i(LOG_TAG,"in setUpFollowButton()");
         mTwitterLoginButton.setCallback(new Callback<TwitterSession>() {
             @Override
             public void success(Result<TwitterSession> twitterSessionResult) {
@@ -642,14 +632,16 @@ public class MainActivity extends Activity implements
                 Log.i(LOG_TAG,"Login Failed!" + e.toString());
             }
         });
-        Log.i(LOG_TAG,"Drawable is " + mFollowView.getDrawable().toString());
+        mFollowView.setOnClickListener(new View.OnClickListener() {
+                     @Override
+                     public void onClick(View v) {
         Drawable followDrawable = getResources().getDrawable(R.drawable.twitter_follow);
-        Log.i(LOG_TAG,"Follow drawable is " + followDrawable.toString());
         Drawable followingDrawable = getResources().getDrawable(R.drawable.twitter_following);
 
             if (mFollowView.getDrawable().getConstantState().equals(followDrawable.getConstantState())) {
                // authenticateTwitter();
                 mFollowView.setImageResource(R.drawable.twitter_following);
+                mTwitterLoginButton.performClick();
                 Log.i(LOG_TAG,"Changed image to following");
                 }
             else if (mFollowView.getDrawable().getConstantState().equals(followingDrawable.getConstantState())) {
