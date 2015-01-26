@@ -618,8 +618,8 @@ public class MainActivity extends Activity implements
     }
     private void setUpFollowButton() {
         //we have placed the twitter login button as gone (==invisible+doesn't take up space) and we call it whenever our button (mFollowView) is clicked
-        TwitterAuth twitterAuth = new TwitterAuth();
-        twitterAuth.muieTwitter();
+/*        TwitterAuth twitterAuth = new TwitterAuth();
+        twitterAuth.muieTwitter();*/
         mFollowView.setOnClickListener(new View.OnClickListener() {
                      @Override
                      public void onClick(View v) {
