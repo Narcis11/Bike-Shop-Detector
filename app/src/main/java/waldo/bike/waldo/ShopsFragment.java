@@ -134,7 +134,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                             mNewSpeedDistanceToShop = Utility.calculateDistanceDuration(distanceToShop,getActivity());
                             mFormattedDuration = Utility.formatDistanceDuration(String.valueOf(mNewSpeedDistanceToShop));
                             ((TextView) view).setText(mFormattedDuration);
-                            return true;
+                          //  return true;
                         }
                         return true;
                     case COL_IS_OPEN:

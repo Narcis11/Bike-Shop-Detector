@@ -445,7 +445,7 @@ public class Utility {
             return minute + "min " + seconds + "s";
         }
         else {
-            return distanceDuration + "min ";
+            return distanceDuration + "min";
         }
     }
 
