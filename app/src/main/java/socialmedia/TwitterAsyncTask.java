@@ -36,8 +36,14 @@ public class TwitterAsyncTask extends AsyncTask<String,Void,String> {
         Twitter twitter = tf.getInstance();
 
         try {
-            twitter.createFriendship(screenName);
-            Log.i(LOG_TAG,"Followed you!");
+            if (OPERATION.equals(Constants.TWITTER_FOLLOW)) {
+                twitter.createFriendship(screenName);
+                Log.i(LOG_TAG, "Followed you!");
+            }
+            else {
+                twitter.destroyFriendship(screenName);
+                Log.i(LOG_TAG, "UnFollowed you!");
+            }
         } catch (TwitterException e) {
 
             e.printStackTrace();

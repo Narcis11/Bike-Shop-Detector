@@ -588,7 +588,38 @@ public class MainActivity extends Activity implements
     }
     private void setUpFollowButton() {
         Log.i(LOG_TAG,"in setUpFollowButton()");
+        setTwitterLoginCallback();
+        mFollowView.setOnClickListener(new View.OnClickListener() {
+                     @Override
+                     public void onClick(View v) {
+        Drawable followDrawable = getResources().getDrawable(R.drawable.twitter_follow);
+        Drawable followingDrawable = getResources().getDrawable(R.drawable.twitter_following);
         
+            if (mFollowView.getDrawable().getConstantState().equals(followDrawable.getConstantState())) {//follow button is displayed
+                if (mTwitterToken.equals("") && mTwitterSecret.equals("")) {
+                    //simulate the press of the Twitter login button to get the token and secret
+                    mActivateFollow = true;
+                    mTwitterLoginButton.performClick();
+                }
+                    else {//we have the token and secret, we can execute the Follow action now
+                        twitterOperationWithToken(Constants.TWITTER_FOLLOW);
+                    }
+                }
+            else if (mFollowView.getDrawable().getConstantState().equals(followingDrawable.getConstantState())) {//following button is displayed
+                if (mTwitterToken.equals("") && mTwitterSecret.equals("")) {
+                    //simulate the press of the Twitter login button to get the token and secret
+                    mActivateFollow = false;
+                    mTwitterLoginButton.performClick();
+                }
+                else {//we have the token and secret, we can execute the unfollow now
+                        twitterOperationWithToken(Constants.TWITTER_UNFOLLOW);
+                }
+            }
+        }
+      });
+    }
+
+    private void setTwitterLoginCallback() {
         mTwitterLoginButton.setCallback(new Callback<TwitterSession>() {
             @Override
             public void success(Result<TwitterSession> twitterSessionResult) {
@@ -598,7 +629,7 @@ public class MainActivity extends Activity implements
                 TwitterAuthToken authToken = session.getAuthToken();
                 mTwitterToken = authToken.token;
                 mTwitterSecret = authToken.secret;
-                String[] loginData = new String[2];
+                String[] loginData = new String[5];
                 loginData[0] = authToken.token;
                 loginData[1] = authToken.secret;
                 loginData[2] = mActivateFollow ? Constants.TWITTER_FOLLOW : Constants.TWITTER_UNFOLLOW;
@@ -607,12 +638,17 @@ public class MainActivity extends Activity implements
                 try {
                     String status = twitterAsyncTask.get();
                     if (status.equals(Constants.OK_STATUS)) {
-                        mFollowView.setImageResource(R.drawable.twitter_following);
-                        Log.i(LOG_TAG,"Changed image to following. Status is " + status);
-                        commitFollowChanges(Constants.TWITTER_FOLLOW);
+                        if (mActivateFollow) {
+                            Log.i(LOG_TAG, "Changed image to following. Status is " + status);
+                            commitFollowChanges(Constants.TWITTER_FOLLOW);
+                        }
+                        else {
+                            commitFollowChanges(Constants.TWITTER_UNFOLLOW);
+                            Log.i(LOG_TAG, "Changed image to follow. Status is " + status);
+                        }
                     }
                     else {
-                        Toast.makeText(mContext,getResources().getString(R.string.twitter_follow_failed),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext,getResources().getString(R.string.twitter_operation_failed),Toast.LENGTH_SHORT).show();
                     }
                 }
                 catch (InterruptedException e) {
@@ -628,68 +664,45 @@ public class MainActivity extends Activity implements
             @Override
             public void failure(TwitterException e) {
                 Log.i(LOG_TAG,"Login Failed!" + e.toString());
-                Toast.makeText(mContext,getResources().getString(R.string.twitter_follow_failed),Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext,getResources().getString(R.string.twitter_operation_failed),Toast.LENGTH_SHORT).show();
                 Crashlytics.logException(e);
             }
         });
-        mFollowView.setOnClickListener(new View.OnClickListener() {
-                     @Override
-                     public void onClick(View v) {
-        Drawable followDrawable = getResources().getDrawable(R.drawable.twitter_follow);
-        Drawable followingDrawable = getResources().getDrawable(R.drawable.twitter_following);
-        
-            if (mFollowView.getDrawable().getConstantState().equals(followDrawable.getConstantState())) {//follow button is displayed
-                if (mTwitterToken.equals("") && mTwitterSecret.equals("")) {
-                    //simulate the press of the Twitter login button to get the token and secret
-                    mActivateFollow = true;
-                    mTwitterLoginButton.performClick();
-                }
-                    else {//we have the token and secret, we can execute the Follow action now
-                        String[] loginData = new String[2];
-                        loginData[0] = mTwitterToken;
-                        loginData[1] = mTwitterSecret;
-                        loginData[2] = Constants.TWITTER_FOLLOW;
-                        TwitterAsyncTask twitterAsyncTask = new TwitterAsyncTask();
-                        twitterAsyncTask.execute(loginData);
-                        try {
-                            String status = twitterAsyncTask.get();
-                            if (status.equals(Constants.OK_STATUS)) {
-                                if (mActivateFollow) {
-                                    Log.i(LOG_TAG, "Changed image to following");
-                                    commitFollowChanges(Constants.TWITTER_FOLLOW);
-                                }
-                                else {
-                                    commitFollowChanges(Constants.TWITTER_UNFOLLOW);
-                                }
-                            }
-                            else {
-                                Toast.makeText(mContext,getResources().getString(R.string.twitter_follow_failed),Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                        catch (InterruptedException e) {
-                            e.printStackTrace();
-                            Crashlytics.logException(e);
-                        }
-                        catch (ExecutionException e) {
-                            e.printStackTrace();
-                            Crashlytics.logException(e);
-                        }
-                    }
-                }
-            else if (mFollowView.getDrawable().getConstantState().equals(followingDrawable.getConstantState())) {//following button is displayed
-                mActivateFollow = false;
-                if (mTwitterToken.equals("") && mTwitterSecret.equals("")) {
-                    //simulate the press of the Twitter login button to get the token and secret
-                    mActivateFollow = false;
-                    mTwitterLoginButton.performClick();
-                }
-                commitFollowChanges(Constants.TWITTER_UNFOLLOW);
-                Log.i(LOG_TAG,"Changed image to follow");
-                }
-                }
-                 });
     }
-    
+
+    private void twitterOperationWithToken (String operation) {
+        String[] loginData = new String[5];
+        loginData[0] = mTwitterToken;
+        loginData[1] = mTwitterSecret;
+        loginData[2] = operation;
+        TwitterAsyncTask twitterAsyncTask = new TwitterAsyncTask();
+        twitterAsyncTask.execute(loginData);
+        try {
+            String status = twitterAsyncTask.get();
+            if (status.equals(Constants.OK_STATUS)) {
+                if (operation.equals(Constants.TWITTER_FOLLOW)) {
+                    Log.i(LOG_TAG, "Changed image to followING. Status is " + status);
+                    commitFollowChanges(Constants.TWITTER_FOLLOW);
+                }
+                else {
+                    commitFollowChanges(Constants.TWITTER_UNFOLLOW);
+                    Log.i(LOG_TAG, "Changed image to follow. Status is " + status);
+                }
+            }
+            else {
+                Toast.makeText(mContext,getResources().getString(R.string.twitter_operation_failed),Toast.LENGTH_SHORT).show();
+            }
+        }
+        catch (InterruptedException e) {
+            e.printStackTrace();
+            Crashlytics.logException(e);
+        }
+        catch (ExecutionException e) {
+            e.printStackTrace();
+            Crashlytics.logException(e);
+        }
+    }
+
     private void commitFollowChanges(String operation) {
         SharedPreferences.Editor editor = mSharedPrefs.edit();
         if (operation.equals(Constants.TWITTER_FOLLOW)) {
@@ -703,29 +716,5 @@ public class MainActivity extends Activity implements
             editor.commit();
         }
     }
-    private void authenticateTwitter() {
-        //we need to initialise a Fabric Kit before authenticating
-        mTwitterAuthConfig = new TwitterAuthConfig(Constants.CONSUMER_KEY, Constants.CONSUMER_SECRET);
-        Fabric.with(mContext, new Twitter(mTwitterAuthConfig));
-        //begin authenticating
-        mTwitterAuthClient = new TwitterAuthClient();
-        MainActivity mainActivity = new MainActivity();
-        mTwitterAuthClient.authorize(this, new Callback<TwitterSession>() {
-            @Override
-            public void success(Result<TwitterSession> twitterSessionResult) {
-            Log.i(LOG_TAG,"Logged in with twitter!");
-                TwitterSession session =
-                        Twitter.getSessionManager().getActiveSession();
-                TwitterAuthToken authToken = session.getAuthToken();
-
-
-            }
-
-            @Override
-            public void failure(TwitterException e) {
-            Log.i(LOG_TAG,"Login Failed!" + e.toString());
-            }
-        });
-        }
 
     }
