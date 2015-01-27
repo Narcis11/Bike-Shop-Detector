@@ -323,7 +323,7 @@ public class MainActivity extends Activity implements
             else if (deviceConnection.checkGpsEnabled() ) {
                 mIsGpsMessageDisplayed = false;
                 if (!mIsInternetMessageDisplayed) {
-                    mInfoTextView.setVisibility(View.INVISIBLE);
+                    mInfoTextView.setVisibility(View.GONE);
                 }
             }
           //  }
@@ -382,7 +382,7 @@ public class MainActivity extends Activity implements
                 if (deviceConnection.checkInternetConnected() && (!mNetworkState.equals(Constants.NETWORK_STATE_CONNECTED))) {
                     mIsInternetMessageDisplayed = false;
                     if (!mIsGpsMessageDisplayed) {
-                        mInfoTextView.setVisibility(View.INVISIBLE);
+                        mInfoTextView.setVisibility(View.GONE);
                     }
                     else { //if both GPS and Internet are turned off, and the user turns on only the Internet, we still have to display the message for the GPS
                         mInfoTextView.setVisibility(View.VISIBLE);

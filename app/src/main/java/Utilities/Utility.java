@@ -442,7 +442,7 @@ public class Utility {
                 decimals = distanceDuration.substring(distanceDuration.indexOf(".") + 1, distanceDuration.indexOf(".") + 2);
             }
             String seconds = String.valueOf((Integer.valueOf(decimals) * 60) / 100);
-            return minute + "min " + seconds + "sec";
+            return minute + "min " + seconds + "s";
         }
         else {
             return distanceDuration + "min ";

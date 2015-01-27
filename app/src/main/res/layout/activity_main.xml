@@ -18,9 +18,8 @@
         android:textAlignment="center"
         android:id="@+id/info_textview"
         android:gravity="center"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp"
-        android:visibility="visible"
+        android:visibility="gone"
+        android:overScrollMode="never"
         android:textIsSelectable="false"
         android:textStyle="normal" />
 </FrameLayout>

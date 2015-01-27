@@ -91,14 +91,14 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                 null,
                 new String[] {
                         ShopsContract.ShopsEntry.COLUMN_SHOP_NAME,
-                        ShopsContract.ShopsEntry.COLUMN_SHOP_ADDRESS,
+                       // ShopsContract.ShopsEntry.COLUMN_SHOP_ADDRESS,
                         ShopsContract.ShopsEntry.COLUMN_IS_OPEN,
                         ShopsContract.ShopsEntry.COLUMN_DISTANCE_TO_USER,
                         ShopsContract.ShopsEntry.COLUMN_DISTANCE_DURATION
                 },
                 new int[] {
                         R.id.list_item_shopname_textview,
-                        R.id.list_item_shopaddress_textview,
+                       // R.id.list_item_shopaddress_textview,
                         R.id.list_item_shopisopen_textview,
                         R.id.list_item_distance_textview,
                         R.id.list_item_duration_textview
