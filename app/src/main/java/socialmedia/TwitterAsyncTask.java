@@ -25,6 +25,7 @@ public class TwitterAsyncTask extends AsyncTask<String,Void,String> {
         //TODO: Replace Twitter keys with those of Waldo
         final String USER_TOKEN = params[0].toString();
         final String USER_SECRET_TOKEN = params[1].toString();
+        final String OPERATION = params[2].toString();
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setDebugEnabled(true)
                 .setOAuthConsumerKey(Constants.CONSUMER_KEY)

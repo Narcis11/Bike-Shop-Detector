@@ -112,6 +112,8 @@ public class MainActivity extends Activity implements
     private TwitterAuthClient mTwitterAuthClient;
     private TwitterAuthConfig mTwitterAuthConfig;
     private TwitterLoginButton mTwitterLoginButton;
+    //used to determine whether the user wants to follow or unfollow Waldo
+    private boolean mActivateFollow;
     //used to determine the state of the follow button (follow/following) at app launch
     private SharedPreferences mSharedPrefs;
     private final String FOLLOW_BUTTON_KEY = "follow_key";
@@ -252,6 +254,7 @@ public class MainActivity extends Activity implements
                  mFollowView = (ImageView) findViewById(R.id.follow_button);
                  mTwitterLoginButton = (TwitterLoginButton) findViewById(R.id.twitter_login_button);
                  mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+                 
                  setUpFollowButton();
                  loadCorrectFollowButton();
 
@@ -585,6 +588,7 @@ public class MainActivity extends Activity implements
     }
     private void setUpFollowButton() {
         Log.i(LOG_TAG,"in setUpFollowButton()");
+        
         mTwitterLoginButton.setCallback(new Callback<TwitterSession>() {
             @Override
             public void success(Result<TwitterSession> twitterSessionResult) {
@@ -597,6 +601,7 @@ public class MainActivity extends Activity implements
                 String[] loginData = new String[2];
                 loginData[0] = authToken.token;
                 loginData[1] = authToken.secret;
+                loginData[2] = mActivateFollow ? Constants.TWITTER_FOLLOW : Constants.TWITTER_UNFOLLOW;
                 TwitterAsyncTask twitterAsyncTask = new TwitterAsyncTask();
                 twitterAsyncTask.execute(loginData);
                 try {
@@ -604,6 +609,7 @@ public class MainActivity extends Activity implements
                     if (status.equals(Constants.OK_STATUS)) {
                         mFollowView.setImageResource(R.drawable.twitter_following);
                         Log.i(LOG_TAG,"Changed image to following. Status is " + status);
+                        commitFollowChanges(Constants.TWITTER_FOLLOW);
                     }
                     else {
                         Toast.makeText(mContext,getResources().getString(R.string.twitter_follow_failed),Toast.LENGTH_SHORT).show();
@@ -631,25 +637,30 @@ public class MainActivity extends Activity implements
                      public void onClick(View v) {
         Drawable followDrawable = getResources().getDrawable(R.drawable.twitter_follow);
         Drawable followingDrawable = getResources().getDrawable(R.drawable.twitter_following);
-        SharedPreferences.Editor editor = mSharedPrefs.edit();
-            if (mFollowView.getDrawable().getConstantState().equals(followDrawable.getConstantState())) {
+        
+            if (mFollowView.getDrawable().getConstantState().equals(followDrawable.getConstantState())) {//follow button is displayed
                 if (mTwitterToken.equals("") && mTwitterSecret.equals("")) {
                     //simulate the press of the Twitter login button to get the token and secret
+                    mActivateFollow = true;
                     mTwitterLoginButton.performClick();
-                    editor.putString(FOLLOW_BUTTON_KEY, followingButtonActivated);
-                    editor.commit();
                 }
                     else {//we have the token and secret, we can execute the Follow action now
                         String[] loginData = new String[2];
                         loginData[0] = mTwitterToken;
                         loginData[1] = mTwitterSecret;
+                        loginData[2] = Constants.TWITTER_FOLLOW;
                         TwitterAsyncTask twitterAsyncTask = new TwitterAsyncTask();
                         twitterAsyncTask.execute(loginData);
                         try {
                             String status = twitterAsyncTask.get();
                             if (status.equals(Constants.OK_STATUS)) {
-                                mFollowView.setImageResource(R.drawable.twitter_following);
-                                Log.i(LOG_TAG,"Changed image to following");
+                                if (mActivateFollow) {
+                                    Log.i(LOG_TAG, "Changed image to following");
+                                    commitFollowChanges(Constants.TWITTER_FOLLOW);
+                                }
+                                else {
+                                    commitFollowChanges(Constants.TWITTER_UNFOLLOW);
+                                }
                             }
                             else {
                                 Toast.makeText(mContext,getResources().getString(R.string.twitter_follow_failed),Toast.LENGTH_SHORT).show();
@@ -665,16 +676,33 @@ public class MainActivity extends Activity implements
                         }
                     }
                 }
-            else if (mFollowView.getDrawable().getConstantState().equals(followingDrawable.getConstantState())) {
-                mFollowView.setImageResource(R.drawable.twitter_follow);
-                editor.putString(FOLLOW_BUTTON_KEY,followButtonActivated);
-                editor.commit();
+            else if (mFollowView.getDrawable().getConstantState().equals(followingDrawable.getConstantState())) {//following button is displayed
+                mActivateFollow = false;
+                if (mTwitterToken.equals("") && mTwitterSecret.equals("")) {
+                    //simulate the press of the Twitter login button to get the token and secret
+                    mActivateFollow = false;
+                    mTwitterLoginButton.performClick();
+                }
+                commitFollowChanges(Constants.TWITTER_UNFOLLOW);
                 Log.i(LOG_TAG,"Changed image to follow");
                 }
                 }
                  });
     }
-
+    
+    private void commitFollowChanges(String operation) {
+        SharedPreferences.Editor editor = mSharedPrefs.edit();
+        if (operation.equals(Constants.TWITTER_FOLLOW)) {
+            mFollowView.setImageResource(R.drawable.twitter_following);
+            editor.putString(FOLLOW_BUTTON_KEY, followingButtonActivated);
+            editor.commit();
+        }
+        else if (operation.equals(Constants.TWITTER_UNFOLLOW)) {
+            mFollowView.setImageResource(R.drawable.twitter_follow);
+            editor.putString(FOLLOW_BUTTON_KEY,followButtonActivated);
+            editor.commit();
+        }
+    }
     private void authenticateTwitter() {
         //we need to initialise a Fabric Kit before authenticating
         mTwitterAuthConfig = new TwitterAuthConfig(Constants.CONSUMER_KEY, Constants.CONSUMER_SECRET);

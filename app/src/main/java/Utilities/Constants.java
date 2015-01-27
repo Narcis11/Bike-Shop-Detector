@@ -60,5 +60,8 @@ public class Constants {
     //used for the Twitter authentification
     public static final String CONSUMER_KEY = "amGg88FlHOkWJwFdxcZuwNCNd";
     public static final String CONSUMER_SECRET = "npKv9jr06nWfCCNNbixntIxeZmcuLgQSlebZOYJ82jytuLWHrl";
+    //Used in the Twitter Async Task
+    public static final String TWITTER_FOLLOW = "follow";
+    public static final String TWITTER_UNFOLLOW = "unfollow";
 
 }
