@@ -1,8 +1,10 @@
 package socialmedia;
 
 import android.app.Application;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.ImageView;
 
 import Utilities.Constants;
 import twitter4j.Twitter;
@@ -13,10 +15,12 @@ import twitter4j.conf.ConfigurationBuilder;
 /**
  * Created by nmihai on 23.01.2015.
  */
-public class TwitterAsyncTask extends AsyncTask<String,Void,Void> {
+public class TwitterAsyncTask extends AsyncTask<String,Void,String> {
     private static final String LOG_TAG = TwitterAsyncTask.class.getSimpleName();
+    private Context mContext;
     @Override
-    protected Void doInBackground(String... params) {
+    protected String doInBackground(String... params) {
+
         String screenName = "waldotheknight";
         //TODO: Replace Twitter keys with those of Waldo
         final String USER_TOKEN = params[0].toString();
@@ -36,7 +40,13 @@ public class TwitterAsyncTask extends AsyncTask<String,Void,Void> {
         } catch (TwitterException e) {
 
             e.printStackTrace();
+            return Constants.RETURN_ERROR_STRING;
         }
-        return null;
+        return Constants.OK_STATUS;
+    }
+
+    @Override
+    protected void onPostExecute(String result) {
+        super.onPostExecute(result);
     }
 }

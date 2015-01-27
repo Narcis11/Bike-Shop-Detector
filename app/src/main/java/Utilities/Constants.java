@@ -11,8 +11,9 @@ public class Constants {
     public static final String OK_STATUS = "OK";
     public static final String ZERO_RESULTS = "ZERO_RESULTS";
     public static final String NOT_AVAILABLE="NOT AVAILABLE";
+    public static final String RETURN_ERROR_STRING = "ERROR";
 
-    //separators of the result string from the API call
+    //separators of the result string from the Places API call
     public static final String PIPE_SEPARATOR = "|";
     public static final String SLASH_SEPARATOR = "/";
     public static final String COMMA_SEPARATOR = ",";
@@ -53,8 +54,6 @@ public class Constants {
     public static final String SHOP_CLOSED = "Closed";
     public static final String SHOP_UNAVAILABLE = "";
 
-    //used in every method that returns a String
-    public static final String RETURN_ERROR_STRING = "ERROR";
     //used by the activities that listen to network changes
     public static final String BROADCAST_ACTION = "android.net.conn.CONNECTIVITY_CHANGE";
 

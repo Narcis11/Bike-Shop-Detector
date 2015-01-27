@@ -52,6 +52,8 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+
 import Utilities.Constants;
 import Utilities.DeviceConnection;
 import Utilities.GlobalState;
@@ -511,46 +513,7 @@ public class MainActivity extends Activity implements
         }
     }
 
-    private void openFacebook() {
-        String url = "https://www.facebook.com/waldotheknight";
-        //367189063436001 is the profile id of Waldo
-        String uri = "fb://page/367189063436001";
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        // If a Facebook app is installed, use it. Otherwise, launch
-        // a browser
-        intent.setData(Uri.parse(uri));
-        final PackageManager packageManager = getPackageManager();
-        List<ResolveInfo> list =
-                packageManager.queryIntentActivities(intent,
-                        PackageManager.MATCH_DEFAULT_ONLY);
-        if (list.size() == 0) {
-            intent.setData(Uri.parse(url));
-        }
-        try {
-            startActivity(intent);
-        } catch (ActivityNotFoundException e) {//no app is installed to service this request
-            Toast.makeText(mContext, getResources().getString(R.string.no_app_available), Toast.LENGTH_SHORT).show();
-        }
-    }
-    private void openTwitter() {
-        String url = "http://www.twitter.com/waldotheknight";
-        //2846625313 is Waldo's twitter id
-        String uri = "twitter://user?user_id=2846625313";
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse(uri));
-        final PackageManager packageManager = getPackageManager();
-        List<ResolveInfo> list =
-                packageManager.queryIntentActivities(intent,
-                        PackageManager.MATCH_DEFAULT_ONLY);
-        if (list.size() == 0) {
-            intent.setData(Uri.parse(url));
-        }
-        try {
-            startActivity(intent);
-        } catch (ActivityNotFoundException e) {//no app is installed to service this request
-            Toast.makeText(mContext, getResources().getString(R.string.no_app_available), Toast.LENGTH_SHORT).show();
-        }
-    }
+
 
     private void openWebsite() {
         String url = "http://www.waldo.bike/";
@@ -611,16 +574,6 @@ public class MainActivity extends Activity implements
          return super.onKeyDown(keyCode, event);
     }
 
-    public void twitterFollowTask (View v) {
-        DeviceConnection deviceConnection = new DeviceConnection(mContext);
-        if (deviceConnection.checkInternetConnected()) {
-            new TwitterAsyncTask().execute();
-            mDrawerLayout.closeDrawer(Gravity.LEFT);
-        }
-        else {
-            Toast.makeText(mContext,getResources().getString(R.string.no_internet),Toast.LENGTH_SHORT).show();
-        }
-    }
 
     private void loadCorrectFollowButton() {
         if (mSharedPrefs.contains(FOLLOW_BUTTON_KEY)) {
@@ -635,8 +588,7 @@ public class MainActivity extends Activity implements
         mTwitterLoginButton.setCallback(new Callback<TwitterSession>() {
             @Override
             public void success(Result<TwitterSession> twitterSessionResult) {
-                mFollowView.setImageResource(R.drawable.twitter_following);
-                Log.i(LOG_TAG,"Changed image to following");
+
                 TwitterSession session =
                         Twitter.getSessionManager().getActiveSession();
                 TwitterAuthToken authToken = session.getAuthToken();
@@ -647,6 +599,24 @@ public class MainActivity extends Activity implements
                 loginData[1] = authToken.secret;
                 TwitterAsyncTask twitterAsyncTask = new TwitterAsyncTask();
                 twitterAsyncTask.execute(loginData);
+                try {
+                    String status = twitterAsyncTask.get();
+                    if (status.equals(Constants.OK_STATUS)) {
+                        mFollowView.setImageResource(R.drawable.twitter_following);
+                        Log.i(LOG_TAG,"Changed image to following. Status is " + status);
+                    }
+                    else {
+                        Toast.makeText(mContext,getResources().getString(R.string.twitter_follow_failed),Toast.LENGTH_SHORT).show();
+                    }
+                }
+                catch (InterruptedException e) {
+                    e.printStackTrace();
+                    Crashlytics.logException(e);
+                }
+                catch (ExecutionException e) {
+                    e.printStackTrace();
+                    Crashlytics.logException(e);
+                }
             }
 
             @Override
@@ -663,9 +633,37 @@ public class MainActivity extends Activity implements
         Drawable followingDrawable = getResources().getDrawable(R.drawable.twitter_following);
         SharedPreferences.Editor editor = mSharedPrefs.edit();
             if (mFollowView.getDrawable().getConstantState().equals(followDrawable.getConstantState())) {
-                mTwitterLoginButton.performClick();
-                editor.putString(FOLLOW_BUTTON_KEY,followingButtonActivated);
-                editor.commit();
+                if (mTwitterToken.equals("") && mTwitterSecret.equals("")) {
+                    //simulate the press of the Twitter login button to get the token and secret
+                    mTwitterLoginButton.performClick();
+                    editor.putString(FOLLOW_BUTTON_KEY, followingButtonActivated);
+                    editor.commit();
+                }
+                    else {//we have the token and secret, we can execute the Follow action now
+                        String[] loginData = new String[2];
+                        loginData[0] = mTwitterToken;
+                        loginData[1] = mTwitterSecret;
+                        TwitterAsyncTask twitterAsyncTask = new TwitterAsyncTask();
+                        twitterAsyncTask.execute(loginData);
+                        try {
+                            String status = twitterAsyncTask.get();
+                            if (status.equals(Constants.OK_STATUS)) {
+                                mFollowView.setImageResource(R.drawable.twitter_following);
+                                Log.i(LOG_TAG,"Changed image to following");
+                            }
+                            else {
+                                Toast.makeText(mContext,getResources().getString(R.string.twitter_follow_failed),Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        catch (InterruptedException e) {
+                            e.printStackTrace();
+                            Crashlytics.logException(e);
+                        }
+                        catch (ExecutionException e) {
+                            e.printStackTrace();
+                            Crashlytics.logException(e);
+                        }
+                    }
                 }
             else if (mFollowView.getDrawable().getConstantState().equals(followingDrawable.getConstantState())) {
                 mFollowView.setImageResource(R.drawable.twitter_follow);
