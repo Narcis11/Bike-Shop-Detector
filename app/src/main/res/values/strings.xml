@@ -21,7 +21,7 @@
     <string name="api_zero_results">No bike shops in the selected range</string>
     <string name="api_error">Error occurred while retrieving shops</string>
 
-    <!--Keys of the metric/imperial screen-->
+    <!-- Keys of the metric/imperial screen -->
     <string name="unit_metric_screen">metric_settings</string>
     <string name="unit_imperial_screen">imperial_settings</string>
     <!-- Formatting for Settings/Range preference in metric mode -->
@@ -114,7 +114,7 @@
     <string name="next_shop_button">Next--></string>
     <string name="title_activity_add_shop_form">AddShopFormActivity</string>
 
-    <!-- Used in the AddShopFormActivity-->
+    <!-- Used in the AddShopFormActivity -->
     <string name="form_title">This submission will be moderated by Google. Complete all fields to increase the chance of acceptance.</string>
     <string name="form_shop_name">Shop name (mandatory)</string>
     <string name="form_shop_phone">Phone number (recommended)</string>
@@ -126,7 +126,7 @@
     <string name="invalid_phone">Invalid phone number</string>
     <string name="invalid_form">Please correct the highlighted field(s) below</string>
 
-    <!--Warning messages from the Main Activity-->
+    <!-- Warning messages from the Main Activity -->
     <string name="no_internet">No Internet connection</string>
     <string name="internet_connected">Connected</string>
     <string name="internet_is_connecting">Reconnecting...</string>
@@ -134,7 +134,9 @@
     <string name="gps_reactivated">GPS reactivated</string>
     <string name="no_app_available">No installed application to service this request</string>
     <string name="twitter_operation_failed">Twitter operation failed</string>
-    <!--Keys and IDs-->
+    <!-- Keys and IDs -->
     <string name="gmaps_api_key">AIzaSyCHf4BobJQWDa39E_VJtUkwkuimFfsz7Z0</string>
     <string name="facebook_appId">1528344614097187</string>
+    <string name="title_activity_shop_detail">ShopDetailActivity</string>
+
 </resources>

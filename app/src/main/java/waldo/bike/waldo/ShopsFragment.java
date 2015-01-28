@@ -169,7 +169,13 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Cursor cursor = mShopsAdapter.getCursor();
-                if (cursor != null && cursor.moveToPosition(position)) {
+                Intent openDetailActivity = new Intent(getActivity().getApplicationContext(),ShopDetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString(Constants.BUNDLE_SHOP_LAT,mShopLatitude);
+                bundle.putString(Constants.BUNDLE_SHOP_LNG,mShopLongitude);
+                openDetailActivity.putExtras(bundle);
+                startActivity(openDetailActivity);
+         /*       if (cursor != null && cursor.moveToPosition(position)) {
                     mShopName = cursor.getString(COL_SHOP_NAME);
                     mShopLatitude = cursor.getString(COL_SHOP_LATITUDE);
                     mShopLongitude = cursor.getString(COL_SHOP_LONGITUDE);
@@ -181,7 +187,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                     bundle.putString(Constants.BUNDLE_FRAGMENT,Constants.CALLED_FROM_FRAGMENT);
                     openMap.putExtras(bundle);
                     startActivity(openMap);
-                }
+                }*/
             }
         });
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
