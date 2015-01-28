@@ -128,12 +128,14 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                         if (!mIsSpeedChanged) {
                             mFormattedDuration = Utility.formatDistanceDuration(cursor.getString(COL_DISTANCE_DURATION));
                             ((TextView) view).setText(mFormattedDuration);
+                            Log.i(LOG_TAG,"IF: " + mFormattedDuration);
                         }
                         else {
                             int distanceToShop = Integer.valueOf(cursor.getString(COL_DISTANCE_TO_USER));
                             mNewSpeedDistanceToShop = Utility.calculateDistanceDuration(distanceToShop,getActivity());
                             mFormattedDuration = Utility.formatDistanceDuration(String.valueOf(mNewSpeedDistanceToShop));
                             ((TextView) view).setText(mFormattedDuration);
+                            Log.i(LOG_TAG,"ELSE: " + mFormattedDuration);
                           //  return true;
                         }
                         return true;

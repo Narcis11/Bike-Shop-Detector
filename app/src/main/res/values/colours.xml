@@ -17,4 +17,5 @@
         <color name="counter_text_color">#c5c4c4</color>
         <color name="invalid_field_color">#ED2147</color>
         <color name="temporary_form_background">#423E3F</color>
+        <color name="discount_text">#ff6e17</color>
 </resources>

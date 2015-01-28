@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
-    android:paddingLeft="10dp"
+    android:paddingLeft="5dp"
     android:paddingRight="10dp"
     android:paddingTop="5dp"
     android:paddingBottom="5dp"
@@ -25,30 +25,45 @@
 
     </FrameLayout>
     <!--Shop name and isOpen-->
-    <LinearLayout
-        android:layout_height="wrap_content"
+    <TableLayout
         android:layout_width="0dp"
-        android:layout_weight="0.65"
-        android:orientation="vertical">
-
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_weight="0.65">
         <TextView
             android:id="@+id/list_item_shopname_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed"
             android:maxLines="1"
+            android:layout_weight="1"
             android:ellipsize="end"
             android:textAppearance="?android:textAppearanceMedium"/>
-
 
         <TextView
             android:id="@+id/list_item_shopisopen_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:fontFamily="sans-serif-condensed"
             android:textAppearance="?android:textAppearanceSmall"/>
-    </LinearLayout>
-    <!--Distance/duration-->
+
+     <TableRow>
+
+         <TextView
+             android:id="@+id/discount_view"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:text="-15%"
+             android:layout_gravity="end"
+             android:gravity="end"
+             android:background="@drawable/background_shop_discount"
+             android:textColor="@color/discount_text"
+              />
+
+     </TableRow>
+    </TableLayout>
+
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
