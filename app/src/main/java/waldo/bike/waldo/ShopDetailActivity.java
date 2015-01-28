@@ -1,5 +1,6 @@
 package waldo.bike.waldo;
 
+import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -16,7 +17,8 @@ import Utilities.Constants;
 
 public class ShopDetailActivity extends FragmentActivity
         implements OnStreetViewPanoramaReadyCallback {
-
+    Double mShopLat;
+    Double mShopLng;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,10 +52,22 @@ public class ShopDetailActivity extends FragmentActivity
     @Override
     public void onStreetViewPanoramaReady(StreetViewPanorama streetViewPanorama) {
         Bundle bundle = getIntent().getExtras();
-        Double shopLat = Double.valueOf(bundle.getString(Constants.BUNDLE_SHOP_LAT));
-        Double shopLng = Double.valueOf(bundle.getString(Constants.BUNDLE_SHOP_LNG));
-        LatLng shopLatLng = new LatLng(shopLat, shopLng);
+        mShopLat = Double.valueOf(bundle.getString(Constants.BUNDLE_SHOP_LAT));
+        mShopLng = Double.valueOf(bundle.getString(Constants.BUNDLE_SHOP_LNG));
+        LatLng shopLatLng = new LatLng(mShopLat, mShopLng);
         streetViewPanorama.setPosition(shopLatLng);
         streetViewPanorama.setPanningGesturesEnabled(true);
+    }
+
+    public void openMap() {
+        Intent openMapIntent = new Intent(getApplicationContext(),MapsActivity.class);
+        Bundle bundle = new Bundle();
+        String latitude = String.valueOf(mShopLat);
+        String longitude = String.valueOf(mShopLng);
+        bundle.putString(Constants.BUNDLE_SHOP_LAT,latitude);
+        bundle.putString(Constants.BUNDLE_SHOP_LNG,longitude);
+        bundle.putString(Constants.BUNDLE_FRAGMENT,Constants.CALLED_FROM_FRAGMENT);
+        openMapIntent.putExtras(bundle);
+        startActivity(openMapIntent);
     }
 }
