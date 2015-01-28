@@ -59,6 +59,7 @@
             android:layout_alignBaseline="@+id/list_item_shopisopen_textview"
             android:background="@drawable/background_shop_discount"
             android:textColor="@color/discount_text"
+            android:visibility="gone"
             />
     </RelativeLayout>
 
