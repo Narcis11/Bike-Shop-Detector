@@ -3,10 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
-    android:paddingLeft="5dp"
+    android:paddingLeft="10dp"
     android:paddingRight="10dp"
-    android:paddingTop="5dp"
     android:paddingBottom="5dp"
+    android:paddingTop="5dp"
     android:orientation="horizontal">
 <!--Define the layout for a row in the ListView-->
     <FrameLayout
@@ -37,15 +37,29 @@
             android:fontFamily="sans-serif-condensed"
             android:maxLines="1"
             android:ellipsize="end"
-            android:textAppearance="?android:textAppearanceMedium"/>
+            android:textSize="20sp"/>
 
         <TextView
             android:id="@+id/list_item_shopisopen_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed"
+            android:paddingRight="10dp"
             android:layout_below="@+id/list_item_shopname_textview"
             android:textAppearance="?android:textAppearanceSmall"/>
+
+        <TextView
+            android:id="@+id/discount_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="-15%"
+            android:textAppearance="?android:textAppearanceSmall"
+            android:layout_toRightOf="@+id/list_item_shopisopen_textview"
+            android:layout_toEndOf="@+id/list_item_shopisopen_textview"
+            android:layout_alignBaseline="@+id/list_item_shopisopen_textview"
+            android:background="@drawable/background_shop_discount"
+            android:textColor="@color/discount_text"
+            />
     </RelativeLayout>
 
     <LinearLayout
