@@ -423,7 +423,7 @@ public class MainActivity extends Activity implements
             GlobalState.USER_LAT = mLatLng[0];
             GlobalState.USER_LNG = mLatLng[1];
             ShopsFragment shopsFragment = new ShopsFragment();
-            shopsFragment.updateShopList(mContext);
+            shopsFragment.updateShopList(mContext,null);
         }
             mFirstGPSConnection = false;
     }

@@ -44,6 +44,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     private static final String LOG_TAG = ShopsFragment.class.getSimpleName();
     private String mShopLatitude = "";
     private String mShopLongitude = "";
+    private String mPlaceId;
     private String mShopName = "";
     private String mFormattedDuration = "";
     private String mFormattedDistance = "";
@@ -62,7 +63,8 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
             ShopsContract.ShopsEntry.COLUMN_DISTANCE_TO_USER,
             ShopsContract.ShopsEntry.COLUMN_DISTANCE_DURATION,
             ShopsContract.ShopsEntry.COLUMN_SHOP_LATITUDE,
-            ShopsContract.ShopsEntry.COLUMN_SHOP_LONGITUDE
+            ShopsContract.ShopsEntry.COLUMN_SHOP_LONGITUDE,
+            ShopsContract.ShopsEntry.COLUMN_PLACE_ID
     };
 
     // These indices are tied to SHOPS_COLUMNS.  If SHOPS_COLUMNS changes, these
@@ -75,6 +77,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     public static final int COL_DISTANCE_DURATION = 5;
     public static final int COL_SHOP_LATITUDE = 6;
     public static final int COL_SHOP_LONGITUDE = 7;
+    public static final int COL_PLACE_ID = 8;
 
     public ShopsFragment() {
     }
@@ -172,6 +175,9 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                     Bundle bundle = new Bundle();
                     mShopLatitude = cursor.getString(COL_SHOP_LATITUDE);
                     mShopLongitude = cursor.getString(COL_SHOP_LONGITUDE);
+                    mPlaceId = cursor.getString(COL_PLACE_ID);
+                    //update the database row corresponding to this shop id
+                    updateShopList(getActivity(),mPlaceId);
                     bundle.putString(Constants.BUNDLE_SHOP_LAT, mShopLatitude);
                     bundle.putString(Constants.BUNDLE_SHOP_LNG, mShopLongitude);
                     openDetailActivity.putExtras(bundle);
@@ -257,7 +263,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                 && deviceConnection.checkInternetConnected() && !GlobalState.USER_LAT.equals("") && !GlobalState.USER_LNG.equals("") ) {
             Log.i(LOG_TAG,"****UPDATED SHOP LIST****");
             Log.i(LOG_TAG,GlobalState.USER_LAT + " / " + GlobalState.USER_LNG);
-            updateShopList(getActivity());
+            updateShopList(getActivity(),null);
             mIsListRefreshed = true;
         }
         //we only restart the loader if the refresh caused by the change of range hasn't been performed. If it has, we already have an updated list
@@ -281,13 +287,18 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
         GlobalState.FRAGMENT_SPEED = Utility.getPreferredSpeed(getActivity());
     }
 
-    public void updateShopList(Context context) {
+    public void updateShopList(Context context, String placeId) {
         String[] coordinates = new String[2];
         coordinates[0] = GlobalState.USER_LAT;
         coordinates[1] = GlobalState.USER_LNG;
         Log.i(LOG_TAG,"Lat/lng in updateShopList - " + coordinates[0] + "/" + coordinates[1]);
       //  new FetchGooglePlaces(getActivity()).execute(coordinates);
-        SyncAdapter.syncImmediately(context);
+        if (placeId != null) {//get details for one shop
+            SyncAdapter.syncImmediately(context,placeId);
+        }
+        else {//get all shops
+            SyncAdapter.syncImmediately(context,null);
+        }
     }
 
     //loaders are initialised in onActivityCreated because their lifecycle is bound to the activity, not the fragment
@@ -325,7 +336,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
             Log.i(LOG_TAG, "In onRefresh()");
             swipeLayout.setColorSchemeResources(R.color.waldo_light_blue);
             ShopsFragment shopsFragment = new ShopsFragment();
-            shopsFragment.updateShopList(getActivity());
+            shopsFragment.updateShopList(getActivity(),null);
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
