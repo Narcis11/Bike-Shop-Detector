@@ -48,6 +48,11 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     private static final String LOG_TAG = SyncAdapter.class.getSimpleName();
     private Context mContext;
     private boolean DEBUG = false;
+    //indices of the fields collected from the Place Details API call
+    final int PHONE_NUMBER_ID = 0;
+    final int WEEKDAY_TEXT_ID = 1;
+    final int RATING_ID = 2;
+    final int WEBSITE_ID = 3;
     public SyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
         mContext = context;
@@ -205,8 +210,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                             isShopOpen = Boolean.valueOf(openNow) ? 1 : 0;
                         }
 
-                        String placeDetailRequest = getPlaceDetails(place_id);
-                       // Log.i(LOG_TAG,"placeDetailRequest = " + placeDetailRequest);
+                        String[] placeDetailRequest = getPlaceDetails(place_id);
+                        Log.i(LOG_TAG,"placeDetailRequest = " + placeDetailRequest[0] + "/" + placeDetailRequest[1] + "/" + placeDetailRequest[2] + "/" + placeDetailRequest[3]);
                         ContentValues shopsValues = new ContentValues();
 
 
@@ -314,7 +319,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         return newAccount;
     }
 
-    private String getPlaceDetails (String place_id) {
+    private String[] getPlaceDetails (String place_id) {
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
         String placeDetailsJsonStr = "";//used for storing the response from the Place Details API call
@@ -322,6 +327,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         final String QUERY_KEY = "key";
         final String output = "json";
         final String placeId = "placeid";
+        String returnPlaceDetails[] = new String[5];
         try {
             final String BASE_DETAILS_URL = "https://maps.googleapis.com/maps/api/place/details/" + output + "?";
             Uri builtPlaceUri = Uri.parse(BASE_DETAILS_URL).buildUpon()
@@ -370,6 +376,43 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 }
             }
         }
-        return placeDetailsJsonStr;
+
+       //******Beginning to parse the result*****
+        final String API_RESULT = "result";
+        final String API_PHONE_NUMBER = "formatted_phone_number";
+        final String API_WEEKDAY_TEXT = "weekday_text";
+        final String API_RATING = "rating";
+        final String API_WEBSITE = "website";
+        final String API_STATUS = "status";
+        String placePhoneNumber = "";
+        String placeOpeningHours = "";
+        String rating = "";
+        String website = "";
+        String apiCallStatus = "";
+        try {
+            JSONObject placeDetailsJson = new JSONObject(placeDetailsJsonStr);
+            apiCallStatus = placeDetailsJson.getString(API_STATUS);
+            //we only parse if the result is OK. Otherwise, we return an empty string[].
+            if (apiCallStatus.equals(Constants.OK_STATUS)) {
+                //JSONArray placeDetailsArray = placeDetailsJson.getJSONArray(API_RESULT);
+                JSONObject placeDetailsObject = placeDetailsJson.getJSONObject(API_RESULT);
+                placePhoneNumber = placeDetailsObject.getString(API_PHONE_NUMBER);
+                JSONArray jsonWeekdayArray = (JSONArray) placeDetailsObject.get(API_WEEKDAY_TEXT);
+                for (int i = 0; i < jsonWeekdayArray.length(); i++ ) {
+                    placeOpeningHours = Constants.HASH_SEPARATOR + placeOpeningHours + jsonWeekdayArray.get(i) + Constants.HASH_SEPARATOR;
+                }
+                rating = placeDetailsObject.getString(API_RATING);
+                website = placeDetailsObject.getString(API_WEBSITE);
+                returnPlaceDetails[PHONE_NUMBER_ID] = placePhoneNumber;
+                returnPlaceDetails[WEEKDAY_TEXT_ID] = placeOpeningHours;
+                returnPlaceDetails[RATING_ID] = rating;
+                returnPlaceDetails[WEBSITE_ID] = website;
+            }
+        }
+        catch(JSONException e) {
+            Log.e(LOG_TAG, "Parsing place details | JSON Exception: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return returnPlaceDetails;
     }
 }
