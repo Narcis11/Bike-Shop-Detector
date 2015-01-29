@@ -276,6 +276,15 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 String placeId = extras.getString(Constants.BUNDLE_SHOP_PLACE_ID);
                 String[] placeDetailRequest = getPlaceDetails(placeId);
                 Log.i(LOG_TAG, "****Details response*** = " + placeDetailRequest[0] + "/" + placeDetailRequest[1] + "/" + placeDetailRequest[2] + "/" + placeDetailRequest[3]);
+                ContentValues updateValues = new ContentValues();
+                updateValues.put(ShopsContract.ShopsEntry.COLUMN_WEBSITE,placeDetailRequest[WEBSITE_ID]);
+                updateValues.put(ShopsContract.ShopsEntry.COLUMN_PHONE_NUMBER,placeDetailRequest[PHONE_NUMBER_ID]);
+                updateValues.put(ShopsContract.ShopsEntry.COLUMN_OPENING_HOURS,placeDetailRequest[WEEKDAY_TEXT_ID]);
+                updateValues.put(ShopsContract.ShopsEntry.COLUMN_RATING,placeDetailRequest[RATING_ID]);
+                String whereClause =  ShopsContract.ShopsEntry.COLUMN_PLACE_ID + "=" + "'"  + placeId + "'";
+              //  Log.i(LOG_TAG,"where clause is " + whereClause);
+                int updatedRows = mContext.getContentResolver().update(ShopsContract.ShopsEntry.CONTENT_URI,updateValues,whereClause,null);
+                Log.i(LOG_TAG,"No of rows updated = " + updatedRows);
             }
         }
 
