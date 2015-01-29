@@ -28,6 +28,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -73,8 +75,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             //used for querying the Google Places API
             final String types = Constants.PLACE_TYPE;
             final String key = Constants.API_KEY;
-            final String latLng = GlobalState.USER_LAT + Constants.COMMA_SEPARATOR + GlobalState.USER_LNG;
-            //final String latLng = "44.4391463,26.1428946";
+            //final String latLng = GlobalState.USER_LAT + Constants.COMMA_SEPARATOR + GlobalState.USER_LNG;
+            final String latLng = "44.4391463,26.1428946";
             final String output = "json";
             try {
                 //******Getting the info for all shops*****
@@ -211,7 +213,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                         }
 
                         String[] placeDetailRequest = getPlaceDetails(place_id);
-                        Log.i(LOG_TAG,"placeDetailRequest = " + placeDetailRequest[0] + "/" + placeDetailRequest[1] + "/" + placeDetailRequest[2] + "/" + placeDetailRequest[3]);
+                        Log.i(LOG_TAG,"****Details response*** = " + placeDetailRequest[0] + "/" + placeDetailRequest[1] + "/" + placeDetailRequest[2] + "/" + placeDetailRequest[3]);
                         ContentValues shopsValues = new ContentValues();
 
 
@@ -384,34 +386,81 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         final String API_RATING = "rating";
         final String API_WEBSITE = "website";
         final String API_STATUS = "status";
+        final String API_OPENING_HOURS = "opening_hours";
+        final String API_REVIEWS = "reviews";
+        final String API_ASPECTS = "aspects";
+        Double sumOfRatings = 0.0;
         String placePhoneNumber = "";
         String placeOpeningHours = "";
-        String rating = "";
+        Double rating = 0.0;
         String website = "";
         String apiCallStatus = "";
+        String placeReviews = "";
+        JSONObject singleReviewJson;
+        JSONArray aspectsArray;
         try {
             JSONObject placeDetailsJson = new JSONObject(placeDetailsJsonStr);
             apiCallStatus = placeDetailsJson.getString(API_STATUS);
             //we only parse if the result is OK. Otherwise, we return an empty string[].
             if (apiCallStatus.equals(Constants.OK_STATUS)) {
-                //JSONArray placeDetailsArray = placeDetailsJson.getJSONArray(API_RESULT);
-                JSONObject placeDetailsObject = placeDetailsJson.getJSONObject(API_RESULT);
-                placePhoneNumber = placeDetailsObject.getString(API_PHONE_NUMBER);
-                JSONArray jsonWeekdayArray = (JSONArray) placeDetailsObject.get(API_WEEKDAY_TEXT);
-                for (int i = 0; i < jsonWeekdayArray.length(); i++ ) {
-                    placeOpeningHours = Constants.HASH_SEPARATOR + placeOpeningHours + jsonWeekdayArray.get(i) + Constants.HASH_SEPARATOR;
+                //We have to wrap all of the extractions from the response in a try-catch phrase, because not all of the fields are available.
+                JSONObject placeDetailsObject = placeDetailsJson.getJSONObject(API_RESULT);//root node
+                try {//get phone number
+                    placePhoneNumber = placeDetailsObject.getString(API_PHONE_NUMBER);
                 }
-                rating = placeDetailsObject.getString(API_RATING);
-                website = placeDetailsObject.getString(API_WEBSITE);
+                catch(JSONException phoneException) {
+                    Log.i(LOG_TAG,phoneException.getMessage());
+                }
+                //get opening hours
+                try {
+                    JSONObject openingHours = placeDetailsObject.getJSONObject(API_OPENING_HOURS);
+                    JSONArray jsonWeekdayArray = (JSONArray) openingHours.get(API_WEEKDAY_TEXT);
+                    for (int i = 0; i < jsonWeekdayArray.length(); i++) {
+                        //Log.i(LOG_TAG,"jsonWeekdayArray.get(i): " + jsonWeekdayArray.get(i));
+                        placeOpeningHours = placeOpeningHours + jsonWeekdayArray.get(i) + Constants.HASH_SEPARATOR;
+                    }
+                }
+                catch (JSONException e) {
+                    Log.i(LOG_TAG,e.getMessage());
+                }
+                try {//get rating
+                    rating = placeDetailsObject.getDouble(API_RATING);
+                    returnPlaceDetails[RATING_ID] = String.valueOf(rating);
+                }
+                catch (JSONException e) {
+                    Log.i(LOG_TAG,e.getMessage());
+                    Log.i(LOG_TAG,"Wir rechnen den durchschnittlichen Wert");
+                    try {//if there's no "rating" field in the root node, we calculate the mean rating from the reviews
+                        JSONArray placeReviewsArray = (JSONArray) placeDetailsObject.get(API_REVIEWS);
+                        for (int i = 0; i < placeReviewsArray.length(); i++) {
+                            singleReviewJson = placeReviewsArray.getJSONObject(i);//a whole review
+                            //aspectsArray = singleReviewJson.getJSONArray(API_ASPECTS);
+                            rating = singleReviewJson.getDouble(API_RATING);
+                            sumOfRatings += rating;
+                        }
+                        //format the result to one decimal before returning
+                        BigDecimal returnValueRating = new BigDecimal(sumOfRatings/placeReviewsArray.length());
+                        returnValueRating = returnValueRating.setScale(1, RoundingMode.HALF_UP);
+                        returnPlaceDetails[RATING_ID] = returnValueRating.toString();
+                    }
+                    catch (JSONException jsonExcep) {
+                        Log.i(LOG_TAG,jsonExcep.getMessage());
+                    }
+
+                }
+                try {
+                    website = placeDetailsObject.getString(API_WEBSITE);
+                }
+                catch (JSONException json) {
+                    Log.i(LOG_TAG,json.getMessage());
+                }
                 returnPlaceDetails[PHONE_NUMBER_ID] = placePhoneNumber;
                 returnPlaceDetails[WEEKDAY_TEXT_ID] = placeOpeningHours;
-                returnPlaceDetails[RATING_ID] = rating;
                 returnPlaceDetails[WEBSITE_ID] = website;
             }
         }
         catch(JSONException e) {
             Log.e(LOG_TAG, "Parsing place details | JSON Exception: " + e.getMessage());
-            e.printStackTrace();
         }
         return returnPlaceDetails;
     }
