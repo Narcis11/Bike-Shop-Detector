@@ -72,7 +72,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             //final String latLng = "44.4391463,26.1428946";
             final String output = "json";
             try {
-                //the query parameters used in the call
+                //******Getting the info for all shops*****
+                //the query parameters used in the Nearby search call
                 final String BASE_URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/" + output + "?";
                 final String QUERY_LOCATION = "location";
                 final String QUERY_RADIUS = "radius";
@@ -85,7 +86,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                         .appendQueryParameter(QUERY_KEY, key)
                         .appendQueryParameter(QUERY_TYPES, types)
                         .build();
-                Log.i(LOG_TAG, "Uri is: " + builtUri.toString());
+                Log.i(LOG_TAG, "Places Uri is: " + builtUri.toString());
 
                 URL url = new URL(builtUri.toString());
 
@@ -130,11 +131,11 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 }
             }
 
-            // This will only happen if there was an error getting or parsing the response.
+            //*****Parsing the info for all shops*******
             final String API_RESULT = "results";//root
             final String API_STATUS = "status";//we'll perform some checks on this one
             // Location information
-            final String API_ID = "id";
+            final String API_PLACE_ID = "place_id";
             final String API_NAME = "name";
             final String API_OPENING_HOURS = "opening_hours";//root
             final String API_OPEN_NOW = "open_now"; //child of opening_hours
@@ -159,9 +160,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     Vector<ContentValues> cVVector = new Vector<ContentValues>(placesArray.length());
                     for (int i = 0; i < placesArray.length(); i++) {
                         // These are the values that will be collected.
-                        String id;
+                        String place_id;
                         String placeName;
                         String address;
+                        //some shops do not have this piece of info, so we presume from the start that it's unavailable
                         String openNow = Constants.NOT_AVAILABLE;
                         String latitude;
                         String longitude;
@@ -193,9 +195,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                         shopLocation.setLongitude(Double.valueOf(longitude));
                         distanceToShop = (int) Math.round(userLocation.distanceTo(shopLocation));
                         distanceDuration = Utility.calculateDistanceDuration(distanceToShop, getContext());
-                        //  Log.i(LOG_TAG,"distanceDuration is " + distanceDuration);
                         //main info from the root object
-                        id = placeDetails.getString(API_ID);
+                        place_id = placeDetails.getString(API_PLACE_ID);
+                        //Log.i(LOG_TAG,"place_id = " + place_id);
                         placeName = placeDetails.getString(API_NAME);
                         address = placeDetails.getString(API_ADDRESS);
 
@@ -203,6 +205,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                             isShopOpen = Boolean.valueOf(openNow) ? 1 : 0;
                         }
 
+                        String placeDetailRequest = getPlaceDetails(place_id);
+                       // Log.i(LOG_TAG,"placeDetailRequest = " + placeDetailRequest);
                         ContentValues shopsValues = new ContentValues();
 
 
@@ -308,5 +312,64 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
         }
         return newAccount;
+    }
+
+    private String getPlaceDetails (String place_id) {
+        HttpURLConnection urlConnection = null;
+        BufferedReader reader = null;
+        String placeDetailsJsonStr = "";//used for storing the response from the Place Details API call
+        final String key = Constants.API_KEY;
+        final String QUERY_KEY = "key";
+        final String output = "json";
+        final String placeId = "placeid";
+        try {
+            final String BASE_DETAILS_URL = "https://maps.googleapis.com/maps/api/place/details/" + output + "?";
+            Uri builtPlaceUri = Uri.parse(BASE_DETAILS_URL).buildUpon()
+                    .appendQueryParameter(placeId,place_id)
+                    .appendQueryParameter(QUERY_KEY,key)
+                    .build();
+            Log.i(LOG_TAG, "Place Details Uri is: " + builtPlaceUri.toString());
+            URL url = new URL(builtPlaceUri.toString());
+            //Create the request to Google, and open the connection
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod(Constants.HTTP_GET);
+            urlConnection.connect();
+            // Read the input stream into a String
+            InputStream inputStream = urlConnection.getInputStream();
+            StringBuffer buffer = new StringBuffer();
+            if (inputStream == null) {
+                // Nothing to do.
+                Log.i(LOG_TAG, "No input stream");
+            }
+            reader = new BufferedReader(new InputStreamReader(inputStream));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
+                // But it does make debugging a *lot* easier if you print out the completed
+                // buffer for debugging.
+                buffer.append(line + "\n");
+            }
+            if (buffer.length() == 0) {
+                // Stream was empty.  No point in parsing.
+                Log.i(LOG_TAG, "buffer.length() == 0");
+            }
+            placeDetailsJsonStr = buffer.toString();
+        }
+        catch(IOException e) {
+            Log.e(LOG_TAG, "Error in fetching place details for place_id: + " + place_id + ". Error: " + e);
+        }
+        finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (final IOException e) {
+                    Log.e(LOG_TAG, "Error closing stream", e);
+                }
+            }
+        }
+        return placeDetailsJsonStr;
     }
 }
