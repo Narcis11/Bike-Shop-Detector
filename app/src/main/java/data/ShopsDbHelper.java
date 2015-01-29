@@ -28,7 +28,16 @@ public class ShopsDbHelper extends SQLiteOpenHelper {
                 ShopsContract.ShopsEntry.COLUMN_SHOP_LONGITUDE + " TEXT, " +
                 ShopsContract.ShopsEntry.COLUMN_IS_OPEN + " INTEGER, " +
                 ShopsContract.ShopsEntry.COLUMN_DISTANCE_TO_USER + " INTEGER, " +
-                ShopsContract.ShopsEntry.COLUMN_DISTANCE_DURATION + " REAL);" ;
+                ShopsContract.ShopsEntry.COLUMN_DISTANCE_DURATION + " REAL, "  +
+                ShopsContract.ShopsEntry.COLUMN_PLACE_ID + " TEXT, " +
+                ShopsContract.ShopsEntry.COLUMN_IS_PARTNER + " INTEGER, " +
+                ShopsContract.ShopsEntry.COLUMN_DISCOUNT_VALUE + " INTEGER, " +
+                ShopsContract.ShopsEntry.COLUMN_LOGO_URL + " TEXT, " +
+                ShopsContract.ShopsEntry.COLUMN_WEBSITE + " TEXT, " +
+                ShopsContract.ShopsEntry.COLUMN_PHONE_NUMBER + " TEXT, " +
+                ShopsContract.ShopsEntry.COLUMN_OPENING_HOURS + " TEXT, " +
+                ShopsContract.ShopsEntry.COLUMN_RATING + " REAL" +
+                ");";
 /*                " NOT NULL (" + ShopsContract.ShopsEntry.COLUMN_SHOP_NAME + ", " + ShopsContract.ShopsEntry.COLUMN_SHOP_LATITUDE + ", " +
                 ShopsContract.ShopsEntry.COLUMN_SHOP_LONGITUDE + ") ON CONFLICT IGNORE);";*/
         db.execSQL(SQL_CREATE_SHOPS_TABLE);

@@ -37,6 +37,11 @@ public class ShopsTestContentProvider extends AndroidTestCase {
         insertValues.put(ShopsContract.ShopsEntry.COLUMN_IS_OPEN,1);
         insertValues.put(ShopsContract.ShopsEntry.COLUMN_DISTANCE_TO_USER,1100);
         insertValues.put(ShopsContract.ShopsEntry.COLUMN_DISTANCE_DURATION,10);
+        insertValues.put(ShopsContract.ShopsEntry.COLUMN_PLACE_ID,"fdafjdasofda423423");
+        insertValues.put(ShopsContract.ShopsEntry.COLUMN_IS_PARTNER,1);
+        insertValues.put(ShopsContract.ShopsEntry.COLUMN_DISCOUNT_VALUE,12);
+        insertValues.put(ShopsContract.ShopsEntry.COLUMN_WEBSITE,"www.test.ro");
+        insertValues.put(ShopsContract.ShopsEntry.COLUMN_PHONE_NUMBER,"021.321.38.14");
         Uri insertUri = mContext.getContentResolver().insert(ShopsContract.ShopsEntry.CONTENT_URI,insertValues);
         long positionId = ContentUris.parseId(insertUri);
         Log.i(LOG_TAG,"Insert uri is: " + insertUri);
@@ -45,7 +50,7 @@ public class ShopsTestContentProvider extends AndroidTestCase {
     }
 
     public void testDeleteProvider() throws Throwable {
-        String whereClause = ShopsContract.ShopsEntry.COLUMN_DISTANCE_TO_USER + "=1100";
+        String whereClause = ShopsContract.ShopsEntry.COLUMN_WEBSITE + "='www.test.ro'";
         int deletedRows = mContext.getContentResolver().delete(ShopsContract.ShopsEntry.CONTENT_URI,null,null);
         Log.i(LOG_TAG,"No of rows deleted = " + deletedRows);
     }
@@ -54,7 +59,8 @@ public class ShopsTestContentProvider extends AndroidTestCase {
         ContentValues updateValues = new ContentValues();
         updateValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_LATITUDE, "42.00000");
         updateValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_LONGITUDE, "22.00000");
-        String whereClause = ShopsContract.ShopsEntry.COLUMN_DISTANCE_TO_USER + "=1100";
+        String placeID = "='fdafjdasofda423423'";
+        String whereClause = ShopsContract.ShopsEntry.COLUMN_PLACE_ID + placeID ;
         int updatedRows = mContext.getContentResolver().update(ShopsContract.ShopsEntry.CONTENT_URI,updateValues,whereClause,null);
         Log.i(LOG_TAG,"No of rows updated = " + updatedRows);
     }
@@ -78,6 +84,11 @@ public class ShopsTestContentProvider extends AndroidTestCase {
         columnNames.add(ShopsContract.ShopsEntry.COLUMN_IS_OPEN);
         columnNames.add(ShopsContract.ShopsEntry.COLUMN_DISTANCE_TO_USER);
         columnNames.add(ShopsContract.ShopsEntry.COLUMN_DISTANCE_DURATION);
+        columnNames.add(ShopsContract.ShopsEntry.COLUMN_IS_PARTNER);
+        columnNames.add(ShopsContract.ShopsEntry.COLUMN_PLACE_ID);
+        columnNames.add(ShopsContract.ShopsEntry.COLUMN_IS_PARTNER);
+        columnNames.add(ShopsContract.ShopsEntry.COLUMN_PHONE_NUMBER);
+        columnNames.add(ShopsContract.ShopsEntry.COLUMN_RATING);
    //     ShopsTest.validateCursor(contentCursor,columnNames);
 
 
