@@ -75,8 +75,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             //used for querying the Google Places API
             final String types = Constants.PLACE_TYPE;
             final String key = Constants.API_KEY;
-            //final String latLng = GlobalState.USER_LAT + Constants.COMMA_SEPARATOR + GlobalState.USER_LNG;
-            final String latLng = "44.4391463,26.1428946";
+            final String latLng = GlobalState.USER_LAT + Constants.COMMA_SEPARATOR + GlobalState.USER_LNG;
+            //final String latLng = "44.4391463,26.1428946";
             final String output = "json";
             try {
                 //******Getting the info for all shops*****
@@ -216,7 +216,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                         Log.i(LOG_TAG,"****Details response*** = " + placeDetailRequest[0] + "/" + placeDetailRequest[1] + "/" + placeDetailRequest[2] + "/" + placeDetailRequest[3]);
                         ContentValues shopsValues = new ContentValues();
 
-
+                        //TODO: Get the is_partner, discount_value and logo_url fields
                         //creating the vector and inserting the values
                         shopsValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_NAME, placeName);
                         shopsValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_ADDRESS, address);
@@ -225,6 +225,11 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                         shopsValues.put(ShopsContract.ShopsEntry.COLUMN_IS_OPEN, isShopOpen);
                         shopsValues.put(ShopsContract.ShopsEntry.COLUMN_DISTANCE_TO_USER, distanceToShop);
                         shopsValues.put(ShopsContract.ShopsEntry.COLUMN_DISTANCE_DURATION, distanceDuration);
+                        shopsValues.put(ShopsContract.ShopsEntry.COLUMN_PLACE_ID,place_id);
+                        shopsValues.put(ShopsContract.ShopsEntry.COLUMN_WEBSITE,placeDetailRequest[WEBSITE_ID]);
+                        shopsValues.put(ShopsContract.ShopsEntry.COLUMN_PHONE_NUMBER,placeDetailRequest[PHONE_NUMBER_ID]);
+                        shopsValues.put(ShopsContract.ShopsEntry.COLUMN_OPENING_HOURS,placeDetailRequest[WEEKDAY_TEXT_ID]);
+                        shopsValues.put(ShopsContract.ShopsEntry.COLUMN_RATING,placeDetailRequest[RATING_ID]);
                         cVVector.add(shopsValues);
                     }
                     if (cVVector.size() > 0) {
