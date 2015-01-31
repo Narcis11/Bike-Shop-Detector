@@ -28,6 +28,7 @@
     <style name="SecondaryActivityTheme"
         parent="@android:style/Theme.Holo.Light.DarkActionBar">
         <item name="android:actionBarStyle">@style/SecondaryActivityStyle</item>
+        <item name="android:homeAsUpIndicator">@drawable/ic_back_arrow</item>
     </style>
 
     <style name="SecondaryActivityStyle" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
