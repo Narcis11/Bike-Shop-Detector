@@ -157,10 +157,10 @@ public class MainActivity extends Activity implements
          }
         //instantiante the action bar
         //TODO: Load the action bar from the XML resource
-        ActionBar actionBar = getActionBar();
+ /*       ActionBar actionBar = getActionBar();
         actionBar.setIcon(R.drawable.waldo_action_bar);
         actionBar.setTitle("");
-        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFFFFF")));
+        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFFFFF")));*/
         mLocationView = new TextView(this);
        // setContentView(mLocationView); CRASHES BECAUSE OF THIS LINE
         //register the Google Api Client
@@ -363,6 +363,8 @@ public class MainActivity extends Activity implements
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             //start the settings activity
+            item.setTitle("test");
+            item.setActionView(getResources().getColor(R.color.discount_text));
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
             return true;
@@ -375,7 +377,8 @@ public class MainActivity extends Activity implements
         return super.onOptionsItemSelected(item);
     }
 
-     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+
+             private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
             @Override
              public void onReceive(Context context, Intent intent) {
                 DeviceConnection deviceConnection = new DeviceConnection(mContext);

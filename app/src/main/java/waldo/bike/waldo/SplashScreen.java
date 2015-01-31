@@ -40,10 +40,10 @@ public class SplashScreen extends Activity{
         mIntentFilter = new IntentFilter();
         mIntentFilter.addAction(Constants.BROADCAST_ACTION);
         //instantiante the action bar
-        ActionBar actionBar = getActionBar();
+/*        ActionBar actionBar = getActionBar();
         actionBar.setIcon(R.drawable.waldo_action_bar);
         actionBar.setTitle("");
-        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFFFFF")));
+        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFFFFF")));*/
 
     }
 
