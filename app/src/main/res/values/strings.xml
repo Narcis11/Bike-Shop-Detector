@@ -4,13 +4,17 @@
     <!-- Activity labels -->
     <string name="app_name">Waldo</string>
     <string name="splash_activity">Splash</string>
-    <string name="title_activity_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
     <!-- Names of buttons -->
     <string name="action_settings">Settings</string>
     <string name="action_refresh">Refresh</string>
     <string name="cancel_button">Cancel</string>
 
+    <!--Titles of activities-->
+    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_add_shop_map">Add a shop</string>
+    <string name="title_activity_add_shop_form">Form</string>
+    <string name="title_activity_all_shops">All shops</string>
     <!-- Warning/Error messages -->
     <string name="gps_is_disabled">You must enable GPS for the application to work.</string>
     <string name="enable_gps">Click to activate GPS.</string>
@@ -100,19 +104,17 @@
     <string name="header_slider">Menu</string>
     <!-- Content Description -->
     <string name="desc_list_item_icon">Item Icon</string>
-    <string name="title_activity_maps">Map</string>
+
 
     <!-- SyncAdapter related -->
     <string name="sync_account_type">waldo.bike.shopsapp</string>
     <string name="content_authority">waldo.bike.waldo</string>
-    <string name="title_activity_add_shop_map">Map</string>
 
     <!-- Used in the AddShopMap activity -->
     <string name="search_location">Search here</string>
     <!-- Button names in AddShopMap activity -->
     <string name="delete_shop_button">Delete</string>
     <string name="next_shop_button">Next--></string>
-    <string name="title_activity_add_shop_form">AddShopFormActivity</string>
 
     <!-- Used in the AddShopFormActivity -->
     <string name="form_title">This submission will be moderated by Google. Complete all fields to increase the chance of acceptance.</string>

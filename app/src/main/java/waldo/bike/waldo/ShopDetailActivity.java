@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.google.android.gms.maps.OnStreetViewPanoramaReadyCallback;
 import com.google.android.gms.maps.StreetViewPanorama;
@@ -19,10 +20,16 @@ public class ShopDetailActivity extends FragmentActivity
         implements OnStreetViewPanoramaReadyCallback {
     Double mShopLat;
     Double mShopLng;
+    String mShopName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shop_detail);
+        Bundle bundle = getIntent().getExtras();
+        mShopLat = Double.valueOf(bundle.getString(Constants.BUNDLE_SHOP_LAT));
+        mShopLng = Double.valueOf(bundle.getString(Constants.BUNDLE_SHOP_LNG));
+        mShopName = bundle.getString(Constants.BUNDLE_SHOP_NAME);
+        getActionBar().setTitle(mShopName);
         StreetViewPanoramaFragment streetViewPanoramaFragment =
                 (StreetViewPanoramaFragment) getFragmentManager()
                         .findFragmentById(R.id.streetviewpanorama);
@@ -43,7 +50,6 @@ public class ShopDetailActivity extends FragmentActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
 
         return super.onOptionsItemSelected(item);
@@ -51,15 +57,12 @@ public class ShopDetailActivity extends FragmentActivity
 
     @Override
     public void onStreetViewPanoramaReady(StreetViewPanorama streetViewPanorama) {
-        Bundle bundle = getIntent().getExtras();
-        mShopLat = Double.valueOf(bundle.getString(Constants.BUNDLE_SHOP_LAT));
-        mShopLng = Double.valueOf(bundle.getString(Constants.BUNDLE_SHOP_LNG));
         LatLng shopLatLng = new LatLng(mShopLat, mShopLng);
         streetViewPanorama.setPosition(shopLatLng);
         streetViewPanorama.setPanningGesturesEnabled(true);
     }
 
-    public void openMap() {
+    public void openMap(View v) {
         Intent openMapIntent = new Intent(getApplicationContext(),MapsActivity.class);
         Bundle bundle = new Bundle();
         String latitude = String.valueOf(mShopLat);
@@ -67,6 +70,7 @@ public class ShopDetailActivity extends FragmentActivity
         bundle.putString(Constants.BUNDLE_SHOP_LAT,latitude);
         bundle.putString(Constants.BUNDLE_SHOP_LNG,longitude);
         bundle.putString(Constants.BUNDLE_FRAGMENT,Constants.CALLED_FROM_FRAGMENT);
+        bundle.putString(Constants.BUNDLE_SHOP_NAME,mShopName);
         openMapIntent.putExtras(bundle);
         startActivity(openMapIntent);
     }

@@ -1,9 +1,17 @@
 package waldo.bike.waldo;
 
+import android.content.ComponentCallbacks;
+import android.content.ComponentCallbacks2;
+import android.content.Intent;
 import android.database.Cursor;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.MenuItem;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -19,11 +27,13 @@ public class MapsActivity extends FragmentActivity {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private static final String LOG_TAG = MapsActivity.class.getSimpleName();
+    Bundle mBundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
         setUpMapIfNeeded();
     }
 
@@ -61,12 +71,52 @@ public class MapsActivity extends FragmentActivity {
         }
     }
 
+    @Nullable
+    @Override
+    public Intent getParentActivityIntent() {
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null && !bundle.isEmpty()) {
+            Log.i(LOG_TAG, "Should go back");
+            Intent shopDetailsIntent = new Intent(this,ShopDetailActivity.class);
+            //data from the bundle is extracted in the onCreate from ShopDetailActivity, so we need to send it again.
+            shopDetailsIntent.putExtras(mBundle);
+            return shopDetailsIntent;
+        }
+        else {
+            Intent mainActivityIntent = new Intent(this,MainActivity.class);
+            return mainActivityIntent;
+        }
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        mBundle = getIntent().getExtras();
+        //specify the behaviour for when the back button from the action bar is pressed
+        if (id == android.R.id.home) {
+            Log.i(LOG_TAG,"Back pressed");
+            if (mBundle != null && !mBundle.isEmpty()) {
+                Log.i(LOG_TAG,"Should go back");
+                NavUtils.navigateUpFromSameTask(this);
+                Intent shopDetailsIntent = new Intent(this,ShopDetailActivity.class);
+                startActivity(shopDetailsIntent);
+            }
+            else {
+                Intent mainActivityIntent = new Intent(this,MainActivity.class);
+                startActivity(mainActivityIntent);
+            }
+    }
+        return super.onOptionsItemSelected(item);
+    }
+
     /**
      * This is where we can add markers or lines, add listeners or move the camera. In this case, we
      * just add a marker near Africa.
      * <p/>
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
+
     private void setUpMap() {
         Bundle bundle = getIntent().getExtras();
         String fragmentCall = "";
@@ -81,7 +131,7 @@ public class MapsActivity extends FragmentActivity {
             Double shopLng = Double.valueOf(bundle.getString(Constants.BUNDLE_SHOP_LNG));
             String shopName = bundle.getString(Constants.BUNDLE_SHOP_NAME);
             LatLng shopLatLng = new LatLng(shopLat, shopLng);
-
+            getActionBar().setTitle(shopName);
             mMap.addMarker(new MarkerOptions().position(shopLatLng).title(shopName));
             mMap.moveCamera(CameraUpdateFactory.newLatLng(shopLatLng));
             mMap.animateCamera(CameraUpdateFactory.zoomTo(Constants.SHOP_ZOOM));//*; //zoom to the position
@@ -90,6 +140,7 @@ public class MapsActivity extends FragmentActivity {
             Log.i(LOG_TAG,"Loading all shops map");
             //if there's no bundle, then the call is from the main activity (View all shops button)
             Cursor shopsCursor;
+            getActionBar().setTitle(getResources().getString(R.string.title_activity_all_shops));
             shopsCursor = getApplicationContext().getContentResolver().query(
                     ShopsContract.ShopsEntry.CONTENT_URI,
                     null,

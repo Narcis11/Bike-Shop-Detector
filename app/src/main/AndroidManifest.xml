@@ -44,8 +44,12 @@
         <activity
             android:name="waldo.bike.form.AddShopFormActivity"
             android:configChanges="orientation"
-            android:label="@string/app_name"
+            android:label="@string/title_activity_add_shop_form"
             android:parentActivityName="waldo.bike.form.AddShopMap"
+            >
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="waldo.bike.form.AddShopMap" />
              >
         </activity>
         <activity
@@ -68,7 +72,8 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps"
-            android:parentActivityName=".MainActivity" >
+            >
+
         </activity>
 
         <provider
@@ -105,6 +110,9 @@
             android:name="waldo.bike.form.AddShopMap"
             android:label="@string/title_activity_add_shop_map"
             android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
         </activity>
 
         <meta-data
@@ -113,7 +121,6 @@
 
         <activity
             android:name=".ShopDetailActivity"
-            android:label="@string/title_activity_shop_detail"
             android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

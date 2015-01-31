@@ -177,6 +177,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                 if (cursor != null && cursor.moveToPosition(position)) {
                     Intent openDetailActivity = new Intent(getActivity().getApplicationContext(), ShopDetailActivity.class);
                     Bundle bundle = new Bundle();
+                    mShopName = cursor.getString(COL_SHOP_NAME);
                     mShopLatitude = cursor.getString(COL_SHOP_LATITUDE);
                     mShopLongitude = cursor.getString(COL_SHOP_LONGITUDE);
                     mPlaceId = cursor.getString(COL_PLACE_ID);
@@ -184,6 +185,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                     updateShopList(getActivity(),mPlaceId);
                     bundle.putString(Constants.BUNDLE_SHOP_LAT, mShopLatitude);
                     bundle.putString(Constants.BUNDLE_SHOP_LNG, mShopLongitude);
+                    bundle.putString(Constants.BUNDLE_SHOP_NAME,mShopName);
                     openDetailActivity.putExtras(bundle);
                     startActivity(openDetailActivity);
                 }

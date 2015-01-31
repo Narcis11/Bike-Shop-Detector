@@ -1,5 +1,6 @@
 package waldo.bike.form;
 
+import android.app.Activity;
 import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -19,7 +20,7 @@ import java.util.regex.Pattern;
 import Utilities.Constants;
 import waldo.bike.waldo.R;
 
-public class AddShopFormActivity extends ActionBarActivity {
+public class AddShopFormActivity extends Activity {
 
     public static final String LOG_TAG = AddShopFormActivity.class.getSimpleName();
     private static boolean mShopNameOk;
