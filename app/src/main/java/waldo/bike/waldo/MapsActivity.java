@@ -105,12 +105,9 @@ public class MapsActivity extends FragmentActivity {
     private void setUpMap() {
         Bundle bundle = getIntent().getExtras();
         mBundle = bundle;
-        String fragmentCall = "";
         String allShopsName = "";
         String allShopsLat = "";
         String allShopsLng = "";
-
-        //(fragmentCall = bundle.getString(Constants.BUNDLE_FRAGMENT) ) != null && fragmentCall.equals(Constants.CALLED_FROM_FRAGMENT)
         if ( bundle != null && !bundle.isEmpty() ) { //call for a shop
             //call from fragment
             Double shopLat = Double.valueOf(bundle.getString(Constants.BUNDLE_SHOP_LAT));
