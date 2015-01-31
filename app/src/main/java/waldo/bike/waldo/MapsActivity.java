@@ -92,21 +92,6 @@ public class MapsActivity extends FragmentActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        mBundle = getIntent().getExtras();
-        //specify the behaviour for when the back button from the action bar is pressed
-        if (id == android.R.id.home) {
-            Log.i(LOG_TAG,"Back pressed");
-            if (mBundle != null && !mBundle.isEmpty()) {
-                Log.i(LOG_TAG,"Should go back");
-                NavUtils.navigateUpFromSameTask(this);
-                Intent shopDetailsIntent = new Intent(this,ShopDetailActivity.class);
-                startActivity(shopDetailsIntent);
-            }
-            else {
-                Intent mainActivityIntent = new Intent(this,MainActivity.class);
-                startActivity(mainActivityIntent);
-            }
-    }
         return super.onOptionsItemSelected(item);
     }
 
@@ -119,6 +104,7 @@ public class MapsActivity extends FragmentActivity {
 
     private void setUpMap() {
         Bundle bundle = getIntent().getExtras();
+        mBundle = bundle;
         String fragmentCall = "";
         String allShopsName = "";
         String allShopsLat = "";
