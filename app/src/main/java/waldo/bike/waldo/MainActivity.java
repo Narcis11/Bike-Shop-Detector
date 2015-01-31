@@ -363,8 +363,6 @@ public class MainActivity extends Activity implements
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             //start the settings activity
-            item.setTitle("test");
-            item.setActionView(getResources().getColor(R.color.discount_text));
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
             return true;
