@@ -429,11 +429,11 @@ public class MainActivity extends Activity implements
         //TODO: Find another logic for the user's positioning. We need to collect the coordinates more often.
         if (mFirstGPSConnection) {
             DeviceConnection deviceConnection = new DeviceConnection(mContext);
-            mLatLng = Utility.getLatLngFromLocation(location.toString());
-            GlobalState.USER_LAT = mLatLng[0];
-            GlobalState.USER_LNG = mLatLng[1];
-            ShopsFragment shopsFragment = new ShopsFragment();
-            shopsFragment.updateShopList(mContext,null);
+                //mLatLng = Utility.getLatLngFromLocation(location.toString());
+                GlobalState.USER_LAT = String.valueOf(location.getLatitude());
+                GlobalState.USER_LNG = String.valueOf(location.getLongitude());
+                ShopsFragment shopsFragment = new ShopsFragment();
+                shopsFragment.updateShopList(mContext, null);
         }
             mFirstGPSConnection = false;
     }
