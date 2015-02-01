@@ -190,7 +190,6 @@ public class FetchGooglePlaces extends AsyncTask<String, Void, Void> {
                 } catch (JSONException e) {
                     Log.e(LOG_TAG, "Opening Hours JSON Exception: " + e.getMessage());
                 }
-                //TODO: Remove dummy distance and duration data //not necessary any more, we don't use this function
                 //*************Creating dummy data********************
                 dummyDistance+=150 + i*20;
                 dummyDuration+=3;
@@ -213,7 +212,6 @@ public class FetchGooglePlaces extends AsyncTask<String, Void, Void> {
                 shopsValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_LATITUDE,latitude);
                 shopsValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_LONGITUDE,longitude);
                 shopsValues.put(ShopsContract.ShopsEntry.COLUMN_IS_OPEN, isShopOpen);
-                //TODO: Remove dummy data from the vector and add real data
                 shopsValues.put(ShopsContract.ShopsEntry.COLUMN_DISTANCE_TO_USER,dummyDistance);
                 shopsValues.put(ShopsContract.ShopsEntry.COLUMN_DISTANCE_DURATION,dummyDuration);
                 cVVector.add(shopsValues);

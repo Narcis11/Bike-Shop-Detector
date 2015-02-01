@@ -279,7 +279,6 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
             mIsSpeedChanged = true;
             getLoaderManager().restartLoader(SHOPS_LOADER_ID,null,this);
         }
-        //TODO: test if the sync succeeds even if the phone is rotated while syncing. Check if onLoadFinished is called. The commented code below might prove useful.
 /*        LoaderManager lm = getLoaderManager();
         if (lm.getLoader(SHOPS_LOADER_ID) != null) {
             Log.i(LOG_TAG,"******init loader in onResume()*****");

@@ -155,12 +155,6 @@ public class MainActivity extends Activity implements
                       .add(R.id.container, new ShopsFragment(),fragmentTag)
                       .commit();
          }
-        //instantiante the action bar
-        //TODO: Load the action bar from the XML resource
- /*       ActionBar actionBar = getActionBar();
-        actionBar.setIcon(R.drawable.waldo_action_bar);
-        actionBar.setTitle("");
-        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFFFFF")));*/
         mLocationView = new TextView(this);
        // setContentView(mLocationView); CRASHES BECAUSE OF THIS LINE
         //register the Google Api Client
@@ -250,7 +244,7 @@ public class MainActivity extends Activity implements
                  mLikeView = (LikeView) findViewById(R.id.like_button);
                  mLikeView.setObjectId(mFacebookLikePage);
                  //we also have to set the right padding here, otherwise the LikeD button will move to the right on app launch
-                 mLikeView.setPadding(0, 0, 230, 0);
+                // mLikeView.setPadding(0, 0, 230, 0);
                  mFollowView = (ImageView) findViewById(R.id.follow_button);
                  mTwitterLoginButton = (TwitterLoginButton) findViewById(R.id.twitter_login_button);
                  mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
@@ -303,6 +297,18 @@ public class MainActivity extends Activity implements
     @Override
     protected void onResume() {
         super.onResume();
+/*        try {
+            mLikeView.handleOnActivityResult(mContext, 0, 0, null);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }*/
+        if (!(mLikeView.getPaddingLeft() == 16 || mLikeView.getPaddingLeft() == 0)) {
+            mLikeView.setPadding(16, 0, 211, 0);
+            Log.i(LOG_TAG,"Changed padding in onResume");
+            Log.i(LOG_TAG,"Padding left/right onResume: " + String.valueOf(mLikeView.getPaddingLeft()) + "/" + String.valueOf(mLikeView.getPaddingRight()));
+        }
+
         // Logs 'install' and 'app activate' App Events.
         AppEventsLogger.activateApp(mContext);
         //register the broadcast receiver
@@ -343,7 +349,10 @@ public class MainActivity extends Activity implements
         Log.i(LOG_TAG, "in onActivityResult");
         super.onActivityResult(requestCode, resultCode, data);
         mLikeView.handleOnActivityResult(mContext, requestCode, resultCode, data);
-        mLikeView.setPadding(0, 0, 230, 0);//reposition the button after a Like action
+        if (mLikeView.getPaddingLeft() == 16) {
+            mLikeView.setPadding(0, 0, 220, 0);//reposition the button after a Like action
+            Log.i(LOG_TAG, "Activ results - changed padding | left/right: " + String.valueOf(mLikeView.getPaddingLeft()) + "/" + String.valueOf(mLikeView.getPaddingRight()));
+        }
         if (mTwitterLoginButton != null) {
             try {
                 Log.i(LOG_TAG, requestCode + ", " + resultCode + ", " + data.toString());
