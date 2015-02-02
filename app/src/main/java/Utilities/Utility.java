@@ -452,7 +452,7 @@ public class Utility {
     public static String formatDistanceMetric (String distance) {
         String doublezero = "00";
         if (Integer.valueOf(distance) >= 1000) {
-            if (distance.length() <=5) {
+            if (distance.length() <5) {
                 //for distances between 1000-9999
                 String km = distance.substring(0,1);
                 String meters =  distance.substring(1, 3);
@@ -465,6 +465,7 @@ public class Utility {
                 }
             }
             else {
+
                 //distances of 10.000 and above. Improbable to encounter, but still...
                 String km = distance.substring(0,2);
                 int meters = Math.round(Integer.valueOf(distance.substring(2)));
