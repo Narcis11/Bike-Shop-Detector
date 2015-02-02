@@ -23,6 +23,8 @@
         android:textAppearance="?android:attr/textAppearanceListItemSmall"
         android:textColor="@color/list_item_title"
         android:gravity="center_vertical"
+        android:typeface="monospace"
+        android:fontFamily="sans-serif"
         android:paddingRight="40dp"/>
 
 <!--This is a counter, we may not use it. We'll leave it here for the moment-->

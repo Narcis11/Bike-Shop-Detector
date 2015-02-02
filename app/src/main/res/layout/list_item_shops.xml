@@ -34,7 +34,8 @@
             android:id="@+id/list_item_shopname_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-condensed"
+            android:typeface="serif"
+            android:fontFamily="sans-serif"
             android:maxLines="1"
             android:ellipsize="end"
             android:textSize="20sp"/>
