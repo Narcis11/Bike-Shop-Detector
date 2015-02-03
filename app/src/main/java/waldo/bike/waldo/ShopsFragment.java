@@ -243,7 +243,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.shopsfragment,menu);
+        inflater.inflate(R.menu.shopsfragment, menu);
     }
 
     @Override
@@ -356,5 +356,6 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                 }
             }, 3000);
         }
+
 }
 

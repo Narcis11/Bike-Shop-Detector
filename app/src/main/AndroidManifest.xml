@@ -35,20 +35,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation"
             android:label="@string/app_name"
             android:theme="@style/MainActivityTheme" >
-            <meta-data android:name="android.app.searchable"
-                android:resource="@xml/searchable" />
         </activity>
-        <activity android:name=".SearchResultsActivity">
-        <intent-filter>
-            <action android:name="android.intent.action.SEARCH" />
-        </intent-filter>
-    </activity>
-        
+
         <activity
             android:name="waldo.bike.form.AddShopFormActivity"
             android:configChanges="orientation"
@@ -60,6 +54,7 @@
             android:value="waldo.bike.form.AddShopMap" />
              >
         </activity>
+
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
