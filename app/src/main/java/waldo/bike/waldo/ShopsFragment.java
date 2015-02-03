@@ -3,6 +3,7 @@ package waldo.bike.waldo;
 import android.app.Fragment;
 import android.app.LoaderManager;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.app.SearchManager;
 import android.bluetooth.BluetoothClass;
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +16,7 @@ import android.provider.Settings;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,6 +29,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
@@ -41,7 +44,9 @@ import sync.SyncAdapter;
 /**
  * Created by Narcis11 on 20.12.2014.
  */
-public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, SwipeRefreshLayout.OnRefreshListener{
+public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
+        SwipeRefreshLayout.OnRefreshListener {
+
 
     public SimpleCursorAdapter mShopsAdapter;
     private String mRadius;
@@ -168,6 +173,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
         swipeLayout.setOnRefreshListener(this);
         mListView = listView;
         listView.setAdapter(mShopsAdapter);
+        listView.setTextFilterEnabled(true);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -237,7 +243,6 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-
         inflater.inflate(R.menu.shopsfragment,menu);
     }
 
