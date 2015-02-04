@@ -19,4 +19,17 @@
         android:onClick="openMap"
         />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/detail_shopname"
+        android:paddingTop="15dp"
+        android:paddingLeft="15dp"
+        android:textSize="20sp"
+        android:layout_below="@+id/streetviewpanorama"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+
 </RelativeLayout>

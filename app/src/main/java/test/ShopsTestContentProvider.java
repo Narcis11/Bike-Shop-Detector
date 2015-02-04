@@ -69,12 +69,15 @@ public class ShopsTestContentProvider extends AndroidTestCase {
 
     public void testReadContentProvider() {
         String columnValue = "";
+        final String querySelection = ShopsContract.ShopsEntry.COLUMN_PLACE_ID + "=?";
+        final String[] querySelectionArgs = new String[1];
+        querySelectionArgs[0] = "ChIJic5-xMb4sUARQAHInQfJXbM";
         Cursor contentCursor = mContext.getContentResolver().query(
                 ShopsContract.ShopsEntry.CONTENT_URI,
                 null,
-                null,
-                null,
-                ShopsContract.ShopsEntry.SORT_ORDER
+                querySelection,
+                querySelectionArgs,
+                null
         );
         List<String> columnNames = new ArrayList<String>();
         columnNames.add(ShopsContract.ShopsEntry._ID);
