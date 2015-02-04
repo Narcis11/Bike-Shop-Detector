@@ -567,7 +567,7 @@ public class Utility {
     }
 
     public static String getTodayFromOpeningHours (String schedule) {
-        Log.i(LOG_TAG,"Length of opening hours: " + String.valueOf(schedule.length()));
+        //Log.i(LOG_TAG,"Length of opening hours: " + String.valueOf(schedule.length()));
         String[] openingHours = schedule.split(Constants.HASH_SEPARATOR);
         Calendar calendar = Calendar.getInstance();
         int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);

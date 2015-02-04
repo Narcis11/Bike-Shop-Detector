@@ -69,6 +69,7 @@
         android:paddingLeft="15dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
+        android:paddingBottom="15dp"
 
         />
 </RelativeLayout>

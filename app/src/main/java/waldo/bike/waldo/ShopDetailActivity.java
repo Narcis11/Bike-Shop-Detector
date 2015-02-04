@@ -73,6 +73,7 @@ public class ShopDetailActivity extends FragmentActivity
         TextView shopAddressTextView = (TextView) findViewById(R.id.detail_shopaddress);
         TextView shopPhoneNumberTextView = (TextView) findViewById(R.id.detail_shopphonenumber);
         TextView shopOpeningHoursTextView = (TextView) findViewById(R.id.detail_shopopeninghours);
+        TextView shopWebsiteTextView = (TextView) findViewById(R.id.detail_shopwebsite);
 
         Cursor shopDetailCursor = getApplicationContext().getContentResolver().query(
                 ShopsContract.ShopsEntry.CONTENT_URI,
@@ -86,7 +87,9 @@ public class ShopDetailActivity extends FragmentActivity
             shopNameTextView.setText(shopDetailCursor.getString(COL_SHOP_NAME));
             shopAddressTextView.setText(shopDetailCursor.getString(COL_SHOP_ADDRESS));
             shopPhoneNumberTextView.setText(shopDetailCursor.getString(COL_SHOP_PHONE_NUMBER));
+            if (shopDetailCursor.getString(COL_SHOP_OPENING_HOURS) != null)
             shopOpeningHoursTextView.setText(Utility.getTodayFromOpeningHours(shopDetailCursor.getString(COL_SHOP_OPENING_HOURS)));
+            shopWebsiteTextView.setText(shopDetailCursor.getString(COL_SHOP_WEBSITE));
         }
         else {
             Log.i(LOG_TAG,"*****Cursor is null!*****");
