@@ -20,8 +20,7 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/SecondaryActivityTheme"
-         >
+        android:theme="@style/SecondaryActivityTheme" >
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -32,34 +31,30 @@
             android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation"
             android:label="@string/app_name"
             android:theme="@style/MainActivityTheme" >
         </activity>
-
         <activity
             android:name="waldo.bike.form.AddShopFormActivity"
             android:configChanges="orientation"
             android:label="@string/title_activity_add_shop_form"
-            android:parentActivityName="waldo.bike.form.AddShopMap"
-            >
-        <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value="waldo.bike.form.AddShopMap" />
+            android:parentActivityName="waldo.bike.form.AddShopMap" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="waldo.bike.form.AddShopMap" />
              >
         </activity>
-
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".MainActivity"
-            >
+            android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="waldo.bike.waldo.MainActivity" />
@@ -74,9 +69,7 @@
 
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps"
-            >
-
+            android:label="@string/title_activity_maps" >
         </activity>
 
         <provider
@@ -128,6 +121,14 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="waldo.bike.waldo.MainActivity" />
+        </activity>
+        <activity
+            android:name=".ShopStreetViewActivity"
+            android:label="@string/title_activity_shop_street_view"
+            android:parentActivityName=".ShopDetailActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="waldo.bike.waldo.ShopDetailActivity" />
         </activity>
     </application>
 

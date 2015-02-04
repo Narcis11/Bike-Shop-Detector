@@ -10,7 +10,7 @@
     <string name="cancel_button">Cancel</string>
     <string name="action_search">Search</string>
     <string name="search_hint">Search a shop</string>
-    <!--Titles of activities-->
+    <!-- Titles of activities -->
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_settings">Settings</string>
     <string name="title_activity_add_shop_map">Add a shop</string>
@@ -106,7 +106,6 @@
     <!-- Content Description -->
     <string name="desc_list_item_icon">Item Icon</string>
 
-
     <!-- SyncAdapter related -->
     <string name="sync_account_type">waldo.bike.shopsapp</string>
     <string name="content_authority">waldo.bike.waldo</string>
@@ -141,5 +140,7 @@
     <string name="gmaps_api_key">AIzaSyCHf4BobJQWDa39E_VJtUkwkuimFfsz7Z0</string>
     <string name="facebook_appId">1528344614097187</string>
     <string name="title_activity_shop_detail">ShopDetailActivity</string>
+    <string name="title_activity_shop_street_view">ShopStreetViewActivity</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>

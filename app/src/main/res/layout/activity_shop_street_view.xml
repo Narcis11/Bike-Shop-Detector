@@ -1,0 +1,12 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="waldo.bike.waldo.ShopStreetViewActivity">
+
+    <fragment
+        android:name="com.google.android.gms.maps.StreetViewPanoramaFragment"
+        android:id="@+id/streetview_shop"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</RelativeLayout>

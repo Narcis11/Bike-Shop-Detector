@@ -12,6 +12,7 @@ import com.google.android.gms.maps.OnStreetViewPanoramaReadyCallback;
 import com.google.android.gms.maps.StreetViewPanorama;
 import com.google.android.gms.maps.StreetViewPanoramaFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.StreetViewPanoramaOrientation;
 
 import Utilities.Constants;
 
@@ -21,14 +22,15 @@ public class ShopDetailActivity extends FragmentActivity
     Double mShopLat;
     Double mShopLng;
     String mShopName;
+    Bundle mBundle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shop_detail);
-        Bundle bundle = getIntent().getExtras();
-        mShopLat = Double.valueOf(bundle.getString(Constants.BUNDLE_SHOP_LAT));
-        mShopLng = Double.valueOf(bundle.getString(Constants.BUNDLE_SHOP_LNG));
-        mShopName = bundle.getString(Constants.BUNDLE_SHOP_NAME);
+        mBundle = getIntent().getExtras();
+        mShopLat = Double.valueOf(mBundle.getString(Constants.BUNDLE_SHOP_LAT));
+        mShopLng = Double.valueOf(mBundle.getString(Constants.BUNDLE_SHOP_LNG));
+        mShopName = mBundle.getString(Constants.BUNDLE_SHOP_NAME);
         getActionBar().setTitle(mShopName);
         StreetViewPanoramaFragment streetViewPanoramaFragment =
                 (StreetViewPanoramaFragment) getFragmentManager()
@@ -59,7 +61,16 @@ public class ShopDetailActivity extends FragmentActivity
     public void onStreetViewPanoramaReady(StreetViewPanorama streetViewPanorama) {
         LatLng shopLatLng = new LatLng(mShopLat, mShopLng);
         streetViewPanorama.setPosition(shopLatLng);
-        streetViewPanorama.setPanningGesturesEnabled(true);
+        //the user can just click on the image, he can't manipulate it yet
+        streetViewPanorama.setPanningGesturesEnabled(false);
+        streetViewPanorama.setOnStreetViewPanoramaClickListener(new StreetViewPanorama.OnStreetViewPanoramaClickListener() {
+            @Override
+            public void onStreetViewPanoramaClick(StreetViewPanoramaOrientation streetViewPanoramaOrientation) {
+                Intent shopStreetViewIntent = new Intent(getApplicationContext(),ShopStreetViewActivity.class);
+                shopStreetViewIntent.putExtras(mBundle);
+                startActivity(shopStreetViewIntent);
+            }
+        });
     }
 
     public void openMap(View v) {

@@ -9,8 +9,8 @@ import java.util.ArrayList;
  * Created by Narcis11 on 20.12.2014.
  */
 public class GlobalState { //44.4391463,26.1428946
-    public static String USER_LAT="";
-    public static String USER_LNG="";
+    public static String USER_LAT="44.4391463";
+    public static String USER_LNG="26.1428946";
     public static String ALL_SHOPS_INFO = "";
     public static String FETCH_STATUS = "";
     public static String FRAGMENT_RANGE;
