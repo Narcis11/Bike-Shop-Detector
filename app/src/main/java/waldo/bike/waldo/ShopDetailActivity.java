@@ -2,6 +2,7 @@ package waldo.bike.waldo;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.provider.ContactsContract;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.StreetViewPanoramaOrientation;
 
 import Utilities.Constants;
+import Utilities.Utility;
 import data.ShopsContract;
 
 
@@ -68,7 +70,10 @@ public class ShopDetailActivity extends FragmentActivity
     protected void onResume() {
         super.onResume();
         TextView shopNameTextView = (TextView) findViewById(R.id.detail_shopname);
-        Log.i(LOG_TAG,"querySelectionArgs[0] = " + querySelectionArgs[0]);
+        TextView shopAddressTextView = (TextView) findViewById(R.id.detail_shopaddress);
+        TextView shopPhoneNumberTextView = (TextView) findViewById(R.id.detail_shopphonenumber);
+        TextView shopOpeningHoursTextView = (TextView) findViewById(R.id.detail_shopopeninghours);
+
         Cursor shopDetailCursor = getApplicationContext().getContentResolver().query(
                 ShopsContract.ShopsEntry.CONTENT_URI,
                 QUERY_COLUMS,
@@ -76,9 +81,12 @@ public class ShopDetailActivity extends FragmentActivity
                 querySelectionArgs,
                 null
         );
+        //set the views' text
         if (shopDetailCursor.moveToFirst()) {
             shopNameTextView.setText(shopDetailCursor.getString(COL_SHOP_NAME));
-            
+            shopAddressTextView.setText(shopDetailCursor.getString(COL_SHOP_ADDRESS));
+            shopPhoneNumberTextView.setText(shopDetailCursor.getString(COL_SHOP_PHONE_NUMBER));
+            shopOpeningHoursTextView.setText(Utility.getTodayFromOpeningHours(shopDetailCursor.getString(COL_SHOP_OPENING_HOURS)));
         }
         else {
             Log.i(LOG_TAG,"*****Cursor is null!*****");

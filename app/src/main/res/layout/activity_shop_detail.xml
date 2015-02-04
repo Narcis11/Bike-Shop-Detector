@@ -31,5 +31,44 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/detail_shopaddress"
+        android:layout_below="@+id/detail_shopname"
+        android:paddingTop="5dp"
+        android:paddingLeft="15dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/detail_shopphonenumber"
+        android:layout_below="@+id/detail_shopaddress"
+        android:paddingTop="5dp"
+        android:paddingLeft="15dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/detail_shopopeninghours"
+        android:layout_below="@+id/detail_shopphonenumber"
+        android:paddingTop="5dp"
+        android:paddingLeft="15dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/detail_shopwebsite"
+        android:paddingTop="5dp"
+        android:paddingLeft="15dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+
+        />
 </RelativeLayout>

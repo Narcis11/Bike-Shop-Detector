@@ -10,6 +10,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.List;
 
 import waldo.bike.waldo.R;
@@ -565,8 +566,15 @@ public class Utility {
         return Constants.RETURN_ERROR_STRING;
     }
 
-    public static boolean isListAtTop(ListView listView)   {
-        if(listView.getChildCount() == 0) return true;
-        return listView.getChildAt(0).getTop() == 0;
+    public static String getTodayFromOpeningHours (String schedule) {
+        Log.i(LOG_TAG,"Length of opening hours: " + String.valueOf(schedule.length()));
+        String[] openingHours = schedule.split(Constants.HASH_SEPARATOR);
+        Calendar calendar = Calendar.getInstance();
+        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+        String today = "";
+        for (int i = 0; i < openingHours.length; i ++) {
+            if (dayOfWeek - 2 == i) today = openingHours[i];
+        }
+        return today;
     }
 }
