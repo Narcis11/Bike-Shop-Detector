@@ -3,6 +3,7 @@ package waldo.bike.waldo;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -10,6 +11,8 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.util.Log;
+import android.view.View;
+import android.widget.CheckBox;
 
 
 import java.util.ArrayList;
@@ -47,6 +50,7 @@ public class SettingsActivity extends PreferenceActivity implements
     private String mRange = "Range";
     private String mSpeed = "speed";
     private boolean mIsMetricLoaded;
+    private CheckBoxPreference mNotifCheckBox;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +61,8 @@ public class SettingsActivity extends PreferenceActivity implements
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_range_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_speed_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_unit_key)));
+
+
     }
 
 
@@ -203,5 +209,17 @@ public class SettingsActivity extends PreferenceActivity implements
                     unitListPreference.setDefaultValue(getResources().getString(R.string.unit_array_imperial));
                 }
             }
+          mNotifCheckBox  = (CheckBoxPreference) getPreferenceManager().findPreference(getResources().getString(R.string.pref_enable_notifications_key));
     }
+
+            @Override
+            protected void onStop() {
+                super.onStop();
+                if (mNotifCheckBox.isChecked()) {
+                    Log.i(LOG_TAG,"onStop: Checkbox is checked");
+                }
+                else {
+                    Log.i(LOG_TAG,"onStop: Checkbox is UnChecked");
+                }
+            }
 }

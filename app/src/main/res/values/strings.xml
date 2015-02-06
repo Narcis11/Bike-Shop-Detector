@@ -159,4 +159,6 @@
     <!--Used in the Shops Fragment class to track the opening of a Shop-->
     <string name="ga_open_shop_category_id">open_shop_cat_id</string>
     <string name="ga_open_shop_action_id">open_shop_act_id</string>
+
+    <!--Used in the Settings activity-->
 </resources>

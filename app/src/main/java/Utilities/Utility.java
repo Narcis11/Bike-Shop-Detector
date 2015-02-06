@@ -485,11 +485,14 @@ public class Utility {
 
     public static String formatDistanceImperial (String distance) {
         if (Integer.valueOf(distance) > 1609) {
+            //TODO: There is a bug here for the hardcoded values from the GlobalState. Fix it!
+            Log.i(LOG_TAG,"Distance is: " + distance);
             String doublezero = "00";
             Double reference = 1610.0;
             Double distanceDouble = Double.valueOf(distance);
             Double miles = distanceDouble/reference;
             String calculatedDistance = String.valueOf(miles);
+            Log.i(LOG_TAG,"calculatedDistance: " + calculatedDistance);
             String calculatedMiles = calculatedDistance.substring(0, 1);
             String calculatedYards = calculatedDistance.substring(2, 4);
             if (!calculatedYards.equals(doublezero)) {
