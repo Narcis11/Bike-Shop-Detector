@@ -304,6 +304,7 @@ public class MainActivity extends Activity implements
     @Override
     protected void onResume() {
         super.onResume();
+        //TODO: When you fix the Like button, see what function is called when the like or follow button is pressed.
         //initialise the GA tracker
         mGaTracker = ((Waldo) getApplication()).getTracker(
                 Waldo.TrackerName.APP_TRACKER);
@@ -510,7 +511,6 @@ public class MainActivity extends Activity implements
         public void onItemClick(AdapterView<?> parent, View view, int position,
                                 long id) {
             // display view for selected nav drawer item
-       //     Log.i(LOG_TAG,"Button pressed at position " + position);
             if (position == 1) { //add a shop
                 openMap(AddShopMap);
             }
@@ -520,12 +520,6 @@ public class MainActivity extends Activity implements
             else if (position == 3) {
                 openWebsite();
             }
- /*           else if (position == 4) {
-                openFacebook();
-            }
-            else if (position == 5) {
-                openTwitter();
-            }*/
         }
     }
 
@@ -537,9 +531,9 @@ public class MainActivity extends Activity implements
         try {
             // Build and send a tracked event to GA.
             mGaTracker.send(new HitBuilders.EventBuilder()
-                    .setCategory(getString(R.string.slider_menu_category_id))
-                    .setAction(getString(R.string.about_us_action_id))
-                    .setLabel(getString(R.string.about_us_label_id))
+                    .setCategory(getString(R.string.ga_slider_menu_category_id))
+                    .setAction(getString(R.string.ga_about_us_action_id))
+                    .setLabel(getString(R.string.ga_about_us_label_id))
                     .build());
 
             startActivity(intent);
@@ -568,9 +562,9 @@ public class MainActivity extends Activity implements
                 if (cursor.getCount() > 0) {
                     // Build and send a tracked event to GA.
                     mGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory(getString(R.string.slider_menu_category_id))
-                            .setAction(getString(R.string.view_all_shops_action_id))
-                            .setLabel(getString(R.string.view_all_shops_label_id))
+                            .setCategory(getString(R.string.ga_slider_menu_category_id))
+                            .setAction(getString(R.string.ga_view_all_shops_action_id))
+                            .setLabel(getString(R.string.ga_view_all_shops_label_id))
                             .build());
 
                     //close the drawer only when we are ready to open the map
@@ -590,9 +584,9 @@ public class MainActivity extends Activity implements
             else {
                 // Build and send a tracked event to GA.
                 mGaTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory(getString(R.string.slider_menu_category_id))
-                        .setAction(getString(R.string.add_a_shop_action_id))
-                        .setLabel(getString(R.string.add_a_shop_label_id))
+                        .setCategory(getString(R.string.ga_slider_menu_category_id))
+                        .setAction(getString(R.string.ga_add_a_shop_action_id))
+                        .setLabel(getString(R.string.ga_add_a_shop_label_id))
                         .build());
 
                 //close the drawer only when we are ready to open the map

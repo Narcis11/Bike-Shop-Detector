@@ -33,6 +33,9 @@ import android.widget.SearchView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import Places.FetchGooglePlaces;
 import Utilities.Constants;
 import Utilities.DeviceConnection;
@@ -64,6 +67,8 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     private ListView mListView;
     private boolean mIsSpeedChanged;
     private SwipeRefreshLayout swipeLayout;
+    //used by Google Analytics
+    private Tracker mGaTracker;
     public static final String[] SHOPS_COLUMNS = {
             ShopsContract.ShopsEntry.TABLE_NAME + "." + ShopsContract.ShopsEntry._ID,
             ShopsContract.ShopsEntry.COLUMN_SHOP_NAME,
@@ -189,11 +194,19 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                     mPlaceId = cursor.getString(COL_PLACE_ID);
                     //update the database row corresponding to this shop id
                     updateShopList(getActivity(),mPlaceId);
+                    //set the event to GA
+                    mGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory(getString(R.string.ga_open_shop_category_id))
+                            .setAction(getString(R.string.ga_open_shop_action_id))
+                            .setLabel(mShopName)
+                            .build());
+                    //assemble the bundle
                     bundle.putString(Constants.BUNDLE_SHOP_LAT, mShopLatitude);
                     bundle.putString(Constants.BUNDLE_SHOP_LNG, mShopLongitude);
                     bundle.putString(Constants.BUNDLE_SHOP_NAME,mShopName);
                     bundle.putString(Constants.BUNDLE_SHOP_PLACE_ID,mPlaceId);
                     openDetailActivity.putExtras(bundle);
+                    //lift off!
                     startActivity(openDetailActivity);
                 }
          /*       if (cursor != null && cursor.moveToPosition(position)) {
@@ -233,10 +246,11 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
 
     }
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mGaTracker = ((Waldo)  getActivity().getApplication()).getTracker(
+                Waldo.TrackerName.APP_TRACKER);
         setHasOptionsMenu(true); //tells the system that we have button(s) in the menu
 
     }
