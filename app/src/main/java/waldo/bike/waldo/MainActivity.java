@@ -48,6 +48,8 @@ import com.facebook.AppEventsLogger;
 import com.facebook.Settings;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.LikeView;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -124,6 +126,8 @@ public class MainActivity extends Activity implements
     private String followingButtonActivated = "following";
     //used to store the user's coordinates
     private static String[] mLatLng = new String[2];
+    //the Google Analytics tracker
+    Tracker mGaTracker;
      //these variables are used for the slider menu
      private DrawerLayout mDrawerLayout;
      private ListView mDrawerList;
@@ -300,20 +304,16 @@ public class MainActivity extends Activity implements
     @Override
     protected void onResume() {
         super.onResume();
-/*        try {
-            mLikeView.handleOnActivityResult(mContext, 0, 0, null);
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-        }*/
+        //initialise the GA tracker
+        mGaTracker = ((Waldo) getApplication()).getTracker(
+                Waldo.TrackerName.APP_TRACKER);
+
         if (!(mLikeView.getPaddingLeft() == 16 || mLikeView.getPaddingLeft() == 0)) {
             mLikeView.setPadding(16, 0, 211, 0);
             Log.i(LOG_TAG,"Changed padding in onResume");
             Log.i(LOG_TAG,"Padding left/right onResume: " + String.valueOf(mLikeView.getPaddingLeft()) + "/" + String.valueOf(mLikeView.getPaddingRight()));
         }
 
-        // Logs 'install' and 'app activate' App Events.
-        AppEventsLogger.activateApp(mContext);
         //register the broadcast receiver
         registerReceiver(mBroadcastReceiver,mIntentFilter);
         DeviceConnection deviceConnection = new DeviceConnection(mContext);
@@ -535,6 +535,13 @@ public class MainActivity extends Activity implements
         String url = "http://www.waldo.bike/";
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         try {
+            // Build and send a tracked event to GA.
+            mGaTracker.send(new HitBuilders.EventBuilder()
+                    .setCategory(getString(R.string.slider_menu_category_id))
+                    .setAction(getString(R.string.about_us_action_id))
+                    .setLabel(getString(R.string.about_us_label_id))
+                    .build());
+
             startActivity(intent);
             //close the drawer only when we are ready to open the browser (no exception thrown)
             mDrawerLayout.closeDrawer(Gravity.LEFT);
@@ -559,6 +566,13 @@ public class MainActivity extends Activity implements
                 Toast.makeText(mContext, R.string.no_user_location, Toast.LENGTH_SHORT).show();
             } else {
                 if (cursor.getCount() > 0) {
+                    // Build and send a tracked event to GA.
+                    mGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory(getString(R.string.slider_menu_category_id))
+                            .setAction(getString(R.string.view_all_shops_action_id))
+                            .setLabel(getString(R.string.view_all_shops_label_id))
+                            .build());
+
                     //close the drawer only when we are ready to open the map
                     mDrawerLayout.closeDrawer(Gravity.LEFT);
                     Intent intent = new Intent(this, MapsActivity.class);
@@ -574,6 +588,13 @@ public class MainActivity extends Activity implements
                 Toast.makeText(mContext, R.string.no_user_location, Toast.LENGTH_SHORT).show();
             }
             else {
+                // Build and send a tracked event to GA.
+                mGaTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory(getString(R.string.slider_menu_category_id))
+                        .setAction(getString(R.string.add_a_shop_action_id))
+                        .setLabel(getString(R.string.add_a_shop_label_id))
+                        .build());
+
                 //close the drawer only when we are ready to open the map
                 mDrawerLayout.closeDrawer(Gravity.LEFT);
                 Intent intent = new Intent(mContext, waldo.bike.form.AddShopMap.class);

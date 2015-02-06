@@ -143,4 +143,17 @@
     <string name="title_activity_shop_street_view">ShopStreetViewActivity</string>
     <string name="hello_world">Hello world!</string>
 
+    <!--Used for tracking-->
+    <!--Slider Menu actions-->
+    <string name="slider_menu_category_id">slider_menu</string>
+    <!--View all shops-->
+    <string name="view_all_shops_action_id">view_all_shops</string>
+    <string name="view_all_shops_label_id">View all shops</string>
+    <!--Add a shops-->
+    <string name="add_a_shop_action_id">add_a_shops</string>
+    <string name="add_a_shop_label_id">Add a shops</string>
+    <!--About us-->
+    <string name="about_us_action_id">about_us</string>
+    <string name="about_us_label_id">About us</string>
+
 </resources>
