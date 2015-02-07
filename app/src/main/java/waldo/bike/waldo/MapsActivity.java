@@ -79,6 +79,7 @@ public class MapsActivity extends FragmentActivity {
             Log.i(LOG_TAG, "Should go back");
             Intent shopDetailsIntent = new Intent(this,ShopDetailActivity.class);
             //data from the bundle is extracted in the onCreate from ShopDetailActivity, so we need to send it again.
+            Log.i(LOG_TAG,mBundle.getString(Constants.BUNDLE_SHOP_PLACE_ID));
             shopDetailsIntent.putExtras(mBundle);
             return shopDetailsIntent;
         }
@@ -103,16 +104,15 @@ public class MapsActivity extends FragmentActivity {
      */
 
     private void setUpMap() {
-        Bundle bundle = getIntent().getExtras();
-        mBundle = bundle;
+        mBundle = getIntent().getExtras();
         String allShopsName = "";
         String allShopsLat = "";
         String allShopsLng = "";
-        if ( bundle != null && !bundle.isEmpty() ) { //call for a shop
+        if ( mBundle != null && !mBundle.isEmpty() ) { //call for a shop
             //call from fragment
-            Double shopLat = Double.valueOf(bundle.getString(Constants.BUNDLE_SHOP_LAT));
-            Double shopLng = Double.valueOf(bundle.getString(Constants.BUNDLE_SHOP_LNG));
-            String shopName = bundle.getString(Constants.BUNDLE_SHOP_NAME);
+            Double shopLat = Double.valueOf(mBundle.getString(Constants.BUNDLE_SHOP_LAT));
+            Double shopLng = Double.valueOf(mBundle.getString(Constants.BUNDLE_SHOP_LNG));
+            String shopName = mBundle.getString(Constants.BUNDLE_SHOP_NAME);
             LatLng shopLatLng = new LatLng(shopLat, shopLng);
             getActionBar().setTitle(shopName);
             mMap.addMarker(new MarkerOptions().position(shopLatLng).title(shopName));

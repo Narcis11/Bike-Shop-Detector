@@ -37,7 +37,12 @@ public class Waldo extends Application {
         authConfig =
                 new TwitterAuthConfig(Constants.CONSUMER_KEY,
                         Constants.CONSUMER_SECRET);
-        Fabric.with(this, new Twitter(authConfig));
+        try {
+            Fabric.with(this, new Twitter(authConfig));
+        }
+        catch (Exception e) {
+
+        }
     }
     synchronized Tracker getTracker(TrackerName trackerId) {
         if (!mTrackers.containsKey(trackerId)) {

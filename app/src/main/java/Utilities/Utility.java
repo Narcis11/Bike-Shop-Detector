@@ -489,13 +489,22 @@ public class Utility {
             Log.i(LOG_TAG,"Distance is: " + distance);
             String doublezero = "00";
             Double reference = 1610.0;
+            String calculatedYards;
             Double distanceDouble = Double.valueOf(distance);
             Double miles = distanceDouble/reference;
             String calculatedDistance = String.valueOf(miles);
             Log.i(LOG_TAG,"calculatedDistance: " + calculatedDistance);
             String calculatedMiles = calculatedDistance.substring(0, 1);
-            String calculatedYards = calculatedDistance.substring(2, 4);
-            if (!calculatedYards.equals(doublezero)) {
+            if (calculatedDistance.length() == 1) { //x
+                calculatedYards = doublezero;
+            }
+            else if (calculatedDistance.length() == 3) { //x.y
+                calculatedYards = calculatedDistance.substring(2, 3);
+            }
+            else {
+                calculatedYards = calculatedDistance.substring(2, 4);
+            }
+            if (!calculatedYards.equals(doublezero)) { //x.adsadadas (câte or fi)
                 return calculatedMiles + Constants.DOT_SEPARATOR + calculatedYards + " " + mMileSign;
             }
             else {

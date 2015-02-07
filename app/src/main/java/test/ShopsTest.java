@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import Utilities.Utility;
 import data.ShopsContract;
 import data.ShopsDbHelper;
 
@@ -107,5 +108,36 @@ public class ShopsTest extends AndroidTestCase {
             assertEquals(expectedValue, valueCursor.getString(idx));
         }
         valueCursor.close();
+    }
+
+    public void testMetricDistanceToUser() {
+        String distance = "";
+       for (int i = 0; i < 15.000; i ++) {
+            distance = String.valueOf(i);
+            try {
+                Utility.formatDistanceMetric(distance);
+            }
+            catch (Exception e) {
+                Log.i(LOG_TAG,"Error for: " + distance);
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    public void testImperialDistanceToUser() {
+        String distance = "";
+        for (int i = 0; i < 15000;i++) {
+            distance = String.valueOf(i);
+             try {
+                //Log.i(LOG_TAG,distance);
+                Utility.formatDistanceImperial(distance);
+            }
+            catch (Exception e) {
+                Log.i(LOG_TAG,"Error for: " + distance);
+                e.printStackTrace();
+            }
+        }
+       // Utility.formatDistanceImperial(String.valueOf(1932));
     }
 }
