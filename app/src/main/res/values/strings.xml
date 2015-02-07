@@ -155,7 +155,9 @@
     <!--About us-->
     <string name="ga_about_us_action_id">about_us</string>
     <string name="ga_about_us_label_id">About us</string>
-
+    <!--Social media buttons-->
+    <string name="ga_socialmedia_cat_id">social_cat_id</string>
+    <string name="ga_socialmedia_act_id">social_act_id</string>
     <!--Used in the Shops Fragment class to track the opening of a Shop-->
     <string name="ga_open_shop_category_id">open_shop_cat_id</string>
     <string name="ga_open_shop_action_id">open_shop_act_id</string>

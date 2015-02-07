@@ -128,25 +128,25 @@ public class MainActivity extends Activity implements
     private static String[] mLatLng = new String[2];
     //the Google Analytics tracker
     Tracker mGaTracker;
+    //labels of social media buttons for GA
+    String mLikeLabel = "like_pressed";
+    String mFollowLabel = "follow_pressed";
      //these variables are used for the slider menu
-     private DrawerLayout mDrawerLayout;
-     private ListView mDrawerList;
-     private ActionBarDrawerToggle mDrawerToggle;
-     private View mHeaderView;
-     private View mFooterView;
-     private View mDividerFooterView;
-     // nav drawer title
-     private CharSequence mDrawerTitle;
-
-     // used to store app title
-     private CharSequence mTitle;
-
-     // slide menu items
-     private String[] navMenuTitles;
-     private TypedArray navMenuIcons;
-
-     private ArrayList<SliderDrawerItem> navDrawerItems;
-     private SliderDrawerListAdapter adapter;
+    private DrawerLayout mDrawerLayout;
+    private ListView mDrawerList;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private View mHeaderView;
+    private View mFooterView;
+    private View mDividerFooterView;
+    // nav drawer title
+    private CharSequence mDrawerTitle;
+    // used to store app title
+    private CharSequence mTitle;
+    // slide menu items
+    private String[] navMenuTitles;
+    private TypedArray navMenuIcons;
+    private ArrayList<SliderDrawerItem> navDrawerItems;
+    private SliderDrawerListAdapter adapter;
 
     @Override
     protected void onDestroy() {
@@ -255,7 +255,6 @@ public class MainActivity extends Activity implements
                  mFollowView = (ImageView) findViewById(R.id.follow_button);
                  mTwitterLoginButton = (TwitterLoginButton) findViewById(R.id.twitter_login_button);
                  mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
-                 
                  setUpFollowButton();
                  loadCorrectFollowButton();
     }
@@ -314,9 +313,29 @@ public class MainActivity extends Activity implements
             Log.i(LOG_TAG,"Changed padding in onResume");
             Log.i(LOG_TAG,"Padding left/right onResume: " + String.valueOf(mLikeView.getPaddingLeft()) + "/" + String.valueOf(mLikeView.getPaddingRight()));
         }
-
+        //send a GA event for each press of the like/follow button
+        mLikeView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mGaTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory(getString(R.string.ga_socialmedia_cat_id))
+                        .setAction(getString(R.string.ga_socialmedia_act_id))
+                        .setLabel(mLikeLabel)
+                        .build());
+            }
+        });
+        mFollowView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mGaTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory(getString(R.string.ga_socialmedia_cat_id))
+                        .setAction(getString(R.string.ga_socialmedia_act_id))
+                        .setLabel(mFollowLabel)
+                        .build());
+            }
+        });
         //register the broadcast receiver
-        registerReceiver(mBroadcastReceiver,mIntentFilter);
+        registerReceiver(mBroadcastReceiver, mIntentFilter);
         DeviceConnection deviceConnection = new DeviceConnection(mContext);
       //  Log.i(LOG_TAG,"onResume()|mNetworkState = " + mNetworkState);
         //onResume is called by the system from onReceive whenever there's a network change
@@ -618,33 +637,30 @@ public class MainActivity extends Activity implements
         Log.i(LOG_TAG,"in setUpFollowButton()");
         setTwitterLoginCallback();
         mFollowView.setOnClickListener(new View.OnClickListener() {
-                     @Override
-                     public void onClick(View v) {
-        Drawable followDrawable = getResources().getDrawable(R.drawable.twitter_follow);
-        Drawable followingDrawable = getResources().getDrawable(R.drawable.twitter_following);
-        
-            if (mFollowView.getDrawable().getConstantState().equals(followDrawable.getConstantState())) {//follow button is displayed
-                if (mTwitterToken.equals("") && mTwitterSecret.equals("")) {
-                    //simulate the press of the Twitter login button to get the token and secret
-                    mActivateFollow = true;
-                    mTwitterLoginButton.performClick();
-                }
-                    else {//we have the token and secret, we can execute the Follow action now
+            @Override
+            public void onClick(View v) {
+                Drawable followDrawable = getResources().getDrawable(R.drawable.twitter_follow);
+                Drawable followingDrawable = getResources().getDrawable(R.drawable.twitter_following);
+
+                if (mFollowView.getDrawable().getConstantState().equals(followDrawable.getConstantState())) {//follow button is displayed
+                    if (mTwitterToken.equals("") && mTwitterSecret.equals("")) {
+                        //simulate the press of the Twitter login button to get the token and secret
+                        mActivateFollow = true;
+                        mTwitterLoginButton.performClick();
+                    } else {//we have the token and secret, we can execute the Follow action now
                         twitterOperationWithToken(Constants.TWITTER_FOLLOW);
                     }
-                }
-            else if (mFollowView.getDrawable().getConstantState().equals(followingDrawable.getConstantState())) {//following button is displayed
-                if (mTwitterToken.equals("") && mTwitterSecret.equals("")) {
-                    //simulate the press of the Twitter login button to get the token and secret
-                    mActivateFollow = false;
-                    mTwitterLoginButton.performClick();
-                }
-                else {//we have the token and secret, we can execute the unfollow now
+                } else if (mFollowView.getDrawable().getConstantState().equals(followingDrawable.getConstantState())) {//following button is displayed
+                    if (mTwitterToken.equals("") && mTwitterSecret.equals("")) {
+                        //simulate the press of the Twitter login button to get the token and secret
+                        mActivateFollow = false;
+                        mTwitterLoginButton.performClick();
+                    } else {//we have the token and secret, we can execute the unfollow now
                         twitterOperationWithToken(Constants.TWITTER_UNFOLLOW);
+                    }
                 }
             }
-        }
-      });
+        });
     }
 
     private void setTwitterLoginCallback() {
