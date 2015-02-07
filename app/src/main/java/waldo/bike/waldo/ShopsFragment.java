@@ -12,6 +12,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 
 import android.os.Handler;
+import android.os.Parcelable;
 import android.provider.Settings;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Spannable;
@@ -178,8 +179,6 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
         swipeLayout.setOnRefreshListener(this);
         mListView = listView;
         listView.setAdapter(mShopsAdapter);
-        listView.setTextFilterEnabled(true);
-
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -193,7 +192,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                     mShopLongitude = cursor.getString(COL_SHOP_LONGITUDE);
                     mPlaceId = cursor.getString(COL_PLACE_ID);
                     //update the database row corresponding to this shop id
-                    updateShopList(getActivity(),mPlaceId);
+                   // updateShopList(getActivity(),mPlaceId);
                     //set the event to GA
                     mGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory(getString(R.string.ga_open_shop_category_id))
@@ -291,7 +290,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                 && deviceConnection.checkInternetConnected() && !GlobalState.USER_LAT.equals("") && !GlobalState.USER_LNG.equals("") ) {
             Log.i(LOG_TAG,"****UPDATED SHOP LIST****");
             Log.i(LOG_TAG,GlobalState.USER_LAT + " / " + GlobalState.USER_LNG);
-            updateShopList(getActivity(),null);
+            updateShopList(getActivity());
             mIsListRefreshed = true;
         }
         //we only restart the loader if the refresh caused by the change of range hasn't been performed. If it has, we already have an updated list
@@ -299,11 +298,6 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
             mIsSpeedChanged = true;
             getLoaderManager().restartLoader(SHOPS_LOADER_ID,null,this);
         }
-/*        LoaderManager lm = getLoaderManager();
-        if (lm.getLoader(SHOPS_LOADER_ID) != null) {
-            Log.i(LOG_TAG,"******init loader in onResume()*****");
-            lm.initLoader(SHOPS_LOADER_ID, null, this);
-        }*/
     }
 
     @Override
@@ -314,18 +308,19 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
         GlobalState.FRAGMENT_SPEED = Utility.getPreferredSpeed(getActivity());
     }
 
-    public void updateShopList(Context context, String placeId) {
+    public void updateShopList(Context context) {
         String[] coordinates = new String[2];
         coordinates[0] = GlobalState.USER_LAT;
         coordinates[1] = GlobalState.USER_LNG;
         Log.i(LOG_TAG,"Lat/lng in updateShopList - " + coordinates[0] + "/" + coordinates[1]);
       //  new FetchGooglePlaces(getActivity()).execute(coordinates);
-        if (placeId != null) {//get details for one shop
+        SyncAdapter.syncImmediately(context);
+/*        if (placeId != null) {//get details for one shop
             SyncAdapter.syncImmediately(context,placeId);
         }
         else {//get all shops
             SyncAdapter.syncImmediately(context,null);
-        }
+        }*/
     }
 
     //loaders are initialised in onActivityCreated because their lifecycle is bound to the activity, not the fragment
@@ -363,7 +358,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
             Log.i(LOG_TAG, "In onRefresh()");
             swipeLayout.setColorSchemeResources(R.color.waldo_light_blue);
             ShopsFragment shopsFragment = new ShopsFragment();
-            shopsFragment.updateShopList(getActivity(),null);
+            shopsFragment.updateShopList(getActivity());
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {

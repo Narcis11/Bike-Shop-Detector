@@ -64,7 +64,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
 
             Log.i(LOG_TAG, "Starting sync...");
-            if (extras.getString(Constants.BUNDLE_SHOP_PLACE_ID,"").equals("")) { //get all shops
+          //  if (extras.getString(Constants.BUNDLE_SHOP_PLACE_ID,"").equals("")) { //get all shops
                 String[] finalResult = new String[100];
                 String preferredUnit = Utility.getPreferredUnit(mContext);
                 String metric = "Metric";
@@ -213,7 +213,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                                 isShopOpen = Boolean.valueOf(openNow) ? 1 : 0;
                             }
 
-                         //   String[] placeDetailRequest = getPlaceDetails(place_id);
+                            String[] placeDetailRequest = getPlaceDetails(place_id);
                            // Log.i(LOG_TAG, "****Details response*** = " + placeDetailRequest[0] + "/" + placeDetailRequest[1] + "/" + placeDetailRequest[2] + "/" + placeDetailRequest[3]);
                             ContentValues shopsValues = new ContentValues();
 
@@ -227,10 +227,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                             shopsValues.put(ShopsContract.ShopsEntry.COLUMN_DISTANCE_TO_USER, distanceToShop);
                             shopsValues.put(ShopsContract.ShopsEntry.COLUMN_DISTANCE_DURATION, distanceDuration);
                             shopsValues.put(ShopsContract.ShopsEntry.COLUMN_PLACE_ID, place_id);
-      /*                      shopsValues.put(ShopsContract.ShopsEntry.COLUMN_WEBSITE, placeDetailRequest[WEBSITE_ID]);
+                            shopsValues.put(ShopsContract.ShopsEntry.COLUMN_WEBSITE, placeDetailRequest[WEBSITE_ID]);
                             shopsValues.put(ShopsContract.ShopsEntry.COLUMN_PHONE_NUMBER, placeDetailRequest[PHONE_NUMBER_ID]);
                             shopsValues.put(ShopsContract.ShopsEntry.COLUMN_OPENING_HOURS, placeDetailRequest[WEEKDAY_TEXT_ID]);
-                            shopsValues.put(ShopsContract.ShopsEntry.COLUMN_RATING, placeDetailRequest[RATING_ID]);*/
+                            shopsValues.put(ShopsContract.ShopsEntry.COLUMN_RATING, placeDetailRequest[RATING_ID]);
                             cVVector.add(shopsValues);
                         }
                         if (cVVector.size() > 0) {
@@ -271,11 +271,12 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     Log.e(LOG_TAG, "Caught JSON Exception: " + e.getMessage());
                     e.printStackTrace();
                 }
-            }
-        else {
+            //}
+/*        else {
+                Log.i(LOG_TAG,"Updating for shop! ");
                 String placeId = extras.getString(Constants.BUNDLE_SHOP_PLACE_ID);
                 String[] placeDetailRequest = getPlaceDetails(placeId);
-                Log.i(LOG_TAG, "****Details response*** = " + placeDetailRequest[0] + "/" + placeDetailRequest[1] + "/" + placeDetailRequest[2] + "/" + placeDetailRequest[3]);
+                //Log.i(LOG_TAG, "****Details response*** = " + placeDetailRequest[0] + "/" + placeDetailRequest[1] + "/" + placeDetailRequest[2] + "/" + placeDetailRequest[3]);
                 ContentValues updateValues = new ContentValues();
                 updateValues.put(ShopsContract.ShopsEntry.COLUMN_WEBSITE,placeDetailRequest[WEBSITE_ID]);
                 updateValues.put(ShopsContract.ShopsEntry.COLUMN_PHONE_NUMBER,placeDetailRequest[PHONE_NUMBER_ID]);
@@ -285,17 +286,17 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
               //  Log.i(LOG_TAG,"where clause is " + whereClause);
                 int updatedRows = mContext.getContentResolver().update(ShopsContract.ShopsEntry.CONTENT_URI,updateValues,whereClause,null);
                 Log.i(LOG_TAG,"No of rows updated = " + updatedRows);
-            }
+            }*/
         }
 
-    public static void syncImmediately(Context context, String placeId) {
+    public static void syncImmediately(Context context/*, String placeId*/) {
         Log.i(LOG_TAG, "In syncImmediately");
         Bundle bundle = new Bundle();
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-        if (placeId != null) {
+/*        if (placeId != null) {
             bundle.putString(Constants.BUNDLE_SHOP_PLACE_ID,placeId);
-        }
+        }*/
         if (ContentResolver.isSyncPending(getSyncAccount(context), context.getString(R.string.content_authority))  ||
                 ContentResolver.isSyncActive(getSyncAccount(context), context.getString(R.string.content_authority))) {
             Log.i("ContentResolver", "SyncPending, canceling");
@@ -359,7 +360,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     .appendQueryParameter(placeId,place_id)
                     .appendQueryParameter(QUERY_KEY,key)
                     .build();
-            Log.i(LOG_TAG, "Place Details Uri is: " + builtPlaceUri.toString());
+           // Log.i(LOG_TAG, "Place Details Uri is: " + builtPlaceUri.toString());
             URL url = new URL(builtPlaceUri.toString());
             //Create the request to Google, and open the connection
             urlConnection = (HttpURLConnection) url.openConnection();
@@ -451,8 +452,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     returnPlaceDetails[RATING_ID] = String.valueOf(rating);
                 }
                 catch (JSONException e) {
-                    Log.i(LOG_TAG,e.getMessage());
-                    Log.i(LOG_TAG,"Wir rechnen den durchschnittlichen Wert");
+                  //  Log.i(LOG_TAG,e.getMessage());
+                  //  Log.i(LOG_TAG,"Wir rechnen den durchschnittlichen Wert");
                     try {//if there's no "rating" field in the root node, we calculate the mean rating from the reviews
                         JSONArray placeReviewsArray = (JSONArray) placeDetailsObject.get(API_REVIEWS);
                         for (int i = 0; i < placeReviewsArray.length(); i++) {

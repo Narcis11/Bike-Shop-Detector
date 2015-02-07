@@ -2,9 +2,11 @@ package Utilities;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.location.Address;
 import android.location.Geocoder;
 import android.preference.PreferenceManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -486,14 +488,12 @@ public class Utility {
     public static String formatDistanceImperial (String distance) {
         if (Integer.valueOf(distance) > 1609) {
             //TODO: There is a bug here for the hardcoded values from the GlobalState. Fix it!
-            Log.i(LOG_TAG,"Distance is: " + distance);
             String doublezero = "00";
             Double reference = 1610.0;
             String calculatedYards;
             Double distanceDouble = Double.valueOf(distance);
             Double miles = distanceDouble/reference;
             String calculatedDistance = String.valueOf(miles);
-            Log.i(LOG_TAG,"calculatedDistance: " + calculatedDistance);
             String calculatedMiles = calculatedDistance.substring(0, 1);
             if (calculatedDistance.length() == 1) { //x
                 calculatedYards = doublezero;
@@ -588,5 +588,12 @@ public class Utility {
             if (dayOfWeek - 2 == i) today = openingHours[i];
         }
         return today;
+    }
+
+    public static float convertPixelsToDp(Context context, float px){
+        Resources resources = context.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        float dp = px / (metrics.densityDpi / 160f);
+        return dp;
     }
 }

@@ -6,6 +6,7 @@ import android.provider.ContactsContract;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -69,6 +70,10 @@ public class ShopDetailActivity extends FragmentActivity
     @Override
     protected void onResume() {
         super.onResume();
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        float heightPx = displaymetrics.heightPixels;
+        //Log.i(LOG_TAG,"Screen height is: " + String.valueOf(displaymetrics.heightPixels) + "| dp = " +  Utility.convertPixelsToDp(getApplicationContext(),heightPx));
         TextView shopNameTextView = (TextView) findViewById(R.id.detail_shopname);
         TextView shopAddressTextView = (TextView) findViewById(R.id.detail_shopaddress);
         TextView shopPhoneNumberTextView = (TextView) findViewById(R.id.detail_shopphonenumber);
@@ -89,6 +94,7 @@ public class ShopDetailActivity extends FragmentActivity
             shopPhoneNumberTextView.setText(shopDetailCursor.getString(COL_SHOP_PHONE_NUMBER));
             if (shopDetailCursor.getString(COL_SHOP_OPENING_HOURS) != null)
             shopOpeningHoursTextView.setText(Utility.getTodayFromOpeningHours(shopDetailCursor.getString(COL_SHOP_OPENING_HOURS)));
+
             shopWebsiteTextView.setText(shopDetailCursor.getString(COL_SHOP_WEBSITE));
         }
         else {
@@ -131,6 +137,33 @@ public class ShopDetailActivity extends FragmentActivity
                 startActivity(shopStreetViewIntent);
             }
         });
+
+        TextView shopNameTextView = (TextView) findViewById(R.id.detail_shopname);
+        TextView shopAddressTextView = (TextView) findViewById(R.id.detail_shopaddress);
+        TextView shopPhoneNumberTextView = (TextView) findViewById(R.id.detail_shopphonenumber);
+        TextView shopOpeningHoursTextView = (TextView) findViewById(R.id.detail_shopopeninghours);
+        TextView shopWebsiteTextView = (TextView) findViewById(R.id.detail_shopwebsite);
+
+        Cursor shopDetailCursor = getApplicationContext().getContentResolver().query(
+                ShopsContract.ShopsEntry.CONTENT_URI,
+                QUERY_COLUMS,
+                querySelection,
+                querySelectionArgs,
+                null
+        );
+        //set the views' text
+        if (shopDetailCursor.moveToFirst()) {
+            shopNameTextView.setText(shopDetailCursor.getString(COL_SHOP_NAME));
+            shopAddressTextView.setText(shopDetailCursor.getString(COL_SHOP_ADDRESS));
+            shopPhoneNumberTextView.setText(shopDetailCursor.getString(COL_SHOP_PHONE_NUMBER));
+            if (shopDetailCursor.getString(COL_SHOP_OPENING_HOURS) != null)
+                shopOpeningHoursTextView.setText(Utility.getTodayFromOpeningHours(shopDetailCursor.getString(COL_SHOP_OPENING_HOURS)));
+
+            shopWebsiteTextView.setText(shopDetailCursor.getString(COL_SHOP_WEBSITE));
+        }
+        else {
+            Log.i(LOG_TAG,"*****Cursor is null!*****");
+        }
     }
 
     public void openMap(View v) {
