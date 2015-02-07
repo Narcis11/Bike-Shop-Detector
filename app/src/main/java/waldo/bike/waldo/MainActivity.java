@@ -36,6 +36,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
@@ -131,6 +132,8 @@ public class MainActivity extends Activity implements
     //labels of social media buttons for GA
     String mLikeLabel = "like_pressed";
     String mFollowLabel = "follow_pressed";
+    //the frame layout that holds the list view
+    FrameLayout mListFrameLayout;
      //these variables are used for the slider menu
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -334,6 +337,8 @@ public class MainActivity extends Activity implements
                         .build());
             }
         });
+        //get the reference to the frame layout that holds the list view
+         mListFrameLayout = (FrameLayout) findViewById(R.id.shops_frame_id);
         //register the broadcast receiver
         registerReceiver(mBroadcastReceiver, mIntentFilter);
         DeviceConnection deviceConnection = new DeviceConnection(mContext);
@@ -343,6 +348,7 @@ public class MainActivity extends Activity implements
         //if (!mFirstLoad) {
             //checking if GPS is enabled
             if (!deviceConnection.checkGpsEnabled()) {
+                mListFrameLayout.setPadding(Utility.convertDpToPixels(mContext,8), Utility.convertDpToPixels(mContext,26), Utility.convertDpToPixels(mContext,8),0);
                 mIsGpsMessageDisplayed = true;
                 mInfoTextView.setVisibility(View.VISIBLE);
                 mInfoTextView.setText(mContext.getResources().getString(R.string.no_gps));
@@ -353,6 +359,7 @@ public class MainActivity extends Activity implements
                 mIsGpsMessageDisplayed = false;
                 if (!mIsInternetMessageDisplayed) {
                     mInfoTextView.setVisibility(View.GONE);
+                    mListFrameLayout.setPadding(Utility.convertDpToPixels(mContext,8), 0, Utility.convertDpToPixels(mContext,8),0);
                 }
             }
           //  }
@@ -416,8 +423,10 @@ public class MainActivity extends Activity implements
                     mIsInternetMessageDisplayed = false;
                     if (!mIsGpsMessageDisplayed) {
                         mInfoTextView.setVisibility(View.GONE);
+                        mListFrameLayout.setPadding(Utility.convertDpToPixels(mContext,8), 0, Utility.convertDpToPixels(mContext,8),0);
                     }
                     else { //if both GPS and Internet are turned off, and the user turns on only the Internet, we still have to display the message for the GPS
+                        mListFrameLayout.setPadding(Utility.convertDpToPixels(mContext,8), Utility.convertDpToPixels(mContext,26), Utility.convertDpToPixels(mContext,8),0);
                         mInfoTextView.setVisibility(View.VISIBLE);
                         mInfoTextView.setText(mContext.getResources().getString(R.string.no_gps));
                         mInfoTextView.setTextColor(Color.WHITE);
@@ -428,6 +437,7 @@ public class MainActivity extends Activity implements
                         || deviceConnection.checkInternetConnecting())) {
                     mNetworkState = Constants.NETWORK_STATE_DISCONNECTED;
                     mIsInternetMessageDisplayed = true;
+                    mListFrameLayout.setPadding(Utility.convertDpToPixels(mContext,8), Utility.convertDpToPixels(mContext,26), Utility.convertDpToPixels(mContext,8),0);
                     mInfoTextView.setVisibility(View.VISIBLE);
                     mInfoTextView.setText(mContext.getResources().getString(R.string.no_internet));
                     mInfoTextView.setTextColor(Color.WHITE);

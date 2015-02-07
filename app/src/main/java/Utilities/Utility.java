@@ -596,4 +596,10 @@ public class Utility {
         float dp = px / (metrics.densityDpi / 160f);
         return dp;
     }
+
+    public static int convertDpToPixels(Context context, int dp)
+    {
+        float density = context.getResources().getDisplayMetrics().density;
+        return Math.round((float)dp * density);
+    }
 }

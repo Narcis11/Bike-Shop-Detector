@@ -19,6 +19,8 @@
         android:id="@+id/info_textview"
         android:gravity="center"
         android:visibility="gone"
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp"
         android:overScrollMode="never"
         android:textIsSelectable="false"
         android:textStyle="normal" />
