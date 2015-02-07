@@ -15,6 +15,9 @@ import android.view.View;
 import android.widget.CheckBox;
 
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -51,12 +54,18 @@ public class SettingsActivity extends PreferenceActivity implements
     private String mSpeed = "speed";
     private boolean mIsMetricLoaded;
     private CheckBoxPreference mNotifCheckBox;
+    private boolean mIsChecked;
+    private boolean mFirstCheck;
+    String mCheckBoxStatus = "";
+    private Tracker mGaTracker;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Add 'general' preferences, defined in the XML file
         mContext = getApplicationContext();
         mFirstLoad = true;
+        mGaTracker = ((Waldo)  getApplication()).getTracker(
+                Waldo.TrackerName.APP_TRACKER);
         loadPreferenceScreen(mFirstLoad);
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_range_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_speed_key)));
@@ -210,16 +219,33 @@ public class SettingsActivity extends PreferenceActivity implements
                 }
             }
           mNotifCheckBox  = (CheckBoxPreference) getPreferenceManager().findPreference(getResources().getString(R.string.pref_enable_notifications_key));
+          mFirstCheck = (mNotifCheckBox.isChecked()) ? true : false;
+          mIsChecked = (mNotifCheckBox.isChecked()) ? true : false;
+          mNotifCheckBox.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+              @Override
+              public boolean onPreferenceClick(Preference preference) {
+                  mIsChecked = (mNotifCheckBox.isChecked()) ? true : false;
+                  return true;
+              }
+          });
     }
 
             @Override
             protected void onStop() {
                 super.onStop();
-                if (mNotifCheckBox.isChecked()) {
-                    Log.i(LOG_TAG,"onStop: Checkbox is checked");
+                //we check if the status of the check box has changed since the user opened the Settings Activitys
+                if (mIsChecked != mFirstCheck) {
+                    Log.i(LOG_TAG,"Changed check type");
+                    mCheckBoxStatus = (mIsChecked) ? "checked" : "unchecked";
+                    //set the event to GA
+                    mGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory(getString(R.string.ga_checkbox_category_id))
+                            .setAction(getString(R.string.ga_checkbox_action_id))
+                            .setLabel(mCheckBoxStatus)
+                            .build());
                 }
                 else {
-                    Log.i(LOG_TAG,"onStop: Checkbox is UnChecked");
+                    Log.i(LOG_TAG,"Same check");
                 }
             }
 }

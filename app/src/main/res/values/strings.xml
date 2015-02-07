@@ -161,4 +161,7 @@
     <string name="ga_open_shop_action_id">open_shop_act_id</string>
 
     <!--Used in the Settings activity-->
+    <string name="ga_checkbox_category_id">checkbox_cat_id</string>
+    <string name="ga_checkbox_action_id">checkbox_act_id</string>
+
 </resources>
