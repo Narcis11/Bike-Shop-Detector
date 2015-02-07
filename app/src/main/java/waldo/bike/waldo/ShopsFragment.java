@@ -68,6 +68,8 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     private ListView mListView;
     private boolean mIsSpeedChanged;
     private SwipeRefreshLayout swipeLayout;
+    private int mPosition = ListView.INVALID_POSITION;
+    private static final String SELECTED_KEY = "selected_position";
     //used by Google Analytics
     private Tracker mGaTracker;
     public static final String[] SHOPS_COLUMNS = {
@@ -193,6 +195,8 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                     mPlaceId = cursor.getString(COL_PLACE_ID);
                     //update the database row corresponding to this shop id
                    // updateShopList(getActivity(),mPlaceId);
+                    //store the position
+                    mPosition = position;
                     //set the event to GA
                     mGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory(getString(R.string.ga_open_shop_category_id))
@@ -241,6 +245,12 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                 }
             }
         });
+        if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
+            // The listview probably hasn't even been populated yet.  Actually perform the
+            // swapout in onLoadFinished.
+            mPosition = savedInstanceState.getInt(SELECTED_KEY);
+        }
+
         return rootView;
 
     }
@@ -269,6 +279,10 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
+        if (mPosition != ListView.INVALID_POSITION) {
+            outState.putInt(SELECTED_KEY, mPosition);
+        }
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -334,6 +348,11 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     @Override
     public void onLoadFinished(android.content.Loader<Cursor> loader, Cursor data) {
         mShopsAdapter.swapCursor(data);
+        if (mPosition != ListView.INVALID_POSITION) {
+            // If we don't need to restart the loader, and there's a desired position to restore
+            // to, do so now.
+            mListView.smoothScrollToPosition(mPosition);
+        }
     }
 
     @Override
