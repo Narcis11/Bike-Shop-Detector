@@ -3,6 +3,7 @@ package waldo.bike.form;
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -58,6 +59,7 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
         final AutoCompleteTextView autoCompView = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView);
         autoCompView.setAdapter(new PlacesAutoCompleteAdapter(this, R.layout.list_item_places));
         autoCompView.setOnItemClickListener(this);
+        autoCompView.setWidth(Utility.getAutocompleteViewWidth(getApplicationContext()));
 /*        autoCompView.setOnTouchListener(new View.OnTouchListener(){
             @Override
             public boolean onTouch(View v, MotionEvent event) {

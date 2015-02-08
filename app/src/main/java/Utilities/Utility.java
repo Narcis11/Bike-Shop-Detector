@@ -602,4 +602,13 @@ public class Utility {
         float density = context.getResources().getDisplayMetrics().density;
         return Math.round((float)dp * density);
     }
+    //return the screen's absolute width in pixels
+    public static int getAutocompleteViewWidth(Context context) {
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        double screenWidthFraction = 0.7;
+        String viewString = String.valueOf(screenWidthFraction * displayMetrics.widthPixels);
+        String viewFinal = viewString.substring(0,viewString.indexOf(Constants.DOT_SEPARATOR));
+        int viewWidth = Integer.valueOf(viewFinal) ;
+        return viewWidth;
+    }
 }
