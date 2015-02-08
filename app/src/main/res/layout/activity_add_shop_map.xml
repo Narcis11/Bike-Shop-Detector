@@ -14,7 +14,21 @@
             android:layout_alignParentTop="true"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="15dp"
-            android:ems="7" />
+            android:drawableRight="@drawable/ic_remove"
+            android:drawableEnd="@drawable/ic_remove"
+             />
+<!--
+android:ems="7"
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_remove"
+            android:onClick="clearViewText"
+            android:paddingLeft="3dp"
+            android:layout_toRightOf="@+id/autoCompleteTextView"
+            android:layout_toEndOf="@+id/autoCompleteTextView"
+            android:layout_alignBaseline="@+id/autoCompleteTextView"
+           />-->
 
         <ImageButton
             android:layout_width="wrap_content"

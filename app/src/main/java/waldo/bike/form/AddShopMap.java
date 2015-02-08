@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
@@ -33,6 +34,7 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
     private static double mNewShopLng;
     private static String mAddress;
     private static String mTestAddress;
+    private static AutoCompleteTextView mAutoCompleteTextView;
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
         Log.i(LOG_TAG,"In onItemClick");
@@ -56,10 +58,24 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_shop_map);
         //creating the search view
-        final AutoCompleteTextView autoCompView = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView);
-        autoCompView.setAdapter(new PlacesAutoCompleteAdapter(this, R.layout.list_item_places));
-        autoCompView.setOnItemClickListener(this);
-        autoCompView.setWidth(Utility.getAutocompleteViewWidth(getApplicationContext()));
+        mAutoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView);
+        mAutoCompleteTextView.setAdapter(new PlacesAutoCompleteAdapter(this, R.layout.list_item_places));
+        mAutoCompleteTextView.setOnItemClickListener(this);
+        mAutoCompleteTextView.setWidth(Utility.getAutocompleteViewWidth(getApplicationContext()));
+        mAutoCompleteTextView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                final int DRAWABLE_RIGHT = 2;
+                if(event.getAction() == MotionEvent.ACTION_UP) {
+                    if(event.getRawX() >= (mAutoCompleteTextView.getRight() - mAutoCompleteTextView.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        // your action here
+                        clearViewText();
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
 /*        autoCompView.setOnTouchListener(new View.OnTouchListener(){
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -190,4 +206,10 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
             mNextButton.setVisibility(ImageButton.INVISIBLE);
         }
     }
+
+    public void clearViewText() {
+        mAutoCompleteTextView.clearListSelection();
+        mAutoCompleteTextView.setText("");
+    }
+
 }

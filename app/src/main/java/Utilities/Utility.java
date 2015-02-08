@@ -554,13 +554,12 @@ public class Utility {
         Double[] coordinatesArray = new Double[5];
         try {
             List<Address> coordinates = geocoder.getFromLocationName(address,1);
-            coordinatesArray[0] = coordinates.get(0).getLatitude();
-            coordinatesArray[1] = coordinates.get(0).getLongitude();
+               coordinatesArray[0] = coordinates.get(0).getLatitude();
+               coordinatesArray[1] = coordinates.get(0).getLongitude();
         }
         catch (IOException e) {
-            e.printStackTrace();
+               e.printStackTrace();
         }
-
         return coordinatesArray;
     }
 
