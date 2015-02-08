@@ -39,11 +39,11 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
     private static AutoCompleteTextView mAutoCompleteTextView;
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-        Log.i(LOG_TAG,"In onItemClick");
+        Log.i(LOG_TAG, "In onItemClick");
         String str = (String) adapterView.getItemAtPosition(position);
         Log.i(LOG_TAG,"str is " + str);
         Double[] coordinatesArray = Utility.getCoordinatesFromAddressName(getApplicationContext(), str);
-        Log.i(LOG_TAG,"Lat/lng of address " + str+ " = " + coordinatesArray[0] + "/" + coordinatesArray[1]);
+        Log.i(LOG_TAG, "Lat/lng of address " + str + " = " + coordinatesArray[0] + "/" + coordinatesArray[1]);
         mNewShopLat = coordinatesArray[0];
         mNewShopLng = coordinatesArray[1];
         mAddress = str;
@@ -144,19 +144,18 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                Log.i(LOG_TAG,"in onMarkerClick");
+                Log.i(LOG_TAG, "in onMarkerClick");
                 if (marker != null) {
                     mMarker = marker;
-                    Log.i(LOG_TAG,"MARKER != NULL");
+                    Log.i(LOG_TAG, "MARKER != NULL");
                     if (mDeleteButton != null && mNextButton != null) {
                         mDeleteButton.setVisibility(View.INVISIBLE);
                         mNextButton.setVisibility(View.INVISIBLE);
-                        Log.i(LOG_TAG,"After delete of buttons");
+                        Log.i(LOG_TAG, "After delete of buttons");
+                    } else {
+                        Log.i(LOG_TAG, "Buttons are null");
                     }
-                    else {
-                        Log.i(LOG_TAG,"Buttons are null");
-                    }
-                 //   displayButtons();
+                    //   displayButtons();
                 }
                 return false;
             }
@@ -174,6 +173,7 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
         userMarker.showInfoWindow();//we always display the title of the user's marker
     }
 
+
     public void openFormActivity(View view) {
         Bundle bundle = new Bundle();
             bundle.putDouble(Constants.ADD_SHOP_BUNDLE_LAT_KEY, mNewShopLat);
@@ -182,10 +182,6 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
             Intent formIntent = new Intent(getApplicationContext(), AddShopFormActivity.class);
             formIntent.putExtras(bundle);
             startActivity(formIntent);
-    }
-
-    public void deleteMarker(View view) {
-        mMap.clear();
     }
 
     public void clearViewText() {
