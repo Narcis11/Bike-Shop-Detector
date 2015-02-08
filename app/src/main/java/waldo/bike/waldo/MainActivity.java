@@ -749,11 +749,9 @@ public class MainActivity extends Activity implements
         }
         catch (InterruptedException e) {
             e.printStackTrace();
-            Crashlytics.logException(e);
         }
         catch (ExecutionException e) {
             e.printStackTrace();
-            Crashlytics.logException(e);
         }
     }
 

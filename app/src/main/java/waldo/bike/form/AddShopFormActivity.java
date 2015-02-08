@@ -2,6 +2,7 @@ package waldo.bike.form;
 
 import android.app.Activity;
 import android.graphics.Color;
+import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -15,9 +16,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 
 import Utilities.Constants;
+import Utilities.GlobalState;
 import waldo.bike.waldo.R;
 
 public class AddShopFormActivity extends Activity {
@@ -188,6 +193,25 @@ public class AddShopFormActivity extends Activity {
 
             PostForm postForm = new PostForm();
             postForm.execute(postParameters);
+            String response = "";
+            try {
+                response = postForm.get();
+            }
+            catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+            if (response.indexOf("ok") >= 0) {
+                Toast.makeText(getApplicationContext(),"Shop added", Toast.LENGTH_LONG).show();
+            }
+            else if (response.indexOf("error") >= 0) {
+                Toast.makeText(getApplicationContext(),"An error occured. Please try again later", Toast.LENGTH_LONG).show();
+            }
+            else {
+                Toast.makeText(getApplicationContext(),"Problem, boss", Toast.LENGTH_LONG).show();
+            }
         }
         else {
             mErrorMessage.setText(getResources().getString(R.string.invalid_form));

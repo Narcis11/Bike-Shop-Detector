@@ -7,14 +7,17 @@ import android.util.Log;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HTTP;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import Utilities.Constants;
+import Utilities.GlobalState;
 import waldo.bike.waldo.MainActivity;
 import waldo.bike.waldo.SettingsActivity;
 
@@ -29,20 +32,22 @@ public class PostForm extends AsyncTask<String, Void, String> {
     protected String doInBackground(String... params) {
         String jsonString = createJSONObject(params);
        // String url = "https://maps.googleapis.com/maps/api/place/add/json?key=" + Constants.API_KEY;
-        String url = "http://hapciu.go.ro:8880/places";
+        String url = "http://ec2-54-93-55-179.eu-central-1.compute.amazonaws.com:8888/places";
         HttpPost httpPost = new HttpPost(url);
         HttpClient httpClient = new DefaultHttpClient();
+        String status = "";
         try {
             StringEntity stringEntity = new StringEntity(jsonString, HTTP.UTF_8);
             httpPost.setEntity(stringEntity);
-            HttpResponse response = httpClient.execute(httpPost);
-            Log.i(LOG_TAG,"Response is " + response.toString());
+            ResponseHandler<String> responseHandler = new BasicResponseHandler();
+            String response = httpClient.execute(httpPost, responseHandler);
+            status = response.toString();
             //TODO: Add a onPostExecute method that returns a message to the AddShopForm activity so as to open the MainActivity afterwards.
         }
         catch (Exception e){
             e.printStackTrace();
         }
-        return null;
+        return status;
     }
 
     protected String createJSONObject (String[] parameters) {
@@ -69,7 +74,7 @@ public class PostForm extends AsyncTask<String, Void, String> {
             if (parameters[6] != null) {
                 fullJson.put(website,parameters[6]);
             }
-            Log.i(LOG_TAG,"JSON String is: " + fullJson.toString(2));
+           // Log.i(LOG_TAG,"JSON String is: " + fullJson.toString(2));
         }
         catch(JSONException e) {
             e.printStackTrace();
@@ -78,5 +83,10 @@ public class PostForm extends AsyncTask<String, Void, String> {
             e.printStackTrace();
         }
         return fullJson.toString();
+    }
+
+    @Override
+    protected void onPostExecute(String s) {
+        super.onPostExecute(s);
     }
 }
