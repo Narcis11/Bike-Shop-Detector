@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -62,13 +64,14 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
         mAutoCompleteTextView.setAdapter(new PlacesAutoCompleteAdapter(this, R.layout.list_item_places));
         mAutoCompleteTextView.setOnItemClickListener(this);
         mAutoCompleteTextView.setWidth(Utility.getAutocompleteViewWidth(getApplicationContext()));
+      //  mAutoCompleteTextView.setHeight(Utility.getAutocompleteViewHeight(getApplicationContext()));
         mAutoCompleteTextView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                //remove the text when the "X" button is pressed
                 final int DRAWABLE_RIGHT = 2;
                 if(event.getAction() == MotionEvent.ACTION_UP) {
                     if(event.getRawX() >= (mAutoCompleteTextView.getRight() - mAutoCompleteTextView.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                        // your action here
                         clearViewText();
                         return true;
                     }
@@ -76,18 +79,9 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
                 return false;
             }
         });
-/*        autoCompView.setOnTouchListener(new View.OnTouchListener(){
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                autoCompView.setThreshold(5);
-                autoCompView.showDropDown();
-                return false;
-            }
-        });*/
 
         //loading the map
         setUpMapIfNeeded();
-      //  displayButtons();
     }
 
     @Override
@@ -133,10 +127,10 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
-        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
-            public void onMapLongClick(LatLng latLng) {
-                //delete all markers and add a new one when the map is long clicked
+            public void onMapClick(LatLng latLng) {
                 mMap.clear();
                 mMap.addMarker(new MarkerOptions()
                                 .position(latLng)
@@ -162,7 +156,7 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
                     else {
                         Log.i(LOG_TAG,"Buttons are null");
                     }
-                    displayButtons();
+                 //   displayButtons();
                 }
                 return false;
             }
@@ -180,31 +174,18 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
         userMarker.showInfoWindow();//we always display the title of the user's marker
     }
 
-    private void displayButtons() {
-        ImageButton deleteButton = (ImageButton) findViewById(R.id.deleteButton);
-        ImageButton nextButton = (ImageButton) findViewById(R.id.nextButton);
-        deleteButton.setVisibility(ImageButton.VISIBLE);
-        nextButton.setVisibility(ImageButton.VISIBLE);
-        mDeleteButton = deleteButton;
-        mNextButton = nextButton;
-    }
-
     public void openFormActivity(View view) {
         Bundle bundle = new Bundle();
-        bundle.putDouble(Constants.ADD_SHOP_BUNDLE_LAT_KEY,mNewShopLat);
-        bundle.putDouble(Constants.ADD_SHOP_BUNDLE_LNG_KEY, mNewShopLng);
-        bundle.putString(Constants.ADD_SHOP_BUNDLE_ADDRESS_KEY, mAddress);
-        Intent formIntent = new Intent(getApplicationContext(), AddShopFormActivity.class);
-        formIntent.putExtras(bundle);
-        startActivity(formIntent);
+            bundle.putDouble(Constants.ADD_SHOP_BUNDLE_LAT_KEY, mNewShopLat);
+            bundle.putDouble(Constants.ADD_SHOP_BUNDLE_LNG_KEY, mNewShopLng);
+            bundle.putString(Constants.ADD_SHOP_BUNDLE_ADDRESS_KEY, mAddress);
+            Intent formIntent = new Intent(getApplicationContext(), AddShopFormActivity.class);
+            formIntent.putExtras(bundle);
+            startActivity(formIntent);
     }
 
     public void deleteMarker(View view) {
         mMap.clear();
-        if (mDeleteButton != null && mNextButton != null) {
-            mDeleteButton.setVisibility(ImageButton.INVISIBLE);
-            mNextButton.setVisibility(ImageButton.INVISIBLE);
-        }
     }
 
     public void clearViewText() {

@@ -604,8 +604,17 @@ public class Utility {
     //return the screen's absolute width in pixels
     public static int getAutocompleteViewWidth(Context context) {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-        double screenWidthFraction = 0.7;
+        double screenWidthFraction = 0.8;
         String viewString = String.valueOf(screenWidthFraction * displayMetrics.widthPixels);
+        String viewFinal = viewString.substring(0,viewString.indexOf(Constants.DOT_SEPARATOR));
+        int viewWidth = Integer.valueOf(viewFinal) ;
+        return viewWidth;
+    }
+
+    public static int getAutocompleteViewHeight(Context context) {
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        double screenHeightFraction = 0.12;
+        String viewString = String.valueOf(screenHeightFraction * displayMetrics.widthPixels);
         String viewFinal = viewString.substring(0,viewString.indexOf(Constants.DOT_SEPARATOR));
         int viewWidth = Integer.valueOf(viewFinal) ;
         return viewWidth;
