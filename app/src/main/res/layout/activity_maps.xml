@@ -2,4 +2,23 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:id="@+id/map"
     tools:context="waldo.bike.waldo.MapsActivity"
-    android:name="com.google.android.gms.maps.SupportMapFragment" />
+    android:name="com.google.android.gms.maps.SupportMapFragment"
+    >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:id="@+id/info_map_textview"
+        android:gravity="center"
+        android:visibility="gone"
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp"
+        android:overScrollMode="never"
+        android:textIsSelectable="false"
+        android:textStyle="normal"
+        android:background="@color/map_textview"
+        android:textColor="@color/list_background"
+        android:text="@string/map_info_message"/>
+
+</fragment>

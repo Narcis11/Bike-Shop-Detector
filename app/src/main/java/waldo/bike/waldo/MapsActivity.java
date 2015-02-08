@@ -12,6 +12,8 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -27,8 +29,8 @@ public class MapsActivity extends FragmentActivity {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private static final String LOG_TAG = MapsActivity.class.getSimpleName();
-    Bundle mBundle;
-
+    private Bundle mBundle;
+    private TextView mInfoTextView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,12 +76,12 @@ public class MapsActivity extends FragmentActivity {
     @Nullable
     @Override
     public Intent getParentActivityIntent() {
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null && !bundle.isEmpty()) {
+       // Bundle bundle = getIntent().getExtras();
+        if (mBundle != null && !mBundle.isEmpty()) {
             Log.i(LOG_TAG, "Should go back");
             Intent shopDetailsIntent = new Intent(this,ShopDetailActivity.class);
-            //data from the bundle is extracted in the onCreate from ShopDetailActivity, so we need to send it again.
-            Log.i(LOG_TAG,mBundle.getString(Constants.BUNDLE_SHOP_PLACE_ID));
+            //data from the bundle is extracted in the onCreate method from ShopDetailActivity, so we need to send it again.
+           // Log.i(LOG_TAG,mBundle.getString(Constants.BUNDLE_SHOP_PLACE_ID));
             shopDetailsIntent.putExtras(mBundle);
             return shopDetailsIntent;
         }
@@ -96,6 +98,12 @@ public class MapsActivity extends FragmentActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onStop() {
+        if (mInfoTextView != null && mInfoTextView.getVisibility() == View.VISIBLE) mInfoTextView.setVisibility(View.GONE);
+        super.onStop();
+    }
+
     /**
      * This is where we can add markers or lines, add listeners or move the camera. In this case, we
      * just add a marker near Africa.
@@ -109,6 +117,9 @@ public class MapsActivity extends FragmentActivity {
         String allShopsLat = "";
         String allShopsLng = "";
         if ( mBundle != null && !mBundle.isEmpty() ) { //call for a shop
+            //display the textview
+            mInfoTextView = (TextView) findViewById(R.id.info_map_textview);
+            mInfoTextView.setVisibility(View.VISIBLE);
             //call from fragment
             Double shopLat = Double.valueOf(mBundle.getString(Constants.BUNDLE_SHOP_LAT));
             Double shopLng = Double.valueOf(mBundle.getString(Constants.BUNDLE_SHOP_LNG));

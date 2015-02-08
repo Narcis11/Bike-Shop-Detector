@@ -208,6 +208,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                     bundle.putString(Constants.BUNDLE_SHOP_LNG, mShopLongitude);
                     bundle.putString(Constants.BUNDLE_SHOP_NAME,mShopName);
                     bundle.putString(Constants.BUNDLE_SHOP_PLACE_ID,mPlaceId);
+                    bundle.putString(Constants.BUNDLE_FRAGMENT,Constants.CALLED_FROM_FRAGMENT);
                     openDetailActivity.putExtras(bundle);
                     //lift off!
                     startActivity(openDetailActivity);
