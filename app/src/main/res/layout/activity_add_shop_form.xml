@@ -1,7 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:orientation="vertical"
     android:background="@color/list_background"
@@ -34,6 +34,8 @@
         android:paddingTop="5dp"
         android:text="@string/form_shop_placeholder"
         android:textSize="8pt"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
         android:layout_gravity="top|center_horizontal">
     </TextView>
 
@@ -44,6 +46,8 @@
         android:paddingTop="15dp"
         android:text="@string/form_title"
         android:textColor="@color/header_text"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
         android:textSize="8pt">
     </TextView>
 
@@ -52,9 +56,11 @@
         android:id="@+id/new_shop_name"
         android:layout_height="wrap_content"
         android:hint="@string/form_shop_name"
-        android:paddingTop="15dp"
+        android:paddingTop="20dp"
         android:inputType="textPersonName"
         android:textColor="@color/header_text"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
         android:layout_width="match_parent">
     </EditText>
 
@@ -62,9 +68,11 @@
         android:id="@+id/new_shop_phone"
         android:layout_height="wrap_content"
         android:hint="@string/form_shop_phone"
-        android:paddingTop="15dp"
+        android:paddingTop="20dp"
         android:inputType="phone"
         android:textColor="@color/header_text"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
         android:layout_width="match_parent">
     </EditText>
 
@@ -72,10 +80,12 @@
         android:id="@+id/new_shop_website"
         android:layout_height="wrap_content"
         android:hint="@string/form_shop_website"
-        android:paddingTop="15dp"
+        android:paddingTop="20dp"
         android:inputType="textWebEmailAddress"
         android:layout_weight="0"
         android:textColor="@color/header_text"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
         android:layout_width="match_parent">
     </EditText>
 
