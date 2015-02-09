@@ -19,4 +19,6 @@
         <color name="temporary_form_background">#423E3F</color>
         <color name="discount_text">#ff6e17</color>
         <color name="map_textview">#08a939</color>
+        <color name="add_shop_pending">#faa208</color>
+        <color name="red">#ff0000</color>
 </resources>

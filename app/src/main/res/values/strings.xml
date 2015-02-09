@@ -26,6 +26,10 @@
     <string name="api_zero_results">No bike shops in the selected range</string>
     <string name="api_error">Error occurred while retrieving shops</string>
     <string name="map_info_message">Tap the shop to open the navigation menu</string>
+    <string name="add_shop_pending">Adding shop...</string>
+    <string name="add_shop_finished">Shop added!</string>
+    <string name="add_shop_failed">Operation failed. Please try again later.</string>
+
     <!-- Keys of the metric/imperial screen -->
     <string name="unit_metric_screen">metric_settings</string>
     <string name="unit_imperial_screen">imperial_settings</string>

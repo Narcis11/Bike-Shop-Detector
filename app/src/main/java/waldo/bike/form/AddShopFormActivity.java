@@ -1,7 +1,9 @@
 package waldo.bike.form;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
+import android.os.Handler;
 import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -23,6 +25,7 @@ import java.util.regex.Pattern;
 
 import Utilities.Constants;
 import Utilities.GlobalState;
+import waldo.bike.waldo.MainActivity;
 import waldo.bike.waldo.R;
 
 public class AddShopFormActivity extends Activity {
@@ -31,11 +34,13 @@ public class AddShopFormActivity extends Activity {
     private static boolean mShopNameOk;
     private static boolean mShopWebsiteOk;
     private static boolean mShopPhoneNumberOk;
-    EditText mShopName;
-    EditText mShopWebsite;
-    EditText mShopPhoneNumber;
-    TextView mErrorMessage;
-
+    private static final String OK_STATUS = "ok";
+    private static final String ERROR_STATUS = "error";
+    private EditText mShopName;
+    private EditText mShopWebsite;
+    private EditText mShopPhoneNumber;
+    private TextView mErrorMessage;
+    private TextView mInfoMessage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +49,7 @@ public class AddShopFormActivity extends Activity {
         mShopWebsite = (EditText) findViewById(R.id.new_shop_website);
         mShopPhoneNumber = (EditText) findViewById(R.id.new_shop_phone);
         mErrorMessage = (TextView) findViewById(R.id.placeholder_text);
+        mInfoMessage = (TextView) findViewById(R.id.add_shop_status);
         mShopNameOk = false;
         mShopWebsiteOk = true;
         mShopPhoneNumberOk = true;
@@ -118,15 +124,18 @@ public class AddShopFormActivity extends Activity {
 
     public void checkShopName () {
         if (mShopName.getText().toString().length() == 0) {
-            mErrorMessage.setText(getResources().getString(R.string.empty_shop_name));
+            mInfoMessage.setVisibility(View.VISIBLE);
+            mInfoMessage.setText(getResources().getString(R.string.empty_shop_name));
             mShopNameOk = false;
         } //255 is maximum allowed length by Google for the shop's name
         else if (mShopName.getText().toString().length() > 254) {
-            mErrorMessage.setText(getResources().getString(R.string.long_shop_name));
+            mInfoMessage.setVisibility(View.VISIBLE);
+            mInfoMessage.setText(getResources().getString(R.string.long_shop_name));
             mShopNameOk = false;
         }
         else {
-            mErrorMessage.setText("");
+            mInfoMessage.setText("");
+            mInfoMessage.setVisibility(View.INVISIBLE);
             mShopNameOk = true;
         }
     }
@@ -134,15 +143,18 @@ public class AddShopFormActivity extends Activity {
     public void checkShopWebsite() {
         if (mShopWebsite.getText().toString().length() > 0) {
             if (!Patterns.WEB_URL.matcher(mShopWebsite.getText()).matches()) {
-                mErrorMessage.setText(getResources().getString(R.string.invalid_url));
+                mInfoMessage.setVisibility(View.VISIBLE);
+                mInfoMessage.setText(getResources().getString(R.string.invalid_url));
                 mShopWebsiteOk = false;
             } else {
-                mErrorMessage.setText("");
+                mInfoMessage.setText("");
+                mInfoMessage.setVisibility(View.INVISIBLE);
                 mShopWebsiteOk = true;
             }
         }
         else {
-            mErrorMessage.setText("");
+            mInfoMessage.setText("");
+            mInfoMessage.setVisibility(View.INVISIBLE);
             mShopWebsiteOk = true;
         }
     }
@@ -150,29 +162,38 @@ public class AddShopFormActivity extends Activity {
     public void checkShopPhoneNumber() {
         if (mShopPhoneNumber.getText().toString().length() > 0) {
             if (mShopPhoneNumber.getText().toString().length() < 7) {
-                mErrorMessage.setText(getResources().getString(R.string.invalid_phone));
+                mInfoMessage.setVisibility(View.VISIBLE);
+                mInfoMessage.setText(getResources().getString(R.string.invalid_phone));
                 mShopPhoneNumberOk = false;
             } else {
-                mErrorMessage.setText("");
+                mInfoMessage.setText("");
+                mInfoMessage.setVisibility(View.INVISIBLE);
                 mShopPhoneNumberOk = true;
             }
         }
         else {
-            mErrorMessage.setText("");
+            mInfoMessage.setText("");
+            mInfoMessage.setVisibility(View.INVISIBLE);
             mShopPhoneNumberOk = true;
         }
     }
-
+    //This method is when the user presses "Add shop". It checks the form and displays an info message accordingly.
     public void addShop(View v) {
+        final long DELAY_TIME = 2500;
         if (mShopWebsite.getText().toString().length() == 0) {
             //this field is not mandatory
             mShopWebsiteOk = true;
         }
         if (mShopWebsiteOk && mShopNameOk && mShopPhoneNumberOk) {
             Log.i(LOG_TAG,"OK to submit form");
-            mShopName.setBackgroundColor(getResources().getColor(R.color.temporary_form_background));
-            mShopWebsite.setBackgroundColor(getResources().getColor(R.color.temporary_form_background));
-            mShopPhoneNumber.setBackgroundColor(getResources().getColor(R.color.temporary_form_background));
+            //styling the shop add status
+            mInfoMessage.setVisibility(View.VISIBLE);
+            mInfoMessage.setBackgroundColor(getResources().getColor(R.color.add_shop_pending));
+            mInfoMessage.setText(getResources().getString(R.string.add_shop_pending));
+            //styling the form's fields
+            mShopName.setBackgroundColor(getResources().getColor(R.color.list_background));
+            mShopWebsite.setBackgroundColor(getResources().getColor(R.color.list_background));
+            mShopPhoneNumber.setBackgroundColor(getResources().getColor(R.color.list_background));
             Bundle bundle = getIntent().getExtras();
             Double latitude = bundle.getDouble(Constants.ADD_SHOP_BUNDLE_LAT_KEY);
             Double longitude = bundle.getDouble(Constants.ADD_SHOP_BUNDLE_LNG_KEY);
@@ -203,36 +224,50 @@ public class AddShopFormActivity extends Activity {
             catch (ExecutionException e) {
                 e.printStackTrace();
             }
-            if (response.indexOf("ok") >= 0) {
-                Toast.makeText(getApplicationContext(),"Shop added", Toast.LENGTH_LONG).show();
+
+            if (response.indexOf(OK_STATUS) >= 0) {
+                mInfoMessage.setVisibility(View.VISIBLE);
+                mInfoMessage.setBackgroundColor(getResources().getColor(R.color.map_textview));
+                mInfoMessage.setText(getResources().getString(R.string.add_shop_finished));
+                //open the main activity after two seconds
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        Intent mainActivity = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivity(mainActivity);
+                    }
+
+                }, DELAY_TIME);
             }
-            else if (response.indexOf("error") >= 0) {
-                Toast.makeText(getApplicationContext(),"An error occured. Please try again later", Toast.LENGTH_LONG).show();
-            }
-            else {
-                Toast.makeText(getApplicationContext(),"Problem, boss", Toast.LENGTH_LONG).show();
+            else if (response.indexOf(ERROR_STATUS) >= 0) {
+                mInfoMessage.setVisibility(View.VISIBLE);
+                mInfoMessage.setBackgroundColor(Color.RED);
+                mInfoMessage.setText(getResources().getString(R.string.add_shop_failed));
             }
         }
         else {
-            mErrorMessage.setText(getResources().getString(R.string.invalid_form));
+            mInfoMessage.setVisibility(View.VISIBLE);
+            mInfoMessage.setText(getResources().getString(R.string.invalid_form));
             if (!mShopNameOk) {
                 mShopName.setBackgroundColor(getResources().getColor(R.color.invalid_field_color));
             }
             else {
-                mShopName.setBackgroundColor(getResources().getColor(R.color.temporary_form_background));
+                mShopName.setBackgroundColor(getResources().getColor(R.color.list_background));
             }
 
             if (!mShopWebsiteOk) {
                 mShopWebsite.setBackgroundColor(getResources().getColor(R.color.invalid_field_color));
             }
             else {
-                mShopWebsite.setBackgroundColor(getResources().getColor(R.color.temporary_form_background));
+                mShopWebsite.setBackgroundColor(getResources().getColor(R.color.list_background));
             }
             if (!mShopPhoneNumberOk) {
                 mShopPhoneNumber.setBackgroundColor(getResources().getColor(R.color.invalid_field_color));
             }
             else {
-                mShopPhoneNumber.setBackgroundColor(getResources().getColor(R.color.temporary_form_background));
+                mShopPhoneNumber.setBackgroundColor(getResources().getColor(R.color.list_background));
             }
         }
     }
