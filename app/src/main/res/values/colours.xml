@@ -21,4 +21,7 @@
         <color name="map_textview">#08a939</color>
         <color name="add_shop_pending">#faa208</color>
         <color name="red">#ff0000</color>
+        <color name="button_shop_default">#1e85fb</color>
+        <color name="button_shop_pressed">#4599fa</color>
+        <color name="button_shop_focused">#00afef</color>
 </resources>

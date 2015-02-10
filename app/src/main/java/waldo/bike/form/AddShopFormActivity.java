@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,7 +46,7 @@ public class AddShopFormActivity extends Activity {
     private TextView mShopNameTitle;
     private TextView mShopPhoneTitle;
     private TextView mShopWebsiteTitle;
-
+    private Button mAddShopButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +58,7 @@ public class AddShopFormActivity extends Activity {
         mShopPhoneTitle = (TextView) findViewById(R.id.new_shop_phone_title);
         mShopPhoneNumber = (EditText) findViewById(R.id.new_shop_phone);
         mInfoMessage = (TextView) findViewById(R.id.add_shop_status);
+        mAddShopButton = (Button) findViewById(R.id.add_shop_button);
         mShopNameOk = false;
         mShopWebsiteOk = true;
         mShopPhoneNumberOk = true;

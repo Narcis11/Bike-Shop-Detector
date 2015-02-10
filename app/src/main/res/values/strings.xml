@@ -123,9 +123,9 @@
     <!-- Used in the AddShopFormActivity -->
     <string name="form_title">This submission will be moderated by Google. Complete all fields to increase the chance of acceptance.</string>
     <string name="form_shop_name_title">Shop\'s name (mandatory)</string>
-    <string name="form_shop_name">5 characters minimum.</string>
+    <string name="form_shop_name">5 characters minimum</string>
     <string name="form_shop_phone_title">Phone number (recommended)</string>
-    <string name="form_shop_phone">7 digits minimum.</string>
+    <string name="form_shop_phone">7 digits minimum</string>
     <string name="form_shop_website_title">Website (recommended)</string>
     <string name="form_shop_website"></string>
     <string name="form_shop_placeholder"></string>
