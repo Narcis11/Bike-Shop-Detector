@@ -247,7 +247,6 @@ public class AddShopFormActivity extends Activity {
                 mInfoMessage.setVisibility(View.VISIBLE);
                 mInfoMessage.setBackgroundColor(Color.RED);
                 mInfoMessage.setText(getResources().getString(R.string.add_shop_failed));
-                //TODO: After you finish the form, redirect the user to the main activity even if the add shop fails.
                 //open the main activity after two seconds
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
