@@ -42,12 +42,19 @@ public class AddShopFormActivity extends Activity {
     private EditText mShopWebsite;
     private EditText mShopPhoneNumber;
     private TextView mInfoMessage;
+    private TextView mShopNameTitle;
+    private TextView mShopPhoneTitle;
+    private TextView mShopWebsiteTitle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_shop_form);
+        mShopNameTitle = (TextView) findViewById(R.id.new_shop_name_title);
         mShopName = (EditText) findViewById(R.id.new_shop_name);
+        mShopWebsiteTitle = (TextView) findViewById(R.id.new_shop_website_title);
         mShopWebsite = (EditText) findViewById(R.id.new_shop_website);
+        mShopPhoneTitle = (TextView) findViewById(R.id.new_shop_phone_title);
         mShopPhoneNumber = (EditText) findViewById(R.id.new_shop_phone);
         mInfoMessage = (TextView) findViewById(R.id.add_shop_status);
         mShopNameOk = false;
@@ -225,29 +232,36 @@ public class AddShopFormActivity extends Activity {
                 mInfoMessage.setVisibility(View.VISIBLE);
                 mInfoMessage.setBackgroundColor(Color.RED);
                 mInfoMessage.setText(getResources().getString(R.string.add_shop_failed));
+                //TODO: After you finish the form, redirect the user to the main activity even if the add shop fails.
             }
         }
         else {
             mInfoMessage.setVisibility(View.VISIBLE);
             mInfoMessage.setText(getResources().getString(R.string.invalid_form));
             if (!mShopNameOk) {
-                mShopName.setBackgroundColor(getResources().getColor(R.color.invalid_field_color));
+                //mShopName.setBackgroundColor(getResources().getColor(R.color.invalid_field_color));
+                mShopNameTitle.setTextColor(Color.RED);
             }
             else {
-                mShopName.setBackgroundColor(getResources().getColor(R.color.list_background));
+                //mShopName.setBackgroundColor(getResources().getColor(R.color.list_background));
+                mShopNameTitle.setTextColor(getResources().getColor(R.color.header_text));
             }
 
             if (!mShopWebsiteOk) {
-                mShopWebsite.setBackgroundColor(getResources().getColor(R.color.invalid_field_color));
+                //mShopWebsite.setBackgroundColor(getResources().getColor(R.color.invalid_field_color));
+                mShopWebsiteTitle.setTextColor(Color.RED);
             }
             else {
-                mShopWebsite.setBackgroundColor(getResources().getColor(R.color.list_background));
+                //mShopWebsite.setBackgroundColor(getResources().getColor(R.color.list_background));
+                mShopWebsiteTitle.setTextColor(getResources().getColor(R.color.header_text));
             }
             if (!mShopPhoneNumberOk) {
-                mShopPhoneNumber.setBackgroundColor(getResources().getColor(R.color.invalid_field_color));
+                //mShopPhoneNumber.setBackgroundColor(getResources().getColor(R.color.invalid_field_color));
+                mShopPhoneTitle.setTextColor(Color.RED);
             }
             else {
-                mShopPhoneNumber.setBackgroundColor(getResources().getColor(R.color.list_background));
+                //mShopPhoneNumber.setBackgroundColor(getResources().getColor(R.color.list_background));
+                mShopPhoneTitle.setTextColor(getResources().getColor(R.color.header_text));
             }
         }
     }
