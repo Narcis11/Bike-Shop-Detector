@@ -122,11 +122,12 @@
 
     <!-- Used in the AddShopFormActivity -->
     <string name="form_title">This submission will be moderated by Google. Complete all fields to increase the chance of acceptance.</string>
-    <string name="form_shop_name">Shop name (mandatory)</string>
+    <string name="form_shop_name">Mandatory</string>
     <string name="form_shop_phone">Phone number (recommended)</string>
     <string name="form_shop_website">Website (recommended)</string>
     <string name="form_shop_placeholder"></string>
     <string name="empty_shop_name">Please complete the shop\'s name</string>
+    <string name="short_shop_name">The shop\'s name is too short</string>
     <string name="long_shop_name">The shop\'s name is too long</string>
     <string name="invalid_url">Invalid website address</string>
     <string name="invalid_phone">Invalid phone number</string>

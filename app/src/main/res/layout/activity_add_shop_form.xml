@@ -28,18 +28,6 @@
         />
 
     <TextView
-        android:id="@+id/placeholder_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="5dp"
-        android:text="@string/form_shop_placeholder"
-        android:textSize="8pt"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:layout_gravity="top|center_horizontal">
-    </TextView>
-
-    <TextView
         android:id="@+id/form_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

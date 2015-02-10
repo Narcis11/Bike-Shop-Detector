@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,7 +41,6 @@ public class AddShopFormActivity extends Activity {
     private EditText mShopName;
     private EditText mShopWebsite;
     private EditText mShopPhoneNumber;
-    private TextView mErrorMessage;
     private TextView mInfoMessage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,60 +49,37 @@ public class AddShopFormActivity extends Activity {
         mShopName = (EditText) findViewById(R.id.new_shop_name);
         mShopWebsite = (EditText) findViewById(R.id.new_shop_website);
         mShopPhoneNumber = (EditText) findViewById(R.id.new_shop_phone);
-        mErrorMessage = (TextView) findViewById(R.id.placeholder_text);
         mInfoMessage = (TextView) findViewById(R.id.add_shop_status);
         mShopNameOk = false;
         mShopWebsiteOk = true;
         mShopPhoneNumberOk = true;
 
-        mShopName.addTextChangedListener(new TextWatcher() {
+
+
+        mShopName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                checkShopName();
+            public void onFocusChange(View v, boolean hasFocus) {
+               if (!hasFocus) {
+                   checkShopName();
+               }
             }
         });
 
-        mShopWebsite.addTextChangedListener(new TextWatcher() {
+        mShopWebsite.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                checkShopWebsite();
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    checkShopWebsite();
+                }
             }
         });
 
-        mShopPhoneNumber.addTextChangedListener(new TextWatcher() {
+        mShopPhoneNumber.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                checkShopPhoneNumber();
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    checkShopPhoneNumber();
+                }
             }
         });
     }
@@ -124,20 +101,22 @@ public class AddShopFormActivity extends Activity {
     }
 
     public void checkShopName () {
-        if (mShopName.getText().toString().length() == 0) {
-            mInfoMessage.setVisibility(View.VISIBLE);
-            mInfoMessage.setText(getResources().getString(R.string.empty_shop_name));
-            mShopNameOk = false;
-        } //255 is maximum allowed length by Google for the shop's name
-        else if (mShopName.getText().toString().length() > 254) {
-            mInfoMessage.setVisibility(View.VISIBLE);
-            mInfoMessage.setText(getResources().getString(R.string.long_shop_name));
-            mShopNameOk = false;
-        }
-        else {
-            mInfoMessage.setText("");
-            mInfoMessage.setVisibility(View.INVISIBLE);
-            mShopNameOk = true;
+        Log.i(LOG_TAG, "In checkShopName");
+        if (mShopName.getText().toString().length() > 0) {
+            if (mShopName.getText().toString().length() < 4) {
+                mInfoMessage.setVisibility(View.VISIBLE);
+                mInfoMessage.setText(getResources().getString(R.string.short_shop_name));
+                mShopNameOk = false;
+            } //255 is maximum allowed length by Google for the shop's name
+            else if (mShopName.getText().toString().length() > 254) {
+                mInfoMessage.setVisibility(View.VISIBLE);
+                mInfoMessage.setText(getResources().getString(R.string.long_shop_name));
+                mShopNameOk = false;
+            } else {
+                mInfoMessage.setText("");
+                mInfoMessage.setVisibility(View.INVISIBLE);
+                mShopNameOk = true;
+            }
         }
     }
 
@@ -153,7 +132,7 @@ public class AddShopFormActivity extends Activity {
                 mShopWebsiteOk = true;
             }
         }
-        else {
+        else { //the field is not mandatory, so it's ok if it's empty
             mInfoMessage.setText("");
             mInfoMessage.setVisibility(View.INVISIBLE);
             mShopWebsiteOk = true;
@@ -172,7 +151,7 @@ public class AddShopFormActivity extends Activity {
                 mShopPhoneNumberOk = true;
             }
         }
-        else {
+        else { //the field is not mandatory, so it's ok if it's empty
             mInfoMessage.setText("");
             mInfoMessage.setVisibility(View.INVISIBLE);
             mShopPhoneNumberOk = true;
