@@ -179,7 +179,7 @@ public class AddShopFormActivity extends Activity {
     }
     //This method is when the user presses "Add shop". It checks the form and displays an info message accordingly.
     public void addShop(View v) {
-        final long DELAY_TIME = 2500;
+        final long DELAY_TIME = 2000;
         if (mShopWebsite.getText().toString().length() == 0) {
             //this field is not mandatory
             mShopWebsiteOk = true;
@@ -246,6 +246,17 @@ public class AddShopFormActivity extends Activity {
                 mInfoMessage.setBackgroundColor(Color.RED);
                 mInfoMessage.setText(getResources().getString(R.string.add_shop_failed));
                 //TODO: After you finish the form, redirect the user to the main activity even if the add shop fails.
+                //open the main activity after two seconds
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        Intent mainActivity = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivity(mainActivity);
+                    }
+
+                }, DELAY_TIME);
             }
         }
         else {
