@@ -1,61 +1,124 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="waldo.bike.waldo.ShopDetailActivity">
+    tools:context="waldo.bike.waldo.ShopDetailActivity">-->
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="waldo.bike.waldo.ShopDetailActivity"
+    android:background="@color/list_background">
     <fragment
         android:name="com.google.android.gms.maps.StreetViewPanoramaFragment"
         android:id="@+id/streetviewpanorama"
         android:layout_width="match_parent"
-        android:layout_height="250dp"/>
+        android:layout_height="190dp"/>
 
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/view_on_map"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:onClick="openMap"
-        />
-
+    <!--Shop name-->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
+        android:text="Name"
         android:id="@+id/detail_shopname"
-        android:paddingTop="15dp"
-        android:paddingLeft="15dp"
-        android:textSize="20sp"
+        android:paddingTop="5dp"
+        android:paddingLeft="10dp"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:layout_centerHorizontal="true"
+        android:paddingBottom="3dp"
         android:layout_below="@+id/streetviewpanorama"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+     />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="@color/button_shop_default"
+        android:layout_below="@+id/detail_shopname"
+        />
+
+    <!--Shop Address-->
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/detail_shopaddress_image"
+        android:src="@drawable/map_shop"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/detail_shopname"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:paddingLeft="5dp"
+        android:paddingTop="4dp"
+        />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/detail_shopaddress"
+        android:text="Address"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:layout_toRightOf="@+id/detail_shopaddress_image"
         android:layout_below="@+id/detail_shopname"
-        android:paddingTop="5dp"
-        android:paddingLeft="15dp"
+        android:layout_marginLeft="50dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="12dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"/>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/list_divider"
+        android:paddingTop="48dp"
+        android:layout_below="@+id/detail_shopaddress"
+        />
+
+    <!--Shop phone number-->
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/detail_shopphonenumber_image"
+        android:src="@drawable/phone_shop"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/detail_shopaddress"
+        android:paddingLeft="5dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="3dp"
+        />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/detail_shopphonenumber"
         android:layout_below="@+id/detail_shopaddress"
+        android:layout_marginLeft="50dp"
         android:paddingTop="5dp"
-        android:paddingLeft="15dp"
+        android:paddingBottom="20dp"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:text="00000000"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/list_divider"
+        android:layout_below="@+id/detail_shopphonenumber"
+        />
 
+    <!--Shop opening hours-->
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/detail_shopopeninghours_image"
+        android:src="@drawable/schedule_shop"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/detail_shopphonenumber"
+        android:paddingLeft="5dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="3dp"
+        />
 
     <TextView
         android:layout_width="wrap_content"
@@ -63,9 +126,34 @@
         android:id="@+id/detail_shopopeninghours"
         android:layout_below="@+id/detail_shopphonenumber"
         android:paddingTop="5dp"
+        android:text="14.300"
+        android:textAppearance="?android:textAppearanceMedium"
         android:paddingLeft="15dp"
+        android:paddingBottom="20dp"
+        android:layout_marginLeft="35dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/list_divider"
+        android:layout_below="@+id/detail_shopopeninghours"
+        />
+
+     <!--Shop website-->
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/detail_shopwebsite_image"
+        android:src="@drawable/website_shop"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/detail_shopopeninghours"
+        android:paddingLeft="5dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="3dp"
+        />
 
 
     <TextView
@@ -74,9 +162,37 @@
         android:id="@+id/detail_shopwebsite"
         android:paddingTop="5dp"
         android:paddingLeft="15dp"
+        android:text="www."
+        android:layout_marginLeft="36dp"
+        android:textAppearance="?android:textAppearanceMedium"
         android:layout_below="@+id/detail_shopopeninghours"
         android:layout_alignParentLeft="true"
         android:paddingBottom="15dp"
         />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/list_divider"
+        android:layout_below="@+id/detail_shopwebsite"
+        />
+    <!--Open map button-->
+    <Button
+        android:id="@+id/add_shop_button"
+        android:text="Open map ->"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="5dp"
+        android:paddingLeft="3dp"
+        android:paddingRight="3dp"
+        android:clickable="true"
+        android:onClick="openMap"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/addshop_button_selector"
+        />
     </RelativeLayout>
-</LinearLayout>
+<!--</LinearLayout>-->
