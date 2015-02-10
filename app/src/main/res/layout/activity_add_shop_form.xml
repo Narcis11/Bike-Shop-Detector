@@ -133,14 +133,18 @@
         android:gravity="center|bottom"
         android:orientation="vertical" >
 
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/add_shop_button"
-        android:src="@drawable/add_shop"
-        android:onClick="addShop"
-        android:background="@android:color/transparent"
-         />
+        <Button
+            android:id="@+id/add_shop_button"
+            android:text="@string/add_shop_button_title"
+            android:textColor="#FFFFFF"
+            android:textSize="30sp"
+            android:layout_width="220dp"
+            android:layout_height="50dp"
+            android:clickable="true"
+            android:onClick="addShop"
+            android:paddingBottom="10dp"
+            android:background="@drawable/addshop_button_style"
+            />
     </LinearLayout>
 </LinearLayout>
 </LinearLayout>
