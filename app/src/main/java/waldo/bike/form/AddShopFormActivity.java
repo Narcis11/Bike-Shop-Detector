@@ -61,8 +61,6 @@ public class AddShopFormActivity extends Activity {
         mShopWebsiteOk = true;
         mShopPhoneNumberOk = true;
 
-
-
         mShopName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -71,7 +69,6 @@ public class AddShopFormActivity extends Activity {
                }
             }
         });
-
         mShopWebsite.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -107,61 +104,77 @@ public class AddShopFormActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void checkShopName () {
+    public boolean checkShopName () {
         Log.i(LOG_TAG, "In checkShopName");
         if (mShopName.getText().toString().length() > 0) {
-            if (mShopName.getText().toString().length() < 4) {
+            if (mShopName.getText().toString().length() < 5) {
                 mInfoMessage.setVisibility(View.VISIBLE);
                 mInfoMessage.setText(getResources().getString(R.string.short_shop_name));
                 mShopNameOk = false;
+                return false;
             } //255 is maximum allowed length by Google for the shop's name
             else if (mShopName.getText().toString().length() > 254) {
                 mInfoMessage.setVisibility(View.VISIBLE);
                 mInfoMessage.setText(getResources().getString(R.string.long_shop_name));
                 mShopNameOk = false;
+                return false;
             } else {
                 mInfoMessage.setText("");
                 mInfoMessage.setVisibility(View.INVISIBLE);
+                if (mShopNameTitle.getCurrentTextColor() == Color.RED)
+                    mShopNameTitle.setTextColor(getResources().getColor(R.color.header_text));
                 mShopNameOk = true;
+                return true;
             }
         }
+        return false;
     }
 
-    public void checkShopWebsite() {
+    public boolean checkShopWebsite() {
         if (mShopWebsite.getText().toString().length() > 0) {
             if (!Patterns.WEB_URL.matcher(mShopWebsite.getText()).matches()) {
                 mInfoMessage.setVisibility(View.VISIBLE);
                 mInfoMessage.setText(getResources().getString(R.string.invalid_url));
                 mShopWebsiteOk = false;
+                return false;
             } else {
                 mInfoMessage.setText("");
                 mInfoMessage.setVisibility(View.INVISIBLE);
                 mShopWebsiteOk = true;
+                return true;
             }
         }
         else { //the field is not mandatory, so it's ok if it's empty
             mInfoMessage.setText("");
             mInfoMessage.setVisibility(View.INVISIBLE);
+            if (mShopWebsiteTitle.getCurrentTextColor() == Color.RED)
+                mShopWebsiteTitle.setTextColor(getResources().getColor(R.color.header_text));
             mShopWebsiteOk = true;
+            return true;
         }
     }
 
-    public void checkShopPhoneNumber() {
+    public boolean checkShopPhoneNumber() {
         if (mShopPhoneNumber.getText().toString().length() > 0) {
             if (mShopPhoneNumber.getText().toString().length() < 7) {
                 mInfoMessage.setVisibility(View.VISIBLE);
                 mInfoMessage.setText(getResources().getString(R.string.invalid_phone));
                 mShopPhoneNumberOk = false;
+                return false;
             } else {
                 mInfoMessage.setText("");
                 mInfoMessage.setVisibility(View.INVISIBLE);
                 mShopPhoneNumberOk = true;
+                return true;
             }
         }
         else { //the field is not mandatory, so it's ok if it's empty
             mInfoMessage.setText("");
             mInfoMessage.setVisibility(View.INVISIBLE);
+            if (mShopPhoneTitle.getCurrentTextColor() == Color.RED)
+                mShopPhoneTitle.setTextColor(getResources().getColor(R.color.header_text));
             mShopPhoneNumberOk = true;
+            return true;
         }
     }
     //This method is when the user presses "Add shop". It checks the form and displays an info message accordingly.
@@ -170,8 +183,8 @@ public class AddShopFormActivity extends Activity {
         if (mShopWebsite.getText().toString().length() == 0) {
             //this field is not mandatory
             mShopWebsiteOk = true;
-        }
-        if (mShopWebsiteOk && mShopNameOk && mShopPhoneNumberOk) {
+        } //mShopWebsiteOk
+        if (checkShopName() && checkShopWebsite() && checkShopPhoneNumber()) {
             Log.i(LOG_TAG,"OK to submit form");
             //styling the shop add status
             mInfoMessage.setVisibility(View.VISIBLE);
@@ -198,7 +211,7 @@ public class AddShopFormActivity extends Activity {
             if (mShopWebsite.getText().toString() != null) {
                 postParameters[6] = mShopWebsite.getText().toString();
             }
-
+            //sending the form
             PostForm postForm = new PostForm();
             postForm.execute(postParameters);
             String response = "";
@@ -238,31 +251,32 @@ public class AddShopFormActivity extends Activity {
         else {
             mInfoMessage.setVisibility(View.VISIBLE);
             mInfoMessage.setText(getResources().getString(R.string.invalid_form));
-            if (!mShopNameOk) {
+            //!mShopNameOk
+            if (!checkShopName()) {
                 //mShopName.setBackgroundColor(getResources().getColor(R.color.invalid_field_color));
                 mShopNameTitle.setTextColor(Color.RED);
             }
-            else {
+            else { //check OK
                 //mShopName.setBackgroundColor(getResources().getColor(R.color.list_background));
                 mShopNameTitle.setTextColor(getResources().getColor(R.color.header_text));
+                if (!checkShopWebsite()) {
+                    //mShopWebsite.setBackgroundColor(getResources().getColor(R.color.invalid_field_color));
+                    mShopWebsiteTitle.setTextColor(Color.RED);
+                }
+                else {//check OK
+                    //mShopWebsite.setBackgroundColor(getResources().getColor(R.color.list_background));
+                    mShopWebsiteTitle.setTextColor(getResources().getColor(R.color.header_text));
+                    if (!checkShopPhoneNumber()) {
+                        //mShopPhoneNumber.setBackgroundColor(getResources().getColor(R.color.invalid_field_color));
+                        mShopPhoneTitle.setTextColor(Color.RED);
+                    }
+                    else {//check OK
+                        //mShopPhoneNumber.setBackgroundColor(getResources().getColor(R.color.list_background));
+                        mShopPhoneTitle.setTextColor(getResources().getColor(R.color.header_text));
+                    }
+                }
             }
 
-            if (!mShopWebsiteOk) {
-                //mShopWebsite.setBackgroundColor(getResources().getColor(R.color.invalid_field_color));
-                mShopWebsiteTitle.setTextColor(Color.RED);
-            }
-            else {
-                //mShopWebsite.setBackgroundColor(getResources().getColor(R.color.list_background));
-                mShopWebsiteTitle.setTextColor(getResources().getColor(R.color.header_text));
-            }
-            if (!mShopPhoneNumberOk) {
-                //mShopPhoneNumber.setBackgroundColor(getResources().getColor(R.color.invalid_field_color));
-                mShopPhoneTitle.setTextColor(Color.RED);
-            }
-            else {
-                //mShopPhoneNumber.setBackgroundColor(getResources().getColor(R.color.list_background));
-                mShopPhoneTitle.setTextColor(getResources().getColor(R.color.header_text));
-            }
         }
     }
 }
