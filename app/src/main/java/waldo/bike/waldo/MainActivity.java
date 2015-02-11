@@ -125,6 +125,8 @@ public class MainActivity extends Activity implements
     private final String FOLLOW_BUTTON_KEY = "follow_key";
     private String followButtonActivated = "follow";
     private String followingButtonActivated = "following";
+    //used to determine whether we should reposition the like button
+    private static boolean mRepositionLikeButton = false;
     //used to store the user's coordinates
     private static String[] mLatLng = new String[2];
     //the Google Analytics tracker
@@ -306,7 +308,6 @@ public class MainActivity extends Activity implements
     @Override
     protected void onResume() {
         super.onResume();
-        //TODO: When you fix the Like button, see what function is called when the like or follow button is pressed.
         //initialise the GA tracker
         mGaTracker = ((Waldo) getApplication()).getTracker(
                 Waldo.TrackerName.APP_TRACKER);
@@ -316,27 +317,6 @@ public class MainActivity extends Activity implements
             Log.i(LOG_TAG,"Changed padding in onResume");
             Log.i(LOG_TAG,"Padding left/right onResume: " + String.valueOf(mLikeView.getPaddingLeft()) + "/" + String.valueOf(mLikeView.getPaddingRight()));
         }
-        //send a GA event for each press of the like/follow button
-        mLikeView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mGaTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory(getString(R.string.ga_socialmedia_cat_id))
-                        .setAction(getString(R.string.ga_socialmedia_act_id))
-                        .setLabel(mLikeLabel)
-                        .build());
-            }
-        });
-        mFollowView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mGaTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory(getString(R.string.ga_socialmedia_cat_id))
-                        .setAction(getString(R.string.ga_socialmedia_act_id))
-                        .setLabel(mFollowLabel)
-                        .build());
-            }
-        });
         //get the reference to the frame layout that holds the list view
          mListFrameLayout = (FrameLayout) findViewById(R.id.shops_frame_id);
         //register the broadcast receiver
@@ -373,15 +353,19 @@ public class MainActivity extends Activity implements
         this.finish();
     }
 
-    //called when a new like is given on taken back
+    //called when like/unlike or (un)follow action is executed
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.i(LOG_TAG, "in onActivityResult");
+        Log.i(LOG_TAG, requestCode + ", " + resultCode + ", " + data.toString());
         super.onActivityResult(requestCode, resultCode, data);
         mLikeView.handleOnActivityResult(mContext, requestCode, resultCode, data);
-        if (mLikeView.getPaddingLeft() == 16) {
-            mLikeView.setPadding(0, 0, 220, 0);//reposition the button after a Like action
-            Log.i(LOG_TAG, "Activ results - changed padding | left/right: " + String.valueOf(mLikeView.getPaddingLeft()) + "/" + String.valueOf(mLikeView.getPaddingRight()));
+        if (data.hasExtra("com.facebook.platform.extra.APPLICATION_ID")) mRepositionLikeButton = true;
+        if (mRepositionLikeButton) {
+            if (mLikeView.getPaddingLeft() == 16) {
+                mLikeView.setPadding(0, 0, 220, 0);//reposition the button after a Like action
+                Log.i(LOG_TAG, "Activ results - changed padding | left/right: " + String.valueOf(mLikeView.getPaddingLeft()) + "/" + String.valueOf(mLikeView.getPaddingRight()));
+            }
         }
         if (mTwitterLoginButton != null) {
             try {
@@ -649,9 +633,15 @@ public class MainActivity extends Activity implements
         mFollowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //send a hit to GA for each press of the Twitter follow button
+                mGaTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory(getString(R.string.ga_socialmedia_cat_id))
+                        .setAction(getString(R.string.ga_socialmedia_act_id))
+                        .setLabel(mFollowLabel)
+                        .build());
                 Drawable followDrawable = getResources().getDrawable(R.drawable.twitter_follow);
                 Drawable followingDrawable = getResources().getDrawable(R.drawable.twitter_following);
-
+                mRepositionLikeButton = false;
                 if (mFollowView.getDrawable().getConstantState().equals(followDrawable.getConstantState())) {//follow button is displayed
                     if (mTwitterToken.equals("") && mTwitterSecret.equals("")) {
                         //simulate the press of the Twitter login button to get the token and secret
@@ -672,7 +662,7 @@ public class MainActivity extends Activity implements
             }
         });
     }
-
+    //here is where we handle the success/fail scenario of the twitter login
     private void setTwitterLoginCallback() {
         mTwitterLoginButton.setCallback(new Callback<TwitterSession>() {
             @Override
@@ -719,7 +709,6 @@ public class MainActivity extends Activity implements
             public void failure(TwitterException e) {
                 Log.i(LOG_TAG,"Login Failed!" + e.toString());
                 Toast.makeText(mContext,getResources().getString(R.string.twitter_operation_failed),Toast.LENGTH_SHORT).show();
-                Crashlytics.logException(e);
             }
         });
     }
@@ -767,5 +756,15 @@ public class MainActivity extends Activity implements
             editor.putString(FOLLOW_BUTTON_KEY,followButtonActivated);
             editor.commit();
         }
+    }
+    //called when the like button is pressed
+    private void handleLikeButton(View v) {
+        Log.i(LOG_TAG,"In handleLikeButton");
+        mRepositionLikeButton = true;
+        mGaTracker.send(new HitBuilders.EventBuilder()
+                .setCategory(getString(R.string.ga_socialmedia_cat_id))
+                .setAction(getString(R.string.ga_socialmedia_act_id))
+                .setLabel(mLikeLabel)
+                .build());
     }
          }

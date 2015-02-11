@@ -24,4 +24,6 @@
         <color name="button_shop_default">#1e85fb</color>
         <color name="button_shop_pressed">#4599fa</color>
         <color name="button_shop_focused">#00afef</color>
+        <color name="twitter_button_pressed">#66b1ec</color>
+        <color name="twitter_button_default">#53a7e8</color>
 </resources>
