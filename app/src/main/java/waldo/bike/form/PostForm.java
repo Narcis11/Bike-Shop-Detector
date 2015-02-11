@@ -43,7 +43,6 @@ public class PostForm extends AsyncTask<String, Void, String> {
             ResponseHandler<String> responseHandler = new BasicResponseHandler();
             String response = httpClient.execute(httpPost, responseHandler);
             status = response.toString();
-            //TODO: Add a onPostExecute method that returns a message to the AddShopForm activity so as to open the MainActivity afterwards.
         }
         catch (Exception e){
             e.printStackTrace();
@@ -63,6 +62,7 @@ public class PostForm extends AsyncTask<String, Void, String> {
         String address = "address";
         String types = "types";
         String website = "website";
+        //param[0]=lang; param[1]=lng; param[2]=name; param[3]=phone_number; param[4]=address; param[5]=types; param[6]=website;
         try {
             fullJson.put(name,parameters[2]);
             locationJson.put(lat, parameters[0]);

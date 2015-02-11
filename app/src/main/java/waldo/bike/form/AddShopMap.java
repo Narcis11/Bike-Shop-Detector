@@ -160,6 +160,7 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
                 return false;
             }
         });
+        //TODO: Test if the lat/lng transmitted is the correct one (the user's or the new marker's location)
         LatLng userLatLng = new LatLng(Double.valueOf(GlobalState.USER_LAT), Double.valueOf(GlobalState.USER_LNG));
         mNewShopLat = Double.valueOf(GlobalState.USER_LAT);
         mNewShopLng = Double.valueOf(GlobalState.USER_LNG);
