@@ -85,7 +85,8 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
             ShopsContract.ShopsEntry.COLUMN_SHOP_LONGITUDE,
             ShopsContract.ShopsEntry.COLUMN_PLACE_ID,
             ShopsContract.ShopsEntry.COLUMN_IS_PARTNER,
-            ShopsContract.ShopsEntry.COLUMN_SHOP_PROMO_TEXT
+            ShopsContract.ShopsEntry.COLUMN_SHOP_PROMO_TEXT,
+            ShopsContract.ShopsEntry.COLUMN_DISCOUNT_VALUE
     };
 
     // These indices are tied to SHOPS_COLUMNS.  If SHOPS_COLUMNS changes, these
@@ -101,6 +102,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     public static final int COL_PLACE_ID = 8;
     public static final int COL_IS_PARTNER = 9;
     public static final int COL_PROMO_TEXT = 10;
+    public static final int COL_DISCOUNT_VALUE = 11;
 
     public ShopsFragment() {
     }
@@ -172,6 +174,14 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                         }
                         else {
                             ((TextView) view).setText(Constants.SHOP_UNAVAILABLE);//""
+                        }
+                    case COL_DISCOUNT_VALUE:
+                        if ((cursor.getInt(COL_IS_PARTNER) == 1)) {
+                            ((TextView) view).setText("-" + String.valueOf(cursor.getInt(COL_DISCOUNT_VALUE)) + "%");
+                            view.setVisibility(View.VISIBLE);
+                            view.setBackgroundResource(R.drawable.background_shop_discount);
+                            ((TextView) view).setTextColor(getResources().getColor(R.color.discount_text));
+                            //TODO: Find out why the style (background, text colour) is not loaded from the XML.
                         }
                         return  true;
                 }

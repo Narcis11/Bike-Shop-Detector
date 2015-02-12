@@ -232,10 +232,11 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                             shopsValues.put(ShopsContract.ShopsEntry.COLUMN_OPENING_HOURS, placeDetailRequest[WEEKDAY_TEXT_ID]);
                             shopsValues.put(ShopsContract.ShopsEntry.COLUMN_RATING, placeDetailRequest[RATING_ID]);
                             //Only for testing. Will be removed.
-          /*                  if (i<5) {
+/*                            if (i<5) {
                                 Log.i(LOG_TAG,"Partner shop: " + placeName);
                                 shopsValues.put(ShopsContract.ShopsEntry.COLUMN_IS_PARTNER, 1);
                                 shopsValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_PROMO_TEXT,"-15% reducere la adidasi, pantofi.#-20% reducere la ochi, nas.");
+                                shopsValues.put(ShopsContract.ShopsEntry.COLUMN_DISCOUNT_VALUE,i+5);
                             }*/
                             cVVector.add(shopsValues);
                         }

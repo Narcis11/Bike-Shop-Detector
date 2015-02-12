@@ -53,7 +53,6 @@
             android:id="@+id/discount_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="-15%"
             android:textAppearance="?android:textAppearanceSmall"
             android:layout_toRightOf="@+id/list_item_shopisopen_textview"
             android:layout_toEndOf="@+id/list_item_shopisopen_textview"
