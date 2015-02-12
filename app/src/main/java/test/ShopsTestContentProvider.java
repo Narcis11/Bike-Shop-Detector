@@ -57,12 +57,12 @@ public class ShopsTestContentProvider extends AndroidTestCase {
         Log.i(LOG_TAG,"No of rows deleted = " + deletedRows);
     }
 
-    public void testUpdateContent() throws Throwable {
+    public void testUpdateContentProvider() throws Throwable {
         ContentValues updateValues = new ContentValues();
-        updateValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_LATITUDE, "42.00000");
-        updateValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_LONGITUDE, "22.00000");
-        String placeID = "='fdafjdasofda423423'";
+        updateValues.put(ShopsContract.ShopsEntry.COLUMN_IS_PARTNER, 1);
+        String placeID = " IN ('ChIJdSB_Sjz_sUARXWt7dqrJXB4', 'ChIJGaHt_yn5sUARPdO192g_jPU','ChIJL-0pMrX4sUAR-kjKSO4ZxGk','ChIJcd1nibH4sUARnqDjRwzgiMA')";
         String whereClause = ShopsContract.ShopsEntry.COLUMN_PLACE_ID + placeID ;
+       // String whereClause = ShopsContract.ShopsEntry.COLUMN_WEBSITE + " IS NOT NULL" ;
         int updatedRows = mContext.getContentResolver().update(ShopsContract.ShopsEntry.CONTENT_URI,updateValues,whereClause,null);
         Log.i(LOG_TAG,"No of rows updated = " + updatedRows);
     }
@@ -72,7 +72,7 @@ public class ShopsTestContentProvider extends AndroidTestCase {
         String columnValue = "";
         final String querySelection = ShopsContract.ShopsEntry.COLUMN_PLACE_ID + "=?";
         final String[] querySelectionArgs = new String[1];
-        querySelectionArgs[0] = "ChIJic5-xMb4sUARQAHInQfJXbM";
+        querySelectionArgs[0] = "ChIJdSB_Sjz_sUARXWt7dqrJXB4";
         Cursor contentCursor = mContext.getContentResolver().query(
                 ShopsContract.ShopsEntry.CONTENT_URI,
                 null,
@@ -82,18 +82,18 @@ public class ShopsTestContentProvider extends AndroidTestCase {
         );
         List<String> columnNames = new ArrayList<String>();
         columnNames.add(ShopsContract.ShopsEntry._ID);
-        columnNames.add(ShopsContract.ShopsEntry.COLUMN_SHOP_NAME);
+      /*  columnNames.add(ShopsContract.ShopsEntry.COLUMN_SHOP_NAME);
         columnNames.add(ShopsContract.ShopsEntry.COLUMN_SHOP_ADDRESS);
         columnNames.add(ShopsContract.ShopsEntry.COLUMN_SHOP_LATITUDE);
         columnNames.add(ShopsContract.ShopsEntry.COLUMN_SHOP_LONGITUDE);
         columnNames.add(ShopsContract.ShopsEntry.COLUMN_IS_OPEN);
         columnNames.add(ShopsContract.ShopsEntry.COLUMN_DISTANCE_TO_USER);
-        columnNames.add(ShopsContract.ShopsEntry.COLUMN_DISTANCE_DURATION);
+        columnNames.add(ShopsContract.ShopsEntry.COLUMN_DISTANCE_DURATION);*/
         columnNames.add(ShopsContract.ShopsEntry.COLUMN_IS_PARTNER);
-        columnNames.add(ShopsContract.ShopsEntry.COLUMN_PLACE_ID);
+/*        columnNames.add(ShopsContract.ShopsEntry.COLUMN_PLACE_ID);
         columnNames.add(ShopsContract.ShopsEntry.COLUMN_IS_PARTNER);
         columnNames.add(ShopsContract.ShopsEntry.COLUMN_PHONE_NUMBER);
-        columnNames.add(ShopsContract.ShopsEntry.COLUMN_RATING);
+        columnNames.add(ShopsContract.ShopsEntry.COLUMN_RATING);*/
    //     ShopsTest.validateCursor(contentCursor,columnNames);
 
 

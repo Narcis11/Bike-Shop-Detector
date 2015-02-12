@@ -34,6 +34,7 @@ public class MapsActivity extends FragmentActivity{
     private TextView mInfoTextView;
     private View mInfoWindow;
     private String mShopName;
+    private boolean mIsPartner;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,25 +128,29 @@ public class MapsActivity extends FragmentActivity{
             Double shopLat = Double.valueOf(mBundle.getString(Constants.BUNDLE_SHOP_LAT));
             Double shopLng = Double.valueOf(mBundle.getString(Constants.BUNDLE_SHOP_LNG));
             mShopName = mBundle.getString(Constants.BUNDLE_SHOP_NAME);
+            mIsPartner = mBundle.getBoolean(Constants.BUNDLE_IS_PARTNER);
             LatLng shopLatLng = new LatLng(shopLat, shopLng);
             getActionBar().setTitle(mShopName);
             mMap.addMarker(new MarkerOptions().position(shopLatLng).title(mShopName));
-            mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
-                @Override
-                public View getInfoWindow(Marker marker) {
-                    return null;
-                }
+            //we style the info window only for partner shops
+            if (mIsPartner) {
+                mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+                    @Override
+                    public View getInfoWindow(Marker marker) {
+                        return null;
+                    }
 
-                @Override
-                public View getInfoContents(Marker marker) {
-                    mInfoWindow = getLayoutInflater().inflate(R.layout.custom_infowindow,null);
-                    TextView titleText = (TextView) mInfoWindow.findViewById(R.id.infowindow_title);
-                    TextView contentText = (TextView) mInfoWindow.findViewById(R.id.infowindow_content);
-                    titleText.setText(mShopName);
-                    contentText.setText("Acesta este un text promoțional. Să vă iau pe carbahal!");
-                    return mInfoWindow;
-                }
-            });
+                    @Override
+                    public View getInfoContents(Marker marker) {
+                        mInfoWindow = getLayoutInflater().inflate(R.layout.custom_infowindow, null);
+                        TextView titleText = (TextView) mInfoWindow.findViewById(R.id.infowindow_title);
+                        TextView contentText = (TextView) mInfoWindow.findViewById(R.id.infowindow_content);
+                        titleText.setText(mShopName);
+                        contentText.setText("Acesta este un text promoțional. Să vă iau pe carbahal!");
+                        return mInfoWindow;
+                    }
+                });
+            }
             mMap.moveCamera(CameraUpdateFactory.newLatLng(shopLatLng));
             mMap.animateCamera(CameraUpdateFactory.zoomTo(Constants.SHOP_ZOOM));//*; //zoom to the position
         }
