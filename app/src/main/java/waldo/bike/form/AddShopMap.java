@@ -127,7 +127,8 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
-
+        //disable the toolbar from the right bottom corner
+        mMap.getUiSettings().setMapToolbarEnabled(false);
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {

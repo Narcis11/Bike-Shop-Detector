@@ -19,18 +19,21 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import Utilities.Constants;
 import Utilities.GlobalState;
 import data.ShopsContract;
 
-public class MapsActivity extends FragmentActivity {
+public class MapsActivity extends FragmentActivity{
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private static final String LOG_TAG = MapsActivity.class.getSimpleName();
     private Bundle mBundle;
     private TextView mInfoTextView;
+    private View mInfoWindow;
+    private String mShopName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,10 +126,26 @@ public class MapsActivity extends FragmentActivity {
             //call from fragment
             Double shopLat = Double.valueOf(mBundle.getString(Constants.BUNDLE_SHOP_LAT));
             Double shopLng = Double.valueOf(mBundle.getString(Constants.BUNDLE_SHOP_LNG));
-            String shopName = mBundle.getString(Constants.BUNDLE_SHOP_NAME);
+            mShopName = mBundle.getString(Constants.BUNDLE_SHOP_NAME);
             LatLng shopLatLng = new LatLng(shopLat, shopLng);
-            getActionBar().setTitle(shopName);
-            mMap.addMarker(new MarkerOptions().position(shopLatLng).title(shopName));
+            getActionBar().setTitle(mShopName);
+            mMap.addMarker(new MarkerOptions().position(shopLatLng).title(mShopName));
+            mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+                @Override
+                public View getInfoWindow(Marker marker) {
+                    return null;
+                }
+
+                @Override
+                public View getInfoContents(Marker marker) {
+                    mInfoWindow = getLayoutInflater().inflate(R.layout.custom_infowindow,null);
+                    TextView titleText = (TextView) mInfoWindow.findViewById(R.id.infowindow_title);
+                    TextView contentText = (TextView) mInfoWindow.findViewById(R.id.infowindow_content);
+                    titleText.setText(mShopName);
+                    contentText.setText("Acesta este un text promoțional. Să vă iau pe carbahal!");
+                    return mInfoWindow;
+                }
+            });
             mMap.moveCamera(CameraUpdateFactory.newLatLng(shopLatLng));
             mMap.animateCamera(CameraUpdateFactory.zoomTo(Constants.SHOP_ZOOM));//*; //zoom to the position
         }
