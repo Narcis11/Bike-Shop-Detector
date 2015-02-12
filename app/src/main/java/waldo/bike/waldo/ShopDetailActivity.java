@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.facebook.android.Util;
 import com.google.android.gms.maps.OnStreetViewPanoramaReadyCallback;
 import com.google.android.gms.maps.StreetViewPanorama;
 import com.google.android.gms.maps.StreetViewPanoramaFragment;
@@ -28,11 +29,13 @@ public class ShopDetailActivity extends FragmentActivity
         implements OnStreetViewPanoramaReadyCallback {
 
     private static final String LOG_TAG = ShopDetailActivity.class.getSimpleName();
-    Double mShopLat;
-    Double mShopLng;
-    String mShopName;
-    Bundle mBundle;
-    String mPlaceid;
+    private Double mShopLat;
+    private Double mShopLng;
+    private String mShopName;
+    private Bundle mBundle;
+    private String mPlaceid;
+    private String mPromoText;
+    private static final int ACTIVITY_INDEX = 1;
     private static final String[] QUERY_COLUMS = {
             ShopsContract.ShopsEntry.COLUMN_SHOP_NAME,
             ShopsContract.ShopsEntry.COLUMN_SHOP_ADDRESS,
@@ -59,6 +62,7 @@ public class ShopDetailActivity extends FragmentActivity
         mShopLng = Double.valueOf(mBundle.getString(Constants.BUNDLE_SHOP_LNG));
         mShopName = mBundle.getString(Constants.BUNDLE_SHOP_NAME);
         mPlaceid = mBundle.getString(Constants.BUNDLE_SHOP_PLACE_ID);
+        mPromoText = mBundle.getString(Constants.BUNDLE_PROMO_TEXT,"");//if the value is null, the promo text is ""
         getActionBar().setTitle(mShopName);
         StreetViewPanoramaFragment streetViewPanoramaFragment =
                 (StreetViewPanoramaFragment) getFragmentManager()
@@ -79,7 +83,7 @@ public class ShopDetailActivity extends FragmentActivity
         TextView shopPhoneNumberTextView = (TextView) findViewById(R.id.detail_shopphonenumber);
         TextView shopOpeningHoursTextView = (TextView) findViewById(R.id.detail_shopopeninghours);
         TextView shopWebsiteTextView = (TextView) findViewById(R.id.detail_shopwebsite);
-
+        TextView shopPromoText = (TextView) findViewById(R.id.detail_promo_text);
         Cursor shopDetailCursor = getApplicationContext().getContentResolver().query(
                 ShopsContract.ShopsEntry.CONTENT_URI,
                 QUERY_COLUMS,
@@ -94,8 +98,10 @@ public class ShopDetailActivity extends FragmentActivity
             shopPhoneNumberTextView.setText(shopDetailCursor.getString(COL_SHOP_PHONE_NUMBER));
             if (shopDetailCursor.getString(COL_SHOP_OPENING_HOURS) != null)
             shopOpeningHoursTextView.setText(Utility.getTodayFromOpeningHours(shopDetailCursor.getString(COL_SHOP_OPENING_HOURS)));
-
             shopWebsiteTextView.setText(shopDetailCursor.getString(COL_SHOP_WEBSITE));
+            Log.i(LOG_TAG,"Promo text is: " + mPromoText);
+            if (!mPromoText.equals(""))
+                shopPromoText.setText(Utility.getPromoText(mPromoText,ACTIVITY_INDEX));
         }
         else {
             Log.i(LOG_TAG,"*****Cursor is null!*****");

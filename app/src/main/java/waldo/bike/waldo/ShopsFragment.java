@@ -63,6 +63,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     private String mFormattedDistance = "";
     private String mPreferredUnit = "";
     private boolean mIsPartner;
+    private String mPromoText;
     private boolean mIsListRefreshed;
     private Double mNewSpeedDistanceToShop;
     private static final int SHOPS_LOADER_ID = 0;//loader identifier
@@ -83,7 +84,8 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
             ShopsContract.ShopsEntry.COLUMN_SHOP_LATITUDE,
             ShopsContract.ShopsEntry.COLUMN_SHOP_LONGITUDE,
             ShopsContract.ShopsEntry.COLUMN_PLACE_ID,
-            ShopsContract.ShopsEntry.COLUMN_IS_PARTNER
+            ShopsContract.ShopsEntry.COLUMN_IS_PARTNER,
+            ShopsContract.ShopsEntry.COLUMN_SHOP_PROMO_TEXT
     };
 
     // These indices are tied to SHOPS_COLUMNS.  If SHOPS_COLUMNS changes, these
@@ -98,6 +100,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     public static final int COL_SHOP_LONGITUDE = 7;
     public static final int COL_PLACE_ID = 8;
     public static final int COL_IS_PARTNER = 9;
+    public static final int COL_PROMO_TEXT = 10;
 
     public ShopsFragment() {
     }
@@ -197,6 +200,8 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                     mShopLongitude = cursor.getString(COL_SHOP_LONGITUDE);
                     mPlaceId = cursor.getString(COL_PLACE_ID);
                     mIsPartner = (cursor.getInt(COL_IS_PARTNER) == 1);
+                    mPromoText = cursor.getString(COL_PROMO_TEXT);
+                    Log.i(LOG_TAG, "mIsPartner: " + mIsPartner );
                     //update the database row corresponding to this shop id
                    // updateShopList(getActivity(),mPlaceId);
                     //store the position
@@ -214,6 +219,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                     bundle.putString(Constants.BUNDLE_SHOP_PLACE_ID,mPlaceId);
                     bundle.putBoolean(Constants.BUNDLE_IS_PARTNER,mIsPartner);
                     bundle.putString(Constants.BUNDLE_FRAGMENT,Constants.CALLED_FROM_FRAGMENT);
+                    bundle.putString(Constants.BUNDLE_PROMO_TEXT,mPromoText);
                     openDetailActivity.putExtras(bundle);
                     //lift off!
                     startActivity(openDetailActivity);

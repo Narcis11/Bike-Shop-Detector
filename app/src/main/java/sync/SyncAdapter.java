@@ -217,7 +217,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                            // Log.i(LOG_TAG, "****Details response*** = " + placeDetailRequest[0] + "/" + placeDetailRequest[1] + "/" + placeDetailRequest[2] + "/" + placeDetailRequest[3]);
                             ContentValues shopsValues = new ContentValues();
 
-                            //TODO: Get the is_partner, discount_value and logo_url fields
+                            //TODO: Get the is_partner, discount_value, promo_text and logo_url fields
                             //creating the vector and inserting the values
                             shopsValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_NAME, placeName);
                             shopsValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_ADDRESS, address);
@@ -231,6 +231,12 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                             shopsValues.put(ShopsContract.ShopsEntry.COLUMN_PHONE_NUMBER, placeDetailRequest[PHONE_NUMBER_ID]);
                             shopsValues.put(ShopsContract.ShopsEntry.COLUMN_OPENING_HOURS, placeDetailRequest[WEEKDAY_TEXT_ID]);
                             shopsValues.put(ShopsContract.ShopsEntry.COLUMN_RATING, placeDetailRequest[RATING_ID]);
+                            //Only for testing. Will be removed.
+          /*                  if (i<5) {
+                                Log.i(LOG_TAG,"Partner shop: " + placeName);
+                                shopsValues.put(ShopsContract.ShopsEntry.COLUMN_IS_PARTNER, 1);
+                                shopsValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_PROMO_TEXT,"-15% reducere la adidasi, pantofi.#-20% reducere la ochi, nas.");
+                            }*/
                             cVVector.add(shopsValues);
                         }
                         if (cVVector.size() > 0) {

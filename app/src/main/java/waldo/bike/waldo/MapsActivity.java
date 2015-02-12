@@ -24,6 +24,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import Utilities.Constants;
 import Utilities.GlobalState;
+import Utilities.Utility;
 import data.ShopsContract;
 
 public class MapsActivity extends FragmentActivity{
@@ -35,6 +36,8 @@ public class MapsActivity extends FragmentActivity{
     private View mInfoWindow;
     private String mShopName;
     private boolean mIsPartner;
+    private String mPromoText;
+    private static final int ACTIVITY_INDEX = 2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,6 +132,7 @@ public class MapsActivity extends FragmentActivity{
             Double shopLng = Double.valueOf(mBundle.getString(Constants.BUNDLE_SHOP_LNG));
             mShopName = mBundle.getString(Constants.BUNDLE_SHOP_NAME);
             mIsPartner = mBundle.getBoolean(Constants.BUNDLE_IS_PARTNER);
+            mPromoText = mBundle.getString(Constants.BUNDLE_PROMO_TEXT,"");
             LatLng shopLatLng = new LatLng(shopLat, shopLng);
             getActionBar().setTitle(mShopName);
             mMap.addMarker(new MarkerOptions().position(shopLatLng).title(mShopName));
@@ -142,11 +146,12 @@ public class MapsActivity extends FragmentActivity{
 
                     @Override
                     public View getInfoContents(Marker marker) {
+                        Log.i(LOG_TAG,"In getInfoContents");
                         mInfoWindow = getLayoutInflater().inflate(R.layout.custom_infowindow, null);
                         TextView titleText = (TextView) mInfoWindow.findViewById(R.id.infowindow_title);
                         TextView contentText = (TextView) mInfoWindow.findViewById(R.id.infowindow_content);
                         titleText.setText(mShopName);
-                        contentText.setText("Acesta este un text promoțional. Să vă iau pe carbahal!");
+                        contentText.setText(Utility.getPromoText(mPromoText,ACTIVITY_INDEX));
                         return mInfoWindow;
                     }
                 });

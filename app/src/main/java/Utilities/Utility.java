@@ -627,4 +627,17 @@ public class Utility {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         return displayMetrics.widthPixels;
     }
+
+    //used to extract the promo text for the shop detail or shop map activity
+    public static String getPromoText(String promoText, int activityNumber) {
+        if (activityNumber == 1) {
+            return promoText.substring(0,promoText.indexOf(Constants.HASH_SEPARATOR));
+        }
+        else if (activityNumber == 2) {
+            return promoText.substring(promoText.indexOf(Constants.HASH_SEPARATOR) + 1);
+        }
+        else {
+            return "";
+        }
+    }
 }

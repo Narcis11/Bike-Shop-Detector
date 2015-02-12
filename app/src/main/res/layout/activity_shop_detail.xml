@@ -14,7 +14,7 @@
         android:name="com.google.android.gms.maps.StreetViewPanoramaFragment"
         android:id="@+id/streetviewpanorama"
         android:layout_width="match_parent"
-        android:layout_height="190dp"/>
+        android:layout_height="140dp"/>
 
     <!--Shop name-->
     <TextView
@@ -175,7 +175,18 @@
         android:layout_height="2dp"
         android:background="@color/list_divider"
         android:layout_below="@+id/detail_shopwebsite"
+        android:id="@+id/website_divier"
         />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/detail_promo_text"
+        android:text="testetst"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="50dp"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:layout_below="@+id/website_divier"/>
     <!--Open map button-->
     <Button
         android:id="@+id/add_shop_button"
