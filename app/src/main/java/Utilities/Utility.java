@@ -572,9 +572,12 @@ public class Utility {
             return streetAddress;
         }
         catch (IOException e) {
-            e.printStackTrace();
+            return Constants.RETURN_ERROR_STRING;
         }
-        return Constants.RETURN_ERROR_STRING;
+        catch (Exception e) {
+            return Constants.RETURN_ERROR_STRING;
+        }
+
     }
 
     public static String getTodayFromOpeningHours (String schedule) {
