@@ -24,6 +24,11 @@
         android:overScrollMode="never"
         android:textIsSelectable="false"
         android:textStyle="normal" />
+
+    <WebView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/website_view"/>
 </FrameLayout>
     <!-- Listview to display slider menu -->
     <ListView

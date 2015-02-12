@@ -35,6 +35,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -115,6 +116,7 @@ public class MainActivity extends Activity implements
     private String mTwitterSecret = "";
     private LikeView mLikeView;
     private ImageView mFollowView;
+    private WebView mWaldoWebsite;
     private TwitterAuthClient mTwitterAuthClient;
     private TwitterAuthConfig mTwitterAuthConfig;
     private TwitterLoginButton mTwitterLoginButton;
@@ -541,6 +543,7 @@ public class MainActivity extends Activity implements
     private void openWebsite() {
         String url = "http://www.waldo.bike/";
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        mWaldoWebsite = (WebView) findViewById(R.id.website_view);
         try {
             // Build and send a tracked event to GA.
             mGaTracker.send(new HitBuilders.EventBuilder()
@@ -548,8 +551,8 @@ public class MainActivity extends Activity implements
                     .setAction(getString(R.string.ga_about_us_action_id))
                     .setLabel(getString(R.string.ga_about_us_label_id))
                     .build());
-
-            startActivity(intent);
+            mWaldoWebsite.loadUrl(url);
+            //startActivity(intent);
             //close the drawer only when we are ready to open the browser (no exception thrown)
             mDrawerLayout.closeDrawer(Gravity.LEFT);
         }
@@ -615,6 +618,11 @@ public class MainActivity extends Activity implements
          if ((keyCode == KeyEvent.KEYCODE_BACK) && mDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
              mDrawerLayout.closeDrawer(Gravity.LEFT);
          }
+
+        if ((keyCode == KeyEvent.KEYCODE_BACK) && mWaldoWebsite.canGoBack()) {
+            mWaldoWebsite.goBack();
+            return true;
+        }
          return super.onKeyDown(keyCode, event);
     }
 
