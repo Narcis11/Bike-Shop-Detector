@@ -541,9 +541,9 @@ public class MainActivity extends Activity implements
 
 
     private void openWebsite() {
-        String url = "http://www.waldo.bike/";
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-        mWaldoWebsite = (WebView) findViewById(R.id.website_view);
+      //  String url = "http://www.waldo.bike/";
+        Intent intent = new Intent(getApplicationContext(), WebActivity.class);
+        //mWaldoWebsite = (WebView) findViewById(R.id.website_view);
         try {
             // Build and send a tracked event to GA.
             mGaTracker.send(new HitBuilders.EventBuilder()
@@ -551,8 +551,8 @@ public class MainActivity extends Activity implements
                     .setAction(getString(R.string.ga_about_us_action_id))
                     .setLabel(getString(R.string.ga_about_us_label_id))
                     .build());
-            mWaldoWebsite.loadUrl(url);
-            //startActivity(intent);
+            //mWaldoWebsite.loadUrl(url);
+            startActivity(intent);
             //close the drawer only when we are ready to open the browser (no exception thrown)
             mDrawerLayout.closeDrawer(Gravity.LEFT);
         }

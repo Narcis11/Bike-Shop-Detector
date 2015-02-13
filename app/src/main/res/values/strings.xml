@@ -173,5 +173,6 @@
     <!--Used in the Settings activity-->
     <string name="ga_checkbox_category_id">checkbox_cat_id</string>
     <string name="ga_checkbox_action_id">checkbox_act_id</string>
+    <string name="title_activity_web">Our website</string>
 
 </resources>

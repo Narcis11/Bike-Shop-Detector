@@ -141,6 +141,17 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                     case COL_SHOP_NAME:
                         ((TextView) view).setText(cursor.getString(COL_SHOP_NAME));
                         return true;
+                    case COL_IS_OPEN:
+                        if (cursor.getInt(COL_IS_OPEN) == 1){
+                            ((TextView) view).setText(Constants.SHOP_OPEN); //"Open"
+                        }
+                        else if (cursor.getInt(COL_IS_OPEN) == 0) {
+                            ((TextView) view).setText(Constants.SHOP_CLOSED);//"Closed"
+                        }
+                        else {
+                            ((TextView) view).setText(Constants.SHOP_UNAVAILABLE);//""
+                        }
+                        return true;
                     case COL_DISTANCE_TO_USER:
                     //    Log.i(LOG_TAG,"Shopname / distance: " + cursor.getString(COL_SHOP_NAME) + " / " + cursor.getString(COL_DISTANCE_TO_USER));
                         mPreferredUnit = Utility.getPreferredUnit(getActivity());
@@ -165,16 +176,6 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                           //  return true;
                         }
                         return true;
-                    case COL_IS_OPEN:
-                        if (cursor.getInt(COL_IS_OPEN) == 1){
-                            ((TextView) view).setText(Constants.SHOP_OPEN); //"Open"
-                        }
-                        else if (cursor.getInt(COL_IS_OPEN) == 0) {
-                            ((TextView) view).setText(Constants.SHOP_CLOSED);//"Closed"
-                        }
-                        else {
-                            ((TextView) view).setText(Constants.SHOP_UNAVAILABLE);//""
-                        }
                     case COL_DISCOUNT_VALUE:
                         if ((cursor.getInt(COL_IS_PARTNER) == 1)) {
                             ((TextView) view).setText("-" + String.valueOf(cursor.getInt(COL_DISCOUNT_VALUE)) + "%");
