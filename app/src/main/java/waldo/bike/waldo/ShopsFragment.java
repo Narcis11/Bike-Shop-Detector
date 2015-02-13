@@ -122,14 +122,16 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                        // ShopsContract.ShopsEntry.COLUMN_SHOP_ADDRESS,
                         ShopsContract.ShopsEntry.COLUMN_IS_OPEN,
                         ShopsContract.ShopsEntry.COLUMN_DISTANCE_TO_USER,
-                        ShopsContract.ShopsEntry.COLUMN_DISTANCE_DURATION
+                        ShopsContract.ShopsEntry.COLUMN_DISTANCE_DURATION,
+                        ShopsContract.ShopsEntry.COLUMN_DISCOUNT_VALUE
                 },
                 new int[] {
                         R.id.list_item_shopname_textview,
                        // R.id.list_item_shopaddress_textview,
                         R.id.list_item_shopisopen_textview,
                         R.id.list_item_distance_textview,
-                        R.id.list_item_duration_textview
+                        R.id.list_item_duration_textview,
+                        R.id.list_item_discount_view
                 },
                 0
         );
@@ -177,12 +179,12 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                         }
                         return true;
                     case COL_DISCOUNT_VALUE:
+                        Log.i(LOG_TAG,"In COL_DISCOUNT_VALUE");
                         if ((cursor.getInt(COL_IS_PARTNER) == 1)) {
                             ((TextView) view).setText("-" + String.valueOf(cursor.getInt(COL_DISCOUNT_VALUE)) + "%");
                             view.setVisibility(View.VISIBLE);
-                            view.setBackgroundResource(R.drawable.background_shop_discount);
-                            ((TextView) view).setTextColor(getResources().getColor(R.color.discount_text));
-                            //TODO: Find out why the style (background, text colour) is not loaded from the XML.
+                            //view.setBackgroundResource(R.drawable.background_shop_discount);
+                            //((TextView) view).setTextColor(getResources().getColor(R.color.discount_text));
                         }
                         return  true;
                 }

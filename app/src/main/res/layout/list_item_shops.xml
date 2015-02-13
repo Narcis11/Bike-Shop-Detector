@@ -50,7 +50,7 @@
             android:textAppearance="?android:textAppearanceSmall"/>
 
         <TextView
-            android:id="@+id/discount_view"
+            android:id="@+id/list_item_discount_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:textAppearanceSmall"
@@ -59,7 +59,7 @@
             android:layout_alignBaseline="@+id/list_item_shopisopen_textview"
             android:background="@drawable/background_shop_discount"
             android:textColor="@color/discount_text"
-            android:visibility="gone"
+            android:visibility="invisible"
             />
     </RelativeLayout>
 
