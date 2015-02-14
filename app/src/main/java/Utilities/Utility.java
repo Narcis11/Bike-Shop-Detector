@@ -554,11 +554,16 @@ public class Utility {
         Double[] coordinatesArray = new Double[5];
         try {
             List<Address> coordinates = geocoder.getFromLocationName(address,1);
-               coordinatesArray[0] = coordinates.get(0).getLatitude();
-               coordinatesArray[1] = coordinates.get(0).getLongitude();
+            if (coordinates.size() > 0) {
+                coordinatesArray[0] = coordinates.get(0).getLatitude();
+                coordinatesArray[1] = coordinates.get(0).getLongitude();
+            }
         }
         catch (IOException e) {
                e.printStackTrace();
+        }
+        catch (IndexOutOfBoundsException e) {
+
         }
         return coordinatesArray;
     }
@@ -570,7 +575,7 @@ public class Utility {
             List<Address> address = geocoder.getFromLocation(latitude, longitude, 1);
             streetAddress =  address.get(0).getAddressLine(0);
             return streetAddress;
-        }
+        }//if an error is received, we just return the error_string and manage the address in the back end
         catch (IOException e) {
             return Constants.RETURN_ERROR_STRING;
         }

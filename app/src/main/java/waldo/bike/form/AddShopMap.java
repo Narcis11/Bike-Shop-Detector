@@ -44,15 +44,22 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
         Log.i(LOG_TAG,"str is " + str);
         Double[] coordinatesArray = Utility.getCoordinatesFromAddressName(getApplicationContext(), str);
         Log.i(LOG_TAG, "Lat/lng of address " + str + " = " + coordinatesArray[0] + "/" + coordinatesArray[1]);
-        mNewShopLat = coordinatesArray[0];
-        mNewShopLng = coordinatesArray[1];
-        mAddress = str;
-        //move the marker to the selected address
-        LatLng newUserLatLng = new LatLng(coordinatesArray[0], coordinatesArray[1]);
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(newUserLatLng));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(Constants.SHOP_ZOOM));
-        Marker userMarker = mMap.addMarker(new MarkerOptions().position(new LatLng(coordinatesArray[0], coordinatesArray[1])).title(Constants.NEW_SHOP_NAME));
-        userMarker.showInfoWindow();//we always display the title of the user's marker
+        if (coordinatesArray[0] != null && coordinatesArray[1] != null) {
+            mNewShopLat = coordinatesArray[0];
+            mNewShopLng = coordinatesArray[1];
+            LatLng newUserLatLng = new LatLng(coordinatesArray[0], coordinatesArray[1]);
+
+            mAddress = str;
+            //move the marker to the selected address
+
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(newUserLatLng));
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(Constants.SHOP_ZOOM));
+            Marker userMarker = mMap.addMarker(new MarkerOptions().position(new LatLng(coordinatesArray[0], coordinatesArray[1])).title(Constants.NEW_SHOP_NAME));
+            userMarker.showInfoWindow();//we always display the title of the user's marker
+        }
+        else {
+            Toast.makeText(getApplicationContext(),getResources().getString(R.string.invalid_address), Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

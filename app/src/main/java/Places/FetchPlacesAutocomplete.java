@@ -51,7 +51,7 @@ public class FetchPlacesAutocomplete {
                 sb.append("?key=" + API_KEY);
                 sb.append("&components=country:" + COUNTRY);
                 sb.append("&input=" + URLEncoder.encode(input, "utf8"));
-
+                Log.i(LOG_TAG,"URL is: " + sb.toString());
                 URL url = new URL(sb.toString());
                 conn = (HttpURLConnection) url.openConnection();
                 InputStreamReader in = new InputStreamReader(conn.getInputStream());
