@@ -2,9 +2,11 @@ package waldo.bike.form;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -19,7 +21,7 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
     private boolean mFirstSync = true;
     private long mLastSyncDate;
     public static final int SYNC_INTERVAL = 1500;
-
+    private Context mContext;
     private static final String LOG_TAG = PlacesAutoCompleteAdapter.class.getSimpleName();
     public PlacesAutoCompleteAdapter(Context context, int textViewResourceId) {
         super(context, textViewResourceId);
@@ -40,6 +42,7 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
         Filter filter = new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
+                Log.i(LOG_TAG,"In getFilter");
                 FilterResults filterResults = new FilterResults();
                 if (constraint != null) {
                     //we only sync if there are at least three letters

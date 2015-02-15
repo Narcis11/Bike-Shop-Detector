@@ -324,7 +324,6 @@ public class MainActivity extends Activity implements
         //register the broadcast receiver
         registerReceiver(mBroadcastReceiver, mIntentFilter);
         DeviceConnection deviceConnection = new DeviceConnection(mContext);
-      //  Log.i(LOG_TAG,"onResume()|mNetworkState = " + mNetworkState);
         //onResume is called by the system from onReceive whenever there's a network change
         //we don't display the message if the user turns on wifi when data connection is turned on or viceversa
         //if (!mFirstLoad) {
@@ -334,8 +333,6 @@ public class MainActivity extends Activity implements
                 mIsGpsMessageDisplayed = true;
                 mInfoTextView.setVisibility(View.VISIBLE);
                 mInfoTextView.setText(mContext.getResources().getString(R.string.no_gps));
-                mInfoTextView.setTextColor(Color.WHITE);
-                mInfoTextView.setBackgroundColor(Color.RED);
             }
             else if (deviceConnection.checkGpsEnabled() ) {
                 mIsGpsMessageDisplayed = false;
@@ -344,7 +341,6 @@ public class MainActivity extends Activity implements
                     mListFrameLayout.setPadding(Utility.convertDpToPixels(mContext,8), 0, Utility.convertDpToPixels(mContext,8),0);
                 }
             }
-          //  }
 
         mFirstLoad = false;
     }
@@ -405,6 +401,7 @@ public class MainActivity extends Activity implements
             @Override
              public void onReceive(Context context, Intent intent) {
                 DeviceConnection deviceConnection = new DeviceConnection(mContext);
+                Log.i(LOG_TAG,"In onReceive");
                 if (deviceConnection.checkInternetConnected() && (!mNetworkState.equals(Constants.NETWORK_STATE_CONNECTED))) {
                     mIsInternetMessageDisplayed = false;
                     if (!mIsGpsMessageDisplayed) {
@@ -415,8 +412,6 @@ public class MainActivity extends Activity implements
                         mListFrameLayout.setPadding(Utility.convertDpToPixels(mContext,8), Utility.convertDpToPixels(mContext,26), Utility.convertDpToPixels(mContext,8),0);
                         mInfoTextView.setVisibility(View.VISIBLE);
                         mInfoTextView.setText(mContext.getResources().getString(R.string.no_gps));
-                        mInfoTextView.setTextColor(Color.WHITE);
-                        mInfoTextView.setBackgroundColor(Color.RED);
                     }
                 }
                 else if (deviceConnection.checkInternetDisConnected() && !(deviceConnection.checkInternetConnected()
@@ -426,8 +421,6 @@ public class MainActivity extends Activity implements
                     mListFrameLayout.setPadding(Utility.convertDpToPixels(mContext,8), Utility.convertDpToPixels(mContext,26), Utility.convertDpToPixels(mContext,8),0);
                     mInfoTextView.setVisibility(View.VISIBLE);
                     mInfoTextView.setText(mContext.getResources().getString(R.string.no_internet));
-                    mInfoTextView.setTextColor(Color.WHITE);
-                    mInfoTextView.setBackgroundColor(Color.RED);
                 }
              }
      };
@@ -619,7 +612,7 @@ public class MainActivity extends Activity implements
              mDrawerLayout.closeDrawer(Gravity.LEFT);
          }
 
-        if ((keyCode == KeyEvent.KEYCODE_BACK) && mWaldoWebsite.canGoBack()) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK) && mWaldoWebsite != null && mWaldoWebsite.canGoBack()) {
             mWaldoWebsite.goBack();
             return true;
         }

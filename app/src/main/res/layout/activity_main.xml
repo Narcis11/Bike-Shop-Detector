@@ -19,16 +19,14 @@
         android:id="@+id/info_textview"
         android:gravity="center"
         android:visibility="gone"
+        android:text="TESTTEST"
         android:paddingTop="3dp"
         android:paddingBottom="3dp"
         android:overScrollMode="never"
         android:textIsSelectable="false"
+        android:background="@color/red"
+        android:textColor="@color/white"
         android:textStyle="normal" />
-
-    <WebView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/website_view"/>
 </FrameLayout>
     <!-- Listview to display slider menu -->
     <ListView

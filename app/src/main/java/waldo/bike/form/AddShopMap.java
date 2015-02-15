@@ -3,6 +3,7 @@ package waldo.bike.form;
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.text.Layout;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -37,6 +38,7 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
     private static String mAddress;
     private static String mTestAddress;
     private static AutoCompleteTextView mAutoCompleteTextView;
+    private static TextView mResultView;
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
         Log.i(LOG_TAG, "In onItemClick");
@@ -71,10 +73,15 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
         mAutoCompleteTextView.setAdapter(new PlacesAutoCompleteAdapter(this, R.layout.list_item_places));
         mAutoCompleteTextView.setOnItemClickListener(this);
         mAutoCompleteTextView.setWidth(Utility.getAutocompleteViewWidth(getApplicationContext()));
+        mResultView = (TextView) findViewById(R.id.autocomplete);
+      //  mAutoCompleteTextView.getText().toString();
       //  mAutoCompleteTextView.setHeight(Utility.getAutocompleteViewHeight(getApplicationContext()));
         mAutoCompleteTextView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                Log.i(LOG_TAG,"Input text is: " + mAutoCompleteTextView.getText());
+                if (mResultView != null)
+                    Log.i(LOG_TAG,"Result text is: " + mResultView.getText());
                 //remove the text when the "X" button is pressed
                 final int DRAWABLE_RIGHT = 2;
                 if(event.getAction() == MotionEvent.ACTION_UP) {
@@ -87,6 +94,8 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
             }
         });
 
+
+       // String firstLine = resultsTextView.getText().toString();
         //loading the map
         setUpMapIfNeeded();
     }
