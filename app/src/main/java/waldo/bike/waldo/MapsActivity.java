@@ -46,6 +46,7 @@ public class MapsActivity extends FragmentActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        overridePendingTransition(R.xml.slide_in, R.xml.slide_out);
         getActionBar().setDisplayHomeAsUpEnabled(true);
         setUpMapIfNeeded();
     }
@@ -192,5 +193,10 @@ public class MapsActivity extends FragmentActivity{
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.xml.slide_in, R.xml.slide_out);
+    }
 
 }

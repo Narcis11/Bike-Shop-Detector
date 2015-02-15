@@ -16,6 +16,7 @@ public class WebActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web);
+        overridePendingTransition(R.xml.slide_in, R.xml.slide_out);
         mWebView = (WebView) findViewById(R.id.website_view);
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.getSettings().setUseWideViewPort(true);
@@ -48,5 +49,11 @@ public class WebActivity extends Activity {
         //noinspection SimplifiableIfStatement
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.xml.slide_in, R.xml.slide_out);
     }
 }

@@ -8,6 +8,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -57,6 +59,7 @@ public class ShopDetailActivity extends FragmentActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shop_detail);
+        overridePendingTransition(R.xml.slide_in, R.xml.slide_out);
         mBundle = getIntent().getExtras();
         mShopLat = Double.valueOf(mBundle.getString(Constants.BUNDLE_SHOP_LAT));
         mShopLng = Double.valueOf(mBundle.getString(Constants.BUNDLE_SHOP_LNG));
@@ -183,5 +186,12 @@ public class ShopDetailActivity extends FragmentActivity
         bundle.putString(Constants.BUNDLE_SHOP_NAME,mShopName);*/
         openMapIntent.putExtras(mBundle);
         startActivity(openMapIntent);
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.xml.slide_in, R.xml.slide_out);
     }
 }

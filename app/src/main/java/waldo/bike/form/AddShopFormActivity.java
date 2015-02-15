@@ -51,6 +51,7 @@ public class AddShopFormActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_shop_form);
+        overridePendingTransition(R.xml.slide_in, R.xml.slide_out);
         mShopNameTitle = (TextView) findViewById(R.id.new_shop_name_title);
         mShopName = (EditText) findViewById(R.id.new_shop_name);
         mShopWebsiteTitle = (TextView) findViewById(R.id.new_shop_website_title);
@@ -290,5 +291,11 @@ public class AddShopFormActivity extends Activity {
             }
 
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.xml.slide_in, R.xml.slide_out);
     }
 }

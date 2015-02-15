@@ -164,6 +164,7 @@ public class MainActivity extends Activity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        overridePendingTransition(R.xml.slide_in,R.xml.slide_out);
          if (savedInstanceState == null) {
                  getFragmentManager().beginTransaction()
                       .add(R.id.container, new ShopsFragment(),fragmentTag)
@@ -697,11 +698,9 @@ public class MainActivity extends Activity implements
                 }
                 catch (InterruptedException e) {
                     e.printStackTrace();
-                    Crashlytics.logException(e);
                 }
                 catch (ExecutionException e) {
                     e.printStackTrace();
-                    Crashlytics.logException(e);
                 }
             }
 

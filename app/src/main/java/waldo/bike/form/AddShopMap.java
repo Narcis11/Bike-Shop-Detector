@@ -75,6 +75,8 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_shop_map);
+        //set the animation between activities
+        overridePendingTransition(R.xml.slide_in, R.xml.slide_out);
         //creating the search view
         mAutoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView);
         mAutoCompleteTextView.setAdapter(new PlacesAutoCompleteAdapter(this, R.layout.list_item_places));
@@ -221,5 +223,11 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        Log.i(LOG_TAG,"In onBackPressed");
+        super.onBackPressed();
+        overridePendingTransition(R.xml.slide_in, R.xml.slide_out);
+    }
 
 }

@@ -61,6 +61,8 @@ public class SettingsActivity extends PreferenceActivity implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //animation between activities
+        overridePendingTransition(R.xml.slide_in,R.xml.slide_out);
         // Add 'general' preferences, defined in the XML file
         mContext = getApplicationContext();
         mFirstLoad = true;
@@ -248,4 +250,10 @@ public class SettingsActivity extends PreferenceActivity implements
                     Log.i(LOG_TAG,"Same check");
                 }
             }
+
+    @Override
+    public void onBackPressed() {
+       super.onBackPressed();
+       overridePendingTransition(R.xml.slide_in, R.xml.slide_out);
+    }
 }

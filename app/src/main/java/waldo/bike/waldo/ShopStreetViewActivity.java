@@ -26,6 +26,7 @@ public class ShopStreetViewActivity extends FragmentActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shop_street_view);
+        overridePendingTransition(R.xml.slide_in, R.xml.slide_out);
         getActionBar().setTitle(mActionBarTitle);
         StreetViewPanoramaFragment streetViewPanoramaFragment =
                 (StreetViewPanoramaFragment) getFragmentManager()
@@ -67,5 +68,11 @@ public class ShopStreetViewActivity extends FragmentActivity
             return shopDetailsIntent;
         }
         return null;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.xml.slide_in, R.xml.slide_out);
     }
 }
