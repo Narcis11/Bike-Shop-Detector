@@ -1,7 +1,9 @@
 package waldo.bike.waldo;
 
+import android.app.Activity;
 import android.content.ComponentCallbacks;
 import android.content.ComponentCallbacks2;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.support.annotation.Nullable;
@@ -15,6 +17,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -49,6 +53,8 @@ public class MapsActivity extends FragmentActivity{
     @Override
     protected void onResume() {
         super.onResume();
+        //we also have to check here in case the user returns to the running app through some other means, such as through the back button
+
         setUpMapIfNeeded();
     }
 
@@ -185,4 +191,6 @@ public class MapsActivity extends FragmentActivity{
             shopsCursor.close();
         }
     }
+
+
 }

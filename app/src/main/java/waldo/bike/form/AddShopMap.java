@@ -16,6 +16,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -86,8 +88,8 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
             public boolean onTouch(View v, MotionEvent event) {
                 //remove the text when the "X" button is pressed
                 final int DRAWABLE_RIGHT = 2;
-                if(event.getAction() == MotionEvent.ACTION_UP) {
-                    if(event.getRawX() >= (mAutoCompleteTextView.getRight() - mAutoCompleteTextView.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    if (event.getRawX() >= (mAutoCompleteTextView.getRight() - mAutoCompleteTextView.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
                         clearViewText();
                         return true;
                     }
@@ -218,4 +220,6 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
             Log.i(LOG_TAG,"Text is: " + mResultView.getText());
         }
     }
+
+
 }

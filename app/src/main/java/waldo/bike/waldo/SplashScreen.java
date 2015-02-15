@@ -18,6 +18,9 @@ import android.util.Log;
 import Utilities.Constants;
 import Utilities.DeviceConnection;
 import com.crashlytics.android.Crashlytics;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+
 import io.fabric.sdk.android.Fabric;
 
 /**
@@ -33,7 +36,7 @@ public class SplashScreen extends Activity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Fabric.with(this, new Crashlytics());
+        checkPlayServices();
         setContentView(R.layout.activity_splash);
         mContext = getApplicationContext(); //needed to start the Main Activity
         //instantiate the filter and assign a value
@@ -50,6 +53,7 @@ public class SplashScreen extends Activity{
     @Override
     protected void onResume() {
         super.onResume();
+        checkPlayServices();
         DeviceConnection deviceConnection = new DeviceConnection(mContext);
         Log.i(LOG_TAG,"in onResume");
         if (!deviceConnection.checkGpsEnabled()) {
@@ -119,7 +123,7 @@ public class SplashScreen extends Activity{
                         isInternetEnabled = true;
                     }
                     //onReceive is also called whenever we register the receiver in onResume, so we also have to double-check that the Internet is on
-                    if (isGPSEnabled && isInternetEnabled) {
+                    if (isGPSEnabled && isInternetEnabled && checkPlayServices()) {
                         startMainActivity(mContext);
                     }
                 }
@@ -150,5 +154,22 @@ public class SplashScreen extends Activity{
         Intent MainActivityIntent = new Intent(c,MainActivity.class);
         MainActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); //without this flag, the main activity can't start
         c.startActivity(MainActivityIntent);
+    }
+
+    private boolean checkPlayServices() {
+        final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        Log.i(LOG_TAG,"In checkPlayServices");
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+                GooglePlayServicesUtil.getErrorDialog(resultCode, this,
+                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
+            } else {
+                Log.i(LOG_TAG, "This device is not supported.");
+                finish();
+            }
+            return false;
+        }
+        return true;
     }
 }
