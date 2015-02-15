@@ -401,7 +401,6 @@ public class MainActivity extends Activity implements
             @Override
              public void onReceive(Context context, Intent intent) {
                 DeviceConnection deviceConnection = new DeviceConnection(mContext);
-                Log.i(LOG_TAG,"In onReceive");
                 if (deviceConnection.checkInternetConnected() && (!mNetworkState.equals(Constants.NETWORK_STATE_CONNECTED))) {
                     mIsInternetMessageDisplayed = false;
                     if (!mIsGpsMessageDisplayed) {

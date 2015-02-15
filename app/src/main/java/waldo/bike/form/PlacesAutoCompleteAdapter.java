@@ -3,6 +3,8 @@ package waldo.bike.form;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
@@ -11,6 +13,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import Places.FetchPlacesAutocomplete;
+import Utilities.Constants;
+import waldo.bike.waldo.R;
 
 /**
  * Created by Narcis11 on 03.01.2015.
@@ -23,6 +27,7 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
     public static final int SYNC_INTERVAL = 1500;
     private Context mContext;
     private static final String LOG_TAG = PlacesAutoCompleteAdapter.class.getSimpleName();
+    private boolean mIsTextFormatted = false;
     public PlacesAutoCompleteAdapter(Context context, int textViewResourceId) {
         super(context, textViewResourceId);
     }
@@ -35,6 +40,32 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
     @Override
     public String getItem(int index) {
         return resultList.get(index);
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        //Log.i(LOG_TAG,"convertView: " + convertView.toString());
+       // Log.i(LOG_TAG,"Parent: " + parent.toString());
+/*        for (int i = 0; i < 3; i++) {
+            try {
+                if (parent.getChildAt(i) != null)
+                Log.i(LOG_TAG, "Child at " + i + "=" + parent.getChildAt(i).toString());
+            }
+            catch (NullPointerException e) {
+                Log.i(LOG_TAG,e.getMessage());
+            }
+
+        }*/
+        TextView resultView = (TextView) parent.findViewById(R.id.autocomplete);
+        if (resultView != null && !mIsTextFormatted) {
+                Log.i(LOG_TAG, "resultView: " + resultView.getText());
+                String text = resultView.getText().toString();
+                String address = text.substring(0, text.indexOf(Constants.COMMA_SEPARATOR));
+                String location = text.substring(text.indexOf(Constants.COMMA_SEPARATOR) + 1);
+                resultView.setText(address + "\n" + location);
+                mIsTextFormatted = true;
+        }
+        return super.getView(position, convertView, parent);
     }
 
     @Override

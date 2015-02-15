@@ -3,7 +3,9 @@ package waldo.bike.form;
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.Layout;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -21,12 +23,15 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.Observable;
+import java.util.Observer;
+
 import Utilities.Constants;
 import Utilities.GlobalState;
 import Utilities.Utility;
 import waldo.bike.waldo.R;
 
-public class AddShopMap extends FragmentActivity implements AdapterView.OnItemClickListener{
+public class AddShopMap extends FragmentActivity implements AdapterView.OnItemClickListener, Observer{
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private static final String LOG_TAG = AddShopMap.class.getSimpleName();
@@ -73,15 +78,12 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
         mAutoCompleteTextView.setAdapter(new PlacesAutoCompleteAdapter(this, R.layout.list_item_places));
         mAutoCompleteTextView.setOnItemClickListener(this);
         mAutoCompleteTextView.setWidth(Utility.getAutocompleteViewWidth(getApplicationContext()));
-        mResultView = (TextView) findViewById(R.id.autocomplete);
+
       //  mAutoCompleteTextView.getText().toString();
       //  mAutoCompleteTextView.setHeight(Utility.getAutocompleteViewHeight(getApplicationContext()));
         mAutoCompleteTextView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                Log.i(LOG_TAG,"Input text is: " + mAutoCompleteTextView.getText());
-                if (mResultView != null)
-                    Log.i(LOG_TAG,"Result text is: " + mResultView.getText());
                 //remove the text when the "X" button is pressed
                 final int DRAWABLE_RIGHT = 2;
                 if(event.getAction() == MotionEvent.ACTION_UP) {
@@ -93,12 +95,11 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
                 return false;
             }
         });
-
-
        // String firstLine = resultsTextView.getText().toString();
         //loading the map
         setUpMapIfNeeded();
     }
+
 
     @Override
     protected void onResume() {
@@ -209,4 +210,12 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
         mAutoCompleteTextView.setText("");
     }
 
+    @Override
+    public void update(Observable observable, Object data) {
+        mResultView = (TextView) findViewById(R.id.autocomplete);
+        Log.i(LOG_TAG,"Received notification");
+        if (mResultView != null) {
+            Log.i(LOG_TAG,"Text is: " + mResultView.getText());
+        }
+    }
 }
