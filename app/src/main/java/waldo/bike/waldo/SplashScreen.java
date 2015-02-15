@@ -11,6 +11,7 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
 
@@ -125,6 +126,8 @@ public class SplashScreen extends Activity{
                     //onReceive is also called whenever we register the receiver in onResume, so we also have to double-check that the Internet is on
                     if (isGPSEnabled && isInternetEnabled && checkPlayServices()) {
                         startMainActivity(mContext);
+                        //open the main activity after two seconds
+
                     }
                 }
             } else {
@@ -151,9 +154,21 @@ public class SplashScreen extends Activity{
 
 
     public static void startMainActivity(Context c) {
-        Intent MainActivityIntent = new Intent(c,MainActivity.class);
+        Handler handler = new Handler();
+        final Context context = c;
+        final long DELAY_TIME = 2000;
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent MainActivityIntent = new Intent(context,MainActivity.class);
+                MainActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); //without this flag, the main activity can't start
+                context.startActivity(MainActivityIntent);
+            }
+
+        }, DELAY_TIME);
+/*        Intent MainActivityIntent = new Intent(c,MainActivity.class);
         MainActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); //without this flag, the main activity can't start
-        c.startActivity(MainActivityIntent);
+        c.startActivity(MainActivityIntent);*/
     }
 
     private boolean checkPlayServices() {
