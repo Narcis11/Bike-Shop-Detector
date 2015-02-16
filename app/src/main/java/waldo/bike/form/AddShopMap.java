@@ -46,6 +46,7 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
     private static String mTestAddress;
     private static AutoCompleteTextView mAutoCompleteTextView;
     private static TextView mResultView;
+    private static int DROPDOWN_THRESHOLD = 3;
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
         Log.i(LOG_TAG, "In onItemClick");
@@ -82,7 +83,8 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
         mAutoCompleteTextView.setAdapter(new PlacesAutoCompleteAdapter(this, R.layout.list_item_places));
         mAutoCompleteTextView.setOnItemClickListener(this);
         mAutoCompleteTextView.setWidth(Utility.getAutocompleteViewWidth(getApplicationContext()));
-
+        //the sync will be made and the dropdown will be shown only if the input has 3 characters minimum
+        mAutoCompleteTextView.setThreshold(DROPDOWN_THRESHOLD);
       //  mAutoCompleteTextView.getText().toString();
       //  mAutoCompleteTextView.setHeight(Utility.getAutocompleteViewHeight(getApplicationContext()));
         mAutoCompleteTextView.setOnTouchListener(new View.OnTouchListener() {
@@ -225,7 +227,6 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
 
     @Override
     public void onBackPressed() {
-        Log.i(LOG_TAG,"In onBackPressed");
         super.onBackPressed();
         overridePendingTransition(R.xml.slide_in, R.xml.slide_out);
     }
