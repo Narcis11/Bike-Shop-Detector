@@ -2,7 +2,7 @@
 <resources>
 
     <!-- Activity labels -->
-    <string name="app_name">Waldo</string>
+    <string name="app_name">Bike Shop Detector</string>
     <string name="splash_activity">Splash</string>
     <!-- Names of action bar/overflow buttons -->
     <string name="action_settings">Settings</string>

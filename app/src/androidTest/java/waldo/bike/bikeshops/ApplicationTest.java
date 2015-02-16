@@ -1,4 +1,4 @@
-package waldo.bike.waldo;
+package waldo.bike.bikeshops;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

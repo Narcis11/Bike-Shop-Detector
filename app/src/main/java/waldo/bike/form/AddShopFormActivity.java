@@ -4,32 +4,21 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Handler;
-import android.provider.Settings;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Patterns;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.concurrent.ExecutionException;
-import java.util.regex.Pattern;
 
 import Utilities.Constants;
-import Utilities.GlobalState;
-import Utilities.Utility;
-import waldo.bike.waldo.MainActivity;
-import waldo.bike.waldo.R;
+import waldo.bike.bikeshops.MainActivity;
+import waldo.bike.bikeshops.R;
 
 public class AddShopFormActivity extends Activity {
 

@@ -1,13 +1,8 @@
 package slidermenu;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-
-import waldo.bike.waldo.R;
 
 /**
  * Created by Narcis11 on 23.12.2014.

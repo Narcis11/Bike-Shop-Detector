@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import waldo.bike.waldo.R;
+import waldo.bike.bikeshops.R;
 
 /**
  * Created by Narcis11 on 21.12.2014.

@@ -1,11 +1,8 @@
 package waldo.bike.form;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
-import android.util.Log;
 
-import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpPost;
@@ -15,11 +12,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HTTP;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import Utilities.Constants;
-import Utilities.GlobalState;
-import waldo.bike.waldo.MainActivity;
-import waldo.bike.waldo.SettingsActivity;
 
 /**
  * Created by Narcis11 on 10.01.2015.

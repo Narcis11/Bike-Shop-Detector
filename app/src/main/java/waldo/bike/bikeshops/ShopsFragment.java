@@ -1,24 +1,14 @@
-package waldo.bike.waldo;
+package waldo.bike.bikeshops;
 
 import android.app.Fragment;
 import android.app.LoaderManager;
-import android.app.LoaderManager.LoaderCallbacks;
-import android.app.SearchManager;
-import android.bluetooth.BluetoothClass;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.os.Bundle;
 
 import android.os.Handler;
-import android.os.Parcelable;
-import android.provider.Settings;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.TextUtils;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,22 +18,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.SearchView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
-import Places.FetchGooglePlaces;
 import Utilities.Constants;
 import Utilities.DeviceConnection;
 import Utilities.GlobalState;
 import Utilities.Utility;
 import data.ShopsContract;
-import data.ShopsProvider;
 import sync.SyncAdapter;
 /**
  * Created by Narcis11 on 20.12.2014.

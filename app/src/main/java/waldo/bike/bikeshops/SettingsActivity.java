@@ -1,4 +1,4 @@
-package waldo.bike.waldo;
+package waldo.bike.bikeshops;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -7,23 +7,13 @@ import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.preference.PreferenceScreen;
 import android.util.Log;
-import android.view.View;
-import android.widget.CheckBox;
 
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.prefs.PreferenceChangeListener;
-
-import Utilities.GlobalState;
 import Utilities.Utility;
 
 /**

@@ -1,6 +1,5 @@
-package waldo.bike.waldo;
+package waldo.bike.bikeshops;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
@@ -8,8 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
@@ -18,11 +15,9 @@ import android.util.Log;
 
 import Utilities.Constants;
 import Utilities.DeviceConnection;
-import com.crashlytics.android.Crashlytics;
+
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-
-import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by nmihai on 09.12.2014.
@@ -124,7 +119,7 @@ public class SplashScreen extends Activity{
                         isInternetEnabled = true;
                     }
                     //onReceive is also called whenever we register the receiver in onResume, so we also have to double-check that the Internet is on
-                    if (isGPSEnabled && isInternetEnabled && checkPlayServices()) {
+                    if (isGPSEnabled && isInternetEnabled /*&& checkPlayServices()*/) {
                         startMainActivity(mContext);
                         //open the main activity after two seconds
 

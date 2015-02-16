@@ -1,9 +1,10 @@
-package waldo.bike.waldo;
+package waldo.bike.bikeshops;
 
 import android.app.Application;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
+import com.parse.Parse;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 
@@ -34,6 +35,7 @@ public class Waldo extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Parse.initialize(this, "uD0QY3adOHScxd64i1dTOekQymn9aZVrQTbc9N5N", "VuRbrENiboj1i9tHg73xSa3FT58spKnMaSnH7O38");
         authConfig =
                 new TwitterAuthConfig(Constants.CONSUMER_KEY,
                         Constants.CONSUMER_SECRET);

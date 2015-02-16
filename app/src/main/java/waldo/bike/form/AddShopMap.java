@@ -3,10 +3,6 @@ package waldo.bike.form;
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.Layout;
-import android.text.TextWatcher;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -16,8 +12,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -31,7 +25,7 @@ import java.util.Observer;
 import Utilities.Constants;
 import Utilities.GlobalState;
 import Utilities.Utility;
-import waldo.bike.waldo.R;
+import waldo.bike.bikeshops.R;
 
 public class AddShopMap extends FragmentActivity implements AdapterView.OnItemClickListener, Observer{
 

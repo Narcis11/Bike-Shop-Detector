@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ArrayAdapter;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,7 +25,6 @@ import Utilities.Constants;
 import Utilities.GlobalState;
 import Utilities.Utility;
 import data.ShopsContract;
-import waldo.bike.waldo.R;
 
 /**
  * Created by Narcis11 on 20.12.2014.

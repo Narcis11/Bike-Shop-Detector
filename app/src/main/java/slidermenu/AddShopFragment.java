@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import waldo.bike.waldo.R;
+import waldo.bike.bikeshops.R;
 
 /**
  * Created by Narcis11 on 23.12.2014.

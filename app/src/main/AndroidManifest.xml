@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="waldo.bike.waldo"
+    package="waldo.bike.bikeshops"
     >
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -10,14 +10,21 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <!-- Permissions required by the sync adapter -->
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_SYNC_STATS" />
 
+    <permission android:protectionLevel="signature"
+        android:name="waldo.bike.bikeshops.com.parse.starter.permission.C2D_MESSAGE" />
+    <uses-permission android:name="waldo.bike.bikeshops.com.parse.starter.permission.C2D_MESSAGE" />
     <application
-        android:name=".Waldo"
+        android:name="waldo.bike.bikeshops.Waldo"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
@@ -27,7 +34,7 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".SplashScreen"
+            android:name="waldo.bike.bikeshops.SplashScreen"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
             <intent-filter>
@@ -37,7 +44,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name="waldo.bike.bikeshops.MainActivity"
             android:configChanges="orientation"
             android:label="@string/app_name"
             android:theme="@style/MainActivityTheme" >
@@ -53,12 +60,12 @@
              >
         </activity>
         <activity
-            android:name=".SettingsActivity"
+            android:name="waldo.bike.bikeshops.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName="waldo.bike.bikeshops.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="waldo.bike.waldo.MainActivity" />
+                android:value="waldo.bike.bikeshops.MainActivity" />
         </activity>
 
         <meta-data
@@ -69,7 +76,7 @@
             android:value="@string/facebook_appId" />
 
         <activity
-            android:name=".MapsActivity"
+            android:name="waldo.bike.bikeshops.MapsActivity"
             android:label="@string/title_activity_maps" >
         </activity>
 
@@ -106,10 +113,10 @@
         <activity
             android:name="waldo.bike.form.AddShopMap"
             android:label="@string/title_activity_add_shop_map"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName="waldo.bike.bikeshops.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value="waldo.bike.bikeshops.MainActivity" />
         </activity>
 
         <meta-data
@@ -117,28 +124,52 @@
             android:value="3599dce40899e3fa9ad2896a46b28d2d17edd499" />
 
         <activity
-            android:name=".ShopDetailActivity"
-            android:parentActivityName=".MainActivity" >
+            android:name="waldo.bike.bikeshops.ShopDetailActivity"
+            android:parentActivityName="waldo.bike.bikeshops.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="waldo.bike.waldo.MainActivity" />
+                android:value="waldo.bike.bikeshops.MainActivity" />
         </activity>
         <activity
-            android:name=".ShopStreetViewActivity"
+            android:name="waldo.bike.bikeshops.ShopStreetViewActivity"
             android:label="@string/title_activity_shop_street_view"
-            android:parentActivityName=".ShopDetailActivity" >
+            android:parentActivityName="waldo.bike.bikeshops.ShopDetailActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="waldo.bike.waldo.ShopDetailActivity" />
+                android:value="waldo.bike.bikeshops.ShopDetailActivity" />
         </activity>
         <activity
-            android:name=".WebActivity"
+            android:name="waldo.bike.bikeshops.WebActivity"
             android:label="@string/title_activity_web"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName="waldo.bike.bikeshops.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="waldo.bike.waldo.MainActivity" />
+                android:value="waldo.bike.bikeshops.MainActivity" />
         </activity>
+
+        <service android:name="com.parse.PushService" />
+        <receiver android:name="com.parse.ParseBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.USER_PRESENT" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="com.parse.ParsePushBroadcastReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.parse.push.intent.RECEIVE" />
+                <action android:name="com.parse.push.intent.DELETE" />
+                <action android:name="com.parse.push.intent.OPEN" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="com.parse.GcmBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+                <category android:name="waldo.bike.bikeshops" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

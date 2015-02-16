@@ -8,7 +8,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="waldo.bike.waldo.ShopDetailActivity"
+    tools:context="waldo.bike.bikeshops.ShopDetailActivity"
     android:background="@color/list_background">
     <fragment
         android:name="com.google.android.gms.maps.StreetViewPanoramaFragment"

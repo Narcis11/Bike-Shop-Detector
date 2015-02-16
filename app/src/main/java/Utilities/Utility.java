@@ -1,6 +1,5 @@
 package Utilities;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -8,18 +7,13 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
-import android.util.Log;
-import android.widget.ListView;
 import android.widget.Toast;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
 
-import waldo.bike.waldo.R;
+import waldo.bike.bikeshops.R;
 
 /**
  * Created by nmihai on 15.12.2014.

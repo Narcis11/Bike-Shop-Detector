@@ -2,7 +2,6 @@ package sync;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.app.Activity;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
@@ -14,11 +13,7 @@ import android.database.DatabaseUtils;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
-import android.widget.ArrayAdapter;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,17 +26,14 @@ import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.Vector;
 
 import Utilities.Constants;
 import Utilities.GlobalState;
 import Utilities.Utility;
 import data.ShopsContract;
-import waldo.bike.waldo.R;
+import waldo.bike.bikeshops.R;
 
 /**
  * Created by Narcis11 on 25.12.2014.
