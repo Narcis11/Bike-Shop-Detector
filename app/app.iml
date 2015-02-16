@@ -109,7 +109,7 @@
     <orderEntry type="library" exported="" name="1_twitter4j-core-4.0.2" level="project" />
     <orderEntry type="library" exported="" name="2_twitter4j-core-4.0.2" level="project" />
     <orderEntry type="library" exported="" name="digits-1.0.0" level="project" />
-    <orderEntry type="library" exported="" name="bolts-android-1.1.2" level="project" />
+    <orderEntry type="library" exported="" name="bolts-android-1.1.4" level="project" />
     <orderEntry type="library" exported="" name="AndroidDesignPreview-0.3.2" level="project" />
     <orderEntry type="library" exported="" name="tweet-ui-1.0.0" level="project" />
   </component>
