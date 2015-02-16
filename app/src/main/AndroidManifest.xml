@@ -24,7 +24,7 @@
         android:name="waldo.bike.bikeshops.com.parse.starter.permission.C2D_MESSAGE" />
     <uses-permission android:name="waldo.bike.bikeshops.com.parse.starter.permission.C2D_MESSAGE" />
     <application
-        android:name="waldo.bike.bikeshops.Waldo"
+        android:name=".BikeShopsDetector"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"

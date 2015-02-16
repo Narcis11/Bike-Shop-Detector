@@ -17,7 +17,7 @@ import io.fabric.sdk.android.Fabric;
  * Created by Narcis11 on 26.01.2015.
  * We used this class to Instantiate the Fabric for using Twitter.
  */
-public class Waldo extends Application {
+public class BikeShopsDetector extends Application {
     private TwitterAuthConfig authConfig;
     /**
      * Enum used to identify the tracker that needs to be used for tracking.

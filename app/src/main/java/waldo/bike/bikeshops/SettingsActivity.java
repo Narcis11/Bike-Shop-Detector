@@ -56,8 +56,8 @@ public class SettingsActivity extends PreferenceActivity implements
         // Add 'general' preferences, defined in the XML file
         mContext = getApplicationContext();
         mFirstLoad = true;
-        mGaTracker = ((Waldo)  getApplication()).getTracker(
-                Waldo.TrackerName.APP_TRACKER);
+        mGaTracker = ((BikeShopsDetector)  getApplication()).getTracker(
+                BikeShopsDetector.TrackerName.APP_TRACKER);
         loadPreferenceScreen(mFirstLoad);
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_range_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_speed_key)));

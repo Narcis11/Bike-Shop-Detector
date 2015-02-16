@@ -268,8 +268,8 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mGaTracker = ((Waldo)  getActivity().getApplication()).getTracker(
-                Waldo.TrackerName.APP_TRACKER);
+        mGaTracker = ((BikeShopsDetector)  getActivity().getApplication()).getTracker(
+                BikeShopsDetector.TrackerName.APP_TRACKER);
         setHasOptionsMenu(true); //tells the system that we have button(s) in the menu
 
     }

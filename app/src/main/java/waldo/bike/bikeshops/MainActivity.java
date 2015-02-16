@@ -293,8 +293,8 @@ public class MainActivity extends Activity implements
     protected void onResume() {
         super.onResume();
         //initialise the GA tracker
-        mGaTracker = ((Waldo) getApplication()).getTracker(
-                Waldo.TrackerName.APP_TRACKER);
+        mGaTracker = ((BikeShopsDetector) getApplication()).getTracker(
+                BikeShopsDetector.TrackerName.APP_TRACKER);
 
         if (!(mLikeView.getPaddingLeft() == 16 || mLikeView.getPaddingLeft() == 0)) {
             mLikeView.setPadding(16, 0, 211, 0);
