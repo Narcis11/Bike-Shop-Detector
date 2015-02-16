@@ -3,6 +3,9 @@ package waldo.bike.form;
 import android.content.Context;
 import android.graphics.Color;
 import android.text.Html;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.AbsoluteSizeSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,63 +59,23 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        //Log.i(LOG_TAG,"convertView: " + convertView.toString());
-        // Log.i(LOG_TAG,"Parent: " + parent.toString());
-/*        for (int i = 0; i < 3; i++) {
-            try {
-                if (parent.getChildAt(i) != null)
-                Log.i(LOG_TAG, "Child at " + i + "=" + parent.getChildAt(i).toString());
-            }
-            catch (NullPointerException e) {
-                Log.i(LOG_TAG,e.getMessage());
-            }
 
-        }*/
         //count view is called length_of_input X no of result times.
   //      if (countGetView <= 5) {
             TextView textView = new TextView(mContext);
-            textView.setPadding(0, Utility.convertDpToPixels(mContext,2),0,Utility.convertDpToPixels(mContext,2));
+            textView.setPadding(Utility.convertDpToPixels(mContext,3), Utility.convertDpToPixels(mContext,2),Utility.convertDpToPixels(mContext,3),Utility.convertDpToPixels(mContext,2));
             textView.setLines(RESULT_LINES);
             textView.setBackgroundColor(mContext.getResources().getColor(R.color.list_background));
             mResultText = resultList.get(position);
             mAddress = mResultText.substring(0, mResultText.indexOf(Constants.COMMA_SEPARATOR));
             mLocale = mResultText.substring(mResultText.indexOf(Constants.COMMA_SEPARATOR) + 1);
-            textView.setText(mAddress + System.getProperty(SEPARATOR_PROPERTY) + mLocale);
-            //textView.setText(Html.fromHtml(mAddress + "<br>" + mLocale));
             //textView.setText(mAddress + System.getProperty(SEPARATOR_PROPERTY) + mLocale);
+            //textView.setText(Html.fromHtml(mAddress + "<br>" + mLocale));
+            textView.setText(mAddress + System.getProperty(SEPARATOR_PROPERTY) + mLocale);
             countGetView++;
             return textView;
- //   }
-
-    //    else {
-        //    return super.getView(position, convertView, parent);
-      //  }
-/*        Log.i(LOG_TAG,"Position is: " + position);
-        TextView resultView = (TextView) parent.findViewById(R.id.autocomplete);
-        if (resultView != null && !mIsTextFormatted) {
-                Log.i(LOG_TAG, "resultView: " + resultView.getText());
-                String text = resultView.getText().toString();
-                String address = text.substring(0, text.indexOf(Constants.COMMA_SEPARATOR));
-                String location = text.substring(text.indexOf(Constants.COMMA_SEPARATOR) + 1);
-                resultView.setText(address + "\n" + location);
-                mIsTextFormatted = true;
-        }
-        if (resultView != null) {
-            return resultView;
-        }
-        else {
-            return super.getView(position, convertView, parent);
-        }*/
     }
 
-/*    @Override
-    public View getDropDownView(int position, View convertView, ViewGroup parent) {
-        TextView resultView = (TextView) parent.findViewById(R.id.autocomplete);
-        Log.i(LOG_TAG,"Parent text: " + parent.toString());
-        if (resultView != null)
-        Log.i(LOG_TAG,"Child view: " + resultView.getText() + "/" + position);
-        return super.getDropDownView(position, convertView, parent);
-    }*/
 
     @Override
     public Filter getFilter() {
