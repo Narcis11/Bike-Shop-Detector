@@ -13,7 +13,7 @@ public class ShopsContract {
     //this variables are used for the Content Provider
 
     //the name of the content provider (named as the package of the app)
-    public static final String CONTENT_AUTHORITY = "waldo.bike.waldo";
+    public static final String CONTENT_AUTHORITY = "waldo.bike.bikeshops";
     // Use CONTENT_AUTHORITY to create the base of all URIs which apps will use to contact
     // the content provider. All URIs must begin with "content://"
     //content://waldo.bike.waldo
@@ -41,12 +41,12 @@ public class ShopsContract {
         public static final String COLUMN_SHOP_PROMO_TEXT = "promo_text";
 
         //some coding for the Content Provider
-        //content://waldo.bike.waldo/shops
+        //content://waldo.bike.bikeshops/shops
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_SHOPS).build();
         //these two indicate if the URI returns a list of items (directory) or an item
-        //vnd.android.cursor.dir/waldo.bike.waldo/shops
+        //vnd.android.cursor.dir/waldo.bike.bikeshops/shops
         public static final String CONTENT_TYPE = "vnd.android.cursor.dir/" + CONTENT_AUTHORITY + "/" + PATH_SHOPS;
-        //vnd.android.cursor.item/waldo.bike.waldo/shops
+        //vnd.android.cursor.item/waldo.bike.bikeshops/shops
         public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/" + CONTENT_AUTHORITY + "/" + PATH_SHOPS;
         //used in the query method from Shops Provider
         public static final String SORT_ORDER = COLUMN_DISTANCE_TO_USER + " ASC";

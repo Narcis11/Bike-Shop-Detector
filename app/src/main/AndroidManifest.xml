@@ -13,7 +13,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="com.google.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <!-- Permissions required by the sync adapter -->
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
@@ -21,6 +21,7 @@
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_SYNC_STATS" />
     <!--Used for push notifications-->
+    <!--If you ever change the package name, change it here as well-->
     <permission android:protectionLevel="signature"
         android:name="waldo.bike.bikeshops.permission.C2D_MESSAGE" />
     <uses-permission android:name="waldo.bike.bikeshops.permission.C2D_MESSAGE" />
@@ -169,6 +170,7 @@
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+                <!--If you ever change the package name, change it here as well-->
                 <category android:name="waldo.bike.bikeshops" />
             </intent-filter>
         </receiver>

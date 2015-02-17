@@ -112,7 +112,7 @@
 
     <!-- SyncAdapter related -->
     <string name="sync_account_type">waldo.bike.shopsapp</string>
-    <string name="content_authority">waldo.bike.waldo</string>
+    <string name="content_authority">waldo.bike.bikeshops</string>
 
     <!-- Used in the AddShopMap activity -->
     <string name="search_location">Search here</string>

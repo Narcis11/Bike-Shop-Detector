@@ -6,7 +6,7 @@
 
     To get one, follow this link, follow the directions and press "Create" at the end:
 
-https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&r=C0:06:27:69:D1:6D:DA:2F:A5:2D:82:39:0D:BC:D9:09:7E:45:ED:C2%3Bwaldo.bike.waldo
+https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&r=C0:06:27:69:D1:6D:DA:2F:A5:2D:82:39:0D:BC:D9:09:7E:45:ED:C2%3Bwaldo.bike.bikeshops
 
     You can also add your credentials to an existing key, using this line:
     C0:06:27:69:D1:6D:DA:2F:A5:2D:82:39:0D:BC:D9:09:7E:45:ED:C2;waldo.bike.waldo

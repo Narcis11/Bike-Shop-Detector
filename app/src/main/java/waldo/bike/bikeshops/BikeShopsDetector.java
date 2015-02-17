@@ -8,6 +8,7 @@ import com.google.android.gms.analytics.Tracker;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParsePush;
+import com.parse.PushService;
 import com.parse.SaveCallback;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
@@ -34,8 +35,8 @@ public class BikeShopsDetector extends Application {
         APP_TRACKER, // Tracker used only in this app.
     }
     private static final String PROPERTY_ID = "UA-55296895-2";
-    private static final String PARSE_APP_ID = "uD0QY3adOHScxd64i1dTOekQymn9aZVrQTbc9N5N";
-    private static final String PARSE_CLIENT_KEY = "VuRbrENiboj1i9tHg73xSa3FT58spKnMaSnH7O38";
+    private static final String PARSE_APP_ID = "RVmM8akk2DxY5T4EZwPOEKRWlAMXT6E9TbNTRbDW";
+    private static final String PARSE_CLIENT_KEY = "N17hBgzIkAnYHSifVofBp4GFdee384SUl4XRFGHb";
     private static final String LOG_TAG = BikeShopsDetector.class.getSimpleName();
     HashMap<TrackerName, Tracker> mTrackers = new HashMap<TrackerName, Tracker>();
 
@@ -52,7 +53,6 @@ public class BikeShopsDetector extends Application {
         catch (Exception e) {
 
         }
-
         ParsePush.subscribeInBackground("", new SaveCallback() {
             @Override
             public void done(ParseException e) {
