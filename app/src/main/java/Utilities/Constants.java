@@ -66,5 +66,6 @@ public class Constants {
     //Used in the Twitter Async Task
     public static final String TWITTER_FOLLOW = "follow";
     public static final String TWITTER_UNFOLLOW = "unfollow";
-
+    //the channel used for this app
+    public static final String PARSE_PUSH_CHANNEL = "";
 }

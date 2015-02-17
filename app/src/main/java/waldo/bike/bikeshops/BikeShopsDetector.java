@@ -7,6 +7,7 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseInstallation;
 import com.parse.ParsePush;
 import com.parse.PushService;
 import com.parse.SaveCallback;
@@ -16,6 +17,7 @@ import com.twitter.sdk.android.core.TwitterAuthConfig;
 import java.util.HashMap;
 
 import Utilities.Constants;
+import Utilities.Utility;
 import io.fabric.sdk.android.Fabric;
 
 /**
@@ -53,16 +55,24 @@ public class BikeShopsDetector extends Application {
         catch (Exception e) {
 
         }
-        ParsePush.subscribeInBackground("", new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e == null) {
-                    Log.d(LOG_TAG, "successfully subscribed to the broadcast channel.");
-                } else {
-                    Log.e(LOG_TAG, "failed to subscribe for push", e);
+        if (Utility.getPreferredNotification(getApplicationContext())) {
+            ParsePush.subscribeInBackground(Constants.PARSE_PUSH_CHANNEL, new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e == null) {
+                        Log.i(LOG_TAG, "successfully subscribed to the bikeshops channel.");
+                    } else {
+                        Log.e(LOG_TAG, "failed to subscribe for push", e);
+                    }
                 }
-            }
-        });
+            });
+        }
+        else {
+            ParsePush.unsubscribeInBackground(Constants.PARSE_PUSH_CHANNEL);
+            Log.i(LOG_TAG,"Notifications are disabled");
+        }
+
+
     }
     synchronized Tracker getTracker(TrackerName trackerId) {
         if (!mTrackers.containsKey(trackerId)) {

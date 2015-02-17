@@ -13,7 +13,11 @@ import android.util.Log;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.parse.ParseException;
+import com.parse.ParsePush;
+import com.parse.SaveCallback;
 
+import Utilities.Constants;
 import Utilities.Utility;
 
 /**
@@ -217,6 +221,23 @@ public class SettingsActivity extends PreferenceActivity implements
               @Override
               public boolean onPreferenceClick(Preference preference) {
                   mIsChecked = (mNotifCheckBox.isChecked()) ? true : false;
+                  //subscribe or unsubscribe the user from the channel
+                  if (mIsChecked) {
+                      ParsePush.subscribeInBackground(Constants.PARSE_PUSH_CHANNEL, new SaveCallback() {
+                          @Override
+                          public void done(ParseException e) {
+                              if (e == null) {
+                                  Log.d(LOG_TAG, "successfully activated push notif in Settings.");
+                              } else {
+                                  Log.e(LOG_TAG, "failed to subscribe for push in Settings", e);
+                              }
+                          }
+                      });
+                  }
+                  else {
+                      Log.i(LOG_TAG,"Unsubscribed");
+                      ParsePush.unsubscribeInBackground(Constants.PARSE_PUSH_CHANNEL);
+                  }
                   return true;
               }
           });
@@ -225,7 +246,7 @@ public class SettingsActivity extends PreferenceActivity implements
             @Override
             protected void onStop() {
                 super.onStop();
-                //we check if the status of the check box has changed since the user opened the Settings Activitys
+                //we check if the status of the check box has changed since the user opened the Settings Activity
                 if (mIsChecked != mFirstCheck) {
                     Log.i(LOG_TAG,"Changed check type");
                     mCheckBoxStatus = (mIsChecked) ? "checked" : "unchecked";
