@@ -235,9 +235,9 @@ public class ShopDetailActivity extends FragmentActivity
         try {
             // Build and send a tracked event to GA.
             mGaTracker.send(new HitBuilders.EventBuilder()
-                    .setCategory(getString(R.string.ga_slider_menu_category_id))
-                    .setAction(getString(R.string.ga_about_us_action_id))
-                    .setLabel(getString(R.string.ga_about_us_label_id))
+                    .setCategory(getString(R.string.ga_shopwebsite_category_id))
+                    .setAction(getString(R.string.ga_shopwebsite_action_id))
+                    .setLabel(mShopWebsite)
                     .build());
             intent.putExtras(mBundle);
             startActivity(intent);

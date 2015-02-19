@@ -177,4 +177,7 @@
     <string name="ga_checkbox_action_id">checkbox_act_id</string>
     <string name="title_activity_web">Our website</string>
 
+    <!--Used in the ShopDetail Activity-->
+    <string name="ga_shopwebsite_category_id">shopwebsite_cat_id</string>
+    <string name="ga_shopwebsite_action_id">shopwebsite_act_id</string>
 </resources>
