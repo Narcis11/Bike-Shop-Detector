@@ -117,9 +117,10 @@
     <!-- Used in the AddShopMap activity -->
     <string name="search_location">Search here</string>
     <string name="invalid_address">Invalid address. Please look up a street name.</string>
-    <!-- Button names in AddShopMap activity -->
+    <!-- Button names in AddShopMap/ShopDetail activities -->
     <string name="delete_shop_button">Delete</string>
     <string name="next_shop_button">Next--></string>
+    <string name="shop_detail_map">Open map</string>
 
     <!-- Used in the AddShopFormActivity -->
     <string name="form_title">This submission will be moderated by Google. Complete all fields to increase the chance of acceptance.</string>
