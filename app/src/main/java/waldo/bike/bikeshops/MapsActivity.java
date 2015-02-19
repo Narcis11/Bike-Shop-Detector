@@ -77,7 +77,7 @@ public class MapsActivity extends FragmentActivity{
             }
         }
     }
-
+    //determine the parent of the activity dinamically
     @Nullable
     @Override
     public Intent getParentActivityIntent() {

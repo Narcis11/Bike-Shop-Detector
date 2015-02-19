@@ -144,10 +144,7 @@
         <activity
             android:name="waldo.bike.bikeshops.WebActivity"
             android:label="@string/title_activity_web"
-            android:parentActivityName="waldo.bike.bikeshops.MainActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="waldo.bike.bikeshops.MainActivity" />
+            >
         </activity>
         <!--Used for push notifications-->
         <service android:name="com.parse.PushService" />

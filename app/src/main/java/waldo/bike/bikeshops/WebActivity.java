@@ -1,9 +1,12 @@
 package waldo.bike.bikeshops;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -13,16 +16,22 @@ import Utilities.Constants;
 * This class is used to open our website or a shop's website.*/
 public class WebActivity extends Activity {
     private WebView mWebView;
-    Bundle mWebsiteBundle;
+    Bundle mBundle;
     private static String mUrl = "";
-    private static final String mDefaultWebsite = "http://www.waldo.bike/";
+    private static String mTitle = "";
+    private static final String mDefaultUrl = "http://www.waldo.bike/";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_PROGRESS);
         setContentView(R.layout.activity_web);
         overridePendingTransition(R.xml.slide_in, R.xml.slide_out);
-        mWebsiteBundle = getIntent().getExtras();
-        mUrl = mWebsiteBundle.getString(Constants.BUNDLE_WEBSITE,mDefaultWebsite);//we load our website in case the bundle is null
+        //enable the back button in the action bar
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        mBundle = getIntent().getExtras();
+        mUrl = mBundle.getString(Constants.BUNDLE_WEBSITE);//can't be null, because we always send a website
+        mTitle = mBundle.getString(Constants.BUNDLE_WEBVIEW_TITLE);////can't be null, because we always send a title
+        getActionBar().setTitle(mTitle);
         mWebView = (WebView) findViewById(R.id.website_view);
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.getSettings().setUseWideViewPort(true);
@@ -51,7 +60,18 @@ public class WebActivity extends Activity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
+        switch(id) {
+            case R.id.home:
+                if (mUrl.equals(mDefaultUrl)) {
+                    Intent mainActivityIntent = new Intent(this,MainActivity.class);
+                    startActivity(mainActivityIntent);
+                }
+                else {
+                    Intent shopDetailsIntent = new Intent(this,ShopDetailActivity.class);
+                    shopDetailsIntent.putExtras(mBundle);
+                    startActivity(shopDetailsIntent);
+                }
+        }
         //noinspection SimplifiableIfStatement
 
         return super.onOptionsItemSelected(item);
@@ -61,5 +81,19 @@ public class WebActivity extends Activity {
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(R.xml.slide_in, R.xml.slide_out);
+    }
+
+    @Nullable
+    @Override
+    public Intent getParentActivityIntent() {
+        if (mUrl.equals(mDefaultUrl)) {
+            Intent mainActivityIntent = new Intent(this,MainActivity.class);
+            return mainActivityIntent;
+        }
+        else {
+            Intent shopDetailsIntent = new Intent(this,ShopDetailActivity.class);
+            shopDetailsIntent.putExtras(mBundle);
+            return shopDetailsIntent;
+        }
     }
 }

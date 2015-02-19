@@ -97,7 +97,6 @@ public class MainActivity extends Activity implements
     private String mTwitterSecret = "";
     private LikeView mLikeView;
     private ImageView mFollowView;
-    private WebView mWaldoWebsite;
     private TwitterAuthClient mTwitterAuthClient;
     private TwitterAuthConfig mTwitterAuthConfig;
     private TwitterLoginButton mTwitterLoginButton;
@@ -517,8 +516,10 @@ public class MainActivity extends Activity implements
     private void openWebsite() {
         Intent intent = new Intent(getApplicationContext(), WebActivity.class);
         Bundle webBundle = new Bundle();
-        final String url = "http://www.waldo.bike";
-        webBundle.putString(Constants.BUNDLE_WEBSITE,url);
+        final String URL = "http://www.waldo.bike";
+        final String ACTIVITY_TITLE = "Our website";
+        webBundle.putString(Constants.BUNDLE_WEBSITE,URL);//URL to open
+        webBundle.putString(Constants.BUNDLE_WEBVIEW_TITLE,ACTIVITY_TITLE);//the title of the web activity
         try {
             // Build and send a tracked event to GA.
             mGaTracker.send(new HitBuilders.EventBuilder()
@@ -593,11 +594,6 @@ public class MainActivity extends Activity implements
          if ((keyCode == KeyEvent.KEYCODE_BACK) && mDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
              mDrawerLayout.closeDrawer(Gravity.LEFT);
          }
-
-        if ((keyCode == KeyEvent.KEYCODE_BACK) && mWaldoWebsite != null && mWaldoWebsite.canGoBack()) {
-            mWaldoWebsite.goBack();
-            return true;
-        }
          return super.onKeyDown(keyCode, event);
     }
 

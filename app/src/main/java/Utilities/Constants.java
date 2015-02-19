@@ -29,6 +29,7 @@ public class Constants {
     public static final String BUNDLE_IS_PARTNER = "bundle_is_partner";
     public static final String BUNDLE_PROMO_TEXT = "bundle_promo_text";
     public static final String BUNDLE_WEBSITE = "bundle_website";
+    public static final String BUNDLE_WEBVIEW_TITLE = "bundle_webview_title";
     public static final String BUNDLE_USER_LAT = "bundle_user_lat_key";
     public static final String BUNDLE_USER_LNG = "bundle_user_lng_key";
     public static final String BUNDLE_FRAGMENT = "fragment_key";

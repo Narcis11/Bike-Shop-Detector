@@ -90,6 +90,7 @@
         android:drawableLeft="@drawable/website_shop"
         android:drawablePadding="5dp"
         android:textColor="@color/shop_detail"
+        android:clickable="true"
         android:onClick="openShopWebsite"
         />
     <!--Promo text & Open map button-->
