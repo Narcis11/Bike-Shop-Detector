@@ -59,6 +59,7 @@
         android:drawableLeft="@drawable/phone_shop"
         android:drawablePadding="5dp"
         android:textColor="@color/shop_detail"
+        android:onClick="callShop"
         />
 
     <!--Shop opening hours-->

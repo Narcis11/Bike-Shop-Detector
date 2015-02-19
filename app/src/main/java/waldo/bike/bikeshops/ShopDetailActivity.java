@@ -1,7 +1,9 @@
 package waldo.bike.bikeshops;
 
+import android.app.Notification;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -47,7 +49,7 @@ public class ShopDetailActivity extends FragmentActivity
     public static final int COL_SHOP_PHONE_NUMBER = 3;
     public static final int COL_SHOP_OPENING_HOURS = 4;
     public static final int COL_SHOP_RATING = 5;
-
+    public static String mShopPhoneNumber = "";
     private static final String querySelection = ShopsContract.ShopsEntry.COLUMN_PLACE_ID + "=?";
     private static final String[] querySelectionArgs = new String[1];
     @Override
@@ -93,7 +95,8 @@ public class ShopDetailActivity extends FragmentActivity
         if (shopDetailCursor.moveToFirst()) {
             shopNameTextView.setText(shopDetailCursor.getString(COL_SHOP_NAME));
             shopAddressTextView.setText(shopDetailCursor.getString(COL_SHOP_ADDRESS));
-            shopPhoneNumberTextView.setText(shopDetailCursor.getString(COL_SHOP_PHONE_NUMBER));
+            mShopPhoneNumber = shopDetailCursor.getString(COL_SHOP_PHONE_NUMBER);
+            shopPhoneNumberTextView.setText(mShopPhoneNumber);
             if (shopDetailCursor.getString(COL_SHOP_OPENING_HOURS) != null)
             shopOpeningHoursTextView.setText(Utility.getTodayFromOpeningHours(shopDetailCursor.getString(COL_SHOP_OPENING_HOURS)));
             shopWebsiteTextView.setText(shopDetailCursor.getString(COL_SHOP_WEBSITE));
@@ -188,5 +191,12 @@ public class ShopDetailActivity extends FragmentActivity
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(R.xml.slide_in, R.xml.slide_out);
+    }
+
+    public void callShop (View v) {
+        String intentUri = "tel:" + mShopPhoneNumber;
+        Intent callIntent = new Intent(Intent.ACTION_CALL);
+        callIntent.setData(Uri.parse(intentUri));
+        startActivity(callIntent);
     }
 }
