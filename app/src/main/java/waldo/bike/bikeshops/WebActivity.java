@@ -7,15 +7,22 @@ import android.view.MenuItem;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import Utilities.Constants;
 
+/*Created by Narcis.
+* This class is used to open our website or a shop's website.*/
 public class WebActivity extends Activity {
-    private static final String WEBSITE = "http://www.waldo.bike";
     private WebView mWebView;
+    Bundle mWebsiteBundle;
+    private static String mUrl = "";
+    private static final String mDefaultWebsite = "http://www.waldo.bike/";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web);
         overridePendingTransition(R.xml.slide_in, R.xml.slide_out);
+        mWebsiteBundle = getIntent().getExtras();
+        mUrl = mWebsiteBundle.getString(Constants.BUNDLE_WEBSITE,mDefaultWebsite);//we load our website in case the bundle is null
         mWebView = (WebView) findViewById(R.id.website_view);
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.getSettings().setUseWideViewPort(true);
@@ -27,7 +34,7 @@ public class WebActivity extends Activity {
                 //return super.shouldOverrideUrlLoading(view, url);
             }
         });
-        mWebView.loadUrl(WEBSITE);
+        mWebView.loadUrl(mUrl);
     }
 
 

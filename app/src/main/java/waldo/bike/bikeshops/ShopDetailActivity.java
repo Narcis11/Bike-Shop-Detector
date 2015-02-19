@@ -1,6 +1,8 @@
 package waldo.bike.bikeshops;
 
 import android.app.Notification;
+import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -8,11 +10,15 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.maps.OnStreetViewPanoramaReadyCallback;
 import com.google.android.gms.maps.StreetViewPanorama;
 import com.google.android.gms.maps.StreetViewPanoramaFragment;
@@ -35,6 +41,9 @@ public class ShopDetailActivity extends FragmentActivity
     private String mPlaceid;
     private String mPromoText;
     private static final int ACTIVITY_INDEX = 1;
+    private static Context mContext;
+    //the Google Analytics tracker
+    Tracker mGaTracker;
     private static final String[] QUERY_COLUMS = {
             ShopsContract.ShopsEntry.COLUMN_SHOP_NAME,
             ShopsContract.ShopsEntry.COLUMN_SHOP_ADDRESS,
@@ -50,6 +59,7 @@ public class ShopDetailActivity extends FragmentActivity
     public static final int COL_SHOP_OPENING_HOURS = 4;
     public static final int COL_SHOP_RATING = 5;
     public static String mShopPhoneNumber = "";
+    public static String mShopWebsite = "";
     private static final String querySelection = ShopsContract.ShopsEntry.COLUMN_PLACE_ID + "=?";
     private static final String[] querySelectionArgs = new String[1];
     @Override
@@ -57,6 +67,7 @@ public class ShopDetailActivity extends FragmentActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shop_detail);
         overridePendingTransition(R.xml.slide_in, R.xml.slide_out);
+        mContext = mContext;
         mBundle = getIntent().getExtras();
         mShopLat = Double.valueOf(mBundle.getString(Constants.BUNDLE_SHOP_LAT));
         mShopLng = Double.valueOf(mBundle.getString(Constants.BUNDLE_SHOP_LNG));
@@ -74,17 +85,19 @@ public class ShopDetailActivity extends FragmentActivity
     @Override
     protected void onResume() {
         super.onResume();
+        mGaTracker = ((BikeShopsDetector) getApplication()).getTracker(
+                BikeShopsDetector.TrackerName.APP_TRACKER);
         DisplayMetrics displaymetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
         float heightPx = displaymetrics.heightPixels;
-        //Log.i(LOG_TAG,"Screen height is: " + String.valueOf(displaymetrics.heightPixels) + "| dp = " +  Utility.convertPixelsToDp(getApplicationContext(),heightPx));
+        //Log.i(LOG_TAG,"Screen height is: " + String.valueOf(displaymetrics.heightPixels) + "| dp = " +  Utility.convertPixelsToDp(mContext,heightPx));
         TextView shopNameTextView = (TextView) findViewById(R.id.detail_shopname);
         TextView shopAddressTextView = (TextView) findViewById(R.id.detail_shopaddress);
         TextView shopPhoneNumberTextView = (TextView) findViewById(R.id.detail_shopphonenumber);
         TextView shopOpeningHoursTextView = (TextView) findViewById(R.id.detail_shopopeninghours);
         TextView shopWebsiteTextView = (TextView) findViewById(R.id.detail_shopwebsite);
         TextView shopPromoText = (TextView) findViewById(R.id.detail_promo_text);
-        Cursor shopDetailCursor = getApplicationContext().getContentResolver().query(
+        Cursor shopDetailCursor = mContext.getContentResolver().query(
                 ShopsContract.ShopsEntry.CONTENT_URI,
                 QUERY_COLUMS,
                 querySelection,
@@ -95,11 +108,17 @@ public class ShopDetailActivity extends FragmentActivity
         if (shopDetailCursor.moveToFirst()) {
             shopNameTextView.setText(shopDetailCursor.getString(COL_SHOP_NAME));
             shopAddressTextView.setText(shopDetailCursor.getString(COL_SHOP_ADDRESS));
-            mShopPhoneNumber = shopDetailCursor.getString(COL_SHOP_PHONE_NUMBER);
+            //setting up the phone number
+            mShopPhoneNumber = (shopDetailCursor.getString(COL_SHOP_PHONE_NUMBER) != null) ? shopDetailCursor.getString(COL_SHOP_PHONE_NUMBER) : "";
             shopPhoneNumberTextView.setText(mShopPhoneNumber);
+            //setting up the opening hours
             if (shopDetailCursor.getString(COL_SHOP_OPENING_HOURS) != null)
             shopOpeningHoursTextView.setText(Utility.getTodayFromOpeningHours(shopDetailCursor.getString(COL_SHOP_OPENING_HOURS)));
-            shopWebsiteTextView.setText(shopDetailCursor.getString(COL_SHOP_WEBSITE));
+            //setting up the website
+            mShopWebsite = (shopDetailCursor.getString(COL_SHOP_WEBSITE) != null) ? shopDetailCursor.getString(COL_SHOP_WEBSITE) : "";
+            if (!mShopWebsite.equals(""))
+            shopWebsiteTextView.setText(mShopWebsite);
+            
             Log.i(LOG_TAG,"Promo text is: " + mPromoText);
             if (!mPromoText.equals(""))
                 shopPromoText.setText(Utility.getPromoText(mPromoText,ACTIVITY_INDEX));
@@ -139,7 +158,7 @@ public class ShopDetailActivity extends FragmentActivity
         streetViewPanorama.setOnStreetViewPanoramaClickListener(new StreetViewPanorama.OnStreetViewPanoramaClickListener() {
             @Override
             public void onStreetViewPanoramaClick(StreetViewPanoramaOrientation streetViewPanoramaOrientation) {
-                Intent shopStreetViewIntent = new Intent(getApplicationContext(),ShopStreetViewActivity.class);
+                Intent shopStreetViewIntent = new Intent(mContext,ShopStreetViewActivity.class);
                 shopStreetViewIntent.putExtras(mBundle);
                 startActivity(shopStreetViewIntent);
             }
@@ -151,7 +170,7 @@ public class ShopDetailActivity extends FragmentActivity
         TextView shopOpeningHoursTextView = (TextView) findViewById(R.id.detail_shopopeninghours);
         TextView shopWebsiteTextView = (TextView) findViewById(R.id.detail_shopwebsite);
 
-        Cursor shopDetailCursor = getApplicationContext().getContentResolver().query(
+        Cursor shopDetailCursor = mContext.getContentResolver().query(
                 ShopsContract.ShopsEntry.CONTENT_URI,
                 QUERY_COLUMS,
                 querySelection,
@@ -174,7 +193,7 @@ public class ShopDetailActivity extends FragmentActivity
     }
 
     public void openMap(View v) {
-        Intent openMapIntent = new Intent(getApplicationContext(),MapsActivity.class);
+        Intent openMapIntent = new Intent(mContext,MapsActivity.class);
 /*        Bundle bundle = new Bundle();
         String latitude = String.valueOf(mShopLat);
         String longitude = String.valueOf(mShopLng);
@@ -198,5 +217,24 @@ public class ShopDetailActivity extends FragmentActivity
         Intent callIntent = new Intent(Intent.ACTION_CALL);
         callIntent.setData(Uri.parse(intentUri));
         startActivity(callIntent);
+    }
+
+    public void openShopWebsite(View v) {
+        Intent intent = new Intent(mContext, WebActivity.class);
+        Bundle webBundle = new Bundle();
+        webBundle.putString(Constants.BUNDLE_WEBSITE,mShopWebsite);
+        try {
+            // Build and send a tracked event to GA.
+            mGaTracker.send(new HitBuilders.EventBuilder()
+                    .setCategory(getString(R.string.ga_slider_menu_category_id))
+                    .setAction(getString(R.string.ga_about_us_action_id))
+                    .setLabel(getString(R.string.ga_about_us_label_id))
+                    .build());
+            intent.putExtras(webBundle);
+            startActivity(intent);
+        }
+        catch (ActivityNotFoundException e) {
+            Toast.makeText(mContext, getResources().getString(R.string.no_app_available), Toast.LENGTH_SHORT).show();
+        }
     }
 }

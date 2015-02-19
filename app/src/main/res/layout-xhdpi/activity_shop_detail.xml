@@ -90,6 +90,7 @@
         android:drawableLeft="@drawable/website_shop"
         android:drawablePadding="5dp"
         android:textColor="@color/shop_detail"
+        android:onClick="openShopWebsite"
         />
     <!--Promo text & Open map button-->
     <!--We must wrap them in another layout so as to place them at the bottom-->
