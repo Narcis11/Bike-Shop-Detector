@@ -352,6 +352,10 @@ public class MainActivity extends Activity implements
                 mTwitterLoginButton.onActivityResult(requestCode, resultCode, data);
             }
             catch (NullPointerException e){
+                mGaTracker.send(new HitBuilders.ExceptionBuilder()
+                        .setDescription("NullPointerException in MainActivity, onActivityResult")
+                        .setFatal(false)
+                        .build());
                 e.printStackTrace();
             }
         }
@@ -675,16 +679,27 @@ public class MainActivity extends Activity implements
                     }
                 }
                 catch (InterruptedException e) {
+                    mGaTracker.send(new HitBuilders.ExceptionBuilder()
+                            .setDescription("InterruptedException in MainActivity, setTwitterLoginCallback")
+                            .setFatal(false)
+                            .build());
                     e.printStackTrace();
                 }
                 catch (ExecutionException e) {
+                    mGaTracker.send(new HitBuilders.ExceptionBuilder()
+                            .setDescription("ExecutionException in MainActivity, setTwitterLoginCallback")
+                            .setFatal(false)
+                            .build());
                     e.printStackTrace();
                 }
             }
 
             @Override
             public void failure(TwitterException e) {
-                Log.i(LOG_TAG,"Login Failed!" + e.toString());
+                mGaTracker.send(new HitBuilders.ExceptionBuilder()
+                        .setDescription( getResources().getString(R.string.twitter_operation_failed) + " in MainActivity")
+                        .setFatal(false)
+                        .build());
                 Toast.makeText(mContext,getResources().getString(R.string.twitter_operation_failed),Toast.LENGTH_SHORT).show();
             }
         });
@@ -714,9 +729,17 @@ public class MainActivity extends Activity implements
             }
         }
         catch (InterruptedException e) {
+            mGaTracker.send(new HitBuilders.ExceptionBuilder()
+                    .setDescription("InterruptedException in MainActivity, twitterOperationWithToken")
+                    .setFatal(false)
+                    .build());
             e.printStackTrace();
         }
         catch (ExecutionException e) {
+            mGaTracker.send(new HitBuilders.ExceptionBuilder()
+                    .setDescription("InterruptedException in MainActivity, ExecutionException")
+                    .setFatal(false)
+                    .build());
             e.printStackTrace();
         }
     }

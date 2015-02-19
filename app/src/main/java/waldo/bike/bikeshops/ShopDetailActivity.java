@@ -228,7 +228,6 @@ public class ShopDetailActivity extends FragmentActivity
     }
 
     public void openShopWebsite(View v) {
-        Log.i(LOG_TAG,"In openshopwebsite");
         Intent intent = new Intent(mContext, WebActivity.class);
         mBundle.putString(Constants.BUNDLE_WEBSITE,mShopWebsite);//the URL to open
         mBundle.putString(Constants.BUNDLE_WEBVIEW_TITLE,mShopName);//the title of the WebActivity
