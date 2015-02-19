@@ -59,6 +59,7 @@
         android:drawableLeft="@drawable/phone_shop"
         android:drawablePadding="5dp"
         android:textColor="@color/shop_detail"
+        android:visibility="gone"
         android:onClick="callShop"
         />
 
@@ -75,6 +76,7 @@
         android:drawableLeft="@drawable/schedule_shop"
         android:drawablePadding="5dp"
         android:textColor="@color/shop_detail"
+        android:visibility="gone"
         />
 
      <!--Shop website-->
@@ -92,6 +94,7 @@
         android:textColor="@color/shop_detail"
         android:clickable="true"
         android:onClick="openShopWebsite"
+        android:visibility="gone"
         />
     <!--Promo text & Open map button-->
     <!--We must wrap them in another layout so as to place them at the bottom-->

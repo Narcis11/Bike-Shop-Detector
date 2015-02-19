@@ -40,6 +40,7 @@ public class ShopDetailActivity extends FragmentActivity
     private Bundle mBundle;
     private String mPlaceid;
     private String mPromoText;
+    private String mShopOpeningHours;
     private static final int ACTIVITY_INDEX = 1;
     private static Context mContext;
     //the Google Analytics tracker
@@ -110,15 +111,22 @@ public class ShopDetailActivity extends FragmentActivity
             shopAddressTextView.setText(shopDetailCursor.getString(COL_SHOP_ADDRESS));
             //setting up the phone number
             mShopPhoneNumber = (shopDetailCursor.getString(COL_SHOP_PHONE_NUMBER) != null) ? shopDetailCursor.getString(COL_SHOP_PHONE_NUMBER) : "";
-            shopPhoneNumberTextView.setText(mShopPhoneNumber);
+            if (!mShopPhoneNumber.equals("")) {
+                shopPhoneNumberTextView.setVisibility(View.VISIBLE);
+                shopPhoneNumberTextView.setText(mShopPhoneNumber);
+            }
             //setting up the opening hours
-            if (shopDetailCursor.getString(COL_SHOP_OPENING_HOURS) != null)
-            shopOpeningHoursTextView.setText(Utility.getTodayFromOpeningHours(shopDetailCursor.getString(COL_SHOP_OPENING_HOURS)));
+            mShopOpeningHours =  (shopDetailCursor.getString(COL_SHOP_OPENING_HOURS) != null) ? shopDetailCursor.getString(COL_SHOP_OPENING_HOURS) : "";
+            if (!mShopOpeningHours.equals("")) {
+                shopOpeningHoursTextView.setVisibility(View.VISIBLE);
+                shopOpeningHoursTextView.setText(Utility.getTodayFromOpeningHours(mShopOpeningHours));
+            }
             //setting up the website
             mShopWebsite = (shopDetailCursor.getString(COL_SHOP_WEBSITE) != null) ? shopDetailCursor.getString(COL_SHOP_WEBSITE) : "";
-            if (!mShopWebsite.equals(""))
-            shopWebsiteTextView.setText(mShopWebsite);
-            
+            if (!mShopWebsite.equals("")) {
+                shopWebsiteTextView.setVisibility(View.VISIBLE);
+                shopWebsiteTextView.setText(mShopWebsite);
+            }
             Log.i(LOG_TAG,"Promo text is: " + mPromoText);
             if (!mPromoText.equals(""))
                 shopPromoText.setText(Utility.getPromoText(mPromoText,ACTIVITY_INDEX));
