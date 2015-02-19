@@ -67,7 +67,7 @@ public class ShopDetailActivity extends FragmentActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shop_detail);
         overridePendingTransition(R.xml.slide_in, R.xml.slide_out);
-        mContext = mContext;
+        mContext = getApplicationContext();
         mBundle = getIntent().getExtras();
         mShopLat = Double.valueOf(mBundle.getString(Constants.BUNDLE_SHOP_LAT));
         mShopLng = Double.valueOf(mBundle.getString(Constants.BUNDLE_SHOP_LNG));
