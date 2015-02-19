@@ -16,6 +16,8 @@ import android.util.Log;
 import Utilities.Constants;
 import Utilities.DeviceConnection;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 
@@ -29,6 +31,8 @@ public class SplashScreen extends Activity{
     private IntentFilter mIntentFilter;
     private static boolean isGPSEnabled = false;
     private static boolean isInternetEnabled = false;
+    //the Google Analytics tracker
+    Tracker mGaTracker;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +53,8 @@ public class SplashScreen extends Activity{
     @Override
     protected void onResume() {
         super.onResume();
+        mGaTracker = ((BikeShopsDetector) getApplication()).getTracker(
+                BikeShopsDetector.TrackerName.APP_TRACKER);
         checkPlayServices();
         DeviceConnection deviceConnection = new DeviceConnection(mContext);
         Log.i(LOG_TAG,"in onResume");
@@ -97,6 +103,10 @@ public class SplashScreen extends Activity{
             }
         }
         catch (IllegalArgumentException e) {
+            mGaTracker.send(new HitBuilders.ExceptionBuilder()
+                    .setDescription("IllegalArgumentException in SplashScreen, onPause")
+                    .setFatal(false)
+                    .build());
             Log.e(LOG_TAG,e.toString());
         }
     }
