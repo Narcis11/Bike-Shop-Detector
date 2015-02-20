@@ -180,4 +180,6 @@
     <!--Used in the ShopDetail Activity-->
     <string name="ga_shopwebsite_category_id">shopwebsite_cat_id</string>
     <string name="ga_shopwebsite_action_id">shopwebsite_act_id</string>
+    <string name="ga_shopnumber_category_id">shopnumber_cat_id</string>
+    <string name="ga_shopnumber_action_id">shopnumber_act_id</string>
 </resources>

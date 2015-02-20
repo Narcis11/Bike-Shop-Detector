@@ -223,6 +223,12 @@ public class ShopDetailActivity extends FragmentActivity
     public void callShop (View v) {
         String intentUri = "tel:" + mShopPhoneNumber;
         Intent callIntent = new Intent(Intent.ACTION_DIAL);
+        // Build and send a tracked event to GA.
+        mGaTracker.send(new HitBuilders.EventBuilder()
+                .setCategory(getString(R.string.ga_shopnumber_category_id))
+                .setAction(getString(R.string.ga_shopnumber_action_id))
+                .setLabel(mShopPhoneNumber + " - " + mShopName)
+                .build());
         callIntent.setData(Uri.parse(intentUri));
         startActivity(callIntent);
     }
