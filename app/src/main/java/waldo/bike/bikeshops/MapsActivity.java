@@ -121,6 +121,7 @@ public class MapsActivity extends FragmentActivity{
         String allShopsName = "";
         String allShopsLat = "";
         String allShopsLng = "";
+        Marker marker;
         if ( mBundle != null && !mBundle.isEmpty() ) { //call for a shop
             //display the textview
             mInfoTextView = (TextView) findViewById(R.id.info_map_textview);
@@ -133,7 +134,7 @@ public class MapsActivity extends FragmentActivity{
             mPromoText = mBundle.getString(Constants.BUNDLE_PROMO_TEXT,"");
             LatLng shopLatLng = new LatLng(shopLat, shopLng);
             getActionBar().setTitle(mShopName);
-            mMap.addMarker(new MarkerOptions().position(shopLatLng).title(mShopName));
+            marker = mMap.addMarker(new MarkerOptions().position(shopLatLng).title(mShopName));
             //we style the info window only for partner shops
             if (mIsPartner) {
                 mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
@@ -154,6 +155,7 @@ public class MapsActivity extends FragmentActivity{
                     }
                 });
             }
+            marker.showInfoWindow();//we always display the info window
             mMap.moveCamera(CameraUpdateFactory.newLatLng(shopLatLng));
             mMap.animateCamera(CameraUpdateFactory.zoomTo(Constants.SHOP_ZOOM));//*; //zoom to the position
         }
