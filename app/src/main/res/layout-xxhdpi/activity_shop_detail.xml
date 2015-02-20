@@ -1,0 +1,139 @@
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="waldo.bike.waldo.ShopDetailActivity">-->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="waldo.bike.bikeshops.ShopDetailActivity"
+    android:scrollbars="vertical"
+    android:background="@color/list_background">
+    <fragment
+        android:name="com.google.android.gms.maps.StreetViewPanoramaFragment"
+        android:id="@+id/streetviewpanorama"
+        android:layout_width="match_parent"
+        android:layout_height="140dp"/>
+
+    <!--Shop name-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bike Nature"
+        android:id="@+id/detail_shopname"
+        android:paddingTop="30dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/shop_detail_header"
+     />
+
+    <!--Shop Address-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/detail_shopaddress"
+        android:text="Strada Baicului, nr. 3, Bucuresti"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:drawableLeft="@drawable/map_shop"
+        android:paddingLeft="50dp"
+        android:paddingRight="20dp"
+        android:paddingTop="20dp"
+        android:drawablePadding="5dp"
+        android:textColor="@color/shop_detail"
+        />
+
+    <!--Shop phone number-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/detail_shopphonenumber"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:text="0723547895"
+        android:paddingLeft="50dp"
+        android:paddingRight="20dp"
+        android:paddingTop="10dp"
+        android:drawableLeft="@drawable/phone_shop"
+        android:drawablePadding="5dp"
+        android:textColor="@color/shop_detail"
+        android:onClick="callShop"
+        android:clickable="true"
+        android:visibility="gone"
+        />
+
+    <!--Shop opening hours-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/detail_shopopeninghours"
+        android:paddingTop="10dp"
+        android:paddingLeft="50dp"
+        android:paddingRight="20dp"
+        android:text="Friday 08.00 am - 19.00 pm"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:drawableLeft="@drawable/schedule_shop"
+        android:drawablePadding="5dp"
+        android:textColor="@color/shop_detail"
+        android:visibility="gone"
+        />
+
+     <!--Shop website-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/detail_shopwebsite"
+        android:paddingTop="10dp"
+        android:paddingLeft="50dp"
+        android:paddingRight="20dp"
+        android:text="http://www.magazinuldebiciclete.ro/"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:drawableLeft="@drawable/website_shop"
+        android:drawablePadding="5dp"
+        android:textColor="@color/shop_detail"
+        android:clickable="true"
+        android:onClick="openShopWebsite"
+        android:visibility="gone"
+        />
+    <!--Promo text & Open map button-->
+    <!--We must wrap them in another layout so as to place them at the bottom-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="bottom">
+    <!--Promo text for partner shops-->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/detail_promo_text"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:textAppearance="?android:textAppearanceMedium"
+        />
+
+    <!--Open map button-->
+    <Button
+        android:id="@+id/add_shop_button"
+        android:text="@string/shop_detail_map"
+        android:textColor="@color/white"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="15dp"
+        android:paddingLeft="3dp"
+        android:paddingRight="3dp"
+        android:clickable="true"
+        android:onClick="openMap"
+        android:background="@drawable/addshop_button_selector"
+        />
+
+    </LinearLayout>
+    </LinearLayout>
+<!--</LinearLayout>-->
