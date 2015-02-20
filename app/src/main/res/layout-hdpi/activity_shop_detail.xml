@@ -22,9 +22,12 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Bike Nature"
+        android:text="Baba Novac"
+        android:textColor="#3fc2f0"
         android:id="@+id/detail_shopname"
         android:paddingTop="15dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:textAppearance="?android:textAppearanceMedium"
         android:layout_gravity="center_horizontal"
      />
@@ -34,15 +37,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/detail_shopaddress"
-        android:text="Strada Olteni, nr.4, sector 2, Bucuresti"
+        android:text="Strada Olteni, nr. 6, CP 8423423, Bucuresti"
         android:paddingLeft="60dp"
-        android:paddingRight="40dp"
+        android:paddingRight="10dp"
         android:textAppearance="?android:textAppearanceSmall"
         android:drawableLeft="@drawable/map_shop"
-
         android:paddingTop="10dp"
         android:drawablePadding="5dp"
-        android:layout_gravity="center_horizontal"
         android:textColor="@color/shop_detail"
         />
 
@@ -60,6 +61,7 @@
         android:drawablePadding="5dp"
         android:textColor="@color/shop_detail"
         android:onClick="callShop"
+        android:clickable="true"
         android:visibility="gone"
         />
 
@@ -70,8 +72,8 @@
         android:id="@+id/detail_shopopeninghours"
         android:paddingTop="5dp"
         android:paddingLeft="60dp"
-        android:paddingRight="60dp"
-        android:text="14.300"
+        android:paddingRight="10dp"
+        android:text="Friday: 09.00 am - 7.00 pm"
         android:textAppearance="?android:textAppearanceSmall"
         android:drawableLeft="@drawable/schedule_shop"
         android:drawablePadding="5dp"
@@ -87,7 +89,7 @@
         android:paddingTop="5dp"
         android:paddingLeft="60dp"
         android:paddingRight="10dp"
-        android:text="http://www.bikenature.ro/"
+        android:text="http://www.magazinuldebiciclete.ro/"
         android:textAppearance="?android:textAppearanceSmall"
         android:drawableLeft="@drawable/website_shop"
         android:drawablePadding="5dp"

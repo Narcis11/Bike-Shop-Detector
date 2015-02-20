@@ -222,7 +222,7 @@ public class ShopDetailActivity extends FragmentActivity
 
     public void callShop (View v) {
         String intentUri = "tel:" + mShopPhoneNumber;
-        Intent callIntent = new Intent(Intent.ACTION_CALL);
+        Intent callIntent = new Intent(Intent.ACTION_DIAL);
         callIntent.setData(Uri.parse(intentUri));
         startActivity(callIntent);
     }

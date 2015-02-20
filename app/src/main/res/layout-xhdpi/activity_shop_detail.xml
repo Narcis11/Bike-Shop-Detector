@@ -60,6 +60,7 @@
         android:drawablePadding="5dp"
         android:textColor="@color/shop_detail"
         android:onClick="callShop"
+        android:clickable="true"
         android:visibility="gone"
         />
 

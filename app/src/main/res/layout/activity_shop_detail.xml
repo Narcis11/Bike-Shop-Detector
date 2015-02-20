@@ -61,6 +61,7 @@
         android:textColor="@color/shop_detail"
         android:visibility="gone"
         android:onClick="callShop"
+        android:clickable="true"
         />
 
     <!--Shop opening hours-->
