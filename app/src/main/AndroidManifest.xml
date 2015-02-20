@@ -171,6 +171,10 @@
                 <category android:name="waldo.bike.bikeshops" />
             </intent-filter>
         </receiver>
+
+        <meta-data
+            android:name="com.google.android.gms.analytics.globalConfigResource"
+            android:resource="@xml/app_tracker" />
     </application>
 
 </manifest>
