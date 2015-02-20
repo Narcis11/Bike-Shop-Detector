@@ -4,11 +4,15 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
 
 import Utilities.Constants;
 
@@ -16,10 +20,12 @@ import Utilities.Constants;
 * This class is used to open our website or a shop's website.*/
 public class WebActivity extends Activity {
     private WebView mWebView;
-    Bundle mBundle;
+    private Bundle mBundle;
+    private static final String LOG_TAG = WebActivity.class.getSimpleName();
     private static String mUrl = "";
     private static String mTitle = "";
     private static final String mDefaultUrl = "http://www.waldo.bike/";
+    ProgressBar progressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +37,8 @@ public class WebActivity extends Activity {
         mBundle = getIntent().getExtras();
         mUrl = mBundle.getString(Constants.BUNDLE_WEBSITE);//can't be null, because we always send a website
         mTitle = mBundle.getString(Constants.BUNDLE_WEBVIEW_TITLE);////can't be null, because we always send a title
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.VISIBLE);//without this line, the bar wouldn't appear at the second page load
         getActionBar().setTitle(mTitle);
         mWebView = (WebView) findViewById(R.id.website_view);
         mWebView.getSettings().setJavaScriptEnabled(true);
@@ -42,6 +50,25 @@ public class WebActivity extends Activity {
                 return true;
                 //return super.shouldOverrideUrlLoading(view, url);
             }
+
+        });
+
+        mWebView.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public void onProgressChanged(WebView view, int newProgress) {
+                super.onProgressChanged(view, newProgress);
+                progressBar.setProgress(newProgress);
+                Log.i(LOG_TAG,"Progress is: " + newProgress);
+                if (newProgress == 100) {
+                    progressBar.setVisibility(View.GONE);
+                    Log.i(LOG_TAG,"progressBar is now invisible. Progress is: " + newProgress);
+                }
+                else {
+                    progressBar.setVisibility(View.VISIBLE);
+                }
+            }
+
+
         });
         mWebView.loadUrl(mUrl);
     }
@@ -53,7 +80,6 @@ public class WebActivity extends Activity {
         getMenuInflater().inflate(R.menu.menu_web, menu);
         return true;
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
