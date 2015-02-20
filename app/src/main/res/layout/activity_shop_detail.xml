@@ -27,7 +27,7 @@
         android:paddingTop="30dp"
         android:textAppearance="?android:textAppearanceMedium"
         android:layout_gravity="center_horizontal"
-        android:textStyle="bold"
+        android:textColor="@color/shop_detail_header"
      />
 
     <!--Shop Address-->
@@ -40,7 +40,7 @@
         android:drawableLeft="@drawable/map_shop"
         android:paddingLeft="80dp"
         android:paddingRight="60dp"
-        android:paddingTop="15dp"
+        android:paddingTop="20dp"
         android:layout_gravity="center"
         android:drawablePadding="5dp"
         android:textColor="@color/shop_detail"

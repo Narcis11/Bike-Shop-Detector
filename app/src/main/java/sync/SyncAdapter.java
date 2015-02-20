@@ -227,7 +227,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                             if (i<5) {
                                 Log.i(LOG_TAG,"Partner shop: " + placeName);
                                 shopsValues.put(ShopsContract.ShopsEntry.COLUMN_IS_PARTNER, 1);
-                                shopsValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_PROMO_TEXT,"-15% reducere la adidasi, pantofi.#-20% reducere la ochi, nas.");
+                                shopsValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_PROMO_TEXT,"-15% reducere la adidasi, pantofi. Vino acum să-ți ridici reducerea.#-20% reducere la ochi, nas, gură, urechi.");
                                 shopsValues.put(ShopsContract.ShopsEntry.COLUMN_DISCOUNT_VALUE,i+5);
                             }
                             cVVector.add(shopsValues);
