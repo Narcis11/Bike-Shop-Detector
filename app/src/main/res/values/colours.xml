@@ -6,6 +6,7 @@
         <color name="white">#FFFFFF</color>
         <color name="waldo_light_blue">#00afef</color>
         <color name="waldo_dark_blue">#1e85fb</color>
+        <color name="waldo_dark_blue_transparent">#7F1e85fb</color>
         <color name="waldo_light_shield_blue">#3fc2f0</color>
         <color name="waldo_medium_grey">#6c8087</color>
         <color name="waldo_light_grey">#aaabaf</color>

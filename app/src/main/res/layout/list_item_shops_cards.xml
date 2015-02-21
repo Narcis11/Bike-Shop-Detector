@@ -47,15 +47,15 @@
             <!--Shop Name-->
             <TextView
                 android:id="@+id/list_item_shopname_textview"
-                android:layout_width="wrap_content"
+                android:layout_width="255dp"
                 android:layout_height="wrap_content"
                 android:paddingLeft="60dp"
                 android:paddingBottom="2dp"
                 android:typeface="serif"
                 android:fontFamily="sans-serif"
-                android:maxLines="1"
+                android:singleLine="true"
                 android:ellipsize="end"
-                android:text="Shop Name"
+                android:text="Cel mai lung nume de magazin"
                 android:textColor="@color/shop_detail_header"
                 android:textAppearance="?android:textAppearanceMedium"/>
 
@@ -84,7 +84,7 @@
                android:text="-9%"
                android:paddingLeft="13dp"
                android:paddingRight="13dp"
-               android:visibility="invisible"
+               android:visibility="visible"
                android:layout_alignParentRight="true"
                android:layout_gravity="right" />
 
