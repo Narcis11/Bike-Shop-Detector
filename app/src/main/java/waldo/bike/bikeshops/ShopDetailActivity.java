@@ -5,6 +5,9 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -14,6 +17,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +45,7 @@ public class ShopDetailActivity extends FragmentActivity
     private String mPlaceid;
     private String mPromoText;
     private String mShopOpeningHours;
+    private float mShopRating;
     private static final int ACTIVITY_INDEX = 1;
     private static Context mContext;
     //the Google Analytics tracker
@@ -98,6 +103,8 @@ public class ShopDetailActivity extends FragmentActivity
         TextView shopOpeningHoursTextView = (TextView) findViewById(R.id.detail_shopopeninghours);
         TextView shopWebsiteTextView = (TextView) findViewById(R.id.detail_shopwebsite);
         TextView shopPromoText = (TextView) findViewById(R.id.detail_promo_text);
+        RatingBar shopRatingBar = (RatingBar) findViewById(R.id.detail_rating);
+        LayerDrawable ratingDrawable = (LayerDrawable) shopRatingBar.getProgressDrawable();
         Cursor shopDetailCursor = mContext.getContentResolver().query(
                 ShopsContract.ShopsEntry.CONTENT_URI,
                 QUERY_COLUMS,
@@ -127,6 +134,17 @@ public class ShopDetailActivity extends FragmentActivity
                 shopWebsiteTextView.setVisibility(View.VISIBLE);
                 shopWebsiteTextView.setText(mShopWebsite);
             }
+            //setting up the rating
+            mShopRating = shopDetailCursor.getFloat(COL_SHOP_RATING);
+            if (mShopRating > 0) {
+                shopRatingBar.setVisibility(View.VISIBLE);
+                ratingDrawable.getDrawable(0).setColorFilter(getResources().getColor(R.color.shop_detail), PorterDuff.Mode.SRC_ATOP);//background
+                ratingDrawable.getDrawable(1).setColorFilter(getResources().getColor(R.color.shop_detail), PorterDuff.Mode.SRC_ATOP);//secondary progress
+                ratingDrawable.getDrawable(2).setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_ATOP);//progress
+                Log.i(LOG_TAG,"Rating is: " + mShopRating);
+                shopRatingBar.setRating(mShopRating);
+            }
+            //setting up the promo text
             Log.i(LOG_TAG,"Promo text is: " + mPromoText);
             if (!mPromoText.equals(""))
                 shopPromoText.setText(Utility.getPromoText(mPromoText,ACTIVITY_INDEX));
@@ -134,6 +152,8 @@ public class ShopDetailActivity extends FragmentActivity
         else {
             Log.i(LOG_TAG,"*****Cursor is null!*****");
         }
+
+        shopDetailCursor.close();
 /*        for (String i : QUERY_COLUMS) {
             Log.i(LOG_TAG, String.valueOf(shopDetailCursor.getColumnIndex(QUERY_COLUMS[i])));
         }*/

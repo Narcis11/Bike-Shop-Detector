@@ -27,5 +27,6 @@
         <color name="twitter_button_pressed">#66b1ec</color>
         <color name="twitter_button_default">#53a7e8</color>
         <color name="shop_detail">#666666</color>
-    <color name="shop_detail_header">#3fc2f0</color>
+        <color name="shop_detail_header">#3fc2f0</color>
+        <color name="star_colour">#f7ff24</color>
 </resources>

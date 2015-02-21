@@ -103,6 +103,19 @@
         android:onClick="openShopWebsite"
         android:visibility="gone"
         />
+
+    <!--Shop rating-->
+    <RatingBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/detail_rating"
+        android:numStars="5"
+        android:stepSize="0.1"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="92dp"
+        style="?android:ratingBarStyleSmall"
+        android:visibility="gone"
+        />
     <!--Promo text & Open map button-->
     <!--We must wrap them in another layout so as to place them at the bottom-->
     <LinearLayout

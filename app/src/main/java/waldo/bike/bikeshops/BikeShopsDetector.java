@@ -49,13 +49,14 @@ public class BikeShopsDetector extends Application {
         authConfig =
                 new TwitterAuthConfig(Constants.CONSUMER_KEY,
                         Constants.CONSUMER_SECRET);
-        try {
-            Fabric.with(this, new Twitter(authConfig));
+        try { //TODO: Repară căcatul ăsta de twitter.
+          //  Fabric.with(this, new Twitter(authConfig));
         }
         catch (Exception e) {
 
         }
-        if (Utility.getPreferredNotification(getApplicationContext())) {
+        //TODO: Fix the bug listed on bitbucket regarding the code below.
+/*        if (Utility.getPreferredNotification(getApplicationContext())) {
             ParsePush.subscribeInBackground(Constants.PARSE_PUSH_CHANNEL, new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
@@ -70,7 +71,7 @@ public class BikeShopsDetector extends Application {
         else {
             ParsePush.unsubscribeInBackground(Constants.PARSE_PUSH_CHANNEL);
             Log.i(LOG_TAG,"Notifications are disabled");
-        }
+        }*/
 
 
     }
