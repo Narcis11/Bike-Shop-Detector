@@ -37,6 +37,18 @@
         android:textColor="@color/shop_detail_header"
      />
 
+    <!--Shop rating-->
+    <RatingBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/detail_rating"
+        android:numStars="5"
+        android:stepSize="0.1"
+        android:layout_marginTop="10dp"
+        style="?android:ratingBarStyleSmall"
+        android:visibility="gone"
+        android:layout_gravity="center_horizontal"
+        />
     <!--Shop Address-->
     <TextView
         android:layout_width="wrap_content"
