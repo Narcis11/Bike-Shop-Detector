@@ -7,7 +7,6 @@
         <color name="waldo_light_blue">#00afef</color>
         <color name="list_divider">#AFB3B1</color>
         <color name="list_background">#FFFFFF</color>
-        <color name="list_background_transparent">#80303030</color>
         <color name="list_background_pressed">#00afef</color>
         <color name="header_background">#828f95</color>
         <color name="header_text">#08171e</color>
@@ -28,5 +27,6 @@
         <color name="twitter_button_default">#53a7e8</color>
         <color name="shop_detail">#666666</color>
         <color name="shop_detail_header">#3fc2f0</color>
+        <color name="list_background_transparent">#cc3fc2f0</color>
         <color name="star_colour">#f7ff24</color>
 </resources>

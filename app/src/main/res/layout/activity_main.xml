@@ -2,7 +2,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -10,7 +11,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    tools:ignore="MergeRootFrame" >
+    tools:ignore="MergeRootFrame"
+    >
     <!--Text View used to display messages regarding the GPS/Internet status-->
     <TextView
         android:layout_width="match_parent"
@@ -19,7 +21,6 @@
         android:id="@+id/info_textview"
         android:gravity="center"
         android:visibility="gone"
-        android:text="TESTTEST"
         android:paddingTop="3dp"
         android:paddingBottom="3dp"
         android:overScrollMode="never"
@@ -39,6 +40,6 @@
         android:dividerHeight="0.5dp"
         android:footerDividersEnabled="false"
         android:listSelector="@drawable/list_selector"
-        android:background="@color/list_background"/>
+        />
 
 </android.support.v4.widget.DrawerLayout>

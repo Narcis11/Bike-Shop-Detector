@@ -7,14 +7,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="8dp"
-    android:paddingRight="8dp"
+    android:padding="8dp"
     android:id="@+id/shops_frame_id"
+    android:background="@color/list_background_transparent"
     tools:context=".MainActivity$PlaceholderFragment">
 
 
     <ListView
         android:id="@+id/listview_shops"
+        android:dividerHeight="8dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         </ListView>

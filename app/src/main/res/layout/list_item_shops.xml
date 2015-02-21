@@ -68,7 +68,6 @@
         android:layout_height="wrap_content"
         android:layout_weight="0.38"
         android:gravity="end"
-
         android:orientation="vertical">
 
         <TextView

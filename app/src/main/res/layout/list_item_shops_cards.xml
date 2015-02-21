@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
@@ -7,34 +8,162 @@
     android:paddingRight="10dp"
     android:paddingBottom="5dp"
     android:paddingTop="5dp"
-    android:orientation="horizontal">
+    android:layout_weight="1"
+    android:background="@color/white"
+    >
 
     <!--Used to format each shop from the main activity-->
 
-    <android.support.v7.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+<!--    <android.support.v7.widget.CardView
         android:id="@+id/card_view"
         android:layout_gravity="center"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        >
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        card_view:cardBackgroundColor="@color/white"
+        >-->
 
         <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"
             >
 
             <ImageView
                 android:id="@+id/list_item_icon"
+                android:layout_height="40dp"
+                android:layout_width="40dp"
                 android:layout_gravity="center"
                 android:src="@drawable/bike_tool_kit"
                 android:requiresFadingEdge="vertical"
-                android:layout_width="wrap_content"
-                android:paddingRight="15dp"
-                android:layout_height="wrap_content"/>
+                />
 
         </FrameLayout>
 
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-        </android.support.v7.widget.CardView>
-</LinearLayout>
+            <!--Shop Name-->
+            <TextView
+                android:id="@+id/list_item_shopname_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="60dp"
+                android:paddingBottom="2dp"
+                android:typeface="serif"
+                android:fontFamily="sans-serif"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:text="Shop Name"
+                android:textColor="@color/shop_detail_header"
+                android:textAppearance="?android:textAppearanceMedium"/>
+
+            <!--Shop address-->
+            <TextView
+                android:id="@+id/list_item_shopaddress_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="60dp"
+                android:typeface="serif"
+                android:layout_below="@+id/list_item_shopname_textview"
+                android:fontFamily="sans-serif"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:text="Strada Barbușchi Imitam, nr. 3, sector 2, București"
+                android:textColor="@color/shop_detail"
+                android:textAppearance="?android:textAppearanceSmall"/>
+
+            <!--Shop discount-->
+            <TextView
+               android:id="@+id/list_item_discount_view"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:textAppearance="?android:textAppearanceSmall"
+               android:background="@drawable/background_shop_discount_cards"
+               android:text="-9%"
+               android:paddingLeft="13dp"
+               android:paddingRight="13dp"
+               android:visibility="invisible"
+               android:layout_alignParentRight="true"
+               android:layout_gravity="right" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/list_divider"
+                android:layout_below="@+id/list_item_shopaddress_textview"
+                />
+        </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:layout_centerHorizontal="true">
+
+        <!--Distance image-->
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/list_item_distance_imageview"
+            android:layout_below="@+id/list_item_icon"
+            android:paddingLeft="15dp"
+            android:src="@drawable/schedule_shop"/>
+        <!--Distance textview-->
+        <TextView
+            android:id="@+id/list_item_distance_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:paddingLeft="5dp"
+            android:paddingTop="3dp"
+            android:maxLines="1"
+            android:text="20,3 km"
+            android:drawablePadding="5dp"
+            android:fontFamily="sans-serif-condensed"
+            android:textAppearance="?android:textAppearanceSmall"
+            android:textColor="@color/shop_detail"
+            android:layout_below="@+id/list_item_icon"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <!--Open/Closed-->
+        <TextView
+            android:id="@+id/list_item_shopisopen_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
+            android:paddingRight="36dp"
+            android:paddingLeft="30dp"
+            android:text="Open"
+            android:textColor="@color/shop_detail"
+            android:layout_below="@+id/list_item_shopname_textview"
+            android:textAppearance="?android:textAppearanceMedium"/>
+
+        <!--Duration image-->
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/list_item_duration_imageview"
+            android:src="@drawable/map_shop"/>
+
+        <!--Duration TextView-->
+        <TextView
+            android:id="@+id/list_item_duration_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:paddingTop="3dp"
+            android:paddingRight="15dp"
+            android:paddingLeft="5dp"
+            android:maxLines="1"
+            android:text="3min 20sec"
+            android:textColor="@color/shop_detail"
+            android:layout_below="@+id/list_item_shopname_textview"
+            android:fontFamily="sans-serif-condensed"
+            android:textAppearance="?android:textAppearanceSmall"/>
+    </LinearLayout>
+<!--    </android.support.v7.widget.CardView>-->
+</RelativeLayout>
