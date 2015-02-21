@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:paddingTop="8dp"
     android:paddingBottom="8dp"
-    android:background="@color/waldo_dark_blue_transparent"
+    android:background="@color/waldo_light_grey_transparent"
     android:layout_height="match_parent">
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -12,7 +12,7 @@
     android:layout_height="match_parent"
     android:padding="8dp"
     android:id="@+id/shops_frame_id"
-    android:background="@color/waldo_dark_blue_transparent"
+    android:background="@color/waldo_light_grey_transparent"
     tools:context=".MainActivity$PlaceholderFragment">
 
 

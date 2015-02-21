@@ -4,10 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
-    android:paddingLeft="5dp"
-    android:paddingRight="10dp"
-    android:paddingBottom="5dp"
-    android:paddingTop="5dp"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginBottom="5dp"
+    android:layout_marginTop="5dp"
     android:layout_weight="1"
     android:background="@color/white"
     >
@@ -80,12 +80,13 @@
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:textAppearance="?android:textAppearanceSmall"
-               android:background="@drawable/background_shop_discount_cards"
+               android:background="@color/discount_text"
                android:text="-9%"
-               android:paddingLeft="13dp"
-               android:paddingRight="13dp"
-               android:visibility="visible"
+               android:paddingLeft="18dp"
+               android:paddingRight="18dp"
+               android:visibility="invisible"
                android:layout_alignParentRight="true"
+               android:layout_alignParentTop="true"
                android:layout_gravity="right" />
 
             <View
