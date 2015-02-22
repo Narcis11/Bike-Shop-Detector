@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginBottom="5dp"
+    android:layout_marginTop="5dp"
+    android:layout_weight="1"
+    >
+
+    <!--Used to format each shop from the main activity-->
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp"
+            >
+
+            <ImageView
+                android:id="@+id/list_item_icon"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/bike_tool_kit"
+                android:requiresFadingEdge="vertical"
+                />
+
+        </FrameLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/top_layout">
+
+            <!--Shop Name-->
+            <TextView
+                android:id="@+id/list_item_shopname_textview"
+                android:layout_width="175dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="60dp"
+                android:typeface="serif"
+                android:fontFamily="sans-serif"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:text="Magazin de biciclete"
+                android:textColor="@color/waldo_dark_blue"
+                android:textAppearance="?android:textAppearanceLarge"/>
+
+            <!--Shop address-->
+            <TextView
+                android:id="@+id/list_item_shopaddress_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="60dp"
+                android:paddingBottom="5dp"
+                android:layout_marginRight="10dp"
+                android:typeface="serif"
+                android:layout_below="@+id/list_item_shopname_textview"
+                android:fontFamily="sans-serif"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:text="Strada Barbușchi imitam, nr.2, București"
+                android:textColor="@color/waldo_light_grey"
+                android:textAppearance="?android:textAppearanceSmall"/>
+
+            <!--Shop discount-->
+            <TextView
+               android:id="@+id/list_item_discount_view"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:textAppearance="?android:textAppearanceMedium"
+               android:background="@color/discount_text"
+               android:visibility="gone"
+               android:paddingTop="1dp"
+               android:paddingBottom="1dp"
+               android:paddingLeft="18dp"
+               android:paddingRight="18dp"
+               android:layout_alignParentRight="true"
+               android:layout_alignParentTop="true"
+               android:layout_gravity="right" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="5dp"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:layout_below="@+id/list_item_shopaddress_textview">
+            <View
+                android:layout_width="281dp"
+                android:layout_height="match_parent"
+                android:id="@+id/list_item_divider_view"
+                android:background="@color/waldo_light_grey_transparent"
+                android:gravity="center"
+                />
+        </LinearLayout>
+        </RelativeLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/top_layout"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_centerHorizontal="true">
+
+
+        <!--Distance textview-->
+        <TextView
+            android:id="@+id/list_item_distance_textview"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:maxLines="1"
+            android:text="10,88 km"
+            android:fontFamily="sans-serif-condensed"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:textColor="@color/shop_detail"
+             />
+
+        <!--Open/Closed-->
+        <TextView
+            android:id="@+id/list_item_shopisopen_textview"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:fontFamily="sans-serif-condensed"
+            android:textColor="@color/waldo_light_grey"
+            android:gravity="center_horizontal"
+            android:layout_below="@+id/list_item_shopname_textview"
+            android:textAppearance="?android:textAppearanceMedium"/>
+
+        <!--Duration TextView-->
+        <TextView
+            android:id="@+id/list_item_duration_textview"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.4"
+            android:maxLines="1"
+            android:text="3min 20sec"
+            android:layout_gravity="right"
+            android:gravity="right"
+            android:textColor="@color/shop_detail"
+            android:layout_below="@+id/list_item_shopname_textview"
+            android:fontFamily="sans-serif-condensed"
+            android:textAppearance="?android:textAppearanceMedium"/>
+    </LinearLayout>
+</RelativeLayout>
