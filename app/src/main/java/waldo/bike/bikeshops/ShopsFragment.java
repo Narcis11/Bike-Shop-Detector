@@ -168,10 +168,8 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                         if ((cursor.getInt(COL_IS_PARTNER) == 1)) {
                             ((TextView) view).setText("-" + String.valueOf(cursor.getInt(COL_DISCOUNT_VALUE)) + "%");
                             view.setVisibility(View.VISIBLE);
-                            //view.setBackgroundResource(R.drawable.background_shop_discount);
-                            //((TextView) view).setTextColor(getResources().getColor(R.color.discount_text));
                         }
-                        return  true;
+                        return true;
                 }
                 return false;
             }

@@ -39,7 +39,7 @@
             <!--Shop Name-->
             <TextView
                 android:id="@+id/list_item_shopname_textview"
-                android:layout_width="wrap_content"
+                android:layout_width="175dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginLeft="60dp"
@@ -47,7 +47,7 @@
                 android:fontFamily="sans-serif"
                 android:singleLine="true"
                 android:ellipsize="end"
-                android:text="Cel mai lung nume de magazin"
+                android:text="Magazin de biciclete"
                 android:textColor="@color/waldo_dark_blue"
                 android:textAppearance="?android:textAppearanceLarge"/>
 
@@ -75,11 +75,11 @@
                android:layout_height="wrap_content"
                android:textAppearance="?android:textAppearanceMedium"
                android:background="@color/discount_text"
-               android:visibility="gone"
+               android:text="-15%"
                android:paddingTop="1dp"
                android:paddingBottom="1dp"
-               android:paddingLeft="20dp"
-               android:paddingRight="20dp"
+               android:paddingLeft="18dp"
+               android:paddingRight="18dp"
                android:layout_alignParentRight="true"
                android:layout_alignParentTop="true"
                android:layout_gravity="right" />
@@ -100,7 +100,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/top_layout"
         android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_centerHorizontal="true">
