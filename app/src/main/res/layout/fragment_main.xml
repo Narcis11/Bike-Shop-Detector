@@ -18,6 +18,7 @@
         android:id="@+id/listview_shops"
         android:background="@color/white"
         android:dividerHeight="10dp"
+        android:divider="@color/shop_detail"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         </ListView>
