@@ -10,7 +10,7 @@
         <color name="waldo_light_shield_blue">#3fc2f0</color>
         <color name="waldo_medium_grey">#6c8087</color>
         <color name="waldo_light_grey">#aaabaf</color>
-        <color name="waldo_light_grey_transparent">#7Faaabaf</color>
+        <color name="waldo_light_grey_transparent">#CCaaabaf</color>
         <color name="waldo_dark_grey">#3c4b4e</color>
         <color name="list_divider">#AFB3B1</color>
         <color name="list_background">#FFFFFF</color>

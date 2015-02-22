@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="15dp"
             >
 
             <ImageView
@@ -41,7 +41,7 @@
                 android:id="@+id/list_item_shopname_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginLeft="60dp"
                 android:typeface="serif"
                 android:fontFamily="sans-serif"
@@ -58,6 +58,7 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="60dp"
                 android:paddingBottom="5dp"
+                android:layout_marginRight="10dp"
                 android:typeface="serif"
                 android:layout_below="@+id/list_item_shopname_textview"
                 android:fontFamily="sans-serif"
@@ -72,13 +73,13 @@
                android:id="@+id/list_item_discount_view"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               android:textAppearance="?android:textAppearanceSmall"
+               android:textAppearance="?android:textAppearanceMedium"
                android:background="@color/discount_text"
-               android:text="-9%"
-               android:textStyle="bold"
-               android:paddingLeft="18dp"
-               android:paddingRight="18dp"
                android:visibility="gone"
+               android:paddingTop="1dp"
+               android:paddingBottom="1dp"
+               android:paddingLeft="20dp"
+               android:paddingRight="20dp"
                android:layout_alignParentRight="true"
                android:layout_alignParentTop="true"
                android:layout_gravity="right" />
@@ -88,6 +89,7 @@
                 android:layout_height="1dp"
                 android:layout_centerHorizontal="true"
                 android:id="@+id/list_item_divider_view"
+                android:layout_marginTop="5dp"
                 android:background="@color/waldo_light_grey_transparent"
                 android:layout_below="@+id/list_item_shopaddress_textview"
                 />
@@ -97,8 +99,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/top_layout"
-        android:layout_marginTop="3dp"
-        android:layout_marginBottom="3dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_centerHorizontal="true">
