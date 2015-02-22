@@ -55,6 +55,7 @@
         <activity
             android:name="waldo.bike.form.AddShopFormActivity"
             android:configChanges="orientation"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_add_shop_form"
             android:parentActivityName="waldo.bike.form.AddShopMap" >
             <meta-data
