@@ -82,8 +82,8 @@ public class ShopsTestContentProvider extends AndroidTestCase {
         );
         List<String> columnNames = new ArrayList<String>();
         columnNames.add(ShopsContract.ShopsEntry._ID);
-      /*  columnNames.add(ShopsContract.ShopsEntry.COLUMN_SHOP_NAME);
-        columnNames.add(ShopsContract.ShopsEntry.COLUMN_SHOP_ADDRESS);
+        columnNames.add(ShopsContract.ShopsEntry.COLUMN_SHOP_NAME);
+      /*  columnNames.add(ShopsContract.ShopsEntry.COLUMN_SHOP_ADDRESS);
         columnNames.add(ShopsContract.ShopsEntry.COLUMN_SHOP_LATITUDE);
         columnNames.add(ShopsContract.ShopsEntry.COLUMN_SHOP_LONGITUDE);
         columnNames.add(ShopsContract.ShopsEntry.COLUMN_IS_OPEN);

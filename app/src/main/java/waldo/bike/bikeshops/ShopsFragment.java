@@ -166,8 +166,12 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                         return true;
                     case COL_DISCOUNT_VALUE:
                         if ((cursor.getInt(COL_IS_PARTNER) == 1)) {
+                            Log.i(LOG_TAG,"Added partner with discount value " + String.valueOf(cursor.getInt(COL_DISCOUNT_VALUE)));
                             ((TextView) view).setText("-" + String.valueOf(cursor.getInt(COL_DISCOUNT_VALUE)) + "%");
                             view.setVisibility(View.VISIBLE);
+                        }
+                        else{
+                            view.setVisibility(View.GONE);
                         }
                         return true;
                 }

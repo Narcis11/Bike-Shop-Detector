@@ -75,7 +75,7 @@
                android:layout_height="wrap_content"
                android:textAppearance="?android:textAppearanceMedium"
                android:background="@color/discount_text"
-               android:text="-15%"
+               android:visibility="gone"
                android:paddingTop="1dp"
                android:paddingBottom="1dp"
                android:paddingLeft="18dp"
