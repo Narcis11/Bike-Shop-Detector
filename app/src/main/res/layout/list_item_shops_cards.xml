@@ -13,14 +13,6 @@
 
     <!--Used to format each shop from the main activity-->
 
-<!--    <android.support.v7.widget.CardView
-        android:id="@+id/card_view"
-        android:layout_gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        card_view:cardBackgroundColor="@color/white"
-        >-->
-
         <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -51,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:layout_marginLeft="60dp"
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="3dp"
                 android:typeface="serif"
                 android:fontFamily="sans-serif"
                 android:singleLine="true"
@@ -73,7 +65,7 @@
                 android:maxLines="2"
                 android:ellipsize="end"
                 android:text="Strada Barbușchi, București"
-                android:textColor="@color/shop_detail"
+                android:textColor="@color/waldo_light_grey"
                 android:textAppearance="?android:textAppearanceSmall"/>
 
             <!--Shop discount-->
@@ -140,8 +132,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.3"
             android:fontFamily="sans-serif-condensed"
-            android:text="Closed"
-            android:textColor="@color/shop_detail"
+            android:textStyle="bold"
+            android:textColor="@color/waldo_light_grey"
             android:gravity="center_horizontal"
             android:layout_below="@+id/list_item_shopname_textview"
             android:textAppearance="?android:textAppearanceMedium"/>
@@ -168,5 +160,4 @@
             android:fontFamily="sans-serif-condensed"
             android:textAppearance="?android:textAppearanceMedium"/>
     </LinearLayout>
-<!--    </android.support.v7.widget.CardView>-->
 </RelativeLayout>
