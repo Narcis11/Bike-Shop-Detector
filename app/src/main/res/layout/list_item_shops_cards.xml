@@ -84,18 +84,21 @@
                android:layout_alignParentTop="true"
                android:layout_gravity="right" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="5dp"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:layout_below="@+id/list_item_shopaddress_textview">
             <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_centerHorizontal="true"
+                android:layout_width="281dp"
+                android:layout_height="match_parent"
                 android:id="@+id/list_item_divider_view"
-                android:layout_marginTop="5dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
                 android:background="@color/waldo_light_grey_transparent"
-                android:layout_below="@+id/list_item_shopaddress_textview"
+                android:gravity="center"
                 />
-
+        </LinearLayout>
         </RelativeLayout>
 
 
