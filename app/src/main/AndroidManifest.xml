@@ -49,6 +49,7 @@
             android:name="waldo.bike.bikeshops.MainActivity"
             android:configChanges="orientation"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/MainActivityTheme" >
         </activity>
         <activity

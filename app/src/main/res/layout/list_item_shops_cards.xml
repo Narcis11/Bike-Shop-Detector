@@ -85,15 +85,20 @@
                android:layout_gravity="right" />
 
             <View
-                android:layout_width="290dp"
+                android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_centerHorizontal="true"
                 android:id="@+id/list_item_divider_view"
                 android:layout_marginTop="5dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
                 android:background="@color/waldo_light_grey_transparent"
                 android:layout_below="@+id/list_item_shopaddress_textview"
                 />
+
         </RelativeLayout>
+
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -105,13 +110,6 @@
         android:layout_marginRight="10dp"
         android:layout_centerHorizontal="true">
 
-        <!--Distance image-->
-<!--        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/list_item_distance_imageview"
-            android:layout_below="@+id/list_item_icon"
-            android:src="@drawable/map_shop"/>-->
 
         <!--Distance textview-->
         <TextView
@@ -137,13 +135,6 @@
             android:gravity="center_horizontal"
             android:layout_below="@+id/list_item_shopname_textview"
             android:textAppearance="?android:textAppearanceMedium"/>
-
-        <!--Duration image-->
-<!--        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/list_item_duration_imageview"
-            android:src="@drawable/schedule_shop"/>-->
 
         <!--Duration TextView-->
         <TextView
