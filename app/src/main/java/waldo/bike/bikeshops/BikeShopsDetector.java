@@ -50,7 +50,7 @@ public class BikeShopsDetector extends Application {
                 new TwitterAuthConfig(Constants.CONSUMER_KEY,
                         Constants.CONSUMER_SECRET);
         try { //TODO: Repară căcatul ăsta de twitter.
-          //  Fabric.with(this, new Twitter(authConfig));
+            Fabric.with(this, new Twitter(authConfig));
         }
         catch (Exception e) {
 

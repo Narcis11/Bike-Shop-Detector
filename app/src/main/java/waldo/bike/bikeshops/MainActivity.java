@@ -336,10 +336,9 @@ public class MainActivity extends Activity implements
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.i(LOG_TAG, "in onActivityResult");
-        Log.i(LOG_TAG, requestCode + ", " + resultCode + ", " + data.toString());
         super.onActivityResult(requestCode, resultCode, data);
         mLikeView.handleOnActivityResult(mContext, requestCode, resultCode, data);
-        if (data.hasExtra("com.facebook.platform.extra.APPLICATION_ID")) mRepositionLikeButton = true;
+        if (data != null && data.hasExtra("com.facebook.platform.extra.APPLICATION_ID")) mRepositionLikeButton = true;
         if (mRepositionLikeButton) {
             if (mLikeView.getPaddingLeft() == 16) {
                 mLikeView.setPadding(0, 0, 220, 0);//reposition the button after a Like action
@@ -348,7 +347,6 @@ public class MainActivity extends Activity implements
         }
         if (mTwitterLoginButton != null) {
             try {
-                Log.i(LOG_TAG, requestCode + ", " + resultCode + ", " + data.toString());
                 mTwitterLoginButton.onActivityResult(requestCode, resultCode, data);
             }
             catch (NullPointerException e){
