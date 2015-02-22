@@ -121,7 +121,7 @@
     <string name="delete_shop_button">Delete</string>
     <string name="next_shop_button">Next--></string>
     <string name="shop_detail_map">Open map</string>
-
+    <string name="open_form">Open form</string>
     <!-- Used in the AddShopFormActivity -->
     <string name="form_title">This submission will be moderated by Google. Complete all fields to increase the chance of acceptance.</string>
     <string name="form_shop_name_title">Shop\'s name (mandatory)</string>
