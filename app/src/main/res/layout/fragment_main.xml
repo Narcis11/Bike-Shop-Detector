@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:paddingTop="10dp"
     android:paddingBottom="10dp"
-    android:background="@color/waldo_light_grey_transparent"
     android:layout_height="match_parent">
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -12,7 +11,6 @@
     android:layout_height="match_parent"
     android:padding="10dp"
     android:id="@+id/shops_frame_id"
-    android:background="@color/waldo_light_grey_transparent"
     tools:context=".MainActivity$PlaceholderFragment">
 
 
@@ -20,7 +18,6 @@
         android:id="@+id/listview_shops"
         android:background="@color/white"
         android:dividerHeight="10dp"
-        android:divider="@color/waldo_light_grey_transparent"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         </ListView>

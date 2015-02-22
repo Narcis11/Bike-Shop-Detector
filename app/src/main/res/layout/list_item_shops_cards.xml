@@ -132,7 +132,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.3"
             android:fontFamily="sans-serif-condensed"
-            android:textStyle="bold"
             android:textColor="@color/waldo_light_grey"
             android:gravity="center_horizontal"
             android:layout_below="@+id/list_item_shopname_textview"

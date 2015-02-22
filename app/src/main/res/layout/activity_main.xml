@@ -12,6 +12,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity"
     tools:ignore="MergeRootFrame"
+    android:background="@color/waldo_dark_grey"
     >
     <!--Text View used to display messages regarding the GPS/Internet status-->
     <TextView
