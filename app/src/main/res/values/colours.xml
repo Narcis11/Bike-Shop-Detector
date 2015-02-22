@@ -22,7 +22,7 @@
         <color name="list_item_title">#fff</color>
         <color name="counter_text_color">#c5c4c4</color>
         <color name="invalid_field_color">#ED2147</color>
-        <color name="form_background">#6c8087</color>
+        <color name="form_background">#CCaaabaf</color>
         <color name="discount_text">#ff6e17</color>
         <color name="map_textview">#08a939</color>
         <color name="add_shop_pending">#faa208</color>
