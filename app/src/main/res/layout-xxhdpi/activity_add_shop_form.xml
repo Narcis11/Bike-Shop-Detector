@@ -1,0 +1,155 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/form_background"
+    tools:context="waldo.bike.form.AddShopFormActivity">
+
+    <!--The design of the form used to add a shop-->
+    <!--Adding shop.../Shop added text view-->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:id="@+id/add_shop_status"
+        android:gravity="center"
+        android:visibility="gone"
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp"
+        android:overScrollMode="never"
+        android:textIsSelectable="false"
+        android:textStyle="normal"
+        android:text="test"
+        android:layout_gravity="top|center_horizontal"
+        android:background="@color/red"
+        android:textColor="@color/list_background"
+        />
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:background="@color/form_background"
+        >
+    <!--This form will be moderated by Google.-->
+    <TextView
+        android:id="@+id/form_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:text="@string/form_title"
+        android:textColor="@color/header_text"
+        android:textAppearance="?android:textAppearanceMedium">
+    </TextView>
+
+    <!--Shop name title & input-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/new_shop_name_title"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:paddingTop="25dp"
+        android:paddingBottom="11dp"
+        android:textColor="@color/header_text"
+        android:text="@string/form_shop_name_title"/>
+    <EditText
+        android:id="@+id/new_shop_name"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:hint="@string/form_shop_name"
+        android:background="@drawable/form_input_style"
+        android:inputType="textPersonName"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:textColor="@color/header_text"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        >
+    </EditText>
+
+    <!--Phone number title and input-->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/new_shop_phone_title"
+        android:paddingTop="18dp"
+        android:paddingBottom="11dp"
+        android:textColor="@color/header_text"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:text="@string/form_shop_phone_title"/>
+
+    <EditText
+        android:id="@+id/new_shop_phone"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:hint="@string/form_shop_phone"
+        android:inputType="phone"
+        android:background="@drawable/form_input_style"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        >
+    </EditText>
+
+    <!--Website title and input-->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/new_shop_website_title"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:paddingTop="18dp"
+        android:paddingBottom="11dp"
+        android:textColor="@color/header_text"
+        android:text="@string/form_shop_website_title"/>
+
+    <EditText
+        android:id="@+id/new_shop_website"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:hint="@string/form_shop_website"
+        android:background="@drawable/form_input_style"
+        android:inputType="textWebEmailAddress"
+        android:layout_weight="0"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        >
+    </EditText>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:paddingBottom="10dp"
+        android:gravity="center|bottom"
+        android:orientation="vertical" >
+
+        <Button
+            android:id="@+id/add_shop_button"
+            android:text="@string/add_shop_button_title"
+            android:textColor="@color/white"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="5dp"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:layout_height="45dp"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:paddingTop="3dp"
+            android:clickable="true"
+            android:onClick="addShop"
+            android:paddingBottom="10dp"
+            android:background="@drawable/addshop_button_selector"
+            />
+    </LinearLayout>
+</LinearLayout>
+</LinearLayout>
