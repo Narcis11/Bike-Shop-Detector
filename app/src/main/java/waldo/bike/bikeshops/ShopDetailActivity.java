@@ -124,7 +124,9 @@ public class ShopDetailActivity extends FragmentActivity
             }
             //setting up the opening hours
             mShopOpeningHours =  (shopDetailCursor.getString(COL_SHOP_OPENING_HOURS) != null) ? shopDetailCursor.getString(COL_SHOP_OPENING_HOURS) : "";
-            if (!mShopOpeningHours.equals("")) {
+
+            if (!Utility.getTodayFromOpeningHours(mShopOpeningHours).equals("")) {
+                Log.i(LOG_TAG,"Shop hours is: " + Utility.getTodayFromOpeningHours(mShopOpeningHours));
                 shopOpeningHoursTextView.setVisibility(View.VISIBLE);
                 shopOpeningHoursTextView.setText(Utility.getTodayFromOpeningHours(mShopOpeningHours));
             }

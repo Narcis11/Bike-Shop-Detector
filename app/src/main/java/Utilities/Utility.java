@@ -589,8 +589,20 @@ public class Utility {
         Calendar calendar = Calendar.getInstance();
         int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
         String today = "";
-        for (int i = 0; i < openingHours.length; i ++) {
-            if (dayOfWeek - 2 == i) today = openingHours[i];
+        try {
+            for (int i = 0; i < openingHours.length; i++) {
+                if (dayOfWeek == 1) {
+                    today = openingHours[6];//Sunday
+                } else {//rest of the week
+                    if (dayOfWeek - 2 == i) today = openingHours[i];
+                }
+            }
+        }
+        catch (IndexOutOfBoundsException e) {
+            return ""; //the schedule is invalid
+        }
+        catch (Exception e) {
+            return ""; //unknown error occurred, we don't display any schedule
         }
         return today;
     }
