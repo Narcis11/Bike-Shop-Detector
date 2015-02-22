@@ -9,10 +9,13 @@ import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.Tracker;
+
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
 
+import waldo.bike.bikeshops.BikeShopsDetector;
 import waldo.bike.bikeshops.R;
 
 /**
@@ -24,7 +27,6 @@ public class Utility {
         private static String mMeterSign = "m";
         private static String mMileSign = "mi";
         private static String mFeetSign = "ft";
-
         public static String getPreferredRangeMetric(Context context) {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             return prefs.getString(context.getString(R.string.pref_range_key),
