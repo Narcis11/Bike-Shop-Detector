@@ -24,7 +24,7 @@ public class WebActivity extends Activity {
     private static final String LOG_TAG = WebActivity.class.getSimpleName();
     private static String mUrl = "";
     private static String mTitle = "";
-    private static final String mDefaultUrl = "http://www.waldo.bike/";
+    private static final String mDefaultUrl = "http://www.waldo.bike";
     ProgressBar progressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +61,6 @@ public class WebActivity extends Activity {
                 Log.i(LOG_TAG,"Progress is: " + newProgress);
                 if (newProgress == 100) {
                     progressBar.setVisibility(View.GONE);
-                    Log.i(LOG_TAG,"progressBar is now invisible. Progress is: " + newProgress);
                 }
                 else {
                     progressBar.setVisibility(View.VISIBLE);
