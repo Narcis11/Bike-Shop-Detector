@@ -1,6 +1,7 @@
 package waldo.bike.bikeshops;
 
 import android.app.Application;
+import android.content.pm.PackageManager;
 import android.util.Log;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -50,7 +51,7 @@ public class BikeShopsDetector extends Application {
                 new TwitterAuthConfig(Constants.CONSUMER_KEY,
                         Constants.CONSUMER_SECRET);
         try { //TODO: Repară căcatul ăsta de twitter.
-            Fabric.with(this, new Twitter(authConfig));
+            Fabric.with(getApplicationContext(), new Twitter(authConfig));
         }
         catch (Exception e) {
 
