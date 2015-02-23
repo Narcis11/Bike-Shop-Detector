@@ -97,6 +97,7 @@ public class MainActivity extends Activity implements
     private String mTwitterSecret = "";
     private LikeView mLikeView;
     private ImageView mFollowView;
+    private String FACEBOOK_APP_ID = "com.facebook.platform.extra.APPLICATION_ID";
     private TwitterAuthClient mTwitterAuthClient;
     private TwitterAuthConfig mTwitterAuthConfig;
     private TwitterLoginButton mTwitterLoginButton;
@@ -338,7 +339,7 @@ public class MainActivity extends Activity implements
         Log.i(LOG_TAG, "in onActivityResult");
         super.onActivityResult(requestCode, resultCode, data);
         mLikeView.handleOnActivityResult(mContext, requestCode, resultCode, data);
-        if (data != null && data.hasExtra("com.facebook.platform.extra.APPLICATION_ID")) mRepositionLikeButton = true;
+        if (data != null && data.hasExtra(FACEBOOK_APP_ID)) mRepositionLikeButton = true;
         if (mRepositionLikeButton) {
             if (mLikeView.getPaddingLeft() == 16) {
                 mLikeView.setPadding(0, 0, 220, 0);//reposition the button after a Like action
