@@ -340,10 +340,16 @@ public class MainActivity extends Activity implements
         super.onActivityResult(requestCode, resultCode, data);
         mLikeView.handleOnActivityResult(mContext, requestCode, resultCode, data);
         if (data != null && data.hasExtra(FACEBOOK_APP_ID)) mRepositionLikeButton = true;
-        if (mRepositionLikeButton) {
+        if (mRepositionLikeButton) { //also signals that the like(d) button has been pressed
             if (mLikeView.getPaddingLeft() == 16) {
                 mLikeView.setPadding(0, 0, 220, 0);//reposition the button after a Like action
                 Log.i(LOG_TAG, "Activ results - changed padding | left/right: " + String.valueOf(mLikeView.getPaddingLeft()) + "/" + String.valueOf(mLikeView.getPaddingRight()));
+                //send a hit to GA for each press of the like button
+                mGaTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory(getString(R.string.ga_socialmedia_cat_id))
+                        .setAction(getString(R.string.ga_socialmedia_act_id))
+                        .setLabel(mLikeLabel)
+                        .build());
             }
         }
         if (mTwitterLoginButton != null) {
