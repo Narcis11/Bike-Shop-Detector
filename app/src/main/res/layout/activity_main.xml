@@ -29,6 +29,15 @@
         android:background="@color/red"
         android:textColor="@color/white"
         android:textStyle="normal" />
+
+    <ProgressBar
+        android:id="@+id/gps_spinner_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="visible"
+        />
 </FrameLayout>
     <!-- Listview to display slider menu -->
     <ListView

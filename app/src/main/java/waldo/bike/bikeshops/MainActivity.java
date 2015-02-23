@@ -1,6 +1,8 @@
 package waldo.bike.bikeshops;
 
 import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -29,6 +31,7 @@ import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -119,6 +122,8 @@ public class MainActivity extends Activity implements
     String mFollowLabel = "follow_pressed";
     //the frame layout that holds the list view
     FrameLayout mListFrameLayout;
+    //used for showing the animation to the user
+    ProgressDialog mProgressDialog;
      //these variables are used for the slider menu
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -325,6 +330,19 @@ public class MainActivity extends Activity implements
             }
 
         mFirstLoad = false;
+
+        FragmentManager fragmentManager = getFragmentManager();
+        ShopsFragment shopsFragment = (ShopsFragment) fragmentManager.findFragmentById(R.id.container);
+        //we only display the message if the screen is empty
+        if (mFirstGPSConnection && !shopsFragment.isVisible()) {
+            mProgressDialog = new ProgressDialog(this);
+            mProgressDialog.setMessage(getResources().getString(R.string.waiting_gps));
+            mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            mProgressDialog.setIndeterminate(true);
+            mProgressDialog.setCancelable(false); //don't allow the user to cancel the dialog
+            mProgressDialog.show();
+        }
+
     }
 
     @Override
@@ -416,23 +434,12 @@ public class MainActivity extends Activity implements
     //required methods for managing the location
     @Override
     public void onLocationChanged(Location location) {
-        //mLocationView.setText("Location received: " + location.toString());
-      //  Log.i(LOG_TAG,"firstGPSConnection is " + firstGPSConnection);
- /*      if (firstGPSConnection) { //only display the fragment if it's the first GPS connection
-           getFragmentManager().beginTransaction()
-                    .add(R.id.container, new ShopsFragment(),fragmentTag)
-                    .commit(); //TO BE REMOVED
-           Log.i(LOG_TAG,"Fragment created in onLocationChanged");
-           mLatLng = Utility.getLatLng(location.toString());
-           GlobalState.latitude = mLatLng[0];
-           GlobalState.longitude = mLatLng[1];
-        }*/
-        //TODO: Find another logic for the user's positioning. We need to collect the coordinates more often.
         if (mFirstGPSConnection) {
             DeviceConnection deviceConnection = new DeviceConnection(mContext);
                 //mLatLng = Utility.getLatLngFromLocation(location.toString());
                 GlobalState.USER_LAT = String.valueOf(location.getLatitude());
                 GlobalState.USER_LNG = String.valueOf(location.getLongitude());
+                if (mProgressDialog.isShowing()) mProgressDialog.dismiss();
                 ShopsFragment shopsFragment = new ShopsFragment();
                 shopsFragment.updateShopList(mContext);
         }
