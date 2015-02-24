@@ -124,6 +124,8 @@ public class MainActivity extends Activity implements
     FrameLayout mListFrameLayout;
     //used for showing the animation to the user
     ProgressDialog mProgressDialog;
+    ListView mShopsFragmentList;
+    private boolean mIsDialogCalled = false;
      //these variables are used for the slider menu
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -331,21 +333,53 @@ public class MainActivity extends Activity implements
 
         mFirstLoad = false;
 
-        FragmentManager fragmentManager = getFragmentManager();
-        ShopsFragment shopsFragment = (ShopsFragment) fragmentManager.findFragmentById(R.id.container);
-        //we only display the message if the screen is empty
-        if (mFirstGPSConnection && !shopsFragment.isVisible()) {
+
+
+/*        Log.i(LOG_TAG,"Adapter empty? " + shopsFragmentList.getAdapter().isEmpty());
+        Log.i(LOG_TAG,"Items enabled? " + shopsFragmentList.getAdapter().areAllItemsEnabled());
+        Log.i(LOG_TAG,"Item 1 enabled? " + shopsFragmentList.getAdapter().isEnabled(1));
+        Log.i(LOG_TAG,"View type count? " + shopsFragmentList.getAdapter().getViewTypeCount());
+        Log.i(LOG_TAG,"Adapter is: " + shopsFragmentList.getAdapter().toString());
+        Log.i(LOG_TAG,"Adapter count: " + String.valueOf(shopsFragmentList.getAdapter().getCount()));
+        TextView shopName = (TextView) shopsFragmentList.findViewById(R.id.list_item_shopname_textview);*/
+/*        if (shopName!= null) {
+            Log.i(LOG_TAG,"Shop name is not null");
+        }
+        else {
+            Log.i(LOG_TAG,"Shop name IS null");
+        }*/
+
+/*        if (mFirstGPSConnection && shopsFragmentList.getAdapter().isEmpty()) {
             mProgressDialog = new ProgressDialog(this);
             mProgressDialog.setMessage(getResources().getString(R.string.waiting_gps));
             mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             mProgressDialog.setIndeterminate(true);
             mProgressDialog.setCancelable(false); //don't allow the user to cancel the dialog
             mProgressDialog.show();
-        }
+        }*/
 
     }
 
     @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+                 super.onWindowFocusChanged(hasFocus);
+        //this method is called each time the focus changes. We need to display the dialog only when the app launches
+        if (!mIsDialogCalled) {
+            mShopsFragmentList = (ListView) findViewById(R.id.listview_shops);
+            mProgressDialog = new ProgressDialog(this);
+            if (mFirstGPSConnection && mShopsFragmentList.getAdapter().isEmpty()) {
+                mProgressDialog = new ProgressDialog(this);
+                mProgressDialog.setMessage(getResources().getString(R.string.waiting_gps));
+                mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                mProgressDialog.setIndeterminate(true);
+                mProgressDialog.setCancelable(false); //don't allow the user to cancel the dialog
+                mProgressDialog.show();
+            }
+        }
+        mIsDialogCalled = true;
+    }
+
+             @Override
     public void onBackPressed() {
         super.onBackPressed();
         this.finish();
@@ -439,7 +473,9 @@ public class MainActivity extends Activity implements
                 //mLatLng = Utility.getLatLngFromLocation(location.toString());
                 GlobalState.USER_LAT = String.valueOf(location.getLatitude());
                 GlobalState.USER_LNG = String.valueOf(location.getLongitude());
-                if (mProgressDialog.isShowing()) mProgressDialog.dismiss();
+                if (mProgressDialog != null && mProgressDialog.isShowing()) {
+                    mProgressDialog.dismiss();
+                }
                 ShopsFragment shopsFragment = new ShopsFragment();
                 shopsFragment.updateShopList(mContext);
         }

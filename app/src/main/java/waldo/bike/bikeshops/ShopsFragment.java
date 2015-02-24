@@ -98,7 +98,6 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
 
-        
         mShopsAdapter = new SimpleCursorAdapter(
                 getActivity(),
                 R.layout.list_item_shops_cards,
