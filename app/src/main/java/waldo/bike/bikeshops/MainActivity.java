@@ -38,6 +38,7 @@ import android.widget.Toast;
 import com.facebook.AppEventsLogger;
 import com.facebook.Settings;
 import com.facebook.widget.LikeView;
+import com.google.android.gms.analytics.ExceptionReporter;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.ConnectionResult;
@@ -302,7 +303,11 @@ public class MainActivity extends Activity implements
         //initialise the GA tracker
         mGaTracker = ((BikeShopsDetector) getApplication()).getTracker(
                 BikeShopsDetector.TrackerName.APP_TRACKER);
-
+        //report uncaught exceptions
+        Thread.UncaughtExceptionHandler myHandler = new ExceptionReporter(
+                mGaTracker,                                        // Currently used Tracker.
+                Thread.getDefaultUncaughtExceptionHandler(),      // Current default uncaught exception handler.
+                mContext);
         if (!(mLikeView.getPaddingLeft() == 16 || mLikeView.getPaddingLeft() == 0)) {
             mLikeView.setPadding(16, 0, 211, 0);
             Log.i(LOG_TAG,"Changed padding in onResume");

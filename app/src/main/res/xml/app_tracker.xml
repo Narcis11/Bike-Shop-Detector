@@ -7,7 +7,6 @@
         Waldo Bikeshops
     </ga_appName>
 
-    <bool name="ga_reportUncaughtExceptions">true</bool>
 
     <!-- The screen names that will appear in reports -->
 
