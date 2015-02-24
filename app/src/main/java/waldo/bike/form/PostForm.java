@@ -2,6 +2,7 @@ package waldo.bike.form;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
@@ -68,7 +69,6 @@ public class PostForm extends AsyncTask<String, Void, String> {
             if (parameters[6] != null) {
                 fullJson.put(website,parameters[6]);
             }
-           // Log.i(LOG_TAG,"JSON String is: " + fullJson.toString(2));
         }
         catch(JSONException e) {
             e.printStackTrace();
