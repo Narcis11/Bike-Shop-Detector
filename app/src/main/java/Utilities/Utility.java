@@ -605,12 +605,14 @@ public class Utility {
 
     }
 
-    public static String getTodayFromOpeningHours (String schedule) {
+    public static String getTodayFromOpeningHours (String schedule, Application application) {
         //Log.i(LOG_TAG,"Length of opening hours: " + String.valueOf(schedule.length()));
         String[] openingHours = schedule.split(Constants.HASH_SEPARATOR);
         Calendar calendar = Calendar.getInstance();
         int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
         String today = "";
+        Tracker gaTracker = ((BikeShopsDetector) application).getTracker(
+                BikeShopsDetector.TrackerName.APP_TRACKER);;
         try {
             for (int i = 0; i < openingHours.length; i++) {
                 if (dayOfWeek == 1) {
@@ -621,9 +623,17 @@ public class Utility {
             }
         }
         catch (IndexOutOfBoundsException e) {
+            gaTracker.send(new HitBuilders.ExceptionBuilder()
+                    .setDescription("IndexOutOfBoundsException in Utility, getTodayFromOpeningHours")
+                    .setFatal(false)
+                    .build());
             return ""; //the schedule is invalid
         }
         catch (Exception e) {
+            gaTracker.send(new HitBuilders.ExceptionBuilder()
+                    .setDescription("Exception in Utility, getTodayFromOpeningHours")
+                    .setFatal(false)
+                    .build());
             return ""; //unknown error occurred, we don't display any schedule
         }
         return today;

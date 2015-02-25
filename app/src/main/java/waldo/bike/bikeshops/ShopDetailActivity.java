@@ -45,6 +45,7 @@ public class ShopDetailActivity extends FragmentActivity
     private String mPlaceid;
     private String mPromoText;
     private String mShopOpeningHours;
+    private String mTodayFromOpeningHours;
     private float mShopRating;
     private static final int ACTIVITY_INDEX = 1;
     private static Context mContext;
@@ -124,10 +125,10 @@ public class ShopDetailActivity extends FragmentActivity
             }
             //setting up the opening hours
             mShopOpeningHours =  (shopDetailCursor.getString(COL_SHOP_OPENING_HOURS) != null) ? shopDetailCursor.getString(COL_SHOP_OPENING_HOURS) : "";
-
-            if (!Utility.getTodayFromOpeningHours(mShopOpeningHours).equals("")) {
+            mTodayFromOpeningHours = Utility.getTodayFromOpeningHours(mShopOpeningHours, getApplication());
+            if (!mTodayFromOpeningHours.equals("")) {
                 shopOpeningHoursTextView.setVisibility(View.VISIBLE);
-                shopOpeningHoursTextView.setText(Utility.getTodayFromOpeningHours(mShopOpeningHours));
+                shopOpeningHoursTextView.setText(mTodayFromOpeningHours);
             }
             //setting up the website
             mShopWebsite = (shopDetailCursor.getString(COL_SHOP_WEBSITE) != null) ? shopDetailCursor.getString(COL_SHOP_WEBSITE) : "";
