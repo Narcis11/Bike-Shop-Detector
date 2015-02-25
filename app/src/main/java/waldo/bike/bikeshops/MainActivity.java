@@ -369,7 +369,8 @@ public class MainActivity extends Activity implements
     public void onWindowFocusChanged(boolean hasFocus) {
                  super.onWindowFocusChanged(hasFocus);
         //this method is called each time the focus changes. We need to display the dialog only when the app launches
-/*        if (!mIsDialogCalled) {
+        //TODO: Although the shop list is populated, this method is sometimess called randomly.
+        if (!mIsDialogCalled) {
             mShopsFragmentList = (ListView) findViewById(R.id.listview_shops);
             mProgressDialog = new ProgressDialog(this);
             if (mFirstGPSConnection && mShopsFragmentList.getAdapter().isEmpty()) {
@@ -379,9 +380,10 @@ public class MainActivity extends Activity implements
                 mProgressDialog.setIndeterminate(true);
                 mProgressDialog.setCancelable(false); //don't allow the user to cancel the dialog
                 mProgressDialog.show();
+                mIsDialogCalled = true;
             }
         }
-        mIsDialogCalled = true;*/
+
     }
 
              @Override

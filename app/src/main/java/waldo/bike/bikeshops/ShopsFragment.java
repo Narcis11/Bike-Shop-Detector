@@ -297,7 +297,8 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
 
     @Override
     public void onStart() {
-        super.onStart(); 
+        super.onStart();
+        Log.i(LOG_TAG,"Position in onStart: " + mPosition);
        // Log.i(LOG_TAG, "In fragment onStart()");
        // updateShopList();
     }
@@ -358,9 +359,11 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     @Override
     public void onLoadFinished(android.content.Loader<Cursor> loader, Cursor data) {
         mShopsAdapter.swapCursor(data);
+        Log.i(LOG_TAG,"Position is: " + mPosition);
         if (mPosition != ListView.INVALID_POSITION) {
             // If we don't need to restart the loader, and there's a desired position to restore
             // to, do so now.
+            Log.i(LOG_TAG,"Scrolled to " + mPosition);
             mListView.smoothScrollToPosition(mPosition);
         }
     }
