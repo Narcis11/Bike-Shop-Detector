@@ -155,9 +155,6 @@ public class ShopDetailActivity extends FragmentActivity
         }
 
         shopDetailCursor.close();
-/*        for (String i : QUERY_COLUMS) {
-            Log.i(LOG_TAG, String.valueOf(shopDetailCursor.getColumnIndex(QUERY_COLUMS[i])));
-        }*/
     }
 
     @Override
@@ -197,13 +194,6 @@ public class ShopDetailActivity extends FragmentActivity
 
     public void openMap(View v) {
         Intent openMapIntent = new Intent(mContext,MapsActivity.class);
-/*        Bundle bundle = new Bundle();
-        String latitude = String.valueOf(mShopLat);
-        String longitude = String.valueOf(mShopLng);
-        bundle.putString(Constants.BUNDLE_SHOP_LAT,latitude);
-        bundle.putString(Constants.BUNDLE_SHOP_LNG,longitude);
-        bundle.putString(Constants.BUNDLE_FRAGMENT,Constants.CALLED_FROM_FRAGMENT);
-        bundle.putString(Constants.BUNDLE_SHOP_NAME,mShopName);*/
         openMapIntent.putExtras(mBundle);
         startActivity(openMapIntent);
     }
