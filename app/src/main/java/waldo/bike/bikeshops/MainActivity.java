@@ -386,8 +386,7 @@ public class MainActivity extends Activity implements
 
              @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        this.finish();
+        //we don't do anything when the back button is pressed.
     }
 
     //called when like/unlike or (un)follow action is executed
