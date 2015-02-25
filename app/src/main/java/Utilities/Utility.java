@@ -1,5 +1,6 @@
 package Utilities;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -9,6 +10,7 @@ import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
 import java.io.IOException;
@@ -549,9 +551,11 @@ public class Utility {
         return Constants.RETURN_ERROR_STRING;
     }
 
-    public static Double[] getCoordinatesFromAddressName(Context context, String address) {
+    public static Double[] getCoordinatesFromAddressName(Context context, String address, Application application) {
         Geocoder geocoder = new Geocoder(context);
         Double[] coordinatesArray = new Double[5];
+        Tracker gaTracker = ((BikeShopsDetector) application).getTracker(
+                BikeShopsDetector.TrackerName.APP_TRACKER);;
         try {
             List<Address> coordinates = geocoder.getFromLocationName(address,1);
             if (coordinates.size() > 0) {
@@ -560,26 +564,42 @@ public class Utility {
             }
         }
         catch (IOException e) {
-               e.printStackTrace();
+            gaTracker.send(new HitBuilders.ExceptionBuilder()
+                    .setDescription("IOException in Utility, getCoordinatesFromAddressName")
+                    .setFatal(false)
+                    .build());
         }
         catch (IndexOutOfBoundsException e) {
-
+            gaTracker.send(new HitBuilders.ExceptionBuilder()
+                    .setDescription("IndexOutOfBoundsException in Utility, getCoordinatesFromAddressName")
+                    .setFatal(false)
+                    .build());
         }
         return coordinatesArray;
     }
 
-    public static String getAddressNameFromCoordinates (Context context, double latitude, double longitude) {
+    public static String getAddressNameFromCoordinates (Context context, double latitude, double longitude, Application application) {
         Geocoder geocoder = new Geocoder(context);
         String streetAddress;
+        Tracker gaTracker = ((BikeShopsDetector) application).getTracker(
+                BikeShopsDetector.TrackerName.APP_TRACKER);;
         try {
             List<Address> address = geocoder.getFromLocation(latitude, longitude, 1);
             streetAddress =  address.get(0).getAddressLine(0);
             return streetAddress;
-        }//if an error is received, we just return the error_string and manage the address in the back end
+        }//if an error is received, we just return the error_string and inform the user that this address is unavailable
         catch (IOException e) {
+            gaTracker.send(new HitBuilders.ExceptionBuilder()
+                    .setDescription("IOException in Utility, getAddressNameFromCoordinates")
+                    .setFatal(false)
+                    .build());
             return Constants.RETURN_ERROR_STRING;
         }
         catch (Exception e) {
+            gaTracker.send(new HitBuilders.ExceptionBuilder()
+                    .setDescription("Exception in Utility, getAddressNameFromCoordinates")
+                    .setFatal(false)
+                    .build());
             return Constants.RETURN_ERROR_STRING;
         }
 

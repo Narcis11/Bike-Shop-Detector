@@ -46,7 +46,7 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
         Log.i(LOG_TAG, "In onItemClick");
         String str = (String) adapterView.getItemAtPosition(position);
         Log.i(LOG_TAG,"str is " + str);
-        Double[] coordinatesArray = Utility.getCoordinatesFromAddressName(getApplicationContext(), str);
+        Double[] coordinatesArray = Utility.getCoordinatesFromAddressName(getApplicationContext(), str, getApplication());
         Log.i(LOG_TAG, "Lat/lng of address " + str + " = " + coordinatesArray[0] + "/" + coordinatesArray[1]);
         if (coordinatesArray[0] != null && coordinatesArray[1] != null) {
             mNewShopLat = coordinatesArray[0];
@@ -192,7 +192,7 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
     public void openFormActivity(View view) {
             Bundle bundle = new Bundle();
             //moved it here to make sure we get the right address every time
-            mTestAddress = Utility.getAddressNameFromCoordinates(getApplicationContext(),mNewShopLat,mNewShopLng);
+            mTestAddress = Utility.getAddressNameFromCoordinates(getApplicationContext(),mNewShopLat,mNewShopLng, getApplication());
             if (mTestAddress != Constants.RETURN_ERROR_STRING) {
                 mAddress = mTestAddress;
             }
