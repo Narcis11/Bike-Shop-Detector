@@ -14,9 +14,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import java.util.concurrent.ExecutionException;
 
 import Utilities.Constants;
+import waldo.bike.bikeshops.BikeShopsDetector;
 import waldo.bike.bikeshops.MainActivity;
 import waldo.bike.bikeshops.R;
 
@@ -36,6 +40,8 @@ public class AddShopFormActivity extends Activity {
     private TextView mShopPhoneTitle;
     private TextView mShopWebsiteTitle;
     private Button mAddShopButton;
+    //the Google Analytics tracker
+    Tracker mGaTracker;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +58,8 @@ public class AddShopFormActivity extends Activity {
         mShopNameOk = false;
         mShopWebsiteOk = true;
         mShopPhoneNumberOk = true;
-
+        mGaTracker = ((BikeShopsDetector) getApplication()).getTracker(
+                BikeShopsDetector.TrackerName.APP_TRACKER);
         mShopName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -204,17 +211,23 @@ public class AddShopFormActivity extends Activity {
                 postParameters[6] = mShopWebsite.getText().toString();
             }
             //sending the form
-            PostForm postForm = new PostForm();
+            PostForm postForm = new PostForm(getApplication());
             postForm.execute(postParameters);
             String response = "";
             try {
                 response = postForm.get();
             }
             catch (InterruptedException e) {
-                e.printStackTrace();
+                mGaTracker.send(new HitBuilders.ExceptionBuilder()
+                        .setDescription("InterruptedException in AddShopFormActivity, addShop")
+                        .setFatal(false)
+                        .build());
             }
             catch (ExecutionException e) {
-                e.printStackTrace();
+                mGaTracker.send(new HitBuilders.ExceptionBuilder()
+                        .setDescription("ExecutionException in AddShopFormActivity, addShop")
+                        .setFatal(false)
+                        .build());
             }
 
             if (response.indexOf(OK_STATUS) >= 0) {

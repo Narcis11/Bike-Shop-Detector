@@ -1,8 +1,12 @@
 package waldo.bike.form;
 
+import android.app.Application;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
@@ -14,16 +18,23 @@ import org.apache.http.protocol.HTTP;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import waldo.bike.bikeshops.BikeShopsDetector;
+
 /**
  * Created by Narcis11 on 10.01.2015.
  */
 public class PostForm extends AsyncTask<String, Void, String> {
 
     private static final String LOG_TAG = PostForm.class.getSimpleName();
-    Context mContext;
+    Application mApplication;
+    public PostForm(Application application) {
+        mApplication = application;
+    }
     @Override
     protected String doInBackground(String... params) {
-        String jsonString = createJSONObject(params);
+        Tracker mGaTracker = ((BikeShopsDetector)  mApplication).getTracker(
+                BikeShopsDetector.TrackerName.APP_TRACKER);
+        String jsonString = createJSONObject(params, mGaTracker);
        // String url = "https://maps.googleapis.com/maps/api/place/add/json?key=" + Constants.API_KEY;
         String url = "http://app.waldo.bike:8888/places";
         String ERROR_STATUS = "error";
@@ -38,13 +49,16 @@ public class PostForm extends AsyncTask<String, Void, String> {
             status = response.toString();
         }
         catch (Exception e){
-            e.printStackTrace();
+            mGaTracker.send(new HitBuilders.ExceptionBuilder()
+                    .setDescription("Exception in PostForm, doInBackground")
+                    .setFatal(false)
+                    .build());
             return ERROR_STATUS;
         }
         return status;
     }
 
-    protected String createJSONObject (String[] parameters) {
+    protected String createJSONObject (String[] parameters, Tracker gaTracker) {
         JSONObject fullJson = new JSONObject();
         JSONObject locationJson = new JSONObject();
         String lat = "lat";
@@ -71,10 +85,16 @@ public class PostForm extends AsyncTask<String, Void, String> {
             }
         }
         catch(JSONException e) {
-            e.printStackTrace();
+            gaTracker.send(new HitBuilders.ExceptionBuilder()
+                    .setDescription("JSONException in PostForm, createJSONObject")
+                    .setFatal(false)
+                    .build());
         }
         catch(NullPointerException e) {
-            e.printStackTrace();
+            gaTracker.send(new HitBuilders.ExceptionBuilder()
+                    .setDescription("NullPointerException in PostForm, createJSONObject")
+                    .setFatal(false)
+                    .build());
         }
         return fullJson.toString();
     }
