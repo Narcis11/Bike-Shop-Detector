@@ -220,6 +220,15 @@ public class AddShopFormActivity extends Activity {
             if (response.indexOf(OK_STATUS) >= 0) {
                 mInfoMessage.setVisibility(View.VISIBLE);
                 mInfoMessage.setBackgroundColor(getResources().getColor(R.color.map_textview));
+                //set the text title color back to black
+                mShopNameTitle.setTextColor(Color.BLACK);
+                mShopWebsiteTitle.setTextColor(Color.BLACK);
+                mShopPhoneTitle.setTextColor(Color.BLACK);
+                //the input text format disappears. We have to set it again.
+                mShopPhoneNumber.setBackgroundResource(R.drawable.form_input_style);
+                mShopWebsite.setBackgroundResource(R.drawable.form_input_style);
+                mShopName.setBackgroundResource(R.drawable.form_input_style);
+                //
                 mInfoMessage.setText(getResources().getString(R.string.add_shop_finished));
                 //open the main activity after two seconds
                 Handler handler = new Handler();

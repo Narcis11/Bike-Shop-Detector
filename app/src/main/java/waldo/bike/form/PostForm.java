@@ -25,7 +25,7 @@ public class PostForm extends AsyncTask<String, Void, String> {
     protected String doInBackground(String... params) {
         String jsonString = createJSONObject(params);
        // String url = "https://maps.googleapis.com/maps/api/place/add/json?key=" + Constants.API_KEY;
-        String url = "http://ec2-54-93-55-179.eu-central-1.compute.amazonaws.com:8888/places";
+        String url = "http://app.waldo.bike:8888/places";
         String ERROR_STATUS = "error";
         HttpPost httpPost = new HttpPost(url);
         HttpClient httpClient = new DefaultHttpClient();
