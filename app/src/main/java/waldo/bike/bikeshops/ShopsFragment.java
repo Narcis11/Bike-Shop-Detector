@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 
 import android.os.Handler;
+import android.os.Parcelable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -60,6 +61,9 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     private static final String SELECTED_KEY = "selected_position";
     //used by Google Analytics
     private Tracker mGaTracker;
+    //used for maintaining the listview state
+    Bundle mOutBundle;
+    private static Parcelable mListViewScrollPos = null;
     public static final String[] SHOPS_COLUMNS = {
             ShopsContract.ShopsEntry.TABLE_NAME + "." + ShopsContract.ShopsEntry._ID,
             ShopsContract.ShopsEntry.COLUMN_SHOP_NAME,
@@ -215,9 +219,10 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                     bundle.putString(Constants.BUNDLE_SHOP_LNG, mShopLongitude);
                     bundle.putString(Constants.BUNDLE_SHOP_NAME,mShopName);
                     bundle.putString(Constants.BUNDLE_SHOP_PLACE_ID,mPlaceId);
-                    bundle.putBoolean(Constants.BUNDLE_IS_PARTNER,mIsPartner);
-                    bundle.putString(Constants.BUNDLE_FRAGMENT,Constants.CALLED_FROM_FRAGMENT);
+                    bundle.putBoolean(Constants.BUNDLE_IS_PARTNER, mIsPartner);
+                    bundle.putString(Constants.BUNDLE_FRAGMENT, Constants.CALLED_FROM_FRAGMENT);
                     bundle.putString(Constants.BUNDLE_PROMO_TEXT,mPromoText);
+                    bundle.putInt(SELECTED_KEY, mPosition);
                     openDetailActivity.putExtras(bundle);
                     //lift off!
                     startActivity(openDetailActivity);
@@ -237,6 +242,10 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                 }*/
             }
         });
+        // Restore the ListView position
+        if (mListViewScrollPos != null) {
+            listView.onRestoreInstanceState(mListViewScrollPos);
+        }
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -283,6 +292,13 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        switch(id) {
+            case (R.id.home): {
+                    Log.i(LOG_TAG,"Back from action bar pressed");
+                    Log.i(LOG_TAG,"Position in R.id.home:" + mPosition);
+                    mOutBundle.getInt(SELECTED_KEY,100);
+            }
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -292,15 +308,14 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
         if (mPosition != ListView.INVALID_POSITION) {
             outState.putInt(SELECTED_KEY, mPosition);
         }
+        // Save the ListView position (for the case when the user presses the back button from the action bar
+        mListViewScrollPos = mListView.onSaveInstanceState();
         super.onSaveInstanceState(outState);
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        Log.i(LOG_TAG,"Position in onStart: " + mPosition);
-       // Log.i(LOG_TAG, "In fragment onStart()");
-       // updateShopList();
     }
 
     @Override
@@ -359,11 +374,9 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     @Override
     public void onLoadFinished(android.content.Loader<Cursor> loader, Cursor data) {
         mShopsAdapter.swapCursor(data);
-        Log.i(LOG_TAG,"Position is: " + mPosition);
         if (mPosition != ListView.INVALID_POSITION) {
             // If we don't need to restart the loader, and there's a desired position to restore
             // to, do so now.
-            Log.i(LOG_TAG,"Scrolled to " + mPosition);
             mListView.smoothScrollToPosition(mPosition);
         }
     }
