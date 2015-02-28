@@ -352,14 +352,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
         coordinates[0] = GlobalState.USER_LAT;
         coordinates[1] = GlobalState.USER_LNG;
         Log.i(LOG_TAG,"Lat/lng in updateShopList - " + coordinates[0] + "/" + coordinates[1]);
-      //  new FetchGooglePlaces(getActivity()).execute(coordinates);
         SyncAdapter.syncImmediately(context);
-/*        if (placeId != null) {//get details for one shop
-            SyncAdapter.syncImmediately(context,placeId);
-        }
-        else {//get all shops
-            SyncAdapter.syncImmediately(context,null);
-        }*/
     }
 
     //loaders are initialised in onActivityCreated because their lifecycle is bound to the activity, not the fragment
@@ -373,10 +366,15 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     @Override
     public void onLoadFinished(android.content.Loader<Cursor> loader, Cursor data) {
         mShopsAdapter.swapCursor(data);
+        Log.i(LOG_TAG,"In onLoadFinished.");
         if (mPosition != ListView.INVALID_POSITION) {
             // If we don't need to restart the loader, and there's a desired position to restore
             // to, do so now.
             mListView.smoothScrollToPosition(mPosition);
+        }
+        if (swipeLayout.isRefreshing()) {
+            Log.i(LOG_TAG,"REmoved the refresh circle");
+            swipeLayout.setRefreshing(false);
         }
     }
 
@@ -400,15 +398,10 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     @Override
     public void onRefresh() {
             Log.i(LOG_TAG, "In onRefresh()");
+            long DELAY_REFRESH = 10000;//just a high value, we remove the "refresh circle" anyway after the refresh is over
             swipeLayout.setColorSchemeResources(R.color.waldo_light_blue);
             ShopsFragment shopsFragment = new ShopsFragment();
             shopsFragment.updateShopList(getActivity());
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    swipeLayout.setRefreshing(false);
-                }
-            }, 3000);
         }
 
 }
