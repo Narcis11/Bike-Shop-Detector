@@ -129,7 +129,7 @@ public class SplashScreen extends Activity{
                     }
                     //onReceive is also called whenever we register the receiver in onResume, so we also have to double-check that the Internet is on
                     //TODO: Remove the comment from checkPlayServices before you release the app into production
-                    if (isGPSEnabled && isInternetEnabled /*&& checkPlayServices()*/) {
+                    if (isGPSEnabled && isInternetEnabled && checkPlayServices()) {
                         startMainActivity(mContext);
                         //open the main activity after two seconds
 
