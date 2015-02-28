@@ -373,7 +373,7 @@ public class MainActivity extends Activity implements
         if (!mIsDialogCalled) {
             mShopsFragmentList = (ListView) findViewById(R.id.listview_shops);
             mProgressDialog = new ProgressDialog(this);
-            if (mFirstGPSConnection && mShopsFragmentList.getAdapter().isEmpty()) {
+            if (mFirstGPSConnection && mShopsFragmentList.getAdapter().isEmpty() && mShopsFragmentList.getAdapter().getCount() == 0) {
                 mProgressDialog = new ProgressDialog(this);
                 mProgressDialog.setMessage(getResources().getString(R.string.waiting_gps));
                 mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);

@@ -392,12 +392,6 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     public void onLoadFinished(android.content.Loader<Cursor> loader, Cursor data) {
         mShopsAdapter.swapCursor(data);
         Log.i(LOG_TAG,"In onLoadFinished after swap");
-        if (data.moveToFirst()) {
-            Log.i(LOG_TAG,"Cursor has data");
-        }
-        else {
-            Toast.makeText(getActivity().getApplicationContext(), "No shops in the selected range",Toast.LENGTH_SHORT).show();
-        }
         if (mPosition != ListView.INVALID_POSITION) {
             // If we don't need to restart the loader, and there's a desired position to restore
             // to, do so now.
