@@ -7,6 +7,7 @@ import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SyncResult;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
@@ -155,6 +156,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     JSONObject placesJson = new JSONObject(placesJsonStr);
                     apiCallStatus = placesJson.getString(API_STATUS);
                     Log.i(LOG_TAG, "Status is " + apiCallStatus);
+                    //we need an intent to signal when the sync has finished
+                    Intent syncIntent = new Intent();
+                    syncIntent.setAction(Constants.SYNC_BUNDLE_STATUS_ACTION);
                     if (apiCallStatus.equals(Constants.OK_STATUS)) { //we only parse if the result is OK
                         JSONArray placesArray = placesJson.getJSONArray(API_RESULT); //root node
                         Vector<ContentValues> cVVector = new Vector<ContentValues>(placesArray.length());
@@ -264,6 +268,13 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                                 shopsCursor.close();
                             }
                         }
+                    }
+                    else {//notify that the sync is complete (actually, it never happened
+                        //we notify only when an error occured/there were no results. If the sync goes well, we remove the refresh circle in the onLoadFinished
+                        //from Shop Fragment
+                        syncIntent.putExtra(Constants.SYNC_BUNDLE_STATUS_KEY,Constants.SYNC_BUNDLE_STATUS_STOPPED);//the sync has stopped
+                        syncIntent.putExtra(Constants.SYNC_BUNDLE_RESULT_KEY,apiCallStatus);//the status of the sync
+                        mContext.sendBroadcast(syncIntent);
                     }
 
                 } catch (JSONException e) {

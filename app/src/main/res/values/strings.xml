@@ -147,6 +147,7 @@
     <string name="no_app_available">No installed application to service this request</string>
     <string name="twitter_operation_failed">Twitter operation failed</string>
     <string name="waiting_gps">Waiting for GPS connection...</string>
+    <string name="no_shops">No shops in the selected range</string>
     <!-- Keys and IDs -->
     <string name="gmaps_api_key">AIzaSyCHf4BobJQWDa39E_VJtUkwkuimFfsz7Z0</string>
     <string name="facebook_appId">1528344614097187</string>

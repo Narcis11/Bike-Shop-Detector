@@ -39,7 +39,12 @@ public class Constants {
     public static final String ADD_SHOP_BUNDLE_LAT_KEY = "lat_key";
     public static final String ADD_SHOP_BUNDLE_LNG_KEY = "lng_key";
     public static final String ADD_SHOP_BUNDLE_ADDRESS_KEY = "address_key";
-
+    //the bundle used for the sync adapter receiver
+    public static final String SYNC_BUNDLE_STATUS_KEY = "sync_status";
+    public static final String SYNC_BUNDLE_STATUS_STOPPED = "stopped";
+    public static final String SYNC_BUNDLE_STATUS_ZERO = "ZERO_RESULTS";
+    public static final String SYNC_BUNDLE_STATUS_ACTION = "sync_receiver";
+    public static final String SYNC_BUNDLE_RESULT_KEY = "sync_result";
     //used in the Maps Activity
     public static final float  CITY_ZOOM = 11;
     public static final float  SHOP_ZOOM = 18;

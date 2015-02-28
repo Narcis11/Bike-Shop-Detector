@@ -2,8 +2,10 @@ package waldo.bike.bikeshops;
 
 import android.app.Fragment;
 import android.app.LoaderManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.os.Bundle;
 
@@ -22,6 +24,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -59,6 +62,8 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     private SwipeRefreshLayout swipeLayout;
     private int mPosition = ListView.INVALID_POSITION;
     private static final String SELECTED_KEY = "selected_position";
+    //the intent filter used to determine the sync status
+    private IntentFilter mSyncFilter;
     //used by Google Analytics
     private Tracker mGaTracker;
     //used for maintaining the listview state
@@ -331,6 +336,11 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
         //onResume is called before the loader, so it's safe (read "doesn't affect the logic") to assign values to the booleans here
         mIsListRefreshed = false;
         mIsSpeedChanged = false;
+        //register the sync receiver
+        mSyncFilter = new IntentFilter();
+        mSyncFilter.addAction(Constants.SYNC_BUNDLE_STATUS_ACTION);
+        getActivity().registerReceiver(mSyncReceiver,mSyncFilter);
+        //instantiate the DeviceConnection class
         DeviceConnection deviceConnection = new DeviceConnection(getActivity());
         //refresh if the range has changed, we have an internet connection and the user's last location
         if (GlobalState.FRAGMENT_RANGE != null && !GlobalState.FRAGMENT_RANGE.equals(Utility.getPreferredRangeImperial(getActivity()))
@@ -345,6 +355,13 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
             mIsSpeedChanged = true;
             getLoaderManager().restartLoader(SHOPS_LOADER_ID,null,this);
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        //unregister the receiver
+        getActivity().unregisterReceiver(mSyncReceiver);
     }
 
     @Override
@@ -374,6 +391,13 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     @Override
     public void onLoadFinished(android.content.Loader<Cursor> loader, Cursor data) {
         mShopsAdapter.swapCursor(data);
+        Log.i(LOG_TAG,"In onLoadFinished after swap");
+        if (data.moveToFirst()) {
+            Log.i(LOG_TAG,"Cursor has data");
+        }
+        else {
+            Toast.makeText(getActivity().getApplicationContext(), "No shops in the selected range",Toast.LENGTH_SHORT).show();
+        }
         if (mPosition != ListView.INVALID_POSITION) {
             // If we don't need to restart the loader, and there's a desired position to restore
             // to, do so now.
@@ -404,11 +428,31 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     @Override
     public void onRefresh() {
             Log.i(LOG_TAG, "In onRefresh()");
-            long DELAY_REFRESH = 10000;//just a high value, we remove the "refresh circle" anyway after the refresh is over
             swipeLayout.setColorSchemeResources(R.color.waldo_light_blue);
             ShopsFragment shopsFragment = new ShopsFragment();
             shopsFragment.updateShopList(getActivity());
         }
+
+    private BroadcastReceiver mSyncReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle syncExtras = intent.getExtras();
+            String syncStatus = "";
+            String syncResult = "";
+            if (syncExtras != null) {
+                syncStatus = syncExtras.getString(Constants.SYNC_BUNDLE_STATUS_KEY,"");
+                syncResult = syncExtras.getString(Constants.SYNC_BUNDLE_RESULT_KEY,"");
+                if (!syncStatus.equals("")) {
+                    Log.i(LOG_TAG,"Sync status/result : " + syncStatus + "/" + syncResult);
+                    if (syncStatus.equals(Constants.SYNC_BUNDLE_STATUS_STOPPED)) {
+                        if (swipeLayout.isRefreshing()) swipeLayout.setRefreshing(false);//remove the refresh circle if it is present
+                        if (syncResult.equals(Constants.SYNC_BUNDLE_STATUS_ZERO)) Toast.makeText(getActivity().getApplicationContext(),
+                                getResources().getString(R.string.no_shops), Toast.LENGTH_LONG).show();//inform the user
+                    }
+                }
+            }
+        }
+    };
 
 }
 
