@@ -57,16 +57,6 @@ public class SliderDrawerListAdapter extends BaseAdapter {
         txtTitle.setText(navDrawerItems.get(position).getTitle());
         txtTitle.setTextColor(mContext.getResources().getColor(R.color.item_slider));
 
-        // displaying count
-        // check whether it set visible or not
-        if(navDrawerItems.get(position).getCounterVisibility()){
-            txtCount.setText(navDrawerItems.get(position).getCount());
-            Log.i(LOG_TAG,"Text is: " + navDrawerItems.get(position).getCount());
-        }else{
-            // hide the counter view
-            txtCount.setVisibility(View.GONE);
-        }
-
         return convertView;
     }
 }
