@@ -118,6 +118,7 @@ public class MainActivity extends Activity implements
     private static String[] mLatLng = new String[2];
     //the Google Analytics tracker
     Tracker mGaTracker;
+    private String screenName = "Main Activity";
     //labels of social media buttons for GA
     String mLikeLabel = "like_pressed";
     String mFollowLabel = "follow_pressed";
@@ -303,6 +304,9 @@ public class MainActivity extends Activity implements
         //initialise the GA tracker
         mGaTracker = ((BikeShopsDetector) getApplication()).getTracker(
                 BikeShopsDetector.TrackerName.APP_TRACKER);
+        //report to GA that the screen has been opened
+        mGaTracker.setScreenName(screenName);
+        mGaTracker.send(new HitBuilders.AppViewBuilder().build());
         //report uncaught exceptions
         Thread.UncaughtExceptionHandler myHandler = new ExceptionReporter(
                 mGaTracker,                                        // Currently used Tracker.
@@ -371,8 +375,7 @@ public class MainActivity extends Activity implements
         //this method is called each time the focus changes. We need to display the dialog only when the app launches
         //TODO: Although the shop list is populated, this method is sometimess called randomly.
         if (!mIsDialogCalled) {
-            mShopsFragmentList = (ListView) findViewById(R.id.listview_shops);
-            mProgressDialog = new ProgressDialog(this);
+            mShopsFragmentList = (ListView) findViewById(R.id.listview_shops);            mProgressDialog = new ProgressDialog(this);
             if (mFirstGPSConnection && mShopsFragmentList.getAdapter().isEmpty() && mShopsFragmentList.getAdapter().getCount() == 0) {
                 mProgressDialog = new ProgressDialog(this);
                 mProgressDialog.setMessage(getResources().getString(R.string.waiting_gps));

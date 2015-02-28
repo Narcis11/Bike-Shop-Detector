@@ -42,6 +42,7 @@ public class AddShopFormActivity extends Activity {
     private Button mAddShopButton;
     //the Google Analytics tracker
     Tracker mGaTracker;
+    private String screenName = "AddShopForm Activity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +61,9 @@ public class AddShopFormActivity extends Activity {
         mShopPhoneNumberOk = true;
         mGaTracker = ((BikeShopsDetector) getApplication()).getTracker(
                 BikeShopsDetector.TrackerName.APP_TRACKER);
+        //report to GA that the screen has been opened
+        mGaTracker.setScreenName(screenName);
+        mGaTracker.send(new HitBuilders.AppViewBuilder().build());
         mShopName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {

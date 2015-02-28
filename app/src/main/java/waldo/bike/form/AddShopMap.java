@@ -12,6 +12,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -25,6 +27,7 @@ import java.util.Observer;
 import Utilities.Constants;
 import Utilities.GlobalState;
 import Utilities.Utility;
+import waldo.bike.bikeshops.BikeShopsDetector;
 import waldo.bike.bikeshops.R;
 
 public class AddShopMap extends FragmentActivity implements AdapterView.OnItemClickListener, Observer{
@@ -40,7 +43,10 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
     private static String mTestAddress;
     private static AutoCompleteTextView mAutoCompleteTextView;
     private static TextView mResultView;
-    private static int DROPDOWN_THRESHOLD = 3;
+    private static int DROPDOWN_THRESHOLD = 3;//we display the list of locations after the user types in 3 characters
+    //the Google Analytics tracker
+    Tracker mGaTracker;
+    private String screenName = "AddShopMap Activity";
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
         Log.i(LOG_TAG, "In onItemClick");
@@ -104,6 +110,12 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
     @Override
     protected void onResume() {
         super.onResume();
+        //initialise the GA tracker
+        mGaTracker = ((BikeShopsDetector) getApplication()).getTracker(
+                BikeShopsDetector.TrackerName.APP_TRACKER);
+        //report to GA that the screen has been opened
+        mGaTracker.setScreenName(screenName);
+        mGaTracker.send(new HitBuilders.AppViewBuilder().build());
         setUpMapIfNeeded();
     }
 

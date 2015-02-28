@@ -161,9 +161,9 @@
     <!--View all shops-->
     <string name="ga_view_all_shops_action_id">view_all_shops</string>
     <string name="ga_view_all_shops_label_id">View all shops</string>
-    <!--Add a shops-->
-    <string name="ga_add_a_shop_action_id">add_a_shops</string>
-    <string name="ga_add_a_shop_label_id">Add a shops</string>
+    <!--Add a shop-->
+    <string name="ga_add_a_shop_action_id">add_a_shop</string>
+    <string name="ga_add_a_shop_label_id">Add a shop</string>
     <!--About us-->
     <string name="ga_about_us_action_id">about_us</string>
     <string name="ga_about_us_label_id">About us</string>

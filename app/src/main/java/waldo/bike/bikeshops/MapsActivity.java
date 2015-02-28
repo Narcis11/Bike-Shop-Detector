@@ -10,6 +10,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -33,6 +35,9 @@ public class MapsActivity extends FragmentActivity{
     private boolean mIsPartner;
     private String mPromoText;
     private static final int ACTIVITY_INDEX = 2;
+    //the Google Analytics tracker
+    Tracker mGaTracker;
+    private String screenName = "Maps Activity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,8 +50,12 @@ public class MapsActivity extends FragmentActivity{
     @Override
     protected void onResume() {
         super.onResume();
-        //we also have to check here in case the user returns to the running app through some other means, such as through the back button
-
+        //initialise the GA tracker
+        mGaTracker = ((BikeShopsDetector) getApplication()).getTracker(
+                BikeShopsDetector.TrackerName.APP_TRACKER);
+        //report to GA that the screen has been opened
+        mGaTracker.setScreenName(screenName);
+        mGaTracker.send(new HitBuilders.AppViewBuilder().build());
         setUpMapIfNeeded();
     }
 

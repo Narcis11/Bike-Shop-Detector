@@ -52,6 +52,7 @@ public class SettingsActivity extends PreferenceActivity implements
     private boolean mFirstCheck;
     String mCheckBoxStatus = "";
     private Tracker mGaTracker;
+    private String screenName = "Settings activity";
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +63,9 @@ public class SettingsActivity extends PreferenceActivity implements
         mFirstLoad = true;
         mGaTracker = ((BikeShopsDetector)  getApplication()).getTracker(
                 BikeShopsDetector.TrackerName.APP_TRACKER);
+        //report to GA that this screen has been opened
+        mGaTracker.setScreenName(screenName);
+        mGaTracker.send(new HitBuilders.AppViewBuilder().build());
         loadPreferenceScreen(mFirstLoad);
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_range_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_speed_key)));

@@ -14,6 +14,9 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import Utilities.Constants;
 
 /*Created by Narcis.
@@ -26,6 +29,9 @@ public class WebActivity extends Activity {
     private static String mTitle = "";
     private static final String mDefaultUrl = "http://www.waldo.bike";
     ProgressBar progressBar;
+    //the Google Analytics tracker
+    Tracker mGaTracker;
+    private String screenName = "Web Activity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +78,16 @@ public class WebActivity extends Activity {
         mWebView.loadUrl(mUrl);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //initialise the GA tracker
+        mGaTracker = ((BikeShopsDetector) getApplication()).getTracker(
+                BikeShopsDetector.TrackerName.APP_TRACKER);
+        //report to GA that the screen has been opened
+        mGaTracker.setScreenName(screenName);
+        mGaTracker.send(new HitBuilders.AppViewBuilder().build());
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

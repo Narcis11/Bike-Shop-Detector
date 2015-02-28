@@ -51,6 +51,7 @@ public class ShopDetailActivity extends FragmentActivity
     private static Context mContext;
     //the Google Analytics tracker
     Tracker mGaTracker;
+    private String screenName="Shop Detail Activity";
     private static final String[] QUERY_COLUMS = {
             ShopsContract.ShopsEntry.COLUMN_SHOP_NAME,
             ShopsContract.ShopsEntry.COLUMN_SHOP_ADDRESS,
@@ -94,6 +95,9 @@ public class ShopDetailActivity extends FragmentActivity
         super.onResume();
         mGaTracker = ((BikeShopsDetector) getApplication()).getTracker(
                 BikeShopsDetector.TrackerName.APP_TRACKER);
+        //report to GA that this screen has been opened
+        mGaTracker.setScreenName(screenName);
+        mGaTracker.send(new HitBuilders.AppViewBuilder().build());
         DisplayMetrics displaymetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
         float heightPx = displaymetrics.heightPixels;
