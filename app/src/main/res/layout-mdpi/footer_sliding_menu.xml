@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:paddingTop="5dp"
+    android:paddingBottom="1dp"
+    android:layout_height="match_parent"
+    >
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/logo_footer"
+        android:layout_gravity="center_horizontal"
+        android:paddingBottom="2dp"
+        android:src="@drawable/logo_footer"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+    <com.facebook.widget.LikeView
+        android:id="@+id/like_button"
+        android:layout_width="wrap_content"
+        android:layout_height="27dp"
+        android:paddingLeft="13dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_gravity="start"
+        android:onClick="handleLikeButton"
+        >
+    </com.facebook.widget.LikeView>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/follow_button"
+        android:layout_marginRight="9dp"
+        android:layout_marginEnd="9dp"
+        android:layout_marginBottom="9dp"
+        android:src="@drawable/twitter_follow"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="end" />
+
+        <com.twitter.sdk.android.core.identity.TwitterLoginButton
+            android:id="@+id/twitter_login_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+
+</LinearLayout>
