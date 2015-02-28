@@ -254,8 +254,18 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 DeviceConnection deviceConnection = new DeviceConnection(getActivity());
+                //determine whether the first item is *fully* visible
+                boolean enableSwipe = false;
+                if(mListView!= null && mListView.getChildCount() > 0){
+                    // check if the first item of the list is visible
+                    boolean firstItemVisible = mListView.getFirstVisiblePosition() == 0;
+                    // check if the top of the first item is visible
+                    boolean topOfFirstItemVisible = mListView.getChildAt(0).getTop() == 0;
+                    // enabling or disabling the refresh layout
+                    enableSwipe = firstItemVisible && topOfFirstItemVisible;
+                }
                 //we only refresh when the user is at the top of the list and the Internet is connected and we have the last user's location
-                if (firstVisibleItem == 0 && deviceConnection.checkInternetConnected() && !GlobalState.USER_LAT.equals("") && !GlobalState.USER_LNG.equals("")) {
+                if (enableSwipe && deviceConnection.checkInternetConnected() && !GlobalState.USER_LAT.equals("") && !GlobalState.USER_LNG.equals("")) {
                     swipeLayout.setEnabled(true);
                 }
                 else {
@@ -293,8 +303,6 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
         int id = item.getItemId();
         switch(id) {
             case (R.id.home): {
-                    Log.i(LOG_TAG,"Back from action bar pressed");
-                    Log.i(LOG_TAG,"Position in R.id.home:" + mPosition);
                     mOutBundle.getInt(SELECTED_KEY,100);
             }
         }
@@ -366,14 +374,12 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     @Override
     public void onLoadFinished(android.content.Loader<Cursor> loader, Cursor data) {
         mShopsAdapter.swapCursor(data);
-        Log.i(LOG_TAG,"In onLoadFinished.");
         if (mPosition != ListView.INVALID_POSITION) {
             // If we don't need to restart the loader, and there's a desired position to restore
             // to, do so now.
             mListView.smoothScrollToPosition(mPosition);
         }
         if (swipeLayout.isRefreshing()) {
-            Log.i(LOG_TAG,"REmoved the refresh circle");
             swipeLayout.setRefreshing(false);
         }
     }
