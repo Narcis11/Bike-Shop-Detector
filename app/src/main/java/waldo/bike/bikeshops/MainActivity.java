@@ -101,6 +101,7 @@ public class MainActivity extends Activity implements
     private String mTwitterToken = "";
     private String mTwitterSecret = "";
     private LikeView mLikeView;
+    private int[] mLikeViewPadding;
     private ImageView mFollowView;
     private String FACEBOOK_APP_ID = "com.facebook.platform.extra.APPLICATION_ID";
     private TwitterAuthClient mTwitterAuthClient;
@@ -313,11 +314,9 @@ public class MainActivity extends Activity implements
                 mGaTracker,                                        // Currently used Tracker.
                 Thread.getDefaultUncaughtExceptionHandler(),      // Current default uncaught exception handler.
                 mContext);
-        if (!(mLikeView.getPaddingLeft() == 16 || mLikeView.getPaddingLeft() == 0)) {
-            DisplayMetrics metrics = getResources().getDisplayMetrics();
-            Log.i(LOG_TAG,"Density is: " + metrics.densityDpi);
-            //mLikeView.setPadding(16, 0, 211, 0);
-            mLikeView.setPadding(32, 0, 422, 0);
+        mLikeViewPadding = Utility.getLikeViewPaddingOnResume(mContext);
+        if (!(mLikeView.getPaddingLeft() == mLikeViewPadding[0] || mLikeView.getPaddingLeft() == 0)) {
+            mLikeView.setPadding(mLikeViewPadding[0], mLikeViewPadding[1], mLikeViewPadding[2], mLikeViewPadding[3]);
             Log.i(LOG_TAG,"Changed padding in onResume");
             Log.i(LOG_TAG,"Padding left/right onResume: " + String.valueOf(mLikeView.getPaddingLeft()) + "/" + String.valueOf(mLikeView.getPaddingRight()));
         }
@@ -406,8 +405,8 @@ public class MainActivity extends Activity implements
         mLikeView.handleOnActivityResult(mContext, requestCode, resultCode, data);
         if (data != null && data.hasExtra(FACEBOOK_APP_ID)) mRepositionLikeButton = true;
         if (mRepositionLikeButton) { //also signals that the like(d) button has been pressed
-            if (mLikeView.getPaddingLeft() == 16) {
-                mLikeView.setPadding(0, 0, 220, 0);//reposition the button after a Like action
+            if (mLikeView.getPaddingLeft() == mLikeViewPadding[0]) {
+                mLikeView.setPadding(0, 0, Utility.getPaddingRightLikeView(mContext), 0);//reposition the button after a Like action
                 Log.i(LOG_TAG, "Activ results - changed padding | left/right: " + String.valueOf(mLikeView.getPaddingLeft()) + "/" + String.valueOf(mLikeView.getPaddingRight()));
                 //send a hit to GA for each press of the like button
                 mGaTracker.send(new HitBuilders.EventBuilder()
@@ -429,7 +428,6 @@ public class MainActivity extends Activity implements
                 e.printStackTrace();
             }
         }
-        else {Log.i(LOG_TAG,"mTwitterLoginButton ieste NULL");}
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

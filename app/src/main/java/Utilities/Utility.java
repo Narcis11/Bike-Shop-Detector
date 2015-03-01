@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.crypto.Cipher;
+
 import waldo.bike.bikeshops.BikeShopsDetector;
 import waldo.bike.bikeshops.R;
 
@@ -685,6 +687,85 @@ public class Utility {
         }
         else {
             return "";
+        }
+    }
+
+    //used to determine the right padding for the Like View depending on the screen density in the onResume method from the main activity
+    public static int[] getLikeViewPaddingOnResume (Context context) {
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        int[] paddingArray = new int[4]; //left, top, right, bottom
+        switch (metrics.densityDpi) {
+            case DisplayMetrics.DENSITY_LOW: {
+                    paddingArray[0] = 8;
+                    paddingArray[1] = 0;
+                    paddingArray[2] = 105;
+                    paddingArray[1] = 0;
+                    break;
+            }
+            case DisplayMetrics.DENSITY_MEDIUM: {
+                    paddingArray[0] = 11;
+                    paddingArray[1] = 0;
+                    paddingArray[2] = 140;
+                    paddingArray[1] = 0;
+                    break;
+            }
+            case DisplayMetrics.DENSITY_HIGH: {
+                    paddingArray[0] = 16;
+                    paddingArray[1] = 0;
+                    paddingArray[2] = 211;
+                    paddingArray[1] = 0;
+                    break;
+            }
+            case DisplayMetrics.DENSITY_XHIGH: {
+                    paddingArray[0] = 21;
+                    paddingArray[1] = 0;
+                    paddingArray[2] = 280;
+                    paddingArray[1] = 0;
+                    break;
+            }
+            case DisplayMetrics.DENSITY_XXHIGH: {
+                    paddingArray[0] = 32;
+                    paddingArray[1] = 0;
+                    paddingArray[2] = 422;
+                    paddingArray[1] = 0;
+                    break;
+            }
+            default: { //we return the density_high values by default
+                    paddingArray[0] = 16;
+                    paddingArray[1] = 0;
+                    paddingArray[2] = 211;
+                    paddingArray[1] = 0;
+                    break;
+            }
+        }
+        return paddingArray;
+    }
+
+    //used in the onActivityResult method from the Main activity to determine the right padding based on the screen density
+    public static int getPaddingRightLikeView(Context context) {
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        final int LOW_PADDING = 110;
+        final int MEDIUM_PADDING = 146;
+        final int HIGH_PADDING = 220;
+        final int XHIGH_PADDING = 293;
+        final int XXHIGH_PADDING = 440;
+        switch (metrics.densityDpi) {
+            case DisplayMetrics.DENSITY_LOW: {
+                return LOW_PADDING;
+            }
+            case DisplayMetrics.DENSITY_MEDIUM: {
+                return MEDIUM_PADDING;
+            }
+            case DisplayMetrics.DENSITY_HIGH: {
+                return HIGH_PADDING;
+            }
+            case DisplayMetrics.DENSITY_XHIGH: {
+                return XHIGH_PADDING;
+            }
+            case DisplayMetrics.DENSITY_XXHIGH: {
+                return XXHIGH_PADDING;
+            }
+            default: return HIGH_PADDING;
         }
     }
 }
