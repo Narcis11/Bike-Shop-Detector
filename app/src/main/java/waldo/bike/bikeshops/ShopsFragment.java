@@ -135,6 +135,10 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
             public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
                 switch (columnIndex) {
                     case COL_SHOP_NAME:
+                        Log.i(LOG_TAG,"In COL_SHOP_NAME");
+                        //check if there are records with the shop name populated (a mandatory column)
+                        GlobalState.IS_DATABASE_POPULATED = cursor.getString(COL_SHOP_NAME) != null || !cursor.getString(COL_SHOP_NAME).equals("");
+                        //set the text
                         ((TextView) view).setText(cursor.getString(COL_SHOP_NAME));
                         return true;
                     case COL_IS_OPEN:
@@ -378,7 +382,6 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     @Override
     public void onLoadFinished(android.content.Loader<Cursor> loader, Cursor data) {
         mShopsAdapter.swapCursor(data);
-        Log.i(LOG_TAG,"In onLoadFinished after swap");
         if (mPosition != ListView.INVALID_POSITION) {
             // If we don't need to restart the loader, and there's a desired position to restore
             // to, do so now.

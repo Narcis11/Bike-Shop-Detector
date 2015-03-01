@@ -11,10 +11,7 @@ import java.util.ArrayList;
 public class GlobalState { //44.4391463,26.1428946
     public static String USER_LAT="44.4391463";
     public static String USER_LNG="26.1428946";
-    public static String ALL_SHOPS_INFO = "";
-    public static String FETCH_STATUS = "";
     public static String FRAGMENT_RANGE;
     public static String FRAGMENT_SPEED;
-    //used in the Settings activity
-    public static boolean IS_METRIC_LOADED;
+    public static boolean IS_DATABASE_POPULATED = false;//used to determine whether there are records in the DB
 }

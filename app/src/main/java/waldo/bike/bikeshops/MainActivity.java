@@ -355,12 +355,13 @@ public class MainActivity extends Activity implements
         //TODO: Although the shop list is populated, this method is sometimess called randomly.
         if (!mIsDialogCalled) {
             mShopsFragmentList = (ListView) findViewById(R.id.listview_shops);            mProgressDialog = new ProgressDialog(this);
-            if (mFirstGPSConnection && mShopsFragmentList.getAdapter().isEmpty() && mShopsFragmentList.getAdapter().getCount() == 0) {
+            if (mFirstGPSConnection && mShopsFragmentList.getAdapter().isEmpty() && mShopsFragmentList.getAdapter().getCount() == 0
+                    && !GlobalState.IS_DATABASE_POPULATED) {
                 mProgressDialog = new ProgressDialog(this);
                 mProgressDialog.setMessage(getResources().getString(R.string.waiting_gps));
                 mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                 mProgressDialog.setIndeterminate(true);
-                mProgressDialog.setCancelable(true); //don't allow the user to cancel the dialog
+                mProgressDialog.setCancelable(false); //don't allow the user to cancel the dialog
                 mProgressDialog.show();
                 mIsDialogCalled = true;
             }
