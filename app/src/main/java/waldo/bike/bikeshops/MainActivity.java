@@ -346,30 +346,6 @@ public class MainActivity extends Activity implements
         mFirstLoad = false;
 
 
-
-/*        Log.i(LOG_TAG,"Adapter empty? " + shopsFragmentList.getAdapter().isEmpty());
-        Log.i(LOG_TAG,"Items enabled? " + shopsFragmentList.getAdapter().areAllItemsEnabled());
-        Log.i(LOG_TAG,"Item 1 enabled? " + shopsFragmentList.getAdapter().isEnabled(1));
-        Log.i(LOG_TAG,"View type count? " + shopsFragmentList.getAdapter().getViewTypeCount());
-        Log.i(LOG_TAG,"Adapter is: " + shopsFragmentList.getAdapter().toString());
-        Log.i(LOG_TAG,"Adapter count: " + String.valueOf(shopsFragmentList.getAdapter().getCount()));
-        TextView shopName = (TextView) shopsFragmentList.findViewById(R.id.list_item_shopname_textview);*/
-/*        if (shopName!= null) {
-            Log.i(LOG_TAG,"Shop name is not null");
-        }
-        else {
-            Log.i(LOG_TAG,"Shop name IS null");
-        }*/
-
-/*        if (mFirstGPSConnection && shopsFragmentList.getAdapter().isEmpty()) {
-            mProgressDialog = new ProgressDialog(this);
-            mProgressDialog.setMessage(getResources().getString(R.string.waiting_gps));
-            mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            mProgressDialog.setIndeterminate(true);
-            mProgressDialog.setCancelable(false); //don't allow the user to cancel the dialog
-            mProgressDialog.show();
-        }*/
-
     }
 
     @Override

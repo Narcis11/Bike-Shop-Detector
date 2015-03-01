@@ -231,19 +231,6 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                     //lift off!
                     startActivity(openDetailActivity);
                 }
-         /*       if (cursor != null && cursor.moveToPosition(position)) {
-                    mShopName = cursor.getString(COL_SHOP_NAME);
-                    mShopLatitude = cursor.getString(COL_SHOP_LATITUDE);
-                    mShopLongitude = cursor.getString(COL_SHOP_LONGITUDE);
-                    Intent openMap = new Intent(getActivity().getApplicationContext(),MapsActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putString(Constants.BUNDLE_SHOP_LAT,mShopLatitude);
-                    bundle.putString(Constants.BUNDLE_SHOP_LNG,mShopLongitude);
-                    bundle.putString(Constants.BUNDLE_SHOP_NAME,mShopName);
-                    bundle.putString(Constants.BUNDLE_FRAGMENT,Constants.CALLED_FROM_FRAGMENT);
-                    openMap.putExtras(bundle);
-                    startActivity(openMap);
-                }*/
             }
         });
         // Restore the ListView position
