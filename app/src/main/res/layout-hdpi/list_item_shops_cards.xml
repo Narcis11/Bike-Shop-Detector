@@ -47,7 +47,7 @@
                 android:fontFamily="sans-serif"
                 android:singleLine="true"
                 android:ellipsize="end"
-                android:text="Magazin de biciclete"
+                android:text="Magazin de bicicle"
                 android:textColor="@color/waldo_dark_blue"
                 android:textAppearance="?android:textAppearanceLarge"/>
 

@@ -39,7 +39,7 @@
             <!--Shop Name-->
             <TextView
                 android:id="@+id/list_item_shopname_textview"
-                android:layout_width="240dp"
+                android:layout_width="235dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginLeft="60dp"
@@ -47,7 +47,7 @@
                 android:fontFamily="sans-serif"
                 android:singleLine="true"
                 android:ellipsize="end"
-                android:text="Magazin de biciclete foarte lung"
+                android:text="Magazin de biciclete foa"
                 android:textColor="@color/waldo_dark_blue"
                 android:textAppearance="?android:textAppearanceLarge"
                 />
@@ -102,8 +102,6 @@
                 />
         </LinearLayout>
         </RelativeLayout>
-
-
 
     <LinearLayout
         android:layout_width="match_parent"

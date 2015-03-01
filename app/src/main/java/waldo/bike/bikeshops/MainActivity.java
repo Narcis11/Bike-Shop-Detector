@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -313,7 +314,10 @@ public class MainActivity extends Activity implements
                 Thread.getDefaultUncaughtExceptionHandler(),      // Current default uncaught exception handler.
                 mContext);
         if (!(mLikeView.getPaddingLeft() == 16 || mLikeView.getPaddingLeft() == 0)) {
-            mLikeView.setPadding(16, 0, 211, 0);
+            DisplayMetrics metrics = getResources().getDisplayMetrics();
+            Log.i(LOG_TAG,"Density is: " + metrics.densityDpi);
+            //mLikeView.setPadding(16, 0, 211, 0);
+            mLikeView.setPadding(32, 0, 422, 0);
             Log.i(LOG_TAG,"Changed padding in onResume");
             Log.i(LOG_TAG,"Padding left/right onResume: " + String.valueOf(mLikeView.getPaddingLeft()) + "/" + String.valueOf(mLikeView.getPaddingRight()));
         }
@@ -381,7 +385,7 @@ public class MainActivity extends Activity implements
                 mProgressDialog.setMessage(getResources().getString(R.string.waiting_gps));
                 mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                 mProgressDialog.setIndeterminate(true);
-                mProgressDialog.setCancelable(false); //don't allow the user to cancel the dialog
+                mProgressDialog.setCancelable(true); //don't allow the user to cancel the dialog
                 mProgressDialog.show();
                 mIsDialogCalled = true;
             }

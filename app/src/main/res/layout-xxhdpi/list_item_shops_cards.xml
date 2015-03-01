@@ -39,7 +39,7 @@
             <!--Shop Name-->
             <TextView
                 android:id="@+id/list_item_shopname_textview"
-                android:layout_width="235dp"
+                android:layout_width="210dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginLeft="60dp"
@@ -47,7 +47,7 @@
                 android:fontFamily="sans-serif"
                 android:singleLine="true"
                 android:ellipsize="end"
-                android:text="Magazin de biciclete"
+                android:text="Magazin de biciclete f"
                 android:textColor="@color/waldo_dark_blue"
                 android:textAppearance="?android:textAppearanceLarge"
                 />
@@ -76,7 +76,8 @@
                android:layout_height="wrap_content"
                android:textAppearance="?android:textAppearanceMedium"
                android:background="@color/discount_text"
-               android:visibility="gone"
+               android:visibility="visible"
+                android:text="-15%"
                android:paddingTop="1dp"
                android:paddingBottom="1dp"
                android:paddingLeft="20dp"
