@@ -155,9 +155,10 @@
                 <action android:name="android.intent.action.USER_PRESENT" />
             </intent-filter>
         </receiver>
-        <receiver android:name="com.parse.ParsePushBroadcastReceiver"
+        <receiver android:name="waldo.bike.bikeshops.SettingsActivity$ParseCustomReceiver"
             android:exported="false">
             <intent-filter>
+                <action android:name="com.example.UPDATE_STATUS" />
                 <action android:name="com.parse.push.intent.RECEIVE" />
                 <action android:name="com.parse.push.intent.OPEN" />
                 <action android:name="com.parse.push.intent.DELETE" />

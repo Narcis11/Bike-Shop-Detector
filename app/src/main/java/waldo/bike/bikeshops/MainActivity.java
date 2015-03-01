@@ -354,7 +354,8 @@ public class MainActivity extends Activity implements
         //this method is called each time the focus changes. We need to display the dialog only when the app launches
         //TODO: Although the shop list is populated, this method is sometimess called randomly.
         if (!mIsDialogCalled) {
-            mShopsFragmentList = (ListView) findViewById(R.id.listview_shops);            mProgressDialog = new ProgressDialog(this);
+            mShopsFragmentList = (ListView) findViewById(R.id.listview_shops);
+            mProgressDialog = new ProgressDialog(this);
             if (mFirstGPSConnection && mShopsFragmentList.getAdapter().isEmpty() && mShopsFragmentList.getAdapter().getCount() == 0
                     && !GlobalState.IS_DATABASE_POPULATED) {
                 mProgressDialog = new ProgressDialog(this);

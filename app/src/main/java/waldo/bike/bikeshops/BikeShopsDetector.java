@@ -57,7 +57,6 @@ public class BikeShopsDetector extends Application {
 
         }
         //TODO: Fix the bug listed on bitbucket regarding the code below.
-        if (Utility.getPreferredNotification(getApplicationContext())) {
             ParsePush.subscribeInBackground(Constants.PARSE_PUSH_CHANNEL, new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
@@ -69,13 +68,7 @@ public class BikeShopsDetector extends Application {
                 }
             });
         }
-        else {
-            ParsePush.unsubscribeInBackground(Constants.PARSE_PUSH_CHANNEL);
-            Log.i(LOG_TAG,"Notifications are disabled");
-        }
 
-
-    }
     public synchronized Tracker getTracker(TrackerName trackerId) {
         if (!mTrackers.containsKey(trackerId)) {
 

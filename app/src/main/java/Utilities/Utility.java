@@ -1,12 +1,18 @@
 package Utilities;
 
 import android.app.Application;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.location.Address;
 import android.location.Geocoder;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
 import android.util.DisplayMetrics;
 import android.widget.Toast;
 
@@ -16,6 +22,7 @@ import com.google.android.gms.analytics.Tracker;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Random;
 
 import javax.crypto.Cipher;
 
@@ -767,5 +774,49 @@ public class Utility {
             }
             default: return HIGH_PADDING;
         }
+    }
+
+    public static void sendNotification(String title, String body, String uri, Context context) {
+        Random generator = new Random();
+        long[] vibratePattern = {0,200,1000};//[ms] delay, duration, sleep
+        int notificationID = 11;//we need a new notification each time
+        Uri notificationSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
+        //  Ringtone r = RingtoneManager.getRingtone(context, notificationSound);
+        if(notificationSound == null){ //in case there's no alarm/ringtone sound set
+            notificationSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+            if(notificationSound == null){
+                notificationSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            }
+            else {
+                notificationSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALL);
+            }
+        }
+
+        NotificationCompat.Builder notificationBuilder =
+                new NotificationCompat.Builder(context)
+                        .setSmallIcon(R.drawable.ic_launcher) //icon of notification
+                        .setAutoCancel(true) //eliminates the notification from the status bar
+                        .setStyle(new NotificationCompat.BigTextStyle().bigText(title))
+                        .setSound(notificationSound) //play the sound
+                        .setVibrate(vibratePattern)
+                        .setContentTitle(title) //title of notification
+                        .setContentText(body)
+                        ; //text of notification
+
+        //determine whether we should open a website
+        if (uri.equals("")) {//no website to open
+            PendingIntent resultPendingIntent = PendingIntent.getActivity(context, 0, new Intent(), 0);
+            notificationBuilder.setContentIntent(resultPendingIntent);
+        }
+        else {
+            // open the URI
+            Intent resultIntent = new Intent(Intent.ACTION_VIEW);
+            resultIntent.setData(Uri.parse(uri));
+            PendingIntent pending = PendingIntent.getActivity(context, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            notificationBuilder.setContentIntent(pending);
+        }
+        NotificationManager notificationManager = ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE));
+        //  r.play();
+        notificationManager.notify(notificationID, notificationBuilder.build());
     }
 }

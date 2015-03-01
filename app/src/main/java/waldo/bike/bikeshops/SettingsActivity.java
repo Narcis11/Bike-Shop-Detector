@@ -1,6 +1,7 @@
 package waldo.bike.bikeshops;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
@@ -15,7 +16,11 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.parse.ParseException;
 import com.parse.ParsePush;
+import com.parse.ParsePushBroadcastReceiver;
 import com.parse.SaveCallback;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import Utilities.Constants;
 import Utilities.Utility;
@@ -48,7 +53,7 @@ public class SettingsActivity extends PreferenceActivity implements
     private String mSpeed = "speed";
     private boolean mIsMetricLoaded;
     private CheckBoxPreference mNotifCheckBox;
-    private boolean mIsChecked;
+    boolean mIsChecked;
     private boolean mFirstCheck;
     String mCheckBoxStatus = "";
     private Tracker mGaTracker;
@@ -219,29 +224,12 @@ public class SettingsActivity extends PreferenceActivity implements
                 }
             }
           mNotifCheckBox  = (CheckBoxPreference) getPreferenceManager().findPreference(getResources().getString(R.string.pref_enable_notifications_key));
-          mFirstCheck = (mNotifCheckBox.isChecked()) ? true : false;
-          mIsChecked = (mNotifCheckBox.isChecked()) ? true : false;
+          mFirstCheck = (mNotifCheckBox.isChecked());
+          mIsChecked = (mNotifCheckBox.isChecked());
           mNotifCheckBox.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
               @Override
               public boolean onPreferenceClick(Preference preference) {
                   mIsChecked = (mNotifCheckBox.isChecked()) ? true : false;
-                  //subscribe or unsubscribe the user from the channel
-                  if (mIsChecked) {
-                      ParsePush.subscribeInBackground(Constants.PARSE_PUSH_CHANNEL, new SaveCallback() {
-                          @Override
-                          public void done(ParseException e) {
-                              if (e == null) {
-                                  Log.d(LOG_TAG, "successfully activated push notif in Settings.");
-                              } else {
-                                  Log.e(LOG_TAG, "failed to subscribe for push in Settings", e);
-                              }
-                          }
-                      });
-                  }
-                  else {
-                      Log.i(LOG_TAG,"Unsubscribed");
-                      ParsePush.unsubscribeInBackground(Constants.PARSE_PUSH_CHANNEL);
-                  }
                   return true;
               }
           });
@@ -270,5 +258,33 @@ public class SettingsActivity extends PreferenceActivity implements
     public void onBackPressed() {
        super.onBackPressed();
        overridePendingTransition(R.xml.slide_in, R.xml.slide_out);
+    }
+    //we implement our own receiver for the push notifications
+    public static class ParseCustomReceiver extends ParsePushBroadcastReceiver {
+        public static boolean mIsCheckedInner;
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            super.onReceive(context, intent);
+            mIsCheckedInner = Utility.getPreferredNotification(context);
+            final String PARSE_KEY = "com.parse.Data";
+            final String TITLE_KEY = "custom_title";
+            final String BODY_KEY = "custom_alert";
+            final String URI_KEY = "custom_uri";
+            try {
+                JSONObject json = new JSONObject(intent.getExtras().getString(PARSE_KEY));
+                String title = json.getString(TITLE_KEY);
+                String body = json.getString(BODY_KEY);
+                String uri = json.getString(URI_KEY);
+                if (mIsCheckedInner) {
+                    Utility.sendNotification(title, body, uri, context);
+                    Log.i(LOG_TAG, "Ready to send notifications");
+                }
+                else
+                    Log.i(LOG_TAG,"Notif not sent!");
+            }
+            catch(JSONException e) {
+                Log.e(LOG_TAG,e.getMessage());
+            }
+        }
     }
 }
