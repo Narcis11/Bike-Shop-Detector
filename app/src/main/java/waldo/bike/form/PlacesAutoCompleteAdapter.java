@@ -54,17 +54,14 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        //count view is called length_of_input X no of result times.
-  //      if (countGetView <= 5) {
+            //Format the results from the search in add shop map
             TextView textView = new TextView(mContext);
             textView.setPadding(Utility.convertDpToPixels(mContext,3), Utility.convertDpToPixels(mContext,2),Utility.convertDpToPixels(mContext,3),Utility.convertDpToPixels(mContext,2));
             textView.setLines(RESULT_LINES);
             textView.setBackgroundColor(mContext.getResources().getColor(R.color.list_background));
             mResultText = resultList.get(position);
             mAddress = mResultText.substring(0, mResultText.indexOf(Constants.COMMA_SEPARATOR));
-            mLocale = mResultText.substring(mResultText.indexOf(Constants.COMMA_SEPARATOR) + 1);
-            //textView.setText(mAddress + System.getProperty(SEPARATOR_PROPERTY) + mLocale);
-            //textView.setText(Html.fromHtml(mAddress + "<br>" + mLocale));
+            mLocale = mResultText.substring(mResultText.indexOf(Constants.COMMA_SEPARATOR) + 2);
             textView.setText(mAddress + System.getProperty(SEPARATOR_PROPERTY) + mLocale);
             countGetView++;
             return textView;
