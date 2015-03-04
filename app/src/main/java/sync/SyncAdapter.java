@@ -16,6 +16,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
+import org.apache.http.Header;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.protocol.HTTP;
 import org.json.*;
 
 import java.io.BufferedReader;
@@ -231,7 +239,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                             if (i < 3) {
                                 Log.i(LOG_TAG,"Partner shop: " + placeName);
                                 shopsValues.put(ShopsContract.ShopsEntry.COLUMN_IS_PARTNER, 1);
-                                shopsValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_PROMO_TEXT,"Aici va fi primul text promoţional pentru magazinele partenere.#Al doilea text promoţional pentru magazinele partenere.");
+                                shopsValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_PROMO_TEXT,"Aici va fi primul text promoţional pentru magazinele partenere.#Aici va fi al doilea text.");
                                 shopsValues.put(ShopsContract.ShopsEntry.COLUMN_DISCOUNT_VALUE,(i+1)*5);
                             }
                             cVVector.add(shopsValues);
@@ -358,7 +366,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         }
         return newAccount;
     }
-
+    //get the details for each shop
     private String[] getPlaceDetails (String place_id) {
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
@@ -503,26 +511,78 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         return returnPlaceDetails;
     }
 
+    //the HTTP POST to get the partner shops
     private void getPartnerShops(String[] place_ids) {
-        for (int i =0; i<3; i++) {
-            Log.i(LOG_TAG,"place[" +i + "]: " + place_ids[i]);
+        String shopsJson = createJsonObject(place_ids);
+        String url = "http://app.waldo.bike:8888/querypartners";
+        HttpPost httpPost = new HttpPost(url);
+        HttpClient httpClient = new DefaultHttpClient();
+        final String HEADER_KEY = "Content-Type";
+        final String HEADER_VALUE = "application/json";
+        String responseString = "";
+        try {
+            StringEntity stringEntity = new StringEntity(shopsJson, HTTP.UTF_8);
+            httpPost.setEntity(stringEntity);
+            httpPost.setHeader(HEADER_KEY,HEADER_VALUE);
+            ResponseHandler<String> responseHandler = new BasicResponseHandler();
+            String response = httpClient.execute(httpPost, responseHandler);
+            responseString = response.toString();
+            Log.i(LOG_TAG,"Response is: " + responseString);
+
+
         }
-        JSONObject shopsJson = createJsonObject(place_ids);
-        Log.i(LOG_TAG,"Shops JSON: " + shopsJson);
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+
+        //*******Parsing the result*******
+        //the keys
+        final String ROOT_NODE = "places";
+        final String PARTNER_ID = "_id";
+        final String PARTNER_NUMBER = "telephoneNumber";
+        final String PARTNER_TEXTA = "texta"; //first promo text
+        final String PARTNER_TEXTB = "textb"; //second promo text
+        final String PARTNER_LOGO = "logoUrl"; //the URL of the partner's logo
+        final String PARTNER_DISCOUNT = "discountValue"; //int
+        final String PARTNER_ADDRESS = "address";
+
+        //the values
+        String place_id;
+        String shop_number;
+        String shop_textA;
+        String shop_textB;
+        String shop_logo;
+        int shop_discount;
+        String shop_address;
+        try {
+            JSONObject partnersJson = new JSONObject(responseString);
+            JSONArray partnersArray = partnersJson.getJSONArray(ROOT_NODE);
+            JSONObject partnerShopDetails;
+            //parsing each shop
+            for (int i = 0; i < partnersArray.length(); i ++) {
+                partnerShopDetails = partnersArray.getJSONObject(i);
+                place_id = partnerShopDetails.getString(PARTNER_ID);
+                Log.i(LOG_TAG, "Partner place id: " + place_id);
+            }
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
-    private JSONObject createJsonObject(String[] place_ids) {
-        JSONObject partnerShops = new JSONObject();
+    //This method creates the JSON object that will be used in getPartnerShops()
+    private String createJsonObject(String[] place_ids) {
+        JSONObject allShops = new JSONObject();
         final String JSON_KEY = "places";
         try {
             for (int i = 0; i < place_ids.length; i++) {
-                partnerShops.accumulate(JSON_KEY,place_ids[i]);
+                allShops.accumulate(JSON_KEY, place_ids[i]);
             }
 
         }
         catch (JSONException e) {
             e.printStackTrace();
         }
-        return partnerShops;
+        return allShops.toString();
     }
 }
