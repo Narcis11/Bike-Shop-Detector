@@ -15,5 +15,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/infowindow_content"
         android:textAppearance="?android:textAppearanceSmall"
-        android:paddingTop="5dp"/>
+        android:paddingTop="5dp"
+        android:visibility="gone"/>
 </LinearLayout>

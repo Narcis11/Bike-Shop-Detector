@@ -159,7 +159,11 @@ public class MapsActivity extends FragmentActivity{
                         TextView titleText = (TextView) mInfoWindow.findViewById(R.id.infowindow_title);
                         TextView contentText = (TextView) mInfoWindow.findViewById(R.id.infowindow_content);
                         titleText.setText(mShopName);
-                        contentText.setText(Utility.getPromoText(mPromoText,ACTIVITY_INDEX));
+                        String promoText = Utility.getPromoText(mPromoText,ACTIVITY_INDEX);
+                        if (!promoText.equals("")) {
+                            contentText.setVisibility(View.VISIBLE);
+                            contentText.setText(promoText);
+                        }
                         return mInfoWindow;
                     }
                 });
