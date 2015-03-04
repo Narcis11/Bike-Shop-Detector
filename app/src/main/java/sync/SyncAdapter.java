@@ -361,7 +361,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     .appendQueryParameter(placeId,place_id)
                     .appendQueryParameter(QUERY_KEY,key)
                     .build();
-           // Log.i(LOG_TAG, "Place Details Uri is: " + builtPlaceUri.toString());
+            Log.i(LOG_TAG, "Place Details Uri is: " + builtPlaceUri.toString());
             URL url = new URL(builtPlaceUri.toString());
             //Create the request to Google, and open the connection
             urlConnection = (HttpURLConnection) url.openConnection();
@@ -519,21 +519,25 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         //the keys
         final String ROOT_NODE = "places";
         final String PARTNER_ID = "_id";
-        final String PARTNER_NUMBER = "telephoneNumber";
+        final String PARTNER_DISCOUNT = "discountValue"; //int
         final String PARTNER_TEXTA = "texta"; //first promo text
         final String PARTNER_TEXTB = "textb"; //second promo text
+        final String PARTNER_NAME = "name";
+        final String PARTNER_NUMBER = "telephoneNumber";
         final String PARTNER_LOGO = "logoUrl"; //the URL of the partner's logo
-        final String PARTNER_DISCOUNT = "discountValue"; //int
         final String PARTNER_ADDRESS = "address";
+        final String PARTNER_SCHEDULE = "opening_hours";
 
         //the values
         String place_id = "";
-        String shop_number = "";
+        int shop_discount;
         String shop_textA = "";
         String shop_textB = "";
+        String shop_name = "";
+        String shop_number = "";
         String shop_logo = "";
-        int shop_discount;
         String shop_address = "";
+        String shop_schedule = "";
         try {
             JSONObject partnersJson = new JSONObject(responseString);
             JSONArray partnersArray = partnersJson.getJSONArray(ROOT_NODE);
@@ -548,13 +552,13 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 catch (JSONException a) {
                     a.printStackTrace();
                 }
-                //get the phone number
+                //get the discount
                 try{
-                    shop_number = partnerShopDetails.getString(PARTNER_NUMBER);
-                    updateValues.put(ShopsContract.ShopsEntry.COLUMN_PHONE_NUMBER,shop_number);
+                    shop_discount = partnerShopDetails.getInt(PARTNER_DISCOUNT);
+                    updateValues.put(ShopsContract.ShopsEntry.COLUMN_DISCOUNT_VALUE,shop_discount);
                 }
-                catch (JSONException b) {
-                    b.printStackTrace();
+                catch (JSONException f) {
+                    f.printStackTrace();
                 }
                 //get the first promo text
                 try{
@@ -569,36 +573,60 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     updateValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_PROMO_TEXT,shop_textA + Constants.HASH_SEPARATOR + shop_textB);
                 }
                 catch (JSONException d) {
+                    d.printStackTrace();
+                }
+                //if necessary, get the rest of the details for the partner shop
+                if (partnerShopDetails.length() > 4) {
 
-                }
-                //get the logo URL
-                try{
-                    shop_logo = partnerShopDetails.getString(PARTNER_LOGO);
-                    updateValues.put(ShopsContract.ShopsEntry.COLUMN_LOGO_URL,shop_logo);
-                }
-                catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                //get the discount
-                try{
-                    shop_discount = partnerShopDetails.getInt(PARTNER_DISCOUNT);
-                    updateValues.put(ShopsContract.ShopsEntry.COLUMN_DISCOUNT_VALUE,shop_discount);
-                }
-                catch (JSONException f) {
-                    f.printStackTrace();
-                }
-                //get the address
-                try {
-                    shop_address = partnerShopDetails.getString(PARTNER_ADDRESS);
-                    updateValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_ADDRESS,shop_address);
-                }
-                catch (JSONException g){
-                    g.printStackTrace();
+                    //get the name
+                    try {
+                        shop_name = partnerShopDetails.getString(PARTNER_NAME);
+                        updateValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_NAME, shop_name);
+                    } catch (JSONException n) {
+                        n.printStackTrace();
+                    }
+
+                    //get the phone number
+                    try {
+                        shop_number = partnerShopDetails.getString(PARTNER_NUMBER);
+                        updateValues.put(ShopsContract.ShopsEntry.COLUMN_PHONE_NUMBER, shop_number);
+                    } catch (JSONException b) {
+                        b.printStackTrace();
+                    }
+
+                    //get the logo URL
+                    try {
+                        shop_logo = partnerShopDetails.getString(PARTNER_LOGO);
+                        updateValues.put(ShopsContract.ShopsEntry.COLUMN_LOGO_URL, shop_logo);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    //get the address
+                    try {
+                        shop_address = partnerShopDetails.getString(PARTNER_ADDRESS);
+                        updateValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_ADDRESS, shop_address);
+                    } catch (JSONException g) {
+                        g.printStackTrace();
+                    }
+
+                    //get the schedule
+                    try {
+                        JSONArray jsonWeekdayArray = (JSONArray) partnerShopDetails.get(PARTNER_SCHEDULE);
+                        for (int j = 0; j < jsonWeekdayArray.length(); j++) {
+                            shop_schedule = shop_schedule + jsonWeekdayArray.get(j) + Constants.HASH_SEPARATOR;
+                        }
+                        updateValues.put(ShopsContract.ShopsEntry.COLUMN_OPENING_HOURS,shop_schedule);
+                    }
+                    catch (JSONException s) {
+                        s.printStackTrace();
+                    }
                 }
             //update the DB
             updateValues.put(ShopsContract.ShopsEntry.COLUMN_IS_PARTNER,IS_PARTNER);
             whereClause = ShopsContract.ShopsEntry.COLUMN_PLACE_ID + " = '" + place_id + "'";
-            int updatedRows = mContext.getContentResolver().update(ShopsContract.ShopsEntry.CONTENT_URI,updateValues,whereClause,null);
+            mContext.getContentResolver().update(ShopsContract.ShopsEntry.CONTENT_URI,updateValues,whereClause,null);
+            updateValues.clear();
             }
         }
         catch (JSONException e) {
