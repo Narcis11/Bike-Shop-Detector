@@ -294,21 +294,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     e.printStackTrace();
                 }
             //}
-/*        else {
-                Log.i(LOG_TAG,"Updating for shop! ");
-                String placeId = extras.getString(Constants.BUNDLE_SHOP_PLACE_ID);
-                String[] placeDetailRequest = getPlaceDetails(placeId);
-                //Log.i(LOG_TAG, "****Details response*** = " + placeDetailRequest[0] + "/" + placeDetailRequest[1] + "/" + placeDetailRequest[2] + "/" + placeDetailRequest[3]);
-                ContentValues updateValues = new ContentValues();
-                updateValues.put(ShopsContract.ShopsEntry.COLUMN_WEBSITE,placeDetailRequest[WEBSITE_ID]);
-                updateValues.put(ShopsContract.ShopsEntry.COLUMN_PHONE_NUMBER,placeDetailRequest[PHONE_NUMBER_ID]);
-                updateValues.put(ShopsContract.ShopsEntry.COLUMN_OPENING_HOURS,placeDetailRequest[WEEKDAY_TEXT_ID]);
-                updateValues.put(ShopsContract.ShopsEntry.COLUMN_RATING,placeDetailRequest[RATING_ID]);
-                String whereClause =  ShopsContract.ShopsEntry.COLUMN_PLACE_ID + "=" + "'"  + placeId + "'";
-              //  Log.i(LOG_TAG,"where clause is " + whereClause);
-                int updatedRows = mContext.getContentResolver().update(ShopsContract.ShopsEntry.CONTENT_URI,updateValues,whereClause,null);
-                Log.i(LOG_TAG,"No of rows updated = " + updatedRows);
-            }*/
         }
 
     public static void syncImmediately(Context context/*, String placeId*/) {
@@ -561,8 +546,56 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             //parsing each shop
             for (int i = 0; i < partnersArray.length(); i ++) {
                 partnerShopDetails = partnersArray.getJSONObject(i);
-                place_id = partnerShopDetails.getString(PARTNER_ID);
-                Log.i(LOG_TAG, "Partner place id: " + place_id);
+                //get the place_id
+                try {
+                    place_id = partnerShopDetails.getString(PARTNER_ID);
+                }
+                catch (JSONException a) {
+                    a.printStackTrace();
+                }
+                //get the phone number
+                try{
+                    shop_number = partnerShopDetails.getString(PARTNER_NUMBER);
+                }
+                catch (JSONException b) {
+                    b.printStackTrace();
+                }
+                //get the first promo text
+                try{
+                    shop_textA = partnerShopDetails.getString(PARTNER_TEXTA);
+                }
+                catch (JSONException c) {
+                    c.printStackTrace();
+                }
+                //get the second promo text
+                try {
+                    shop_textB = partnerShopDetails.getString(PARTNER_TEXTB);
+                }
+                catch (JSONException d) {
+
+                }
+                //get the logo URL
+                try{
+                    shop_logo = partnerShopDetails.getString(PARTNER_LOGO);
+                }
+                catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                //get the discount
+                try{
+                    shop_discount = partnerShopDetails.getInt(PARTNER_DISCOUNT);
+                }
+                catch (JSONException f) {
+                    f.printStackTrace();
+                }
+                //get the address
+                try {
+                    shop_address = partnerShopDetails.getString(PARTNER_ADDRESS);
+                }
+                catch (JSONException g){
+                    g.printStackTrace();
+                }
+
             }
         }
         catch (JSONException e) {
