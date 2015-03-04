@@ -60,7 +60,7 @@ public class ShopsTestContentProvider extends AndroidTestCase {
     public void testUpdateContentProvider() throws Throwable {
         ContentValues updateValues = new ContentValues();
         updateValues.put(ShopsContract.ShopsEntry.COLUMN_IS_PARTNER, 1);
-        String placeID = " IN ('ChIJdSB_Sjz_sUARXWt7dqrJXB4', 'ChIJGaHt_yn5sUARPdO192g_jPU','ChIJL-0pMrX4sUAR-kjKSO4ZxGk','ChIJcd1nibH4sUARnqDjRwzgiMA')";
+        String placeID = " = 'ChIJdSB_Sjz_sUARXWt7dqrJXB4' ";
         String whereClause = ShopsContract.ShopsEntry.COLUMN_PLACE_ID + placeID ;
        // String whereClause = ShopsContract.ShopsEntry.COLUMN_WEBSITE + " IS NOT NULL" ;
         int updatedRows = mContext.getContentResolver().update(ShopsContract.ShopsEntry.CONTENT_URI,updateValues,whereClause,null);

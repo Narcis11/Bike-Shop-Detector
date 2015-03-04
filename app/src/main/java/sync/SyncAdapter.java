@@ -235,13 +235,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                             shopsValues.put(ShopsContract.ShopsEntry.COLUMN_PHONE_NUMBER, placeDetailRequest[PHONE_NUMBER_ID]);
                             shopsValues.put(ShopsContract.ShopsEntry.COLUMN_OPENING_HOURS, placeDetailRequest[WEEKDAY_TEXT_ID]);
                             shopsValues.put(ShopsContract.ShopsEntry.COLUMN_RATING, placeDetailRequest[RATING_ID]);
-                            //Only for testing. Will be removed.
-                            if (i < 3) {
-                                Log.i(LOG_TAG,"Partner shop: " + placeName);
-                                shopsValues.put(ShopsContract.ShopsEntry.COLUMN_IS_PARTNER, 1);
-                                shopsValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_PROMO_TEXT,"Aici va fi primul text promoţional pentru magazinele partenere.#Aici va fi al doilea text.");
-                                shopsValues.put(ShopsContract.ShopsEntry.COLUMN_DISCOUNT_VALUE,(i+1)*5);
-                            }
+
                             cVVector.add(shopsValues);
                         }
                         if (cVVector.size() > 0) {
@@ -505,6 +499,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         final String HEADER_KEY = "Content-Type";
         final String HEADER_VALUE = "application/json";
         String responseString = "";
+        //used for the DB update
+        ContentValues updateValues = new ContentValues();
+        String whereClause;
+        final int IS_PARTNER = 1;
         try {
             StringEntity stringEntity = new StringEntity(shopsJson, HTTP.UTF_8);
             httpPost.setEntity(stringEntity);
@@ -512,8 +510,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             ResponseHandler<String> responseHandler = new BasicResponseHandler();
             String response = httpClient.execute(httpPost, responseHandler);
             responseString = response.toString();
-            Log.i(LOG_TAG,"Response is: " + responseString);
-
 
         }
         catch(Exception e) {
@@ -532,13 +528,13 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         final String PARTNER_ADDRESS = "address";
 
         //the values
-        String place_id;
-        String shop_number;
-        String shop_textA;
-        String shop_textB;
-        String shop_logo;
+        String place_id = "";
+        String shop_number = "";
+        String shop_textA = "";
+        String shop_textB = "";
+        String shop_logo = "";
         int shop_discount;
-        String shop_address;
+        String shop_address = "";
         try {
             JSONObject partnersJson = new JSONObject(responseString);
             JSONArray partnersArray = partnersJson.getJSONArray(ROOT_NODE);
@@ -556,6 +552,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 //get the phone number
                 try{
                     shop_number = partnerShopDetails.getString(PARTNER_NUMBER);
+                    updateValues.put(ShopsContract.ShopsEntry.COLUMN_PHONE_NUMBER,shop_number);
                 }
                 catch (JSONException b) {
                     b.printStackTrace();
@@ -570,6 +567,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 //get the second promo text
                 try {
                     shop_textB = partnerShopDetails.getString(PARTNER_TEXTB);
+                    updateValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_PROMO_TEXT,shop_textA + Constants.HASH_SEPARATOR + shop_textB);
                 }
                 catch (JSONException d) {
 
@@ -577,6 +575,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 //get the logo URL
                 try{
                     shop_logo = partnerShopDetails.getString(PARTNER_LOGO);
+                    updateValues.put(ShopsContract.ShopsEntry.COLUMN_LOGO_URL,shop_logo);
                 }
                 catch (JSONException e) {
                     e.printStackTrace();
@@ -584,6 +583,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 //get the discount
                 try{
                     shop_discount = partnerShopDetails.getInt(PARTNER_DISCOUNT);
+                    updateValues.put(ShopsContract.ShopsEntry.COLUMN_DISCOUNT_VALUE,shop_discount);
                 }
                 catch (JSONException f) {
                     f.printStackTrace();
@@ -591,11 +591,16 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 //get the address
                 try {
                     shop_address = partnerShopDetails.getString(PARTNER_ADDRESS);
+                    updateValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_ADDRESS,shop_address);
                 }
                 catch (JSONException g){
                     g.printStackTrace();
                 }
-
+            //update the DB
+            updateValues.put(ShopsContract.ShopsEntry.COLUMN_IS_PARTNER,IS_PARTNER);
+            whereClause = ShopsContract.ShopsEntry.COLUMN_PLACE_ID + " = '" + place_id + "'";
+            int updatedRows = mContext.getContentResolver().update(ShopsContract.ShopsEntry.CONTENT_URI,updateValues,whereClause,null);
+            Log.i(LOG_TAG,"No of rows updated: " + updatedRows);
             }
         }
         catch (JSONException e) {
