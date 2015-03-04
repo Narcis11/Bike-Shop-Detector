@@ -510,7 +510,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             ResponseHandler<String> responseHandler = new BasicResponseHandler();
             String response = httpClient.execute(httpPost, responseHandler);
             responseString = response.toString();
-
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -600,7 +599,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             updateValues.put(ShopsContract.ShopsEntry.COLUMN_IS_PARTNER,IS_PARTNER);
             whereClause = ShopsContract.ShopsEntry.COLUMN_PLACE_ID + " = '" + place_id + "'";
             int updatedRows = mContext.getContentResolver().update(ShopsContract.ShopsEntry.CONTENT_URI,updateValues,whereClause,null);
-            Log.i(LOG_TAG,"No of rows updated: " + updatedRows);
             }
         }
         catch (JSONException e) {
