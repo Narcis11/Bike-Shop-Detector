@@ -16,9 +16,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.json.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -161,6 +159,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     syncIntent.setAction(Constants.SYNC_BUNDLE_STATUS_ACTION);
                     if (apiCallStatus.equals(Constants.OK_STATUS)) { //we only parse if the result is OK
                         JSONArray placesArray = placesJson.getJSONArray(API_RESULT); //root node
+                        String[] place_ids = new String[placesArray.length()];//used for getting the partner shops at a later stage
                         Vector<ContentValues> cVVector = new Vector<ContentValues>(placesArray.length());
                         for (int i = 0; i < placesArray.length(); i++) {
                             // These are the values that will be collected.
@@ -178,7 +177,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                             JSONObject location = geometry.getJSONObject(API_LOCATION); //location object
                             latitude = location.getString(API_COORD_LAT);
                             longitude = location.getString(API_COORD_LONG);
-                            //   Log.i(LOG_TAG, "Lat/Lng = " + latitude + "/" + longitude);
                             //getting info from opening_hours
                             try {
                                 //some shops don't have opening hours, that's why we put this request into a try/catch
@@ -208,9 +206,11 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                             if (!openNow.equals(Constants.NOT_AVAILABLE) && openNow != null) {
                                 isShopOpen = Boolean.valueOf(openNow) ? 1 : 0;
                             }
-
+                            //get the details for each shop
                             String[] placeDetailRequest = getPlaceDetails(place_id);
-                           // Log.i(LOG_TAG, "****Details response*** = " + placeDetailRequest[0] + "/" + placeDetailRequest[1] + "/" + placeDetailRequest[2] + "/" + placeDetailRequest[3]);
+
+                            //build the vector of place ids
+                            place_ids[i] = place_id;
                             ContentValues shopsValues = new ContentValues();
 
                             //TODO: Get the is_partner, discount_value, promo_text and logo_url fields
@@ -245,7 +245,11 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                             rowsInserted = mContext.getContentResolver().bulkInsert(
                                     ShopsContract.ShopsEntry.CONTENT_URI,
                                     cvArray);
+
                             Log.i(LOG_TAG, "No of bulk rows inserted = " + rowsInserted);
+                            //final step: get the partner shops
+                            if (rowsInserted > 0) getPartnerShops(place_ids);
+
                             if (DEBUG) {
                                 Cursor shopsCursor = mContext.getContentResolver().query(
                                         ShopsContract.ShopsEntry.CONTENT_URI,
@@ -497,5 +501,28 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             Log.e(LOG_TAG, "Parsing place details | JSON Exception: " + e.getMessage());
         }
         return returnPlaceDetails;
+    }
+
+    private void getPartnerShops(String[] place_ids) {
+        for (int i =0; i<3; i++) {
+            Log.i(LOG_TAG,"place[" +i + "]: " + place_ids[i]);
+        }
+        JSONObject shopsJson = createJsonObject(place_ids);
+        Log.i(LOG_TAG,"Shops JSON: " + shopsJson);
+    }
+
+    private JSONObject createJsonObject(String[] place_ids) {
+        JSONObject partnerShops = new JSONObject();
+        final String JSON_KEY = "places";
+        try {
+            for (int i = 0; i < place_ids.length; i++) {
+                partnerShops.accumulate(JSON_KEY,place_ids[i]);
+            }
+
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return partnerShops;
     }
 }

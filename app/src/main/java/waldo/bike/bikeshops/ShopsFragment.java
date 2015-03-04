@@ -135,10 +135,9 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
             public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
                 switch (columnIndex) {
                     case COL_SHOP_NAME:
-                        Log.i(LOG_TAG,"In COL_SHOP_NAME");
                         //check if there are records with the shop name populated (a mandatory column)
                         GlobalState.IS_DATABASE_POPULATED = cursor.getString(COL_SHOP_NAME) != null || !cursor.getString(COL_SHOP_NAME).equals("");
-                        Log.i(LOG_TAG,"Populated: " + GlobalState.IS_DATABASE_POPULATED);
+                        //Log.i(LOG_TAG,"Populated: " + GlobalState.IS_DATABASE_POPULATED);
                         //set the text
                         ((TextView) view).setText(cursor.getString(COL_SHOP_NAME));
                         return true;
