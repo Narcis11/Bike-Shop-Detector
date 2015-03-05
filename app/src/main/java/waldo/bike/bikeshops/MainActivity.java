@@ -374,7 +374,7 @@ public class MainActivity extends Activity implements
     public void onBackPressed() {
         //we don't do anything when the back button is pressed.
         finish();
-        super.onBackPressed();
+       // super.onBackPressed();
 
     }
 
