@@ -1,11 +1,14 @@
 package waldo.bike.form;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
@@ -116,7 +119,6 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
         //report to GA that the screen has been opened
         mGaTracker.setScreenName(screenName);
         mGaTracker.send(new HitBuilders.AppViewBuilder().build());
-        setUpMapIfNeeded();
     }
 
     /**
@@ -236,5 +238,18 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
         super.onBackPressed();
         overridePendingTransition(R.xml.slide_in, R.xml.slide_out);
     }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        Log.i(LOG_TAG,"in onConfigurationChanged");
+        // Checks whether a hardware keyboard is available
+        if (newConfig.equals(Configuration.KEYBOARDHIDDEN_NO)) {
+            Log.i(LOG_TAG,"Keyboard is on");
+        } else if (newConfig.equals(Configuration.KEYBOARDHIDDEN_YES)) {
+            Log.i(LOG_TAG,"Keyboard is off");
+        }
+    }
+
 
 }

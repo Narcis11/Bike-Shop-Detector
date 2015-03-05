@@ -5,7 +5,8 @@
     android:name="com.google.android.gms.maps.SupportMapFragment"
     tools:layout="@layout/activity_add_shop_map">
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent" android:layout_height="match_parent">
+        android:layout_width="match_parent" android:layout_height="match_parent"
+        >
 
         <AutoCompleteTextView
             android:id="@+id/autoCompleteTextView"

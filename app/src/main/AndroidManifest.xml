@@ -62,7 +62,8 @@
             android:parentActivityName="waldo.bike.form.AddShopMap" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="waldo.bike.form.AddShopMap" />
+                android:value="waldo.bike.form.AddShopMap"
+                />
              >
         </activity>
         <activity
@@ -119,7 +120,8 @@
         <activity
             android:name="waldo.bike.form.AddShopMap"
             android:label="@string/title_activity_add_shop_map"
-            android:parentActivityName="waldo.bike.bikeshops.MainActivity" >
+            android:parentActivityName="waldo.bike.bikeshops.MainActivity"
+            >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="waldo.bike.bikeshops.MainActivity" />
