@@ -86,7 +86,8 @@ public class MainActivity extends Activity implements
     private static boolean mIsGpsMessageDisplayed;
     private static boolean mIsInternetMessageDisplayed;
     private IntentFilter mIntentFilter;
-    private static boolean mFirstGPSConnection = true; //used to control fragment behaviour in onLocationChanged()
+    private static boolean mFirstGPSConnection = true; //used to control GPS dialogue behaviour
+    private static final long GPS_REFRESH = 5000; //we get the location every five seconds
     private static boolean isGPSConnected = false;//used to control fragment behaviour in onResume()
     private static String ViewAllShopsMap = "MapsActivity";
     private static String AddShopMap = "AddShopMap";
@@ -460,18 +461,19 @@ public class MainActivity extends Activity implements
     //required methods for managing the location
     @Override
     public void onLocationChanged(Location location) {
-        if (mFirstGPSConnection) {
-            DeviceConnection deviceConnection = new DeviceConnection(mContext);
-                //mLatLng = Utility.getLatLngFromLocation(location.toString());
-                GlobalState.USER_LAT = String.valueOf(location.getLatitude());
-                GlobalState.USER_LNG = String.valueOf(location.getLongitude());
-                if (mProgressDialog != null && mProgressDialog.isShowing()) {
-                    mProgressDialog.dismiss();
+                if (mFirstGPSConnection) {
+                    GlobalState.USER_LAT = String.valueOf(location.getLatitude());
+                    GlobalState.USER_LNG = String.valueOf(location.getLongitude());
+                    if (mProgressDialog != null && mProgressDialog.isShowing()) {
+                        mProgressDialog.dismiss();
+                    }
+                    ShopsFragment shopsFragment = new ShopsFragment();
+                    shopsFragment.updateShopList(mContext);
                 }
-                ShopsFragment shopsFragment = new ShopsFragment();
-                shopsFragment.updateShopList(mContext);
-        }
-            mFirstGPSConnection = false;
+             //we need to update the location every GPS_REFRESH seconds
+             GlobalState.USER_LAT = String.valueOf(location.getLatitude());
+             GlobalState.USER_LNG = String.valueOf(location.getLongitude());
+             mFirstGPSConnection = false;
     }
 
     @Override
@@ -479,7 +481,7 @@ public class MainActivity extends Activity implements
         Log.i(LOG_TAG,"in onConnected GPS");
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mLocationRequest.setInterval(1000); // Update the location every second
+        mLocationRequest.setInterval(GPS_REFRESH); // Update the location every 5 seconds
         isGPSConnected = true;
         LocationServices.FusedLocationApi.requestLocationUpdates(
                 mGoogleApiClient, mLocationRequest, this);
