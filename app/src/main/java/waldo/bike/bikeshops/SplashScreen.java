@@ -25,7 +25,8 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
  * Created by nmihai on 09.12.2014.
  */
 public class SplashScreen extends Activity{
-    static AlertDialog staticDialog = null;
+    static AlertDialog mStaticInternetDialogue;
+    static AlertDialog mStaticGPSDialogue;
     private static final String LOG_TAG = SplashScreen.class.getSimpleName();
     private static Context mContext;
     private IntentFilter mIntentFilter;
@@ -87,9 +88,9 @@ public class SplashScreen extends Activity{
                                 startActivity(callSettingIntent);
                             }
                         });
-        staticDialog = alertDialogBuilder.create();
+        mStaticInternetDialogue = alertDialogBuilder.create();
 
-        staticDialog.show();
+        mStaticInternetDialogue.show();
 
     }
 
@@ -123,8 +124,8 @@ public class SplashScreen extends Activity{
                     isInternetEnabled = false;
                 } else {
                     isInternetEnabled = true;
-                    if ((staticDialog != null) && staticDialog.isShowing()) {
-                        staticDialog.cancel();
+                    if ((mStaticInternetDialogue != null) && mStaticInternetDialogue.isShowing()) {
+                        mStaticInternetDialogue.cancel();
                         isInternetEnabled = true;
                     }
                     //onReceive is also called whenever we register the receiver in onResume, so we also have to double-check that the Internet is on
@@ -153,12 +154,14 @@ public class SplashScreen extends Activity{
                                 startActivity(callGPSSettingIntent);
                             }
                         });
-        AlertDialog alert = alertDialogBuilder.create();
-        alert.show();
+        mStaticGPSDialogue = alertDialogBuilder.create();
+        mStaticGPSDialogue.show();
     }
 
 
     public static void startMainActivity(Context c) {
+        Log.i(LOG_TAG,"In startMainActivity");
+
         Handler handler = new Handler();
         final Context context = c;
         final long DELAY_TIME = 2000;
@@ -167,7 +170,6 @@ public class SplashScreen extends Activity{
             public void run() {
                 Intent MainActivityIntent = new Intent(context,MainActivity.class);
                 MainActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //without this flag, the main activity can't start
-
                 context.startActivity(MainActivityIntent);
             }
 
@@ -192,5 +194,17 @@ public class SplashScreen extends Activity{
             return false;
         }
         return true;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mStaticGPSDialogue != null && mStaticGPSDialogue.isShowing()) {
+            mStaticGPSDialogue.cancel();
+        }
+
+        if (mStaticInternetDialogue != null && mStaticInternetDialogue.isShowing()) {
+            mStaticGPSDialogue.cancel();
+        }
     }
 }
