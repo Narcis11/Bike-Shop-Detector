@@ -93,6 +93,7 @@ public class AddShopMap extends FragmentActivity implements AdapterView.OnItemCl
         mAutoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView);
         mAutoCompleteTextView.setAdapter(new PlacesAutoCompleteAdapter(this, R.layout.list_item_places));
         mAutoCompleteTextView.setOnItemClickListener(this);
+        //set the width to be 0.9 of the screen width
         mAutoCompleteTextView.setWidth(Utility.getAutocompleteViewWidth(getApplicationContext()));
         //the sync will be made and the dropdown will be shown only if the input has 3 characters minimum
         mAutoCompleteTextView.setThreshold(DROPDOWN_THRESHOLD);

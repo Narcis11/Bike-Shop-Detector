@@ -663,7 +663,7 @@ public class Utility {
 
     public static int getAutocompleteViewWidth(Context context) {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-        double screenWidthFraction = 0.8;
+        double screenWidthFraction = 0.9;
         String viewString = String.valueOf(screenWidthFraction * displayMetrics.widthPixels);
         String viewFinal = viewString.substring(0,viewString.indexOf(Constants.DOT_SEPARATOR));
         int viewWidth = Integer.valueOf(viewFinal) ;
