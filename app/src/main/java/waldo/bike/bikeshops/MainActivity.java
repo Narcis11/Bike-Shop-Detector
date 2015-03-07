@@ -138,6 +138,7 @@ public class MainActivity extends Activity implements
     private View mHeaderView;
     private View mFooterView;
     private View mDividerFooterView;
+    private ImageView mFooterImageView;
     // nav drawer title
     private CharSequence mDrawerTitle;
     // used to store app title
@@ -194,6 +195,7 @@ public class MainActivity extends Activity implements
                  mHeaderView = getLayoutInflater().inflate(R.layout.header_sliding_menu,null);
                  mFooterView = getLayoutInflater().inflate(R.layout.footer_sliding_menu,null);
                  mDividerFooterView = getLayoutInflater().inflate(R.layout.list_divider_view,null);
+
                  navDrawerItems = new ArrayList<SliderDrawerItem>();
 
                  // adding nav drawer items to array
@@ -214,6 +216,11 @@ public class MainActivity extends Activity implements
                  mDrawerList.addHeaderView(mHeaderView);//in pre-KitKat versions, we must add the header before the setAdapter is called;
                  mDrawerList.addFooterView(mDividerFooterView);
                  mDrawerList.addFooterView(mFooterView);
+                 //set the width 0.85 times the screen size
+                 mDrawerList.setMinimumWidth(Utility.getAutocompleteDrawerWidth(mContext));
+                 //set the height of the footer logo
+                 mFooterImageView = (ImageView) mFooterView.findViewById(R.id.logo_footer);
+                 mFooterImageView.setMaxHeight(Utility.getDrawerLogoHeight(mContext));//
                  // setting the nav drawer list adapter
                  adapter = new SliderDrawerListAdapter(getApplicationContext(),
                          navDrawerItems);

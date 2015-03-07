@@ -670,6 +670,23 @@ public class Utility {
         return viewWidth;
     }
 
+    public static int getAutocompleteDrawerWidth(Context context) {
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        double screenWidthFraction = 0.85;
+        String viewString = String.valueOf(screenWidthFraction * displayMetrics.widthPixels);
+        String viewFinal = viewString.substring(0,viewString.indexOf(Constants.DOT_SEPARATOR));
+        int viewWidth = Integer.valueOf(viewFinal) ;
+        return viewWidth;
+    }
+
+    public static int getDrawerLogoHeight(Context context) {
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        double screenHeightFraction = 0.45;
+        String viewString = String.valueOf(screenHeightFraction * displayMetrics.heightPixels);
+        String viewFinal = viewString.substring(0,viewString.indexOf(Constants.DOT_SEPARATOR));
+        int viewHeight = Integer.valueOf(viewFinal) ;
+        return viewHeight;
+    }
     public static int getAutocompleteViewHeight(Context context) {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         double screenHeightFraction = 0.12;
@@ -697,6 +714,26 @@ public class Utility {
         }
     }
 
+    //this method is used to get the phone bucket. Used for getting the right size for our partners' logos
+    public static String getPhoneBucket(Context context) {
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        final String DENSITY_MEDIUM = "mdpi";
+        final String DENSITY_HIGH = "hdpi";
+        final String DENSITY_XHIGH = "xhdpi";
+        final String DENSITY_XXHIGH = "xxhdpi";
+        switch (metrics.densityDpi) {
+            case DisplayMetrics.DENSITY_MEDIUM:
+                return DENSITY_MEDIUM;
+            case DisplayMetrics.DENSITY_HIGH:
+                return DENSITY_HIGH;
+            case DisplayMetrics.DENSITY_XHIGH:
+                return DENSITY_HIGH;
+            case DisplayMetrics.DENSITY_XXHIGH:
+                return DENSITY_XXHIGH;
+            default:
+                return DENSITY_HIGH;
+        }
+    }
     //used to determine the right padding for the Like View depending on the screen density in the onResume method from the main activity
     public static int[] getLikeViewPaddingOnResume (Context context) {
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();

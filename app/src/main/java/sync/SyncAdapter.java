@@ -16,6 +16,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.facebook.android.Util;
+import com.google.android.gms.wallet.fragment.BuyButtonAppearance;
+
 import org.apache.http.Header;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
@@ -361,7 +364,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     .appendQueryParameter(placeId,place_id)
                     .appendQueryParameter(QUERY_KEY,key)
                     .build();
-            Log.i(LOG_TAG, "Place Details Uri is: " + builtPlaceUri.toString());
+            //Log.i(LOG_TAG, "Place Details Uri is: " + builtPlaceUri.toString());
             URL url = new URL(builtPlaceUri.toString());
             //Create the request to Google, and open the connection
             urlConnection = (HttpURLConnection) url.openConnection();
@@ -638,11 +641,13 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     private String createJsonObject(String[] place_ids) {
         JSONObject allShops = new JSONObject();
         final String JSON_KEY = "places";
+        final String JSON_KEY_BUCKET = "phone_bucket";
+        String phoneBucket = Utility.getPhoneBucket(mContext);
         try {
             for (int i = 0; i < place_ids.length; i++) {
                 allShops.accumulate(JSON_KEY, place_ids[i]);
             }
-
+            allShops.accumulate(JSON_KEY_BUCKET, phoneBucket);
         }
         catch (JSONException e) {
             e.printStackTrace();
