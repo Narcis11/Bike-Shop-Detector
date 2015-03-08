@@ -59,8 +59,8 @@ public class ShopsTestContentProvider extends AndroidTestCase {
 
     public void testUpdateContentProvider() throws Throwable {
         ContentValues updateValues = new ContentValues();
-        updateValues.put(ShopsContract.ShopsEntry.COLUMN_IS_PARTNER, 1);
-        String placeID = " = 'ChIJdSB_Sjz_sUARXWt7dqrJXB4' ";
+        updateValues.put(ShopsContract.ShopsEntry.COLUMN_LOGO_URL, "https://edinburghcriticalmass.files.wordpress.com/2012/11/bike-to-work.gif?w=68&h=68&crop=1");
+        String placeID = " = 'ChIJcd1nibH4sUARnqDjRwzgiMA' ";
         String whereClause = ShopsContract.ShopsEntry.COLUMN_PLACE_ID + placeID ;
        // String whereClause = ShopsContract.ShopsEntry.COLUMN_WEBSITE + " IS NOT NULL" ;
         int updatedRows = mContext.getContentResolver().update(ShopsContract.ShopsEntry.CONTENT_URI,updateValues,whereClause,null);
@@ -72,7 +72,7 @@ public class ShopsTestContentProvider extends AndroidTestCase {
         String columnValue = "";
         final String querySelection = ShopsContract.ShopsEntry.COLUMN_PLACE_ID + "=?";
         final String[] querySelectionArgs = new String[1];
-        querySelectionArgs[0] = "ChIJdSB_Sjz_sUARXWt7dqrJXB4";
+        querySelectionArgs[0] = "ChIJcd1nibH4sUARnqDjRwzgiMA";
         Cursor contentCursor = mContext.getContentResolver().query(
                 ShopsContract.ShopsEntry.CONTENT_URI,
                 null,
@@ -91,6 +91,7 @@ public class ShopsTestContentProvider extends AndroidTestCase {
         columnNames.add(ShopsContract.ShopsEntry.COLUMN_DISTANCE_DURATION);*/
         columnNames.add(ShopsContract.ShopsEntry.COLUMN_IS_PARTNER);
         columnNames.add(ShopsContract.ShopsEntry.COLUMN_SHOP_PROMO_TEXT);
+        columnNames.add(ShopsContract.ShopsEntry.COLUMN_LOGO_URL);
 /*        columnNames.add(ShopsContract.ShopsEntry.COLUMN_PLACE_ID);
         columnNames.add(ShopsContract.ShopsEntry.COLUMN_IS_PARTNER);
         columnNames.add(ShopsContract.ShopsEntry.COLUMN_PHONE_NUMBER);

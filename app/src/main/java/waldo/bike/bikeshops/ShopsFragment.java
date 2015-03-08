@@ -7,6 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import android.os.Handler;
@@ -21,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
@@ -28,6 +32,12 @@ import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 
 import Utilities.Constants;
 import Utilities.DeviceConnection;
@@ -66,6 +76,10 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     private IntentFilter mSyncFilter;
     //used by Google Analytics
     private Tracker mGaTracker;
+    //the left side icon for each shop
+    private View mListItemIcon;
+    //the class used to load the partners' images
+    LoadImage loadImage;
     //used for maintaining the listview state
     Bundle mOutBundle;
     private static Parcelable mListViewScrollPos = null;
@@ -81,7 +95,8 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
             ShopsContract.ShopsEntry.COLUMN_PLACE_ID,
             ShopsContract.ShopsEntry.COLUMN_IS_PARTNER,
             ShopsContract.ShopsEntry.COLUMN_SHOP_PROMO_TEXT,
-            ShopsContract.ShopsEntry.COLUMN_DISCOUNT_VALUE
+            ShopsContract.ShopsEntry.COLUMN_DISCOUNT_VALUE,
+            ShopsContract.ShopsEntry.COLUMN_LOGO_URL
     };
 
     // These indices are tied to SHOPS_COLUMNS.  If SHOPS_COLUMNS changes, these
@@ -98,6 +113,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     public static final int COL_IS_PARTNER = 9;
     public static final int COL_PROMO_TEXT = 10;
     public static final int COL_DISCOUNT_VALUE = 11;
+    public static final int COL_LOGO_URL = 12;
 
     public ShopsFragment() {
     }
@@ -117,7 +133,8 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                         ShopsContract.ShopsEntry.COLUMN_IS_OPEN,
                         ShopsContract.ShopsEntry.COLUMN_DISTANCE_TO_USER,
                         ShopsContract.ShopsEntry.COLUMN_DISTANCE_DURATION,
-                        ShopsContract.ShopsEntry.COLUMN_DISCOUNT_VALUE
+                        ShopsContract.ShopsEntry.COLUMN_DISCOUNT_VALUE,
+                        ShopsContract.ShopsEntry.COLUMN_LOGO_URL
                 },
                 new int[] {
                         R.id.list_item_shopname_textview,
@@ -125,10 +142,23 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                         R.id.list_item_shopisopen_textview,
                         R.id.list_item_distance_textview,
                         R.id.list_item_duration_textview,
-                        R.id.list_item_discount_view
+                        R.id.list_item_discount_view,
+                        R.id.list_item_icon
                 },
                 0
         );
+
+    //    Log.i(LOG_TAG,"Size of mShopsAdapter = " + mShopsAdapter.getCount());
+
+        // Get a reference to the ListView, and attach this adapter to it.
+        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        ListView listView = (ListView) rootView.findViewById(R.id.listview_shops);
+        Log.i(LOG_TAG,"Initialized mListItemIcon");
+        swipeLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_container);
+        swipeLayout.setOnRefreshListener(this);
+        mListView = listView;
+        listView.setAdapter(mShopsAdapter);
+
         //we need to format the data from the database
         mShopsAdapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
             @Override
@@ -153,7 +183,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                         }
                         return true;
                     case COL_DISTANCE_TO_USER:
-                    //    Log.i(LOG_TAG,"Shopname / distance: " + cursor.getString(COL_SHOP_NAME) + " / " + cursor.getString(COL_DISTANCE_TO_USER));
+                        //    Log.i(LOG_TAG,"Shopname / distance: " + cursor.getString(COL_SHOP_NAME) + " / " + cursor.getString(COL_DISTANCE_TO_USER));
                         mPreferredUnit = Utility.getPreferredUnit(getActivity());
                         if (mPreferredUnit.equals(getResources().getString(R.string.unit_array_metric))) {
                             mFormattedDistance = Utility.formatDistanceMetric(cursor.getString(COL_DISTANCE_TO_USER));
@@ -173,7 +203,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                             mNewSpeedDistanceToShop = Utility.calculateDistanceDuration(distanceToShop,getActivity());
                             mFormattedDuration = Utility.formatDistanceDuration(String.valueOf(mNewSpeedDistanceToShop));
                             ((TextView) view).setText(mFormattedDuration);
-                          //  return true;
+                            //  return true;
                         }
                         return true;
                     case COL_DISCOUNT_VALUE:
@@ -185,19 +215,26 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                             view.setVisibility(View.GONE);
                         }
                         return true;
+                    case COL_LOGO_URL:
+                        if ((cursor.getInt(COL_IS_PARTNER) == 1)) {
+                            loadImage = new LoadImage();
+                            String[] url = new String[1];
+                            mListItemIcon = view;
+                            //TODO: Uncomment the line below when whe add some URLs in the DB
+                            //url[0] = cursor.getString(COL_LOGO_URL);
+                            url[0] = "https://edinburghcriticalmass.files.wordpress.com/2012/11/bike-to-work.gif?w=68&h=68&crop=1";
+                            Log.i(LOG_TAG,"URL from DB is: " + url[0]);
+                            loadImage.execute(url);
+                        }
+                        else {
+                            view.setBackgroundResource(R.drawable.bike_tool_kit);//we need to re-set the resource for each
+                            //non-partner shop
+                        }
                 }
                 return false;
             }
         });
-    //    Log.i(LOG_TAG,"Size of mShopsAdapter = " + mShopsAdapter.getCount());
 
-        // Get a reference to the ListView, and attach this adapter to it.
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        ListView listView = (ListView) rootView.findViewById(R.id.listview_shops);
-        swipeLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_container);
-        swipeLayout.setOnRefreshListener(this);
-        mListView = listView;
-        listView.setAdapter(mShopsAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -358,7 +395,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     @Override
     public void onStop() {
         super.onStop();
-        //used to determine of a refresh of the displayed speed or range is necessary
+        //used to determine if a refresh of the displayed speed or range is necessary
         GlobalState.FRAGMENT_RANGE = Utility.getPreferredRangeImperial(getActivity());
         GlobalState.FRAGMENT_SPEED = Utility.getPreferredSpeed(getActivity());
     }
@@ -438,5 +475,68 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
         }
     };
 
+
+    private class LoadImage extends AsyncTask<String, Void, Bitmap> {
+        @Override
+        protected Bitmap doInBackground(String...url) {
+            Log.i(LOG_TAG,"In doInBackground");
+            Bitmap map;
+            map = downloadImage(url[0]);
+            return map;
+        }
+
+        // Sets the Bitmap returned by doInBackground
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            try {
+                ImageView imageView = (ImageView) mListItemIcon;
+                imageView.setImageBitmap(result);
+            }
+            catch (NullPointerException e) {
+                Log.e(LOG_TAG, "NullPointer at 495");
+                //In case the bitmap is null, we simply load the default image (in the XML layout file)
+            }
+        }
+
+        // Creates Bitmap from InputStream and returns it
+        private Bitmap downloadImage(String url) {
+            Bitmap bitmap = null;
+            InputStream stream;
+            BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+            bmOptions.inSampleSize = 1; //set the image the exact size it is on the server
+
+            try {
+                stream = getHttpConnection(url);
+                bitmap = BitmapFactory.
+                        decodeStream(stream, null, bmOptions);
+                stream.close();
+            }
+            catch (Exception f) {
+                f.printStackTrace();
+            }
+            return bitmap;
+        }
+
+        // Makes HttpURLConnection and returns InputStream
+        private InputStream getHttpConnection(String urlString)
+                throws IOException {
+            InputStream stream = null;
+            URL url = new URL(urlString);
+            URLConnection connection = url.openConnection();
+
+            try {
+                HttpURLConnection httpConnection = (HttpURLConnection) connection;
+                httpConnection.setRequestMethod("GET");
+                httpConnection.connect();
+
+                if (httpConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                    stream = httpConnection.getInputStream();
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            return stream;
+        }
+    }
 }
 
