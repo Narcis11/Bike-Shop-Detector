@@ -221,8 +221,8 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                             String[] url = new String[1];
                             mListItemIcon = view;
                             //TODO: Uncomment the line below when whe add some URLs in the DB
-                            //url[0] = cursor.getString(COL_LOGO_URL);
-                            url[0] = "https://edinburghcriticalmass.files.wordpress.com/2012/11/bike-to-work.gif?w=68&h=68&crop=1";
+                            url[0] = cursor.getString(COL_LOGO_URL);
+                            //url[0] = "https://edinburghcriticalmass.files.wordpress.com/2012/11/bike-to-work.gif?w=68&h=68&crop=1";
                             Log.i(LOG_TAG,"URL from DB is: " + url[0]);
                             loadImage.execute(url);
                         }

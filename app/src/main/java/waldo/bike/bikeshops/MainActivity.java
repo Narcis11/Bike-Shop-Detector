@@ -82,7 +82,6 @@ public class MainActivity extends Activity implements
     private static boolean mFirstLoad = true;
     private static boolean mFirstLoadForGPS = true;
     private static String mNetworkState = Constants.NETWORK_STATE_CONNECTED; //main activity only loads if there's Internet connection, so it's safe to assign this value
-    private static int mPreviousOrientation = 0;
     private static boolean mIsGpsMessageDisplayed;
     private static boolean mIsInternetMessageDisplayed;
     private IntentFilter mIntentFilter;
@@ -176,9 +175,6 @@ public class MainActivity extends Activity implements
         //instantiate the intent filter used by the broadcast receiver
         mIntentFilter = new IntentFilter();
         mIntentFilter.addAction(Constants.BROADCAST_ACTION);
-        if (mFirstLoadForGPS) {
-            mPreviousOrientation = Utility.getScreenOrientation(mContext);
-        }
 
      //this piece of code is used for creating the slider menu
                  mTitle = mDrawerTitle = getTitle();
@@ -272,9 +268,7 @@ public class MainActivity extends Activity implements
              @Override
     protected void onStart() {
         super.onStart();
-        if (mPreviousOrientation  != 4 ) {
             mGoogleApiClient.connect();
-        }
 
 
     }
@@ -286,18 +280,13 @@ public class MainActivity extends Activity implements
         AppEventsLogger.deactivateApp(mContext);
         unregisterReceiver(mBroadcastReceiver);
     //    Log.i(LOG_TAG,"in onPause");
-        //random value used to prevent the GPS from disconnecting
-        //at every orientation change (onPause() is called before onStop())
-        mPreviousOrientation = 4;
         mFirstLoadForGPS = false;
     }
 
              @Override
     protected void onStop() {
         super.onStop();
-        if (mPreviousOrientation != 4 ) {
             mGoogleApiClient.disconnect();
-        }
     }
 
     @Override
