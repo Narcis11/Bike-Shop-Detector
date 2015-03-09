@@ -578,6 +578,15 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 catch (JSONException d) {
                     d.printStackTrace();
                 }
+
+                //get the logo URL
+                try {
+                    shop_logo = partnerShopDetails.getString(PARTNER_LOGO);
+                    updateValues.put(ShopsContract.ShopsEntry.COLUMN_LOGO_URL, shop_logo);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                
                 //if necessary, get the rest of the details for the partner shop
                 if (partnerShopDetails.length() > 4) {
 
@@ -595,14 +604,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                         updateValues.put(ShopsContract.ShopsEntry.COLUMN_PHONE_NUMBER, shop_number);
                     } catch (JSONException b) {
                         b.printStackTrace();
-                    }
-
-                    //get the logo URL
-                    try {
-                        shop_logo = partnerShopDetails.getString(PARTNER_LOGO);
-                        updateValues.put(ShopsContract.ShopsEntry.COLUMN_LOGO_URL, shop_logo);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
                     }
 
                     //get the address
