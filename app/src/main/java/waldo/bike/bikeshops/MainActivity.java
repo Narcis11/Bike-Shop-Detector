@@ -370,7 +370,7 @@ public class MainActivity extends Activity implements
                 mProgressDialog.setMessage(getResources().getString(R.string.waiting_gps));
                 mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                 mProgressDialog.setIndeterminate(true);
-                mProgressDialog.setCancelable(false); //don't allow the user to cancel the dialog
+                mProgressDialog.setCancelable(true); //allow the user to cancel the dialog
                 mProgressDialog.show();
                 mIsDialogCalled = true;
             }
