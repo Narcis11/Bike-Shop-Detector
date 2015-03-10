@@ -92,6 +92,7 @@ public class ShopsTestContentProvider extends AndroidTestCase {
         columnNames.add(ShopsContract.ShopsEntry.COLUMN_IS_PARTNER);
         columnNames.add(ShopsContract.ShopsEntry.COLUMN_SHOP_PROMO_TEXT);
         columnNames.add(ShopsContract.ShopsEntry.COLUMN_LOGO_URL);
+        columnNames.add(ShopsContract.ShopsEntry.COLUMN_LOGO_VALUE);
 /*        columnNames.add(ShopsContract.ShopsEntry.COLUMN_PLACE_ID);
         columnNames.add(ShopsContract.ShopsEntry.COLUMN_IS_PARTNER);
         columnNames.add(ShopsContract.ShopsEntry.COLUMN_PHONE_NUMBER);

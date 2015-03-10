@@ -27,8 +27,10 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HTTP;
+import org.apache.http.util.ByteArrayBuffer;
 import org.json.*;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,6 +39,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.Vector;
 
 import Utilities.Constants;
@@ -579,14 +582,16 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     d.printStackTrace();
                 }
 
-                //get the logo URL
+                //get the logo URL and value
                 try {
                     shop_logo = partnerShopDetails.getString(PARTNER_LOGO);
+                    byte[] logoValue = getLogoImage(shop_logo); //get the image
                     updateValues.put(ShopsContract.ShopsEntry.COLUMN_LOGO_URL, shop_logo);
+                    updateValues.put(ShopsContract.ShopsEntry.COLUMN_LOGO_VALUE,logoValue);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                
+
                 //if necessary, get the rest of the details for the partner shop
                 if (partnerShopDetails.length() > 4) {
 
@@ -654,5 +659,26 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             e.printStackTrace();
         }
         return allShops.toString();
+    }
+
+    private byte[] getLogoImage(String url){
+        try {
+            URL imageUrl = new URL(url);
+            URLConnection ucon = imageUrl.openConnection();
+
+            InputStream is = ucon.getInputStream();
+            BufferedInputStream bis = new BufferedInputStream(is);
+
+            ByteArrayBuffer baf = new ByteArrayBuffer(500);
+            int current = 0;
+            while ((current = bis.read()) != -1) {
+                baf.append((byte) current);
+            }
+
+            return baf.toByteArray();
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "Error: " + e.toString());
+        }
+        return null;
     }
 }

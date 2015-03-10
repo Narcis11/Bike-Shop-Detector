@@ -3,14 +3,19 @@ package test;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.location.Address;
+import android.location.Geocoder;
 import android.test.AndroidTestCase;
 import android.util.Log;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import Utilities.GlobalState;
 import Utilities.Utility;
 import data.ShopsContract;
 import data.ShopsDbHelper;
@@ -139,5 +144,36 @@ public class ShopsTest extends AndroidTestCase {
             }
         }
        // Utility.formatDistanceImperial(String.valueOf(1932));
+    }
+
+    public void testCountryCode() {
+        HashMap hm = new HashMap();
+        Geocoder geocoder = new Geocoder(getContext()); //50.854975,4.3753899
+        String LAT_KEY;
+        String LNG_KEY;
+
+            hm.put("lat0", Double.valueOf(52.3747157));//amsterdam
+            hm.put("lng0", Double.valueOf(4.8986142));
+            hm.put("lat1", Double.valueOf(50.854975));//bruxelles
+            hm.put("lng1", Double.valueOf(4.3753899));
+            hm.put("lat2", 48.2092);//austria
+            hm.put("lng2", 16.3728);
+
+        for (int i = 0; i < 3; i++) {
+            LAT_KEY = "lat" + String.valueOf(i);
+            LNG_KEY = "lng" + String.valueOf(i);
+            Log.i(LOG_TAG,"Lat is" + String.valueOf( hm.get(LAT_KEY)));
+            Log.i(LOG_TAG,"Lng is" + String.valueOf( hm.get(LNG_KEY)));
+            Double lat = (Double) hm.get(LAT_KEY);
+            Double lng = (Double) hm.get(LNG_KEY);
+            try {
+                List<Address> addressList = geocoder.getFromLocation(lat, lng, 1);
+                String countryCode = addressList.get(0).getCountryName().substring(0, 2).toLowerCase();
+                Log.i(LOG_TAG,"Contry code: " + countryCode);
+            }
+            catch (IOException e) {
+
+            }
+        }
     }
 }

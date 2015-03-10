@@ -40,8 +40,9 @@ public class FetchPlacesAutocomplete {
         final String OUT_JSON = "/json";
 
         final String API_KEY = Constants.API_KEY;
-        final String COUNTRY = Utility.getCountryCodeFromCoordinates(mContext);
-
+        String country_code = Utility.getCountryCodeFromCoordinates(mContext);
+        //US country code is returned incorrectly
+        if (country_code.equals("st")) country_code = "us";
         ArrayList<String> resultList = null;
 
         HttpURLConnection conn = null;
@@ -49,7 +50,7 @@ public class FetchPlacesAutocomplete {
             try {
                 StringBuilder sb = new StringBuilder(PLACES_API_BASE + TYPE_AUTOCOMPLETE + OUT_JSON);
                 sb.append("?key=" + API_KEY);
-                sb.append("&components=country:" + COUNTRY);
+                sb.append("&components=country:" + country_code);
                 sb.append("&input=" + URLEncoder.encode(input, "utf8"));
                 Log.i(LOG_TAG,"URL is: " + sb.toString());
                 URL url = new URL(sb.toString());

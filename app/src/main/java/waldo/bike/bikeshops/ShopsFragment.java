@@ -33,6 +33,7 @@ import android.widget.Toast;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -96,7 +97,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
             ShopsContract.ShopsEntry.COLUMN_IS_PARTNER,
             ShopsContract.ShopsEntry.COLUMN_SHOP_PROMO_TEXT,
             ShopsContract.ShopsEntry.COLUMN_DISCOUNT_VALUE,
-            ShopsContract.ShopsEntry.COLUMN_LOGO_URL
+            ShopsContract.ShopsEntry.COLUMN_LOGO_VALUE
     };
 
     // These indices are tied to SHOPS_COLUMNS.  If SHOPS_COLUMNS changes, these
@@ -113,7 +114,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     public static final int COL_IS_PARTNER = 9;
     public static final int COL_PROMO_TEXT = 10;
     public static final int COL_DISCOUNT_VALUE = 11;
-    public static final int COL_LOGO_URL = 12;
+    public static final int COL_LOGO_VALUE = 12;
 
     public ShopsFragment() {
     }
@@ -134,7 +135,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                         ShopsContract.ShopsEntry.COLUMN_DISTANCE_TO_USER,
                         ShopsContract.ShopsEntry.COLUMN_DISTANCE_DURATION,
                         ShopsContract.ShopsEntry.COLUMN_DISCOUNT_VALUE,
-                        ShopsContract.ShopsEntry.COLUMN_LOGO_URL
+                        ShopsContract.ShopsEntry.COLUMN_LOGO_VALUE
                 },
                 new int[] {
                         R.id.list_item_shopname_textview,
@@ -215,21 +216,25 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                             view.setVisibility(View.GONE);
                         }
                         return true;
-                    case COL_LOGO_URL:
+                    case COL_LOGO_VALUE:
                         if ((cursor.getInt(COL_IS_PARTNER) == 1)) {
-                            loadImage = new LoadImage();
-                            String[] url = new String[1];
-                            mListItemIcon = view;
-                            //TODO: Uncomment the line below when whe add some URLs in the DB
-                            url[0] = cursor.getString(COL_LOGO_URL);
-                            //url[0] = "https://edinburghcriticalmass.files.wordpress.com/2012/11/bike-to-work.gif?w=68&h=68&crop=1";
-                            Log.i(LOG_TAG,"URL from DB is: " + url[0]);
-                            loadImage.execute(url);
+                            Log.i(LOG_TAG,"Set image from DB");
+                            byte[] imageValue = cursor.getBlob(COL_LOGO_VALUE);
+                            if (imageValue != null) {
+                                ByteArrayInputStream inputStream = new ByteArrayInputStream(imageValue);
+                                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                                ImageView imageView = (ImageView) view;
+                                imageView.setImageBitmap(bitmap);
+                            }
+                            else {//fallback case
+                                view.setBackgroundResource(R.drawable.bike_tool_kit);//set the default image
+                            }
                         }
                         else {
                             view.setBackgroundResource(R.drawable.bike_tool_kit);//we need to re-set the resource for each
                             //non-partner shop
                         }
+                        return true;
                 }
                 return false;
             }
