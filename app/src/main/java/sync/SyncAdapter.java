@@ -545,6 +545,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         String shop_address = "";
         String shop_schedule = "";
         try {
+            Log.i(LOG_TAG,"Response is: " + responseString);
             JSONObject partnersJson = new JSONObject(responseString);
             JSONArray partnersArray = partnersJson.getJSONArray(ROOT_NODE);
             JSONObject partnerShopDetails;

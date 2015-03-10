@@ -77,12 +77,9 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     private IntentFilter mSyncFilter;
     //used by Google Analytics
     private Tracker mGaTracker;
-    //the left side icon for each shop
-    private View mListItemIcon;
-    //the class used to load the partners' images
-    LoadImage loadImage;
     //used for maintaining the listview state
     Bundle mOutBundle;
+    String mTestShopName;
     private static Parcelable mListViewScrollPos = null;
     public static final String[] SHOPS_COLUMNS = {
             ShopsContract.ShopsEntry.TABLE_NAME + "." + ShopsContract.ShopsEntry._ID,
@@ -170,6 +167,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                         GlobalState.IS_DATABASE_POPULATED = cursor.getString(COL_SHOP_NAME) != null || !cursor.getString(COL_SHOP_NAME).equals("");
                         //Log.i(LOG_TAG,"Populated: " + GlobalState.IS_DATABASE_POPULATED);
                         //set the text
+                        mTestShopName = cursor.getString(COL_SHOP_NAME);
                         ((TextView) view).setText(cursor.getString(COL_SHOP_NAME));
                         return true;
                     case COL_IS_OPEN:
@@ -218,19 +216,24 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                         return true;
                     case COL_LOGO_VALUE:
                         if ((cursor.getInt(COL_IS_PARTNER) == 1)) {
-                            Log.i(LOG_TAG,"Set image from DB");
+
                             byte[] imageValue = cursor.getBlob(COL_LOGO_VALUE);
                             if (imageValue != null) {
+                                Log.i(LOG_TAG,"Set image from DB for: " + mTestShopName);
                                 ByteArrayInputStream inputStream = new ByteArrayInputStream(imageValue);
                                 Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
                                 ImageView imageView = (ImageView) view;
                                 imageView.setImageBitmap(bitmap);
+                                view.setVisibility(View.GONE);
                             }
                             else {//fallback case
+                                Log.i(LOG_TAG,"fallback case for: " + mTestShopName);
+                                 //(getResources().getDrawable(R.drawable.bike_tool_kit));
                                 view.setBackgroundResource(R.drawable.bike_tool_kit);//set the default image
                             }
                         }
                         else {
+                            Log.i(LOG_TAG,"Set default image for: " + mTestShopName);
                             view.setBackgroundResource(R.drawable.bike_tool_kit);//we need to re-set the resource for each
                             //non-partner shop
                         }
@@ -480,68 +483,5 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
         }
     };
 
-
-    private class LoadImage extends AsyncTask<String, Void, Bitmap> {
-        @Override
-        protected Bitmap doInBackground(String...url) {
-            Log.i(LOG_TAG,"In doInBackground");
-            Bitmap map;
-            map = downloadImage(url[0]);
-            return map;
-        }
-
-        // Sets the Bitmap returned by doInBackground
-        @Override
-        protected void onPostExecute(Bitmap result) {
-            try {
-                ImageView imageView = (ImageView) mListItemIcon;
-                imageView.setImageBitmap(result);
-            }
-            catch (NullPointerException e) {
-                Log.e(LOG_TAG, "NullPointer at 495");
-                //In case the bitmap is null, we simply load the default image (in the XML layout file)
-            }
-        }
-
-        // Creates Bitmap from InputStream and returns it
-        private Bitmap downloadImage(String url) {
-            Bitmap bitmap = null;
-            InputStream stream;
-            BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-            bmOptions.inSampleSize = 1; //set the image the exact size it is on the server
-
-            try {
-                stream = getHttpConnection(url);
-                bitmap = BitmapFactory.
-                        decodeStream(stream, null, bmOptions);
-                stream.close();
-            }
-            catch (Exception f) {
-                f.printStackTrace();
-            }
-            return bitmap;
-        }
-
-        // Makes HttpURLConnection and returns InputStream
-        private InputStream getHttpConnection(String urlString)
-                throws IOException {
-            InputStream stream = null;
-            URL url = new URL(urlString);
-            URLConnection connection = url.openConnection();
-
-            try {
-                HttpURLConnection httpConnection = (HttpURLConnection) connection;
-                httpConnection.setRequestMethod("GET");
-                httpConnection.connect();
-
-                if (httpConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                    stream = httpConnection.getInputStream();
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-            return stream;
-        }
-    }
 }
 

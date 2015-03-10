@@ -158,8 +158,80 @@ public class ShopsTest extends AndroidTestCase {
             hm.put("lng1", Double.valueOf(4.3753899));
             hm.put("lat2", 48.2092);//austria
             hm.put("lng2", 16.3728);
+        hm.put("lat3",53.9678);//belarus
+        hm.put("lng3", 27.5766);
+        hm.put("lat4",42.7105);//bulgaria
+        hm.put("lng4", 23.3238);
+        hm.put("lat5",45.8150);//croatia/zagreb
+        hm.put("lng5", 15.9785);
+        hm.put("lat6",50.0878);//praga
+        hm.put("lng6", 14.4205);
+        hm.put("lat7",55.6763);//copenhaga
+        hm.put("lng7", 12.5681);
+        hm.put("lat8",59.4389);//tallinn
+        hm.put("lng8", 24.7545);
+        hm.put("lat9",60.1699);//helsinki /finlanda
+        hm.put("lng9", 24.9384);
+        hm.put("lat10",48.8567);//paris/franta
+        hm.put("lng10", 2.3510);
+        hm.put("lat11",52.5235);//berlin/germania
+        hm.put("lng11", 13.4115);
+        hm.put("lat12",37.9792);//atena /grecia
+        hm.put("lng12", 23.7166);
+        hm.put("lat13",47.4984);//budapesta   /ungaria
+        hm.put("lng13", 19.0408);
+        hm.put("lat14",64.1353);//islanda
+        hm.put("lng14", 21.8952);
+        hm.put("lat15",53.3441);//dublin  /irlanda
+        hm.put("lng15", -6.2675);
+        hm.put("lat16",41.8955);//roma    /italia
+        hm.put("lng16", 12.4823);
+        hm.put("lat17",56.9465);//riga/letonia
+        hm.put("lng17", 24.1049);
+        hm.put("lat18",47.1411);//liechtenstein
+        hm.put("lng18", 9.5215);
+        hm.put("lat19",54.6896);//vilnius /lithuania
+        hm.put("lng19", 25.2799);
+        hm.put("lat20",49.6100);//luxemburg
+        hm.put("lng20", 6.1296);
+        hm.put("lat21",42.0024);//skopye/macedonia
+        hm.put("lng21", 21.4361);
+        hm.put("lat22",35.9042);//malta
+        hm.put("lng22", 14.5189);
+        hm.put("lat23",47.0167);//chisinau/Basarabia
+        hm.put("lng23", 28.8497);
+        hm.put("lat24",43.7325);//monaco
+        hm.put("lng24", 7.4189);
+        hm.put("lat25",52.3738);//amsterdam/olanda
+        hm.put("lng25", 4.8910);
+        hm.put("lat26",59.9138);//oslo/norvegia
+        hm.put("lng26", 10.7387);
+        hm.put("lat27",52.2297);//varsovia/polonia
+        hm.put("lng27", 21.0122 );
+        hm.put("lat28",38.7072);//lisabona/portugalia
+        hm.put("lng28", -9.1355);
+        hm.put("lat29",55.7558);//moscova/rusia
+        hm.put("lng29", 37.6176);
+        hm.put("lat30",43.9424);//san marino
+        hm.put("lng30", 12.4578);
+        hm.put("lat31",44.8048);//belgrad/serbia
+        hm.put("lng31", 20.4781);
+        hm.put("lat32",48.2116);//slovacia/bratislava
+        hm.put("lng32", 17.1547);
+        hm.put("lat33",46.0514);//slovenia/ljublijana
+        hm.put("lng33", 14.5060);
+        hm.put("lat34",40.4167);//spania/madrid
+        hm.put("lng34", -3.7033);
+        hm.put("lat35",59.3328);//suedia/stockholm
+        hm.put("lng35", 18.0645);
+        hm.put("lat36",46.9480);// elvetia
+        hm.put("lng36", 7.4481);
+        hm.put("lat36",50.4422);// ucraina
+        hm.put("lng36", 30.5367);
+        hm.put("lat36",51.5002);// londra/anglia
+        hm.put("lng36", -0.1262);
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 37; i++) {
             LAT_KEY = "lat" + String.valueOf(i);
             LNG_KEY = "lng" + String.valueOf(i);
             Log.i(LOG_TAG,"Lat is" + String.valueOf( hm.get(LAT_KEY)));
