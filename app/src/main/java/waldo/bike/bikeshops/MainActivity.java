@@ -314,8 +314,6 @@ public class MainActivity extends Activity implements
         mLikeViewPadding = Utility.getLikeViewPaddingOnResume(mContext);
         if (!(mLikeView.getPaddingLeft() == mLikeViewPadding[0] || mLikeView.getPaddingLeft() == 0)) {
             mLikeView.setPadding(mLikeViewPadding[0], mLikeViewPadding[1], mLikeViewPadding[2], mLikeViewPadding[3]);
-            Log.i(LOG_TAG,"Changed padding in onResume");
-            Log.i(LOG_TAG,"Padding left/right onResume: " + String.valueOf(mLikeView.getPaddingLeft()) + "/" + String.valueOf(mLikeView.getPaddingRight()));
         }
         //get the reference to the frame layout that holds the list view
          mListFrameLayout = (FrameLayout) findViewById(R.id.shops_frame_id);
@@ -378,14 +376,12 @@ public class MainActivity extends Activity implements
     //called when like/unlike or (un)follow action is executed
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.i(LOG_TAG, "in onActivityResult");
         super.onActivityResult(requestCode, resultCode, data);
         mLikeView.handleOnActivityResult(mContext, requestCode, resultCode, data);
         if (data != null && data.hasExtra(FACEBOOK_APP_ID)) mRepositionLikeButton = true;
         if (mRepositionLikeButton) { //also signals that the like(d) button has been pressed
             if (mLikeView.getPaddingLeft() == mLikeViewPadding[0]) {
                 mLikeView.setPadding(0, 0, Utility.getPaddingRightLikeView(mContext), 0);//reposition the button after a Like action
-                Log.i(LOG_TAG, "Activ results - changed padding | left/right: " + String.valueOf(mLikeView.getPaddingLeft()) + "/" + String.valueOf(mLikeView.getPaddingRight()));
                 //send a hit to GA for each press of the like button
                 mGaTracker.send(new HitBuilders.EventBuilder()
                         .setCategory(getString(R.string.ga_socialmedia_cat_id))
@@ -474,7 +470,6 @@ public class MainActivity extends Activity implements
 
     @Override
     public void onConnected(Bundle bundle) {
-        Log.i(LOG_TAG,"in onConnected GPS");
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setInterval(GPS_REFRESH); // Update the location every 5 seconds
@@ -487,12 +482,10 @@ public class MainActivity extends Activity implements
 
     @Override
     public void onConnectionSuspended(int i) {
-        Log.i(LOG_TAG, "GoogleApiClient connection has been suspend");
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.i(LOG_TAG, "GoogleApiClient connection has failed");
     }
 
              /**
@@ -649,7 +642,6 @@ public class MainActivity extends Activity implements
         }
     }
     private void setUpFollowButton() {
-        Log.i(LOG_TAG,"in setUpFollowButton()");
         setTwitterLoginCallback();
         mFollowView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -704,12 +696,10 @@ public class MainActivity extends Activity implements
                     String status = twitterAsyncTask.get();
                     if (status.equals(Constants.OK_STATUS)) {
                         if (mActivateFollow) {
-                            Log.i(LOG_TAG, "Changed image to following. Status is " + status);
                             commitFollowChanges(Constants.TWITTER_FOLLOW);
                         }
                         else {
                             commitFollowChanges(Constants.TWITTER_UNFOLLOW);
-                            Log.i(LOG_TAG, "Changed image to follow. Status is " + status);
                         }
                     }
                     else {
@@ -754,12 +744,10 @@ public class MainActivity extends Activity implements
             String status = twitterAsyncTask.get();
             if (status.equals(Constants.OK_STATUS)) {
                 if (operation.equals(Constants.TWITTER_FOLLOW)) {
-                    Log.i(LOG_TAG, "Changed image to followING. Status is " + status);
                     commitFollowChanges(Constants.TWITTER_FOLLOW);
                 }
                 else {
                     commitFollowChanges(Constants.TWITTER_UNFOLLOW);
-                    Log.i(LOG_TAG, "Changed image to follow. Status is " + status);
                 }
             }
             else {
@@ -797,7 +785,6 @@ public class MainActivity extends Activity implements
     }
     //called when the like button is pressed
     private void handleLikeButton(View v) {
-        Log.i(LOG_TAG,"In handleLikeButton");
         mRepositionLikeButton = true;
         mGaTracker.send(new HitBuilders.EventBuilder()
                 .setCategory(getString(R.string.ga_socialmedia_cat_id))

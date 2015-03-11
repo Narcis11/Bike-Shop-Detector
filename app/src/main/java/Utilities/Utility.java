@@ -556,7 +556,7 @@ public class Utility {
                 e.printStackTrace();
             }
             catch (IndexOutOfBoundsException a) {
-                
+
             }
         }
         return Constants.RETURN_ERROR_STRING;
