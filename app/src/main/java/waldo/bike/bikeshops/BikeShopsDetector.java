@@ -61,9 +61,7 @@ public class BikeShopsDetector extends Application {
                 @Override
                 public void done(ParseException e) {
                     if (e == null) {
-                        Log.i(LOG_TAG, "successfully subscribed to the bikeshops channel.");
                     } else {
-                        Log.e(LOG_TAG, "failed to subscribe for push", e);
                     }
                 }
             });
