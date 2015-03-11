@@ -54,7 +54,7 @@ public class FetchPlacesAutocomplete {
                 sb.append("?key=" + API_KEY);
                 sb.append("&components=country:" + country_code);
                 sb.append("&input=" + URLEncoder.encode(input, "utf8"));
-                Log.i(LOG_TAG,"URL is: " + sb.toString());
+             //   Log.i(LOG_TAG,"URL is: " + sb.toString());
                 URL url = new URL(sb.toString());
                 conn = (HttpURLConnection) url.openConnection();
                 InputStreamReader in = new InputStreamReader(conn.getInputStream());
@@ -66,10 +66,10 @@ public class FetchPlacesAutocomplete {
                     jsonResults.append(buff, 0, read);
                 }
             } catch (MalformedURLException e) {
-                Log.e(LOG_TAG, "Error processing Places API URL", e);
+               // Log.e(LOG_TAG, "Error processing Places API URL", e);
                 return resultList;
             } catch (IOException e) {
-                Log.e(LOG_TAG, "Error connecting to Places API", e);
+               // Log.e(LOG_TAG, "Error connecting to Places API", e);
                 return resultList;
             } finally {
                 if (conn != null) {
@@ -88,10 +88,10 @@ public class FetchPlacesAutocomplete {
                     resultList.add(predsJsonArray.getJSONObject(i).getString("description"));
                 }
             } catch (JSONException e) {
-                Log.e(LOG_TAG, "Cannot process JSON results", e);
+              //  Log.e(LOG_TAG, "Cannot process JSON results", e);
             }
 
-            Log.i(LOG_TAG,"End of sync with resultList.size = " + resultList.size());
+           // Log.i(LOG_TAG,"End of sync with resultList.size = " + resultList.size());
 /*            for (int i = 0; i < resultList.size(); i ++ ) {
                 Log.i(LOG_TAG,resultList.get(i));
             }*/

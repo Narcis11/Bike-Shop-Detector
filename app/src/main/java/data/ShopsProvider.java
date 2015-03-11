@@ -99,7 +99,7 @@ public class ShopsProvider extends ContentProvider {
             sqLiteDatabase.setTransactionSuccessful();
         }
         catch (IllegalStateException e) {
-              Log.e(LOG_TAG, "Error while inserting bulk! = " + e.getMessage());
+           //   Log.e(LOG_TAG, "Error while inserting bulk! = " + e.getMessage());
               e.printStackTrace();
               return super.bulkInsert(uri, values);//in case of errors, we call the regular insert method
         }

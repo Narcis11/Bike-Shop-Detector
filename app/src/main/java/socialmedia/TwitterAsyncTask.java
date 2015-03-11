@@ -37,11 +37,11 @@ public class TwitterAsyncTask extends AsyncTask<String,Void,String> {
         try {
             if (OPERATION.equals(Constants.TWITTER_FOLLOW)) {
                 twitter.createFriendship(screenName);
-                Log.i(LOG_TAG, "Followed you!");
+             //   Log.i(LOG_TAG, "Followed you!");
             }
             else {
                 twitter.destroyFriendship(screenName);
-                Log.i(LOG_TAG, "UnFollowed you!");
+              //  Log.i(LOG_TAG, "UnFollowed you!");
             }
         } catch (TwitterException e) {
 
