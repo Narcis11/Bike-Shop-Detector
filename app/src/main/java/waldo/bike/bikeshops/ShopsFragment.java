@@ -249,7 +249,6 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                     mPlaceId = cursor.getString(COL_PLACE_ID);
                     mIsPartner = (cursor.getInt(COL_IS_PARTNER) == 1);
                     mPromoText = cursor.getString(COL_PROMO_TEXT);
-                    Log.i(LOG_TAG, "mIsPartner: " + mIsPartner );
                     //update the database row corresponding to this shop id
                    // updateShopList(getActivity(),mPlaceId);
                     //store the position
@@ -373,8 +372,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
         //refresh if the range has changed, we have an internet connection and the user's last location
         if (GlobalState.FRAGMENT_RANGE != null && !GlobalState.FRAGMENT_RANGE.equals(Utility.getPreferredRangeImperial(getActivity()))
                 && deviceConnection.checkInternetConnected() && !GlobalState.USER_LAT.equals("") && !GlobalState.USER_LNG.equals("") ) {
-            Log.i(LOG_TAG,"****UPDATED SHOP LIST****");
-            Log.i(LOG_TAG,GlobalState.USER_LAT + " / " + GlobalState.USER_LNG);
+           // Log.i(LOG_TAG,GlobalState.USER_LAT + " / " + GlobalState.USER_LNG);
             updateShopList(getActivity());
             mIsListRefreshed = true;
         }
@@ -404,7 +402,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
         String[] coordinates = new String[2];
         coordinates[0] = GlobalState.USER_LAT;
         coordinates[1] = GlobalState.USER_LNG;
-        Log.i(LOG_TAG,"Lat/lng in updateShopList - " + coordinates[0] + "/" + coordinates[1]);
+       // Log.i(LOG_TAG,"Lat/lng in updateShopList - " + coordinates[0] + "/" + coordinates[1]);
         SyncAdapter.syncImmediately(context);
     }
 
@@ -448,7 +446,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
 
     @Override
     public void onRefresh() {
-            Log.i(LOG_TAG, "In onRefresh()");
+         //   Log.i(LOG_TAG, "In onRefresh()");
             swipeLayout.setColorSchemeResources(R.color.waldo_light_blue);
             ShopsFragment shopsFragment = new ShopsFragment();
             shopsFragment.updateShopList(getActivity());
@@ -464,7 +462,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                 syncStatus = syncExtras.getString(Constants.SYNC_BUNDLE_STATUS_KEY,"");
                 syncResult = syncExtras.getString(Constants.SYNC_BUNDLE_RESULT_KEY,"");
                 if (!syncStatus.equals("")) {
-                    Log.i(LOG_TAG,"Sync status/result : " + syncStatus + "/" + syncResult);
+                   // Log.i(LOG_TAG,"Sync status/result : " + syncStatus + "/" + syncResult);
                     if (syncStatus.equals(Constants.SYNC_BUNDLE_STATUS_STOPPED)) {
                         if (swipeLayout.isRefreshing()) swipeLayout.setRefreshing(false);//remove the refresh circle if it is present
                         if (syncResult.equals(Constants.SYNC_BUNDLE_STATUS_ZERO)) Toast.makeText(getActivity().getApplicationContext(),

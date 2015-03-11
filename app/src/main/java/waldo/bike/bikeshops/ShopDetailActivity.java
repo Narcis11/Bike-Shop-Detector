@@ -147,16 +147,11 @@ public class ShopDetailActivity extends FragmentActivity
                 ratingDrawable.getDrawable(0).setColorFilter(getResources().getColor(R.color.shop_detail), PorterDuff.Mode.SRC_ATOP);//background
                 ratingDrawable.getDrawable(1).setColorFilter(getResources().getColor(R.color.shop_detail), PorterDuff.Mode.SRC_ATOP);//secondary progress
                 ratingDrawable.getDrawable(2).setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_ATOP);//progress
-                Log.i(LOG_TAG,"Rating is: " + mShopRating);
                 shopRatingBar.setRating(mShopRating);
             }
             //setting up the promo text
-            Log.i(LOG_TAG,"Promo text is: " + mPromoText);
             if (!mPromoText.equals(""))
                 shopPromoText.setText(Utility.getPromoText(mPromoText,ACTIVITY_INDEX));
-        }
-        else {
-            Log.i(LOG_TAG,"*****Cursor is null!*****");
         }
 
         shopDetailCursor.close();

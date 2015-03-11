@@ -151,7 +151,6 @@ public class SettingsActivity extends PreferenceActivity implements
             }
         }
         else {
-            Log.i(LOG_TAG,"preference is NULL!");
         }
         return true;
     }
@@ -168,11 +167,9 @@ public class SettingsActivity extends PreferenceActivity implements
             } else {
                 toUsePreferredUnit = oldPreferredUnit;
             }
-        Log.i(LOG_TAG,"toUsePreferredUnit = " + toUsePreferredUnit );
             if (toUsePreferredUnit.equals(getResources().getString(R.string.unit_array_metric))) { //metric screen formatting
                 if (firstLoad) {
                     addPreferencesFromResource(R.xml.pref_metric_general);
-                    Log.i(LOG_TAG, "Loaded pref_metric_general");
                     mIsMetricLoaded = true;
                 }
                 else { //Metric
@@ -199,7 +196,6 @@ public class SettingsActivity extends PreferenceActivity implements
             } else { //imperial screen formatting
                 if (firstLoad) {
                     addPreferencesFromResource(R.xml.pref_imperial_general);
-                    Log.i(LOG_TAG, "Loaded pref_imperial_general");
                     mIsMetricLoaded = false;
 
                 }
@@ -240,7 +236,6 @@ public class SettingsActivity extends PreferenceActivity implements
                 super.onStop();
                 //we check if the status of the check box has changed since the user opened the Settings Activity
                 if (mIsChecked != mFirstCheck) {
-                    Log.i(LOG_TAG,"Changed check type");
                     mCheckBoxStatus = (mIsChecked) ? "checked" : "unchecked";
                     //set the event to GA
                     mGaTracker.send(new HitBuilders.EventBuilder()
@@ -250,7 +245,6 @@ public class SettingsActivity extends PreferenceActivity implements
                             .build());
                 }
                 else {
-                    Log.i(LOG_TAG,"Same check");
                 }
             }
 
@@ -277,10 +271,7 @@ public class SettingsActivity extends PreferenceActivity implements
                 String uri = json.getString(URI_KEY);
                 if (mIsCheckedInner) {
                     Utility.sendNotification(title, body, uri, context);
-                    Log.i(LOG_TAG, "Ready to send notifications");
                 }
-                else
-                    Log.i(LOG_TAG,"Notif not sent!");
             }
             catch(JSONException e) {
                 Log.e(LOG_TAG,e.getMessage());

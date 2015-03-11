@@ -73,11 +73,11 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
         Filter filter = new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
-                Log.i(LOG_TAG,"In getFilter");
+             //   Log.i(LOG_TAG,"In getFilter");
                 FilterResults filterResults = new FilterResults();
                 if (constraint != null) {
                     //we only sync if there are at least three letters
-                        Log.i(LOG_TAG, "Started syncing");
+                  //      Log.i(LOG_TAG, "Started syncing");
                         //we need to reinitialise it at every sync
                         countGetView = 1;
                         FetchPlacesAutocomplete fetchPlacesAutocomplete = new FetchPlacesAutocomplete(mContext);
@@ -92,10 +92,10 @@ public class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements F
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 if (results != null && results.count > 0) {
                     notifyDataSetChanged();
-                    Log.i(LOG_TAG,"notified DataSetChanged");
+                //    Log.i(LOG_TAG,"notified DataSetChanged");
                 }
                 else {
-                    Log.i(LOG_TAG,"DataSetInvalidated()");
+                 //   Log.i(LOG_TAG,"DataSetInvalidated()");
                     notifyDataSetInvalidated();
                 }
             }};

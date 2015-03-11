@@ -64,7 +64,7 @@ public class WebActivity extends Activity {
             public void onProgressChanged(WebView view, int newProgress) {
                 super.onProgressChanged(view, newProgress);
                 progressBar.setProgress(newProgress);
-                Log.i(LOG_TAG,"Progress is: " + newProgress);
+          //      Log.i(LOG_TAG,"Progress is: " + newProgress);
                 if (newProgress == 100) {
                     progressBar.setVisibility(View.GONE);
                 }

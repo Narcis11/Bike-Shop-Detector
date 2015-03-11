@@ -92,7 +92,6 @@ public class MapsActivity extends FragmentActivity{
     public Intent getParentActivityIntent() {
        // Bundle bundle = getIntent().getExtras();
         if (mBundle != null && !mBundle.isEmpty()) {
-            Log.i(LOG_TAG, "Should go back");
             Intent shopDetailsIntent = new Intent(this,ShopDetailActivity.class);
             //data from the bundle is extracted in the onCreate method from ShopDetailActivity, so we need to send it again.
            // Log.i(LOG_TAG,mBundle.getString(Constants.BUNDLE_SHOP_PLACE_ID));
@@ -154,7 +153,6 @@ public class MapsActivity extends FragmentActivity{
 
                     @Override
                     public View getInfoContents(Marker marker) {
-                        Log.i(LOG_TAG,"In getInfoContents");
                         mInfoWindow = getLayoutInflater().inflate(R.layout.custom_infowindow, null);
                         TextView titleText = (TextView) mInfoWindow.findViewById(R.id.infowindow_title);
                         TextView contentText = (TextView) mInfoWindow.findViewById(R.id.infowindow_content);
@@ -173,7 +171,6 @@ public class MapsActivity extends FragmentActivity{
             mMap.animateCamera(CameraUpdateFactory.zoomTo(Constants.SHOP_ZOOM));//*; //zoom to the position
         }
         else {
-            Log.i(LOG_TAG,"Loading all shops map");
             //if there's no bundle, then the call is from the main activity (View all shops button)
             Cursor shopsCursor;
             getActionBar().setTitle(getResources().getString(R.string.title_activity_all_shops));

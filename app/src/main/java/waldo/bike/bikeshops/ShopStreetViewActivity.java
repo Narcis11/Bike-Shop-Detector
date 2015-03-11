@@ -56,7 +56,7 @@ public class ShopStreetViewActivity extends FragmentActivity
     @Override
     //called when the user goes back from this activity to shop detail activity
     public Intent getParentActivityIntent() {
-        Log.i(LOG_TAG,"In getParentActivityIntent");
+        //Log.i(LOG_TAG,"In getParentActivityIntent");
         mBundle = getIntent().getExtras();
         if (mBundle != null && !mBundle.isEmpty()) {
             //we need to resend the bundle

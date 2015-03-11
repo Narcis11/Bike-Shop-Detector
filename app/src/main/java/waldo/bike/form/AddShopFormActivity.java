@@ -108,7 +108,7 @@ public class AddShopFormActivity extends Activity {
     }
 
     public boolean checkShopName () {
-        Log.i(LOG_TAG, "In checkShopName");
+    //    Log.i(LOG_TAG, "In checkShopName");
         if (mShopName.getText().toString().length() > 0) {
             if (mShopName.getText().toString().length() < 5) {
                 mInfoMessage.setVisibility(View.VISIBLE);
@@ -188,7 +188,7 @@ public class AddShopFormActivity extends Activity {
             mShopWebsiteOk = true;
         } //mShopWebsiteOk
         if (checkShopName() && checkShopWebsite() && checkShopPhoneNumber()) {
-            Log.i(LOG_TAG,"OK to submit form");
+      //      Log.i(LOG_TAG,"OK to submit form");
             //styling the shop add status
             mInfoMessage.setVisibility(View.VISIBLE);
             mInfoMessage.setBackgroundColor(getResources().getColor(R.color.add_shop_pending));

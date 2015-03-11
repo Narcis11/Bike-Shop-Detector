@@ -57,7 +57,7 @@ public class SplashScreen extends Activity{
         mGaTracker = ((BikeShopsDetector) getApplication()).getTracker(
                 BikeShopsDetector.TrackerName.APP_TRACKER);
         DeviceConnection deviceConnection = new DeviceConnection(mContext);
-        Log.i(LOG_TAG,"in onResume");
+       // Log.i(LOG_TAG,"in onResume");
         if (!deviceConnection.checkGpsEnabled()) {
             showGPSDisabledAlertToUser();
         }
@@ -107,7 +107,7 @@ public class SplashScreen extends Activity{
                     .setDescription("IllegalArgumentException in SplashScreen, onPause")
                     .setFatal(false)
                     .build());
-            Log.e(LOG_TAG,e.toString());
+           // Log.e(LOG_TAG,e.toString());
         }
     }
 
@@ -136,8 +136,9 @@ public class SplashScreen extends Activity{
 
                     }
                 }
-            } else {
-                Log.i(LOG_TAG, "mContext is null ");
+            }
+            else {
+                //Log.i(LOG_TAG, "mContext is null ");
             }
         };
     };
@@ -160,8 +161,6 @@ public class SplashScreen extends Activity{
 
 
     public static void startMainActivity(Context c) {
-        Log.i(LOG_TAG,"In startMainActivity");
-
         Handler handler = new Handler();
         final Context context = c;
         final long DELAY_TIME = 2000;
@@ -182,13 +181,13 @@ public class SplashScreen extends Activity{
     private boolean checkPlayServices() {
         final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
-        Log.i(LOG_TAG,"In checkPlayServices");
+       // Log.i(LOG_TAG,"In checkPlayServices");
         if (resultCode != ConnectionResult.SUCCESS) {
             if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
                 GooglePlayServicesUtil.getErrorDialog(resultCode, this,
                         PLAY_SERVICES_RESOLUTION_REQUEST).show();
             } else {
-                Log.i(LOG_TAG, "This device is not supported.");
+               // Log.i(LOG_TAG, "This device is not supported.");
                 finish();
             }
             return false;
