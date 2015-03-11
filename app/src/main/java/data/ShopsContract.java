@@ -39,7 +39,6 @@ public class ShopsContract {
         public static final String COLUMN_OPENING_HOURS = "opening_hours";//the opening hours of the shop with info for each day. stored as TEXT, each day is divided by "|"
         public static final String COLUMN_RATING = "rating";//the shop's rating, stored as REAL
         public static final String COLUMN_SHOP_PROMO_TEXT = "promo_text";
-        public static final String COLUMN_LOGO_VALUE = "logo_value";
 
         //some coding for the Content Provider
         //content://waldo.bike.bikeshops/shops

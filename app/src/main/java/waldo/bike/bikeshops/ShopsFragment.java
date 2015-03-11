@@ -32,6 +32,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -94,7 +95,8 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
             ShopsContract.ShopsEntry.COLUMN_IS_PARTNER,
             ShopsContract.ShopsEntry.COLUMN_SHOP_PROMO_TEXT,
             ShopsContract.ShopsEntry.COLUMN_DISCOUNT_VALUE,
-            ShopsContract.ShopsEntry.COLUMN_LOGO_VALUE
+           // ShopsContract.ShopsEntry.COLUMN_LOGO_VALUE
+            ShopsContract.ShopsEntry.COLUMN_LOGO_URL
     };
 
     // These indices are tied to SHOPS_COLUMNS.  If SHOPS_COLUMNS changes, these
@@ -111,7 +113,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     public static final int COL_IS_PARTNER = 9;
     public static final int COL_PROMO_TEXT = 10;
     public static final int COL_DISCOUNT_VALUE = 11;
-    public static final int COL_LOGO_VALUE = 12;
+    public static final int COL_LOGO_URL = 12;
 
     public ShopsFragment() {
     }
@@ -132,7 +134,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                         ShopsContract.ShopsEntry.COLUMN_DISTANCE_TO_USER,
                         ShopsContract.ShopsEntry.COLUMN_DISTANCE_DURATION,
                         ShopsContract.ShopsEntry.COLUMN_DISCOUNT_VALUE,
-                        ShopsContract.ShopsEntry.COLUMN_LOGO_VALUE
+                        ShopsContract.ShopsEntry.COLUMN_LOGO_URL
                 },
                 new int[] {
                         R.id.list_item_shopname_textview,
@@ -150,8 +152,7 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
 
         // Get a reference to the ListView, and attach this adapter to it.
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        ListView listView = (ListView) rootView.findViewById(R.id.listview_shops);
-        Log.i(LOG_TAG,"Initialized mListItemIcon");
+        final ListView listView = (ListView) rootView.findViewById(R.id.listview_shops);
         swipeLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_container);
         swipeLayout.setOnRefreshListener(this);
         mListView = listView;
@@ -214,27 +215,18 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                             view.setVisibility(View.GONE);
                         }
                         return true;
-                    case COL_LOGO_VALUE:
+                    case COL_LOGO_URL:
                         if ((cursor.getInt(COL_IS_PARTNER) == 1)) {
-
-                            byte[] imageValue = cursor.getBlob(COL_LOGO_VALUE);
-                            if (imageValue != null) {
-                                Log.i(LOG_TAG,"Set image from DB for: " + mTestShopName);
-                                ByteArrayInputStream inputStream = new ByteArrayInputStream(imageValue);
-                                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                                ImageView imageView = (ImageView) view;
-                                imageView.setImageBitmap(bitmap);
-                                view.setVisibility(View.GONE);
-                            }
-                            else {//fallback case
-                                Log.i(LOG_TAG,"fallback case for: " + mTestShopName);
-                                 //(getResources().getDrawable(R.drawable.bike_tool_kit));
-                                view.setBackgroundResource(R.drawable.bike_tool_kit);//set the default image
-                            }
+                            ImageView imageView = (ImageView) view;
+                            Picasso.with(getActivity().getApplicationContext())
+                                    .load(cursor.getString(COL_LOGO_URL))
+                                    .placeholder(R.drawable.bike_tool_kit)
+                                    .error(R.drawable.bike_tool_kit)
+                                    .into(imageView);
                         }
                         else {
-                            Log.i(LOG_TAG,"Set default image for: " + mTestShopName);
-                            view.setBackgroundResource(R.drawable.bike_tool_kit);//we need to re-set the resource for each
+                            ImageView imageViewNon = (ImageView) view;
+                            imageViewNon.setImageDrawable(getResources().getDrawable(R.drawable.bike_tool_kit));
                             //non-partner shop
                         }
                         return true;

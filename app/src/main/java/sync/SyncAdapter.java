@@ -586,9 +586,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 //get the logo URL and value
                 try {
                     shop_logo = partnerShopDetails.getString(PARTNER_LOGO);
-                    byte[] logoValue = getLogoImage(shop_logo); //get the image
                     updateValues.put(ShopsContract.ShopsEntry.COLUMN_LOGO_URL, shop_logo);
-                    updateValues.put(ShopsContract.ShopsEntry.COLUMN_LOGO_VALUE,logoValue);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -660,26 +658,5 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             e.printStackTrace();
         }
         return allShops.toString();
-    }
-
-    private byte[] getLogoImage(String url){
-        try {
-            URL imageUrl = new URL(url);
-            URLConnection ucon = imageUrl.openConnection();
-
-            InputStream is = ucon.getInputStream();
-            BufferedInputStream bis = new BufferedInputStream(is);
-
-            ByteArrayBuffer baf = new ByteArrayBuffer(500);
-            int current = 0;
-            while ((current = bis.read()) != -1) {
-                baf.append((byte) current);
-            }
-
-            return baf.toByteArray();
-        } catch (Exception e) {
-            Log.e(LOG_TAG, "Error: " + e.toString());
-        }
-        return null;
     }
 }
