@@ -226,16 +226,15 @@ public class ShopsTest extends AndroidTestCase {
         hm.put("lng35", 18.0645);
         hm.put("lat36",46.9480);// elvetia
         hm.put("lng36", 7.4481);
-        hm.put("lat36",50.4422);// ucraina
-        hm.put("lng36", 30.5367);
-        hm.put("lat36",51.5002);// londra/anglia
-        hm.put("lng36", -0.1262);
+        hm.put("lat37",50.4422);// ucraina
+        hm.put("lng37", 30.5367);
+        hm.put("lat38",51.5105431);// londra/anglia ,
+        hm.put("lng38", -0.1235498);
 
-        for (int i = 0; i < 37; i++) {
+        for (int i = 0; i < 39; i++) {
             LAT_KEY = "lat" + String.valueOf(i);
             LNG_KEY = "lng" + String.valueOf(i);
-            Log.i(LOG_TAG,"Lat is" + String.valueOf( hm.get(LAT_KEY)));
-            Log.i(LOG_TAG,"Lng is" + String.valueOf( hm.get(LNG_KEY)));
+            Log.i(LOG_TAG,"Position/Lat/Lng: " + i + "/" + String.valueOf( hm.get(LAT_KEY)) + "/" +String.valueOf( hm.get(LNG_KEY)));
             Double lat = (Double) hm.get(LAT_KEY);
             Double lng = (Double) hm.get(LNG_KEY);
             try {
@@ -246,6 +245,10 @@ public class ShopsTest extends AndroidTestCase {
             catch (IOException e) {
 
             }
+            catch (IndexOutOfBoundsException a) {
+                a.printStackTrace();
+            }
+            Log.i(LOG_TAG,"*****************************************************************************");
         }
     }
 }

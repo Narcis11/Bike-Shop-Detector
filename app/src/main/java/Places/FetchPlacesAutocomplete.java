@@ -43,6 +43,8 @@ public class FetchPlacesAutocomplete {
         String country_code = Utility.getCountryCodeFromCoordinates(mContext);
         //US country code is returned incorrectly
         if (country_code.equals("st")) country_code = "us";
+        //UK country code is returned incorrectly
+        if (country_code.equals("re")) country_code = "uk";
         ArrayList<String> resultList = null;
 
         HttpURLConnection conn = null;
