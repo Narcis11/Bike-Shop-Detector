@@ -68,7 +68,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
 
-            Log.i(LOG_TAG, "Starting sync...");
+          //  Log.i(LOG_TAG, "Starting sync...");
           //  if (extras.getString(Constants.BUNDLE_SHOP_PLACE_ID,"").equals("")) { //get all shops
                 String[] finalResult = new String[100];
                 String preferredUnit = Utility.getPreferredUnit(mContext);
@@ -99,7 +99,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                             .appendQueryParameter(QUERY_KEY, key)
                             .appendQueryParameter(QUERY_TYPES, types)
                             .build();
-                    Log.i(LOG_TAG, "Places Uri is: " + builtUri.toString());
+                  //  Log.i(LOG_TAG, "Places Uri is: " + builtUri.toString());
 
                     URL url = new URL(builtUri.toString());
 
@@ -112,7 +112,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     StringBuffer buffer = new StringBuffer();
                     if (inputStream == null) {
                         // Nothing to do.
-                        Log.i(LOG_TAG, "No input stream");
+                      //  Log.i(LOG_TAG, "No input stream");
                     }
                     reader = new BufferedReader(new InputStreamReader(inputStream));
                     String line;
@@ -124,12 +124,12 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     }
                     if (buffer.length() == 0) {
                         // Stream was empty.  No point in parsing.
-                        Log.i(LOG_TAG, "buffer.length() == 0");
+                      //  Log.i(LOG_TAG, "buffer.length() == 0");
                     }
                     placesJsonStr = buffer.toString();
                     //   Log.i(LOG_TAG,"Response is: " + placesJsonStr);
                 } catch (IOException e) {
-                    Log.e(LOG_TAG, "Error in fetching places: " + e);
+                   // Log.e(LOG_TAG, "Error in fetching places: " + e);
 
                 } finally {
                     if (urlConnection != null) {
@@ -139,7 +139,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                         try {
                             reader.close();
                         } catch (final IOException e) {
-                            Log.e(LOG_TAG, "Error closing stream", e);
+                          //  Log.e(LOG_TAG, "Error closing stream", e);
                         }
                     }
                 }
@@ -167,7 +167,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 try {
                     JSONObject placesJson = new JSONObject(placesJsonStr);
                     apiCallStatus = placesJson.getString(API_STATUS);
-                    Log.i(LOG_TAG, "Status is " + apiCallStatus);
+                  //  Log.i(LOG_TAG, "Status is " + apiCallStatus);
                     //we need an intent to signal when the sync has finished
                     Intent syncIntent = new Intent();
                     syncIntent.setAction(Constants.SYNC_BUNDLE_STATUS_ACTION);
@@ -197,7 +197,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                                 JSONObject openingHours = placeDetails.getJSONObject(API_OPENING_HOURS);
                                 openNow = openingHours.getString(API_OPEN_NOW);
                             } catch (JSONException e) {
-                                Log.e(LOG_TAG, "Opening Hours JSON Exception: " + e.getMessage());
+                              //  Log.e(LOG_TAG, "Opening Hours JSON Exception: " + e.getMessage());
                             }
                             //44.4391463,26.1428946
                             Location userLocation = new Location(Constants.PROVIDER);
@@ -254,7 +254,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                                     ShopsContract.ShopsEntry.CONTENT_URI,
                                     cvArray);
 
-                            Log.i(LOG_TAG, "No of bulk rows inserted = " + rowsInserted);
+                         //   Log.i(LOG_TAG, "No of bulk rows inserted = " + rowsInserted);
                             //final step: get the partner shops
                             if (rowsInserted > 0) getPartnerShops(place_ids);
 
@@ -290,14 +290,14 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     }
 
                 } catch (JSONException e) {
-                    Log.e(LOG_TAG, "Caught JSON Exception: " + e.getMessage());
+                  //  Log.e(LOG_TAG, "Caught JSON Exception: " + e.getMessage());
                     e.printStackTrace();
                 }
             //}
         }
 
     public static void syncImmediately(Context context/*, String placeId*/) {
-        Log.i(LOG_TAG, "In syncImmediately");
+       // Log.i(LOG_TAG, "In syncImmediately");
         Bundle bundle = new Bundle();
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
@@ -306,7 +306,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         }*/
         if (ContentResolver.isSyncPending(getSyncAccount(context), context.getString(R.string.content_authority))  ||
                 ContentResolver.isSyncActive(getSyncAccount(context), context.getString(R.string.content_authority))) {
-            Log.i("ContentResolver", "SyncPending, canceling");
+         //   Log.i("ContentResolver", "SyncPending, canceling");
             ContentResolver.cancelSync(getSyncAccount(context), context.getString(R.string.content_authority));
         }
         ContentResolver.requestSync(getSyncAccount(context),
@@ -378,7 +378,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             StringBuffer buffer = new StringBuffer();
             if (inputStream == null) {
                 // Nothing to do.
-                Log.i(LOG_TAG, "No input stream");
+               // Log.i(LOG_TAG, "No input stream");
             }
             reader = new BufferedReader(new InputStreamReader(inputStream));
             String line;
@@ -390,12 +390,12 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             }
             if (buffer.length() == 0) {
                 // Stream was empty.  No point in parsing.
-                Log.i(LOG_TAG, "buffer.length() == 0");
+               // Log.i(LOG_TAG, "buffer.length() == 0");
             }
             placeDetailsJsonStr = buffer.toString();
         }
         catch(IOException e) {
-            Log.e(LOG_TAG, "Error in fetching place details for place_id: + " + place_id + ". Error: " + e);
+          //  Log.e(LOG_TAG, "Error in fetching place details for place_id: + " + place_id + ". Error: " + e);
         }
         finally {
             if (urlConnection != null) {
@@ -405,7 +405,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 try {
                     reader.close();
                 } catch (final IOException e) {
-                    Log.e(LOG_TAG, "Error closing stream", e);
+                   // Log.e(LOG_TAG, "Error closing stream", e);
                 }
             }
         }
@@ -440,7 +440,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     placePhoneNumber = placeDetailsObject.getString(API_PHONE_NUMBER);
                 }
                 catch(JSONException phoneException) {
-                    Log.i(LOG_TAG,phoneException.getMessage());
+                   // Log.i(LOG_TAG,phoneException.getMessage());
                 }
                 //get opening hours
                 try {
@@ -452,7 +452,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     }
                 }
                 catch (JSONException e) {
-                    Log.i(LOG_TAG,e.getMessage());
+                   // Log.i(LOG_TAG,e.getMessage());
                 }
                 try {//get rating
                     rating = placeDetailsObject.getDouble(API_RATING);
@@ -475,7 +475,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                         returnPlaceDetails[RATING_ID] = returnValueRating.toString();
                     }
                     catch (JSONException jsonExcep) {
-                        Log.i(LOG_TAG,jsonExcep.getMessage());
+                        //Log.i(LOG_TAG,jsonExcep.getMessage());
                     }
 
                 }
@@ -483,7 +483,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     website = placeDetailsObject.getString(API_WEBSITE);
                 }
                 catch (JSONException json) {
-                    Log.i(LOG_TAG,json.getMessage());
+                    //Log.i(LOG_TAG,json.getMessage());
                 }
                 returnPlaceDetails[PHONE_NUMBER_ID] = placePhoneNumber;
                 returnPlaceDetails[WEEKDAY_TEXT_ID] = placeOpeningHours;
@@ -491,7 +491,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             }
         }
         catch(JSONException e) {
-            Log.e(LOG_TAG, "Parsing place details | JSON Exception: " + e.getMessage());
+            //Log.e(LOG_TAG, "Parsing place details | JSON Exception: " + e.getMessage());
         }
         return returnPlaceDetails;
     }
@@ -545,7 +545,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         String shop_address = "";
         String shop_schedule = "";
         try {
-            Log.i(LOG_TAG,"Response is: " + responseString);
+           // Log.i(LOG_TAG,"Response is: " + responseString);
             JSONObject partnersJson = new JSONObject(responseString);
             JSONArray partnersArray = partnersJson.getJSONArray(ROOT_NODE);
             JSONObject partnerShopDetails;
