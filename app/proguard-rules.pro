@@ -15,3 +15,6 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+-dontwarn twitter4j.**
+-dontwarn com.squareup.picasso.**
+-dontwarn retrofit.**

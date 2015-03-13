@@ -1,0 +1,536 @@
+-- Merging decision tree log ---
+manifest
+ADDED from AndroidManifest.xml:2:1
+	package
+		ADDED from AndroidManifest.xml:3:5
+		INJECTED from AndroidManifest.xml:0:0
+		INJECTED from AndroidManifest.xml:0:0
+	android:versionName
+		ADDED from AndroidManifest.xml:5:5
+		INJECTED from AndroidManifest.xml:0:0
+		INJECTED from AndroidManifest.xml:0:0
+	android:versionCode
+		ADDED from AndroidManifest.xml:4:5
+		INJECTED from AndroidManifest.xml:0:0
+		INJECTED from AndroidManifest.xml:0:0
+	xmlns:android
+		ADDED from AndroidManifest.xml:2:11
+uses-sdk
+ADDED from AndroidManifest.xml:8:5
+MERGED from com.google.android.gms:play-services:6.5.87:18:5
+MERGED from com.android.support:support-v4:21.0.3:15:5
+MERGED from com.android.support:support-v4:21.0.3:15:5
+MERGED from com.android.support:appcompat-v7:21.0.3:15:5
+MERGED from com.android.support:support-v4:21.0.3:15:5
+MERGED from com.facebook.android:facebook-android-sdk:3.21.1:20:5
+MERGED from com.android.support:support-v4:21.0.3:15:5
+MERGED from com.android.support:cardview-v7:21.0.3:15:5
+MERGED from com.twitter.sdk.android:twitter:1.0.0:7:5
+MERGED from com.twitter.sdk.android:tweet-composer:0.7.0:7:5
+MERGED from com.twitter.sdk.android:twitter-core:1.0.0:7:5
+MERGED from io.fabric.sdk.android:fabric:1.1.0:7:5
+MERGED from io.fabric.sdk.android:fabric:1.1.0:7:5
+MERGED from com.digits.sdk.android:digits:1.0.0:7:5
+MERGED from com.twitter.sdk.android:twitter-core:1.0.0:7:5
+MERGED from io.fabric.sdk.android:fabric:1.1.0:7:5
+MERGED from io.fabric.sdk.android:fabric:1.1.0:7:5
+MERGED from com.twitter.sdk.android:tweet-ui:1.0.0:7:5
+MERGED from com.twitter.sdk.android:twitter-core:1.0.0:7:5
+MERGED from io.fabric.sdk.android:fabric:1.1.0:7:5
+MERGED from io.fabric.sdk.android:fabric:1.1.0:7:5
+MERGED from com.android.support:support-v4:21.0.3:15:5
+MERGED from com.twitter.sdk.android:twitter-core:1.0.0:7:5
+MERGED from io.fabric.sdk.android:fabric:1.1.0:7:5
+MERGED from io.fabric.sdk.android:fabric:1.1.0:7:5
+MERGED from com.twitter.sdk.android:tweet-ui:1.0.0:7:5
+MERGED from com.twitter.sdk.android:twitter-core:1.0.0:7:5
+MERGED from io.fabric.sdk.android:fabric:1.1.0:7:5
+MERGED from io.fabric.sdk.android:fabric:1.1.0:7:5
+MERGED from com.android.support:support-v4:21.0.3:15:5
+MERGED from com.crashlytics.sdk.android:crashlytics:2.2.0:7:5
+MERGED from com.crashlytics.sdk.android:answers:1.1.0:7:5
+MERGED from io.fabric.sdk.android:fabric:1.1.0:7:5
+MERGED from com.crashlytics.sdk.android:beta:1.1.0:7:5
+MERGED from io.fabric.sdk.android:fabric:1.1.0:7:5
+MERGED from io.fabric.sdk.android:fabric:1.1.0:7:5
+	android:targetSdkVersion
+		ADDED from AndroidManifest.xml:10:9
+		INJECTED from AndroidManifest.xml:0:0
+		INJECTED from AndroidManifest.xml:0:0
+	android:minSdkVersion
+		ADDED from AndroidManifest.xml:9:9
+		INJECTED from AndroidManifest.xml:0:0
+		INJECTED from AndroidManifest.xml:0:0
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from AndroidManifest.xml:12:5
+	android:name
+		ADDED from AndroidManifest.xml:12:22
+uses-permission#android.permission.ACCESS_COARSE_LOCATION
+ADDED from AndroidManifest.xml:13:5
+	android:name
+		ADDED from AndroidManifest.xml:13:22
+uses-permission#android.permission.ACCESS_FINE_LOCATION
+ADDED from AndroidManifest.xml:14:5
+	android:name
+		ADDED from AndroidManifest.xml:14:22
+uses-permission#android.permission.ACCESS_WIFI_STATE
+ADDED from AndroidManifest.xml:15:5
+	android:name
+		ADDED from AndroidManifest.xml:15:22
+uses-permission#android.permission.INTERNET
+ADDED from AndroidManifest.xml:16:5
+MERGED from com.twitter.sdk.android:tweet-composer:0.7.0:11:5
+MERGED from com.twitter.sdk.android:twitter-core:1.0.0:11:5
+MERGED from com.digits.sdk.android:digits:1.0.0:11:5
+MERGED from com.twitter.sdk.android:twitter-core:1.0.0:11:5
+MERGED from com.twitter.sdk.android:tweet-ui:1.0.0:11:5
+MERGED from com.twitter.sdk.android:twitter-core:1.0.0:11:5
+MERGED from com.twitter.sdk.android:twitter-core:1.0.0:11:5
+MERGED from com.twitter.sdk.android:tweet-ui:1.0.0:11:5
+MERGED from com.twitter.sdk.android:twitter-core:1.0.0:11:5
+MERGED from com.crashlytics.sdk.android:crashlytics:2.2.0:11:5
+	android:name
+		ADDED from AndroidManifest.xml:16:22
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+ADDED from AndroidManifest.xml:17:5
+	android:name
+		ADDED from AndroidManifest.xml:17:22
+uses-permission#com.google.android.providers.gsf.permission.READ_GSERVICES
+ADDED from AndroidManifest.xml:18:5
+	android:name
+		ADDED from AndroidManifest.xml:18:22
+uses-permission#android.permission.VIBRATE
+ADDED from AndroidManifest.xml:19:5
+	android:name
+		ADDED from AndroidManifest.xml:19:22
+uses-permission#android.permission.RECEIVE_BOOT_COMPLETED
+ADDED from AndroidManifest.xml:20:5
+	android:name
+		ADDED from AndroidManifest.xml:20:22
+uses-permission#android.permission.GET_ACCOUNTS
+ADDED from AndroidManifest.xml:21:5
+	android:name
+		ADDED from AndroidManifest.xml:21:22
+uses-permission#com.google.android.c2dm.permission.RECEIVE
+ADDED from AndroidManifest.xml:22:5
+	android:name
+		ADDED from AndroidManifest.xml:22:22
+uses-permission#android.permission.WAKE_LOCK
+ADDED from AndroidManifest.xml:23:5
+	android:name
+		ADDED from AndroidManifest.xml:23:22
+uses-permission#android.permission.READ_SYNC_SETTINGS
+ADDED from AndroidManifest.xml:25:5
+	android:name
+		ADDED from AndroidManifest.xml:25:22
+uses-permission#android.permission.WRITE_SYNC_SETTINGS
+ADDED from AndroidManifest.xml:26:5
+	android:name
+		ADDED from AndroidManifest.xml:26:22
+uses-permission#android.permission.AUTHENTICATE_ACCOUNTS
+ADDED from AndroidManifest.xml:27:5
+	android:name
+		ADDED from AndroidManifest.xml:27:22
+uses-permission#android.permission.READ_SYNC_STATS
+ADDED from AndroidManifest.xml:28:5
+	android:name
+		ADDED from AndroidManifest.xml:28:22
+permission#waldo.bike.bikeshops.permission.C2D_MESSAGE
+ADDED from AndroidManifest.xml:31:5
+	android:protectionLevel
+		ADDED from AndroidManifest.xml:31:17
+	android:name
+		ADDED from AndroidManifest.xml:32:9
+uses-permission#waldo.bike.bikeshops.permission.C2D_MESSAGE
+ADDED from AndroidManifest.xml:33:5
+	android:name
+		ADDED from AndroidManifest.xml:33:22
+application
+ADDED from AndroidManifest.xml:35:5
+MERGED from com.google.android.gms:play-services:6.5.87:20:5
+MERGED from com.android.support:support-v4:21.0.3:16:5
+MERGED from com.android.support:support-v4:21.0.3:16:5
+MERGED from com.android.support:appcompat-v7:21.0.3:16:5
+MERGED from com.android.support:support-v4:21.0.3:16:5
+MERGED from com.facebook.android:facebook-android-sdk:3.21.1:24:5
+MERGED from com.android.support:support-v4:21.0.3:16:5
+MERGED from com.android.support:cardview-v7:21.0.3:16:5
+MERGED from com.twitter.sdk.android:twitter:1.0.0:11:5
+MERGED from com.twitter.sdk.android:tweet-composer:0.7.0:13:5
+MERGED from com.twitter.sdk.android:twitter-core:1.0.0:13:5
+MERGED from io.fabric.sdk.android:fabric:1.1.0:11:5
+MERGED from io.fabric.sdk.android:fabric:1.1.0:11:5
+MERGED from com.digits.sdk.android:digits:1.0.0:13:5
+MERGED from com.twitter.sdk.android:twitter-core:1.0.0:13:5
+MERGED from io.fabric.sdk.android:fabric:1.1.0:11:5
+MERGED from io.fabric.sdk.android:fabric:1.1.0:11:5
+MERGED from com.twitter.sdk.android:tweet-ui:1.0.0:13:5
+MERGED from com.twitter.sdk.android:twitter-core:1.0.0:13:5
+MERGED from io.fabric.sdk.android:fabric:1.1.0:11:5
+MERGED from io.fabric.sdk.android:fabric:1.1.0:11:5
+MERGED from com.android.support:support-v4:21.0.3:16:5
+MERGED from com.twitter.sdk.android:twitter-core:1.0.0:13:5
+MERGED from io.fabric.sdk.android:fabric:1.1.0:11:5
+MERGED from io.fabric.sdk.android:fabric:1.1.0:11:5
+MERGED from com.twitter.sdk.android:tweet-ui:1.0.0:13:5
+MERGED from com.twitter.sdk.android:twitter-core:1.0.0:13:5
+MERGED from io.fabric.sdk.android:fabric:1.1.0:11:5
+MERGED from io.fabric.sdk.android:fabric:1.1.0:11:5
+MERGED from com.android.support:support-v4:21.0.3:16:5
+MERGED from com.crashlytics.sdk.android:crashlytics:2.2.0:13:5
+MERGED from com.crashlytics.sdk.android:answers:1.1.0:11:5
+MERGED from io.fabric.sdk.android:fabric:1.1.0:11:5
+MERGED from com.crashlytics.sdk.android:beta:1.1.0:11:5
+MERGED from io.fabric.sdk.android:fabric:1.1.0:11:5
+MERGED from io.fabric.sdk.android:fabric:1.1.0:11:5
+	android:label
+		ADDED from AndroidManifest.xml:39:9
+	android:allowBackup
+		ADDED from AndroidManifest.xml:37:9
+	android:icon
+		ADDED from AndroidManifest.xml:38:9
+	android:theme
+		ADDED from AndroidManifest.xml:40:9
+	android:name
+		ADDED from AndroidManifest.xml:36:9
+meta-data#com.google.android.gms.version
+ADDED from AndroidManifest.xml:41:9
+MERGED from com.google.android.gms:play-services:6.5.87:21:9
+	android:value
+		ADDED from AndroidManifest.xml:43:13
+	android:name
+		ADDED from AndroidManifest.xml:42:13
+activity#waldo.bike.bikeshops.SplashScreen
+ADDED from AndroidManifest.xml:45:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:48:13
+	android:label
+		ADDED from AndroidManifest.xml:47:13
+	android:theme
+		ADDED from AndroidManifest.xml:49:13
+	android:name
+		ADDED from AndroidManifest.xml:46:13
+intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
+ADDED from AndroidManifest.xml:51:13
+action#android.intent.action.MAIN
+ADDED from AndroidManifest.xml:52:17
+	android:name
+		ADDED from AndroidManifest.xml:52:25
+category#android.intent.category.LAUNCHER
+ADDED from AndroidManifest.xml:53:17
+	android:name
+		ADDED from AndroidManifest.xml:53:27
+activity#waldo.bike.bikeshops.MainActivity
+ADDED from AndroidManifest.xml:56:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:60:13
+	android:label
+		ADDED from AndroidManifest.xml:59:13
+	android:configChanges
+		ADDED from AndroidManifest.xml:58:13
+	android:theme
+		ADDED from AndroidManifest.xml:61:13
+	android:name
+		ADDED from AndroidManifest.xml:57:13
+activity#waldo.bike.form.AddShopFormActivity
+ADDED from AndroidManifest.xml:63:9
+	android:screenOrientation
+		ADDED from AndroidManifest.xml:66:13
+	android:label
+		ADDED from AndroidManifest.xml:67:13
+	android:parentActivityName
+		ADDED from AndroidManifest.xml:68:13
+	android:configChanges
+		ADDED from AndroidManifest.xml:65:13
+	android:name
+		ADDED from AndroidManifest.xml:64:13
+meta-data#android.support.PARENT_ACTIVITY
+ADDED from AndroidManifest.xml:69:13
+	android:value
+		ADDED from AndroidManifest.xml:71:17
+	android:name
+		ADDED from AndroidManifest.xml:70:17
+activity#waldo.bike.bikeshops.SettingsActivity
+ADDED from AndroidManifest.xml:75:9
+	android:label
+		ADDED from AndroidManifest.xml:77:13
+	android:parentActivityName
+		ADDED from AndroidManifest.xml:78:13
+	android:name
+		ADDED from AndroidManifest.xml:76:13
+meta-data#com.google.android.maps.v2.API_KEY
+ADDED from AndroidManifest.xml:84:9
+	android:value
+		ADDED from AndroidManifest.xml:86:13
+	android:name
+		ADDED from AndroidManifest.xml:85:13
+meta-data#com.facebook.sdk.ApplicationId
+ADDED from AndroidManifest.xml:87:9
+	android:value
+		ADDED from AndroidManifest.xml:89:13
+	android:name
+		ADDED from AndroidManifest.xml:88:13
+activity#waldo.bike.bikeshops.MapsActivity
+ADDED from AndroidManifest.xml:91:9
+	android:label
+		ADDED from AndroidManifest.xml:93:13
+	android:name
+		ADDED from AndroidManifest.xml:92:13
+provider#data.ShopsProvider
+ADDED from AndroidManifest.xml:96:9
+	android:authorities
+		ADDED from AndroidManifest.xml:98:13
+	android:enabled
+		ADDED from AndroidManifest.xml:99:13
+	android:syncable
+		ADDED from AndroidManifest.xml:101:13
+	android:exported
+		ADDED from AndroidManifest.xml:100:13
+	android:name
+		ADDED from AndroidManifest.xml:97:13
+service#sync.WaldoAuthenticatorService
+ADDED from AndroidManifest.xml:103:9
+	android:name
+		ADDED from AndroidManifest.xml:103:18
+intent-filter#android.accounts.AccountAuthenticator
+ADDED from AndroidManifest.xml:104:13
+action#android.accounts.AccountAuthenticator
+ADDED from AndroidManifest.xml:105:17
+	android:name
+		ADDED from AndroidManifest.xml:105:25
+meta-data#android.accounts.AccountAuthenticator
+ADDED from AndroidManifest.xml:108:13
+	android:resource
+		ADDED from AndroidManifest.xml:110:17
+	android:name
+		ADDED from AndroidManifest.xml:109:17
+service#sync.WaldoSyncService
+ADDED from AndroidManifest.xml:114:9
+	android:exported
+		ADDED from AndroidManifest.xml:116:13
+	android:name
+		ADDED from AndroidManifest.xml:115:13
+intent-filter#android.content.SyncAdapter
+ADDED from AndroidManifest.xml:117:13
+action#android.content.SyncAdapter
+ADDED from AndroidManifest.xml:118:17
+	android:name
+		ADDED from AndroidManifest.xml:118:25
+meta-data#android.content.SyncAdapter
+ADDED from AndroidManifest.xml:121:13
+	android:resource
+		ADDED from AndroidManifest.xml:123:17
+	android:name
+		ADDED from AndroidManifest.xml:122:17
+activity#waldo.bike.form.AddShopMap
+ADDED from AndroidManifest.xml:126:9
+	android:label
+		ADDED from AndroidManifest.xml:128:13
+	android:parentActivityName
+		ADDED from AndroidManifest.xml:129:13
+	android:name
+		ADDED from AndroidManifest.xml:127:13
+meta-data#com.crashlytics.ApiKey
+ADDED from AndroidManifest.xml:136:9
+	android:value
+		ADDED from AndroidManifest.xml:138:13
+	android:name
+		ADDED from AndroidManifest.xml:137:13
+activity#waldo.bike.bikeshops.ShopDetailActivity
+ADDED from AndroidManifest.xml:140:9
+	android:parentActivityName
+		ADDED from AndroidManifest.xml:142:13
+	android:name
+		ADDED from AndroidManifest.xml:141:13
+activity#waldo.bike.bikeshops.ShopStreetViewActivity
+ADDED from AndroidManifest.xml:147:9
+	android:label
+		ADDED from AndroidManifest.xml:149:13
+	android:parentActivityName
+		ADDED from AndroidManifest.xml:150:13
+	android:name
+		ADDED from AndroidManifest.xml:148:13
+activity#waldo.bike.bikeshops.WebActivity
+ADDED from AndroidManifest.xml:155:9
+	android:label
+		ADDED from AndroidManifest.xml:157:13
+	android:name
+		ADDED from AndroidManifest.xml:156:13
+service#com.parse.PushService
+ADDED from AndroidManifest.xml:161:9
+	android:name
+		ADDED from AndroidManifest.xml:161:18
+receiver#com.parse.ParseBroadcastReceiver
+ADDED from AndroidManifest.xml:162:9
+	android:name
+		ADDED from AndroidManifest.xml:162:19
+intent-filter#android.intent.action.BOOT_COMPLETED+android.intent.action.USER_PRESENT
+ADDED from AndroidManifest.xml:163:13
+action#android.intent.action.BOOT_COMPLETED
+ADDED from AndroidManifest.xml:164:17
+	android:name
+		ADDED from AndroidManifest.xml:164:25
+action#android.intent.action.USER_PRESENT
+ADDED from AndroidManifest.xml:165:17
+	android:name
+		ADDED from AndroidManifest.xml:165:25
+receiver#waldo.bike.bikeshops.SettingsActivity$ParseCustomReceiver
+ADDED from AndroidManifest.xml:168:9
+	android:exported
+		ADDED from AndroidManifest.xml:169:13
+	android:name
+		ADDED from AndroidManifest.xml:168:19
+intent-filter#com.example.UPDATE_STATUS+com.parse.push.intent.DELETE+com.parse.push.intent.OPEN+com.parse.push.intent.RECEIVE
+ADDED from AndroidManifest.xml:170:13
+action#com.example.UPDATE_STATUS
+ADDED from AndroidManifest.xml:171:17
+	android:name
+		ADDED from AndroidManifest.xml:171:25
+action#com.parse.push.intent.RECEIVE
+ADDED from AndroidManifest.xml:172:17
+	android:name
+		ADDED from AndroidManifest.xml:172:25
+action#com.parse.push.intent.OPEN
+ADDED from AndroidManifest.xml:173:17
+	android:name
+		ADDED from AndroidManifest.xml:173:25
+action#com.parse.push.intent.DELETE
+ADDED from AndroidManifest.xml:174:17
+	android:name
+		ADDED from AndroidManifest.xml:174:25
+receiver#com.parse.GcmBroadcastReceiver
+ADDED from AndroidManifest.xml:177:9
+	android:permission
+		ADDED from AndroidManifest.xml:178:13
+	android:name
+		ADDED from AndroidManifest.xml:177:19
+intent-filter#com.google.android.c2dm.intent.RECEIVE+com.google.android.c2dm.intent.REGISTRATION+waldo.bike.bikeshops
+ADDED from AndroidManifest.xml:179:13
+action#com.google.android.c2dm.intent.RECEIVE
+ADDED from AndroidManifest.xml:180:17
+	android:name
+		ADDED from AndroidManifest.xml:180:25
+action#com.google.android.c2dm.intent.REGISTRATION
+ADDED from AndroidManifest.xml:181:17
+	android:name
+		ADDED from AndroidManifest.xml:181:25
+category#waldo.bike.bikeshops
+ADDED from AndroidManifest.xml:183:17
+	android:name
+		ADDED from AndroidManifest.xml:183:27
+activity#com.twitter.sdk.android.core.identity.OAuthActivity
+ADDED from com.twitter.sdk.android:twitter-core:1.0.0:14:9
+MERGED from com.twitter.sdk.android:twitter-core:1.0.0:14:9
+MERGED from com.twitter.sdk.android:twitter-core:1.0.0:14:9
+MERGED from com.twitter.sdk.android:twitter-core:1.0.0:14:9
+MERGED from com.twitter.sdk.android:twitter-core:1.0.0:14:9
+	android:excludeFromRecents
+		ADDED from com.twitter.sdk.android:twitter-core:1.0.0:17:13
+	android:exported
+		ADDED from com.twitter.sdk.android:twitter-core:1.0.0:18:13
+	android:configChanges
+		ADDED from com.twitter.sdk.android:twitter-core:1.0.0:16:13
+	android:name
+		ADDED from com.twitter.sdk.android:twitter-core:1.0.0:15:13
+activity#com.twitter.sdk.android.core.identity.ShareEmailActivity
+ADDED from com.twitter.sdk.android:twitter-core:1.0.0:19:9
+MERGED from com.twitter.sdk.android:twitter-core:1.0.0:19:9
+MERGED from com.twitter.sdk.android:twitter-core:1.0.0:19:9
+MERGED from com.twitter.sdk.android:twitter-core:1.0.0:19:9
+MERGED from com.twitter.sdk.android:twitter-core:1.0.0:19:9
+	android:label
+		ADDED from com.twitter.sdk.android:twitter-core:1.0.0:25:13
+	android:excludeFromRecents
+		ADDED from com.twitter.sdk.android:twitter-core:1.0.0:22:13
+	android:exported
+		ADDED from com.twitter.sdk.android:twitter-core:1.0.0:23:13
+	android:configChanges
+		ADDED from com.twitter.sdk.android:twitter-core:1.0.0:21:13
+	android:icon
+		ADDED from com.twitter.sdk.android:twitter-core:1.0.0:24:13
+	android:name
+		ADDED from com.twitter.sdk.android:twitter-core:1.0.0:20:13
+activity#com.digits.sdk.android.PhoneNumberActivity
+ADDED from com.digits.sdk.android:digits:1.0.0:14:9
+	android:excludeFromRecents
+		ADDED from com.digits.sdk.android:digits:1.0.0:17:13
+	android:exported
+		ADDED from com.digits.sdk.android:digits:1.0.0:18:13
+	android:windowSoftInputMode
+		ADDED from com.digits.sdk.android:digits:1.0.0:21:13
+	android:configChanges
+		ADDED from com.digits.sdk.android:digits:1.0.0:16:13
+	android:theme
+		ADDED from com.digits.sdk.android:digits:1.0.0:20:13
+	android:taskAffinity
+		ADDED from com.digits.sdk.android:digits:1.0.0:19:13
+	android:name
+		ADDED from com.digits.sdk.android:digits:1.0.0:15:13
+activity#com.digits.sdk.android.ConfirmationCodeActivity
+ADDED from com.digits.sdk.android:digits:1.0.0:22:9
+	android:excludeFromRecents
+		ADDED from com.digits.sdk.android:digits:1.0.0:25:13
+	android:exported
+		ADDED from com.digits.sdk.android:digits:1.0.0:26:13
+	android:windowSoftInputMode
+		ADDED from com.digits.sdk.android:digits:1.0.0:29:13
+	android:configChanges
+		ADDED from com.digits.sdk.android:digits:1.0.0:24:13
+	android:theme
+		ADDED from com.digits.sdk.android:digits:1.0.0:28:13
+	android:taskAffinity
+		ADDED from com.digits.sdk.android:digits:1.0.0:27:13
+	android:name
+		ADDED from com.digits.sdk.android:digits:1.0.0:23:13
+activity#com.digits.sdk.android.LoginCodeActivity
+ADDED from com.digits.sdk.android:digits:1.0.0:30:9
+	android:excludeFromRecents
+		ADDED from com.digits.sdk.android:digits:1.0.0:33:13
+	android:launchMode
+		ADDED from com.digits.sdk.android:digits:1.0.0:35:13
+	android:exported
+		ADDED from com.digits.sdk.android:digits:1.0.0:34:13
+	android:windowSoftInputMode
+		ADDED from com.digits.sdk.android:digits:1.0.0:38:13
+	android:configChanges
+		ADDED from com.digits.sdk.android:digits:1.0.0:32:13
+	android:theme
+		ADDED from com.digits.sdk.android:digits:1.0.0:37:13
+	android:taskAffinity
+		ADDED from com.digits.sdk.android:digits:1.0.0:36:13
+	android:name
+		ADDED from com.digits.sdk.android:digits:1.0.0:31:13
+activity#com.digits.sdk.android.TwitterLoginActivity
+ADDED from com.digits.sdk.android:digits:1.0.0:39:9
+	android:excludeFromRecents
+		ADDED from com.digits.sdk.android:digits:1.0.0:42:13
+	android:exported
+		ADDED from com.digits.sdk.android:digits:1.0.0:43:13
+	android:configChanges
+		ADDED from com.digits.sdk.android:digits:1.0.0:41:13
+	android:theme
+		ADDED from com.digits.sdk.android:digits:1.0.0:45:13
+	android:taskAffinity
+		ADDED from com.digits.sdk.android:digits:1.0.0:44:13
+	android:name
+		ADDED from com.digits.sdk.android:digits:1.0.0:40:13
+activity#com.digits.sdk.android.ContactsActivity
+ADDED from com.digits.sdk.android:digits:1.0.0:46:9
+	android:excludeFromRecents
+		ADDED from com.digits.sdk.android:digits:1.0.0:49:13
+	android:exported
+		ADDED from com.digits.sdk.android:digits:1.0.0:50:13
+	android:configChanges
+		ADDED from com.digits.sdk.android:digits:1.0.0:48:13
+	android:theme
+		ADDED from com.digits.sdk.android:digits:1.0.0:51:13
+	android:name
+		ADDED from com.digits.sdk.android:digits:1.0.0:47:13
+service#com.digits.sdk.android.ContactsUploadService
+ADDED from com.digits.sdk.android:digits:1.0.0:53:9
+	android:enabled
+		ADDED from com.digits.sdk.android:digits:1.0.0:55:13
+	android:exported
+		ADDED from com.digits.sdk.android:digits:1.0.0:56:13
+	android:name
+		ADDED from com.digits.sdk.android:digits:1.0.0:54:13
