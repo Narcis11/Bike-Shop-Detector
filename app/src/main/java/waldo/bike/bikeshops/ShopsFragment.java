@@ -208,8 +208,17 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                         return true;
                     case COL_DISCOUNT_VALUE:
                         if ((cursor.getInt(COL_IS_PARTNER) == 1)) {
-                            ((TextView) view).setText("-" + String.valueOf(cursor.getInt(COL_DISCOUNT_VALUE)) + "%");
-                            view.setVisibility(View.VISIBLE);
+                            try {
+                                int discountValue = cursor.getInt(COL_DISCOUNT_VALUE); //this call sometimes throws an exception if the column
+                                // is null/out of limits
+                                if (discountValue != 0) {
+                                    ((TextView) view).setText("-" + String.valueOf(discountValue) + "%");
+                                    view.setVisibility(View.VISIBLE);
+                                }
+                            }
+                            catch(NullPointerException e) {
+                                view.setVisibility(View.GONE);
+                            }
                         }
                         else{
                             view.setVisibility(View.GONE);

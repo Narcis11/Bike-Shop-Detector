@@ -181,7 +181,7 @@ public class MapsActivity extends FragmentActivity{
                     null,
                     ShopsContract.ShopsEntry.SORT_ORDER
             );
-            if (shopsCursor.moveToFirst()) {
+            if (shopsCursor.moveToFirst() && GlobalState.USER_LAT != "" && GlobalState.USER_LNG != "") {
                 for (int i = 0; i < shopsCursor.getCount(); i++) {
                     shopsCursor.moveToPosition(i);//without it, the cursor would remain at the first position and retrieve the same shop in each iteration
                     allShopsName = shopsCursor.getString(shopsCursor.getColumnIndex(ShopsContract.ShopsEntry.COLUMN_SHOP_NAME));
@@ -191,6 +191,12 @@ public class MapsActivity extends FragmentActivity{
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(Double.valueOf(GlobalState.USER_LAT), Double.valueOf(GlobalState.USER_LNG))));
                     mMap.animateCamera(CameraUpdateFactory.zoomTo(Constants.CITY_ZOOM));
                 }
+
+            }
+            else {
+                //we don't have the user's location anymore, so we open the main activity
+                Intent intent = new Intent(MapsActivity.this, MainActivity.class);
+                startActivity(intent);
             }
             shopsCursor.close();
         }

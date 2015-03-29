@@ -572,6 +572,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     shop_textA = partnerShopDetails.getString(PARTNER_TEXTA);
                 }
                 catch (JSONException c) {
+                    shop_textA = "";
                     c.printStackTrace();
                 }
                 //get the second promo text
@@ -580,6 +581,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     updateValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_PROMO_TEXT,shop_textA + Constants.HASH_SEPARATOR + shop_textB);
                 }
                 catch (JSONException d) {
+                    shop_textB = "";
+                    updateValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_PROMO_TEXT,shop_textA + Constants.HASH_SEPARATOR + shop_textB);
                     d.printStackTrace();
                 }
 
@@ -634,6 +637,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             updateValues.put(ShopsContract.ShopsEntry.COLUMN_IS_PARTNER,IS_PARTNER);
             whereClause = ShopsContract.ShopsEntry.COLUMN_PLACE_ID + " = '" + place_id + "'";
             mContext.getContentResolver().update(ShopsContract.ShopsEntry.CONTENT_URI,updateValues,whereClause,null);
+            shop_textA = "";
+            shop_textB = "";
             updateValues.clear();
             }
         }
