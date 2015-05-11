@@ -254,6 +254,8 @@ public class AddShopFormActivity extends Activity {
                     @Override
                     public void run() {
                         Intent mainActivity = new Intent(getApplicationContext(), MainActivity.class);
+                        mainActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        mainActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(mainActivity);
                     }
 
@@ -270,6 +272,9 @@ public class AddShopFormActivity extends Activity {
                     @Override
                     public void run() {
                         Intent mainActivity = new Intent(getApplicationContext(), MainActivity.class);
+                        //prevent the user from returning to this activity by pressing the back button
+                        mainActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        mainActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(mainActivity);
                     }
 

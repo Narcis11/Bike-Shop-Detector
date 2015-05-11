@@ -365,13 +365,6 @@ public class MainActivity extends Activity implements
 
     }
 
-             @Override
-    public void onBackPressed() {
-        //we don't do anything when the back button is pressed.
-        finish();
-       // super.onBackPressed();
-
-    }
 
     //called when like/unlike or (un)follow action is executed
     @Override
@@ -628,6 +621,7 @@ public class MainActivity extends Activity implements
     public boolean onKeyDown(int keyCode, KeyEvent event) {
          if ((keyCode == KeyEvent.KEYCODE_BACK) && mDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
              mDrawerLayout.closeDrawer(Gravity.LEFT);
+             return true;
          }
          return super.onKeyDown(keyCode, event);
     }
