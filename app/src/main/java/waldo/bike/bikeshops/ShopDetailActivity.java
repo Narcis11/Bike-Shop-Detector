@@ -1,9 +1,11 @@
 package waldo.bike.bikeshops;
 
+import android.app.LoaderManager;
 import android.app.Notification;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -35,7 +37,7 @@ import data.ShopsContract;
 
 
 public class ShopDetailActivity extends FragmentActivity
-        implements OnStreetViewPanoramaReadyCallback {
+        implements OnStreetViewPanoramaReadyCallback, LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String LOG_TAG = ShopDetailActivity.class.getSimpleName();
     private Double mShopLat;
@@ -49,6 +51,15 @@ public class ShopDetailActivity extends FragmentActivity
     private float mShopRating;
     private static final int ACTIVITY_INDEX = 1;
     private static Context mContext;
+    //the views
+    private TextView mShopNameTextView;
+    private TextView mShopAddressTextView;
+    private TextView mShopPhoneNumberTextView;
+    private TextView mShopOpeningHoursTextView;
+    private TextView mShopWebsiteTextView;
+    private TextView mShopPromoText;
+    private RatingBar mShopRatingBar;
+    private LayerDrawable mRatingDrawable;
     //the Google Analytics tracker
     Tracker mGaTracker;
     private String screenName="Shop Detail Activity";
@@ -70,6 +81,7 @@ public class ShopDetailActivity extends FragmentActivity
     public static String mShopWebsite = "";
     private static final String querySelection = ShopsContract.ShopsEntry.COLUMN_PLACE_ID + "=?";
     private static final String[] querySelectionArgs = new String[1];
+    private static final int SHOP_DETAILS_LOADER_ID = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,6 +100,7 @@ public class ShopDetailActivity extends FragmentActivity
                         .findFragmentById(R.id.streetviewpanorama);
         streetViewPanoramaFragment.getStreetViewPanoramaAsync(this);
         querySelectionArgs[0] = mPlaceid;
+        getLoaderManager().initLoader(SHOP_DETAILS_LOADER_ID,null,this);//initiate the loader
     }
 
     @Override
@@ -102,59 +115,14 @@ public class ShopDetailActivity extends FragmentActivity
         getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
         float heightPx = displaymetrics.heightPixels;
         //Log.i(LOG_TAG,"Screen height is: " + String.valueOf(displaymetrics.heightPixels) + "| dp = " +  Utility.convertPixelsToDp(mContext,heightPx));
-        TextView shopNameTextView = (TextView) findViewById(R.id.detail_shopname);
-        TextView shopAddressTextView = (TextView) findViewById(R.id.detail_shopaddress);
-        TextView shopPhoneNumberTextView = (TextView) findViewById(R.id.detail_shopphonenumber);
-        TextView shopOpeningHoursTextView = (TextView) findViewById(R.id.detail_shopopeninghours);
-        TextView shopWebsiteTextView = (TextView) findViewById(R.id.detail_shopwebsite);
-        TextView shopPromoText = (TextView) findViewById(R.id.detail_promo_text);
-        RatingBar shopRatingBar = (RatingBar) findViewById(R.id.detail_rating);
-        LayerDrawable ratingDrawable = (LayerDrawable) shopRatingBar.getProgressDrawable();
-        Cursor shopDetailCursor = mContext.getContentResolver().query(
-                ShopsContract.ShopsEntry.CONTENT_URI,
-                QUERY_COLUMS,
-                querySelection,
-                querySelectionArgs,
-                null
-        );
-        //set the views' text
-        if (shopDetailCursor.moveToFirst()) {
-            shopNameTextView.setText(shopDetailCursor.getString(COL_SHOP_NAME));
-            shopAddressTextView.setText(shopDetailCursor.getString(COL_SHOP_ADDRESS));
-            //setting up the phone number
-            mShopPhoneNumber = (shopDetailCursor.getString(COL_SHOP_PHONE_NUMBER) != null) ? shopDetailCursor.getString(COL_SHOP_PHONE_NUMBER) : "";
-            if (!mShopPhoneNumber.equals("")) {
-                shopPhoneNumberTextView.setVisibility(View.VISIBLE);
-                shopPhoneNumberTextView.setText(mShopPhoneNumber);
-            }
-            //setting up the opening hours
-            mShopOpeningHours =  (shopDetailCursor.getString(COL_SHOP_OPENING_HOURS) != null) ? shopDetailCursor.getString(COL_SHOP_OPENING_HOURS) : "";
-            mTodayFromOpeningHours = Utility.getTodayFromOpeningHours(mShopOpeningHours, getApplication());
-            if (!mTodayFromOpeningHours.equals("")) {
-                shopOpeningHoursTextView.setVisibility(View.VISIBLE);
-                shopOpeningHoursTextView.setText(mTodayFromOpeningHours);
-            }
-            //setting up the website
-            mShopWebsite = (shopDetailCursor.getString(COL_SHOP_WEBSITE) != null) ? shopDetailCursor.getString(COL_SHOP_WEBSITE) : "";
-            if (!mShopWebsite.equals("")) {
-                shopWebsiteTextView.setVisibility(View.VISIBLE);
-                shopWebsiteTextView.setText(mShopWebsite);
-            }
-            //setting up the rating
-            mShopRating = shopDetailCursor.getFloat(COL_SHOP_RATING);
-            if (mShopRating > 0) {
-                shopRatingBar.setVisibility(View.VISIBLE);
-                ratingDrawable.getDrawable(0).setColorFilter(getResources().getColor(R.color.shop_detail), PorterDuff.Mode.SRC_ATOP);//background
-                ratingDrawable.getDrawable(1).setColorFilter(getResources().getColor(R.color.shop_detail), PorterDuff.Mode.SRC_ATOP);//secondary progress
-                ratingDrawable.getDrawable(2).setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_ATOP);//progress
-                shopRatingBar.setRating(mShopRating);
-            }
-            //setting up the promo text
-            if (!mPromoText.equals(""))
-                shopPromoText.setText(Utility.getPromoText(mPromoText,ACTIVITY_INDEX));
-        }
-
-        shopDetailCursor.close();
+        mShopNameTextView = (TextView) findViewById(R.id.detail_shopname);
+        mShopAddressTextView = (TextView) findViewById(R.id.detail_shopaddress);
+        mShopPhoneNumberTextView = (TextView) findViewById(R.id.detail_shopphonenumber);
+        mShopOpeningHoursTextView = (TextView) findViewById(R.id.detail_shopopeninghours);
+        mShopWebsiteTextView = (TextView) findViewById(R.id.detail_shopwebsite);
+        mShopPromoText = (TextView) findViewById(R.id.detail_promo_text);
+        mShopRatingBar = (RatingBar) findViewById(R.id.detail_rating);
+        mRatingDrawable = (LayerDrawable) mShopRatingBar.getProgressDrawable();
     }
 
     @Override
@@ -235,5 +203,61 @@ public class ShopDetailActivity extends FragmentActivity
         catch (ActivityNotFoundException e) {
             Toast.makeText(mContext, getResources().getString(R.string.no_app_available), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new android.content.CursorLoader(
+                mContext,
+                ShopsContract.ShopsEntry.CONTENT_URI,
+                QUERY_COLUMS,
+                querySelection,
+                querySelectionArgs,
+                null
+        );
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor shopDetailCursor) {
+        if (shopDetailCursor.moveToFirst()) {
+            mShopNameTextView.setText(shopDetailCursor.getString(COL_SHOP_NAME));
+            mShopAddressTextView.setText(shopDetailCursor.getString(COL_SHOP_ADDRESS));
+            //setting up the phone number
+            mShopPhoneNumber = (shopDetailCursor.getString(COL_SHOP_PHONE_NUMBER) != null) ? shopDetailCursor.getString(COL_SHOP_PHONE_NUMBER) : "";
+            if (!mShopPhoneNumber.equals("")) {
+                mShopPhoneNumberTextView.setVisibility(View.VISIBLE);
+                mShopPhoneNumberTextView.setText(mShopPhoneNumber);
+            }
+            //setting up the opening hours
+            mShopOpeningHours =  (shopDetailCursor.getString(COL_SHOP_OPENING_HOURS) != null) ? shopDetailCursor.getString(COL_SHOP_OPENING_HOURS) : "";
+            mTodayFromOpeningHours = Utility.getTodayFromOpeningHours(mShopOpeningHours, getApplication());
+            if (!mTodayFromOpeningHours.equals("")) {
+                mShopOpeningHoursTextView.setVisibility(View.VISIBLE);
+                mShopOpeningHoursTextView.setText(mTodayFromOpeningHours);
+            }
+            //setting up the website
+            mShopWebsite = (shopDetailCursor.getString(COL_SHOP_WEBSITE) != null) ? shopDetailCursor.getString(COL_SHOP_WEBSITE) : "";
+            if (!mShopWebsite.equals("")) {
+                mShopWebsiteTextView.setVisibility(View.VISIBLE);
+                mShopWebsiteTextView.setText(mShopWebsite);
+            }
+            //setting up the rating
+            mShopRating = shopDetailCursor.getFloat(COL_SHOP_RATING);
+            if (mShopRating > 0) {
+                mShopRatingBar.setVisibility(View.VISIBLE);
+                mRatingDrawable.getDrawable(0).setColorFilter(getResources().getColor(R.color.shop_detail), PorterDuff.Mode.SRC_ATOP);//background
+                mRatingDrawable.getDrawable(1).setColorFilter(getResources().getColor(R.color.shop_detail), PorterDuff.Mode.SRC_ATOP);//secondary progress
+                mRatingDrawable.getDrawable(2).setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_ATOP);//progress
+                mShopRatingBar.setRating(mShopRating);
+            }
+            //setting up the promo text
+            if (!mPromoText.equals(""))
+                mShopPromoText.setText(Utility.getPromoText(mPromoText,ACTIVITY_INDEX));
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
     }
 }
