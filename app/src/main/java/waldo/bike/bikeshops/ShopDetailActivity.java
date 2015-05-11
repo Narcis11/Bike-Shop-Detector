@@ -101,6 +101,7 @@ public class ShopDetailActivity extends FragmentActivity
         streetViewPanoramaFragment.getStreetViewPanoramaAsync(this);
         querySelectionArgs[0] = mPlaceid;
         getLoaderManager().initLoader(SHOP_DETAILS_LOADER_ID,null,this);//initiate the loader
+		//adding a line for testing purposes
     }
 
     @Override
