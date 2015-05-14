@@ -185,7 +185,7 @@ public class MapsActivity extends FragmentActivity implements LoaderManager.Load
         }
         else {
             getLoaderManager().initLoader(ALL_SHOPS_LOADER_ID, null, this);//initiate the loader
-            getActionBar().setTitle(getResources().getString(R.string.title_activity_all_shops));
+            getActionBar().setTitle(getResources().getString(R.string.title_activity_all_shops));//set the title of the action bar
         }
     }
 
