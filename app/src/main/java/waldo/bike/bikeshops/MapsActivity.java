@@ -1,6 +1,8 @@
 package waldo.bike.bikeshops;
 
+import android.app.LoaderManager;
 import android.content.Intent;
+import android.content.Loader;
 import android.database.Cursor;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
@@ -24,7 +26,7 @@ import Utilities.GlobalState;
 import Utilities.Utility;
 import data.ShopsContract;
 
-public class MapsActivity extends FragmentActivity{
+public class MapsActivity extends FragmentActivity implements LoaderManager.LoaderCallbacks<Cursor>{
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private static final String LOG_TAG = MapsActivity.class.getSimpleName();
@@ -35,9 +37,20 @@ public class MapsActivity extends FragmentActivity{
     private boolean mIsPartner;
     private String mPromoText;
     private static final int ACTIVITY_INDEX = 2;
+    private boolean mLoadAllShops;
     //the Google Analytics tracker
     Tracker mGaTracker;
     private String screenName = "Maps Activity";
+    //used in the query
+    private static final String[] QUERY_COLUMS = {
+            ShopsContract.ShopsEntry.COLUMN_SHOP_NAME,
+            ShopsContract.ShopsEntry.COLUMN_SHOP_LATITUDE,
+            ShopsContract.ShopsEntry.COLUMN_SHOP_LONGITUDE
+    };
+    public static final int COL_SHOP_NAME = 0;
+    public static final int COL_SHOP_LAT = 1;
+    public static final int COL_SHOP_LNG = 2;
+    private static final int ALL_SHOPS_LOADER_ID = 2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -171,34 +184,8 @@ public class MapsActivity extends FragmentActivity{
             mMap.animateCamera(CameraUpdateFactory.zoomTo(Constants.SHOP_ZOOM));//*; //zoom to the position
         }
         else {
-            //if there's no bundle, then the call is from the main activity (View all shops button)
-            Cursor shopsCursor;
+            getLoaderManager().initLoader(ALL_SHOPS_LOADER_ID, null, this);//initiate the loader
             getActionBar().setTitle(getResources().getString(R.string.title_activity_all_shops));
-            shopsCursor = getApplicationContext().getContentResolver().query(
-                    ShopsContract.ShopsEntry.CONTENT_URI,
-                    null,
-                    null,
-                    null,
-                    ShopsContract.ShopsEntry.SORT_ORDER
-            );
-            if (shopsCursor.moveToFirst() && GlobalState.USER_LAT != "" && GlobalState.USER_LNG != "") {
-                for (int i = 0; i < shopsCursor.getCount(); i++) {
-                    shopsCursor.moveToPosition(i);//without it, the cursor would remain at the first position and retrieve the same shop in each iteration
-                    allShopsName = shopsCursor.getString(shopsCursor.getColumnIndex(ShopsContract.ShopsEntry.COLUMN_SHOP_NAME));
-                    allShopsLat = shopsCursor.getString(shopsCursor.getColumnIndex(ShopsContract.ShopsEntry.COLUMN_SHOP_LATITUDE));
-                    allShopsLng = shopsCursor.getString(shopsCursor.getColumnIndex(ShopsContract.ShopsEntry.COLUMN_SHOP_LONGITUDE));
-                    mMap.addMarker(new MarkerOptions().position(new LatLng(Double.valueOf(allShopsLat), Double.valueOf(allShopsLng))).title(allShopsName));
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(Double.valueOf(GlobalState.USER_LAT), Double.valueOf(GlobalState.USER_LNG))));
-                    mMap.animateCamera(CameraUpdateFactory.zoomTo(Constants.CITY_ZOOM));
-                }
-
-            }
-            else {
-                //we don't have the user's location anymore, so we open the main activity
-                Intent intent = new Intent(MapsActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
-            shopsCursor.close();
         }
     }
 
@@ -208,4 +195,46 @@ public class MapsActivity extends FragmentActivity{
         overridePendingTransition(R.xml.slide_in, R.xml.slide_out);
     }
 
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new android.content.CursorLoader(
+                getApplicationContext(),
+                ShopsContract.ShopsEntry.CONTENT_URI,
+                QUERY_COLUMS,
+                null,
+                null,
+                null
+        );
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor shopsCursor) {
+        Log.i(LOG_TAG,"Preparing to load shops...");
+            if (shopsCursor.moveToFirst() && GlobalState.USER_LAT != "" && GlobalState.USER_LNG != "") {
+                String allShopsName = "";
+                String allShopsLat = "";
+                String allShopsLng = "";
+                Log.i(LOG_TAG, "shopsCursor.getCount() is " + shopsCursor.getCount());
+                for (int i = 0; i < shopsCursor.getCount(); i++) {
+                    shopsCursor.moveToPosition(i);//without it, the cursor would remain at the first position and retrieve the same shop in each iteration
+                    allShopsName = shopsCursor.getString(COL_SHOP_NAME);
+                    allShopsLat = shopsCursor.getString(COL_SHOP_LAT);
+                    allShopsLng = shopsCursor.getString(COL_SHOP_LNG);
+                    mMap.addMarker(new MarkerOptions().position(new LatLng(Double.valueOf(allShopsLat), Double.valueOf(allShopsLng))).title(allShopsName));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(Double.valueOf(GlobalState.USER_LAT), Double.valueOf(GlobalState.USER_LNG))));
+                    mMap.animateCamera(CameraUpdateFactory.zoomTo(Constants.CITY_ZOOM));
+                }
+
+            } else {
+                //we don't have the user's location anymore, so we open the main activity
+                Intent intent = new Intent(MapsActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
+    }
 }
