@@ -476,6 +476,9 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                         if (swipeLayout.isRefreshing()) swipeLayout.setRefreshing(false);//remove the refresh circle if it is present
                         if (syncResult.equals(Constants.SYNC_BUNDLE_STATUS_ZERO)) Toast.makeText(getActivity().getApplicationContext(),
                                 getResources().getString(R.string.no_shops), Toast.LENGTH_SHORT).show();//inform the user
+                        else
+                            Toast.makeText(getActivity().getApplicationContext(),
+                                    getResources().getString(R.string.api_error), Toast.LENGTH_SHORT).show();
                     }
                 }
             }

@@ -84,216 +84,258 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 final String latLng = GlobalState.USER_LAT + Constants.COMMA_SEPARATOR + GlobalState.USER_LNG;
                 //final String latLng = "44.4391463,26.1428946";
                 final String output = "json";
-                try {
-                    //******Getting the info for all shops*****
-                    //the query parameters used in the Nearby search call
-                    final String BASE_URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/" + output + "?";
-                    final String QUERY_LOCATION = "location";
-                    final String QUERY_RADIUS = "radius";
-                    final String QUERY_KEY = "key";
-                    final String QUERY_TYPES = "types";
-                    //build up the URI
-                    Uri builtUri = Uri.parse(BASE_URL).buildUpon()
+                Vector<ContentValues> cVVector = new Vector<ContentValues>(120);//The current API can't return more than 60 results, but we'll take a buffer
+                String[] place_ids = new String[120];//used for getting the partner shops at a later stage
+                boolean flag_next_page = true;
+                String next_page_token_value = "";
+                int countLoops = 0;
+                int j = 0;//used to populate the vector of place_ids
+        while (flag_next_page) {
+            try {
+                //******Getting the info for all shops*****
+                //the query parameters used in the Nearby search call
+                final String BASE_URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/" + output + "?";
+                final String QUERY_LOCATION = "location";
+                final String QUERY_RADIUS = "radius";
+                final String QUERY_KEY = "key";
+                final String QUERY_TYPES = "types";
+                final String PAGE_TOKEN = "pagetoken";
+                Uri builtUri;
+                //build up the URI
+                if (next_page_token_value.equals("")) {
+                    builtUri = Uri.parse(BASE_URL).buildUpon()
                             .appendQueryParameter(QUERY_LOCATION, latLng)
                             .appendQueryParameter(QUERY_RADIUS, radius)
                             .appendQueryParameter(QUERY_KEY, key)
                             .appendQueryParameter(QUERY_TYPES, types)
                             .build();
-                  //  Log.i(LOG_TAG, "Places Uri is: " + builtUri.toString());
+                }
+                else {
+                    builtUri = Uri.parse(BASE_URL).buildUpon()
+                            .appendQueryParameter(QUERY_LOCATION, latLng)
+                            .appendQueryParameter(QUERY_RADIUS, radius)
+                            .appendQueryParameter(QUERY_KEY, key)
+                            .appendQueryParameter(QUERY_TYPES, types)
+                            .appendQueryParameter(PAGE_TOKEN,next_page_token_value)
+                            .build();
+                }
+                  Log.i(LOG_TAG, "Places Uri is: " + builtUri.toString());
 
-                    URL url = new URL(builtUri.toString());
+                URL url = new URL(builtUri.toString());
 
-                    //Create the request to Google, and open the connection
-                    urlConnection = (HttpURLConnection) url.openConnection();
-                    urlConnection.setRequestMethod(Constants.HTTP_GET);
-                    urlConnection.connect();
-                    // Read the input stream into a String
-                    InputStream inputStream = urlConnection.getInputStream();
-                    StringBuffer buffer = new StringBuffer();
-                    if (inputStream == null) {
-                        // Nothing to do.
-                      //  Log.i(LOG_TAG, "No input stream");
-                    }
-                    reader = new BufferedReader(new InputStreamReader(inputStream));
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
-                        // But it does make debugging a *lot* easier if you print out the completed
-                        // buffer for debugging.
-                        buffer.append(line + "\n");
-                    }
-                    if (buffer.length() == 0) {
-                        // Stream was empty.  No point in parsing.
-                      //  Log.i(LOG_TAG, "buffer.length() == 0");
-                    }
-                    placesJsonStr = buffer.toString();
-                    //   Log.i(LOG_TAG,"Response is: " + placesJsonStr);
-                } catch (IOException e) {
-                   // Log.e(LOG_TAG, "Error in fetching places: " + e);
+                //Create the request to Google, and open the connection
+                urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod(Constants.HTTP_GET);
+                urlConnection.connect();
+                // Read the input stream into a String
+                InputStream inputStream = urlConnection.getInputStream();
+                StringBuffer buffer = new StringBuffer();
+                if (inputStream == null) {
+                    // Nothing to do.
+                    //  Log.i(LOG_TAG, "No input stream");
+                }
+                reader = new BufferedReader(new InputStreamReader(inputStream));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
+                    // But it does make debugging a *lot* easier if you print out the completed
+                    // buffer for debugging.
+                    buffer.append(line + "\n");
+                }
+                if (buffer.length() == 0) {
+                    // Stream was empty.  No point in parsing.
+                    //  Log.i(LOG_TAG, "buffer.length() == 0");
+                }
+                placesJsonStr = buffer.toString();
+                //   Log.i(LOG_TAG,"Response is: " + placesJsonStr);
+            } catch (IOException e) {
+                // Log.e(LOG_TAG, "Error in fetching places: " + e);
+                flag_next_page = false;//exit at the end of the loop if there's no Internet connection
+                //Log.i(LOG_TAG,"At line 154 set flag_next_page to " + flag_next_page);
 
-                } finally {
-                    if (urlConnection != null) {
-                        urlConnection.disconnect();
-                    }
-                    if (reader != null) {
-                        try {
-                            reader.close();
-                        } catch (final IOException e) {
-                          //  Log.e(LOG_TAG, "Error closing stream", e);
-                        }
+            } finally {
+                if (urlConnection != null) {
+                    urlConnection.disconnect();
+                }
+                if (reader != null) {
+                    try {
+                        reader.close();
+                    } catch (final IOException e) {
+                        //  Log.e(LOG_TAG, "Error closing stream", e);
                     }
                 }
+            }
 
-                //*****Parsing the info for all shops*******
-                final String API_RESULT = "results";//root
-                final String API_STATUS = "status";//we'll perform some checks on this one
-                // Location information
-                final String API_PLACE_ID = "place_id";
-                final String API_NAME = "name";
-                final String API_OPENING_HOURS = "opening_hours";//root
-                final String API_OPEN_NOW = "open_now"; //child of opening_hours
-                final String API_ADDRESS = "vicinity";
+            //*****Parsing the info for all shops*******
+            final String API_RESULT = "results";//root
+            final String API_STATUS = "status";//we'll perform some checks on this one
+            // Location information
+            final String API_PLACE_ID = "place_id";
+            final String API_NAME = "name";
+            final String API_OPENING_HOURS = "opening_hours";//root
+            final String API_OPEN_NOW = "open_now"; //child of opening_hours
+            final String API_ADDRESS = "vicinity";
 
-                final String API_GEOMETRY = "geometry";
-                //child of geometry
-                final String API_LOCATION = "location";
-                //children of location
-                final String API_COORD_LAT = "lat";
-                final String API_COORD_LONG = "lng";
-                int distanceToShop;
-                double distanceDuration;
-                String apiCallStatus = "";
-                int isShopOpen = 2; //means that this info is not available
+            final String API_GEOMETRY = "geometry";
+            //child of geometry
+            final String API_LOCATION = "location";
+            //children of location
+            final String API_COORD_LAT = "lat";
+            final String API_COORD_LONG = "lng";
+            final String NEXT_PAGE_TOKEN = "next_page_token";
+            int distanceToShop;
+            double distanceDuration;
+            String apiCallStatus = "";
+            int isShopOpen = 2; //means that this info is not available
+            try {
+              //  Log.i(LOG_TAG,"placesJsonStr: " + placesJsonStr);
+                JSONObject placesJson = new JSONObject(placesJsonStr);
+                apiCallStatus = placesJson.getString(API_STATUS);
                 try {
-                    JSONObject placesJson = new JSONObject(placesJsonStr);
-                    apiCallStatus = placesJson.getString(API_STATUS);
-                  //  Log.i(LOG_TAG, "Status is " + apiCallStatus);
-                    //we need an intent to signal when the sync has finished
-                    Intent syncIntent = new Intent();
-                    syncIntent.setAction(Constants.SYNC_BUNDLE_STATUS_ACTION);
-                    if (apiCallStatus.equals(Constants.OK_STATUS)) { //we only parse if the result is OK
-                        JSONArray placesArray = placesJson.getJSONArray(API_RESULT); //root node
-                        String[] place_ids = new String[placesArray.length()];//used for getting the partner shops at a later stage
-                        Vector<ContentValues> cVVector = new Vector<ContentValues>(placesArray.length());
-                        for (int i = 0; i < placesArray.length(); i++) {
-                            // These are the values that will be collected.
-                            String place_id;
-                            String placeName;
-                            String address;
-                            //some shops do not have this piece of info, so we presume from the start that it's unavailable
-                            String openNow = Constants.NOT_AVAILABLE;
-                            String latitude;
-                            String longitude;
+                    next_page_token_value = placesJson.getString(NEXT_PAGE_TOKEN);
+                    //Log.i(LOG_TAG,"Token is: " + next_page_token_value);
+                }
+                catch (JSONException e) {
+                    Log.e(LOG_TAG, e.getMessage());
+                    flag_next_page = false;//no more information to collect, so this is the last loop
+                   // Log.i(LOG_TAG,"At line 201 set flag_next_page to " + flag_next_page);
+                }
+                //  Log.i(LOG_TAG, "Status is " + apiCallStatus);
+                //we need an intent to signal when the sync has finished
+                Intent syncIntent = new Intent();
+                syncIntent.setAction(Constants.SYNC_BUNDLE_STATUS_ACTION);
+                if (apiCallStatus.equals(Constants.OK_STATUS)) { //we only parse if the result is OK
+                    JSONArray placesArray = placesJson.getJSONArray(API_RESULT); //root node
+                    for (int i = 0; i < placesArray.length(); i++) {
+                        // These are the values that will be collected.
+                        String place_id;
+                        String placeName;
+                        String address;
+                        //some shops do not have this piece of info, so we presume from the start that it's unavailable
+                        String openNow = Constants.NOT_AVAILABLE;
+                        String latitude;
+                        String longitude;
 
-                            // placeDetails is the whole object representing a shop
-                            JSONObject placeDetails = placesArray.getJSONObject(i);
-                            JSONObject geometry = placeDetails.getJSONObject(API_GEOMETRY); //geometry object
-                            JSONObject location = geometry.getJSONObject(API_LOCATION); //location object
-                            latitude = location.getString(API_COORD_LAT);
-                            longitude = location.getString(API_COORD_LONG);
-                            //getting info from opening_hours
-                            try {
-                                //some shops don't have opening hours, that's why we put this request into a try/catch
-                                JSONObject openingHours = placeDetails.getJSONObject(API_OPENING_HOURS);
-                                openNow = openingHours.getString(API_OPEN_NOW);
-                            } catch (JSONException e) {
-                              //  Log.e(LOG_TAG, "Opening Hours JSON Exception: " + e.getMessage());
-                            }
-                            //44.4391463,26.1428946
-                            Location userLocation = new Location(Constants.PROVIDER);
-                            //      Log.i(LOG_TAG, "User location = " + GlobalState.USER_LAT + "/" + GlobalState.USER_LNG);
+                        // placeDetails is the whole object representing a shop
+                        JSONObject placeDetails = placesArray.getJSONObject(i);
+                        JSONObject geometry = placeDetails.getJSONObject(API_GEOMETRY); //geometry object
+                        JSONObject location = geometry.getJSONObject(API_LOCATION); //location object
+                        latitude = location.getString(API_COORD_LAT);
+                        longitude = location.getString(API_COORD_LONG);
+                        //getting info from opening_hours
+                        try {
+                            //some shops don't have opening hours, that's why we put this request into a try/catch
+                            JSONObject openingHours = placeDetails.getJSONObject(API_OPENING_HOURS);
+                            openNow = openingHours.getString(API_OPEN_NOW);
+                        } catch (JSONException e) {
+                            //  Log.e(LOG_TAG, "Opening Hours JSON Exception: " + e.getMessage());
+                        }
+                        //44.4391463,26.1428946
+                        Location userLocation = new Location(Constants.PROVIDER);
+                        //      Log.i(LOG_TAG, "User location = " + GlobalState.USER_LAT + "/" + GlobalState.USER_LNG);
               /*        userLocation.setLatitude(Double.valueOf("44.4391463"));
                         userLocation.setLongitude(Double.valueOf("26.1428946"));*/
-                            userLocation.setLatitude(Double.valueOf(GlobalState.USER_LAT));
-                            userLocation.setLongitude(Double.valueOf(GlobalState.USER_LNG));
-                            Location shopLocation = new Location(Constants.PROVIDER);
-                            shopLocation.setLatitude(Double.valueOf(latitude));
-                            shopLocation.setLongitude(Double.valueOf(longitude));
-                            distanceToShop = (int) Math.round(userLocation.distanceTo(shopLocation));
-                            distanceDuration = Utility.calculateDistanceDuration(distanceToShop, getContext());
-                            //main info from the root object
-                            place_id = placeDetails.getString(API_PLACE_ID);
-                            //Log.i(LOG_TAG,"place_id = " + place_id);
-                            placeName = placeDetails.getString(API_NAME);
-                            address = placeDetails.getString(API_ADDRESS);
+                        userLocation.setLatitude(Double.valueOf(GlobalState.USER_LAT));
+                        userLocation.setLongitude(Double.valueOf(GlobalState.USER_LNG));
+                        Location shopLocation = new Location(Constants.PROVIDER);
+                        shopLocation.setLatitude(Double.valueOf(latitude));
+                        shopLocation.setLongitude(Double.valueOf(longitude));
+                        distanceToShop = (int) Math.round(userLocation.distanceTo(shopLocation));
+                        distanceDuration = Utility.calculateDistanceDuration(distanceToShop, getContext());
+                        //main info from the root object
+                        place_id = placeDetails.getString(API_PLACE_ID);
+                        //Log.i(LOG_TAG,"place_id = " + place_id);
+                        placeName = placeDetails.getString(API_NAME);
+                        address = placeDetails.getString(API_ADDRESS);
 
-                            if (!openNow.equals(Constants.NOT_AVAILABLE) && openNow != null) {
-                                isShopOpen = Boolean.valueOf(openNow) ? 1 : 0;
-                            }
-                            //get the details for each shop
-                            String[] placeDetailRequest = getPlaceDetails(place_id);
-
-                            //build the vector of place ids
-                            place_ids[i] = place_id;
-                            ContentValues shopsValues = new ContentValues();
-
-                            //TODO: Get the is_partner, discount_value, promo_text and logo_url fields
-                            //creating the vector and inserting the values
-                            shopsValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_NAME, placeName);
-                            shopsValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_ADDRESS, address);
-                            shopsValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_LATITUDE, latitude);
-                            shopsValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_LONGITUDE, longitude);
-                            shopsValues.put(ShopsContract.ShopsEntry.COLUMN_IS_OPEN, isShopOpen);
-                            shopsValues.put(ShopsContract.ShopsEntry.COLUMN_DISTANCE_TO_USER, distanceToShop);
-                            shopsValues.put(ShopsContract.ShopsEntry.COLUMN_DISTANCE_DURATION, distanceDuration);
-                            shopsValues.put(ShopsContract.ShopsEntry.COLUMN_PLACE_ID, place_id);
-                            shopsValues.put(ShopsContract.ShopsEntry.COLUMN_WEBSITE, placeDetailRequest[WEBSITE_ID]);
-                            shopsValues.put(ShopsContract.ShopsEntry.COLUMN_PHONE_NUMBER, placeDetailRequest[PHONE_NUMBER_ID]);
-                            shopsValues.put(ShopsContract.ShopsEntry.COLUMN_OPENING_HOURS, placeDetailRequest[WEEKDAY_TEXT_ID]);
-                            shopsValues.put(ShopsContract.ShopsEntry.COLUMN_RATING, placeDetailRequest[RATING_ID]);
-
-                            cVVector.add(shopsValues);
+                        if (!openNow.equals(Constants.NOT_AVAILABLE) && openNow != null) {
+                            isShopOpen = Boolean.valueOf(openNow) ? 1 : 0;
                         }
-                        if (cVVector.size() > 0) {
-                            //we empty the database before inserting the new data
-                            mContext.getContentResolver().delete(ShopsContract.ShopsEntry.CONTENT_URI, null, null);
-                            ContentValues[] cvArray = new ContentValues[cVVector.size()];
-                            cVVector.toArray(cvArray);
-                            int rowsInserted;
-                            rowsInserted = mContext.getContentResolver().bulkInsert(
+                        //get the details for each shop
+                        String[] placeDetailRequest = getPlaceDetails(place_id);
+
+                        //build the vector of place ids
+                        place_ids[j] = place_id;
+                        j++;//i is reset every time a new loop is entered, so we need a different counter
+                        ContentValues shopsValues = new ContentValues();//the shops will be stored temporarily here before we insert them in the DB
+                        //creating the vector and inserting the values
+                        shopsValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_NAME, placeName);
+                        shopsValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_ADDRESS, address);
+                        shopsValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_LATITUDE, latitude);
+                        shopsValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_LONGITUDE, longitude);
+                        shopsValues.put(ShopsContract.ShopsEntry.COLUMN_IS_OPEN, isShopOpen);
+                        shopsValues.put(ShopsContract.ShopsEntry.COLUMN_DISTANCE_TO_USER, distanceToShop);
+                        shopsValues.put(ShopsContract.ShopsEntry.COLUMN_DISTANCE_DURATION, distanceDuration);
+                        shopsValues.put(ShopsContract.ShopsEntry.COLUMN_PLACE_ID, place_id);
+                        shopsValues.put(ShopsContract.ShopsEntry.COLUMN_WEBSITE, placeDetailRequest[WEBSITE_ID]);
+                        shopsValues.put(ShopsContract.ShopsEntry.COLUMN_PHONE_NUMBER, placeDetailRequest[PHONE_NUMBER_ID]);
+                        shopsValues.put(ShopsContract.ShopsEntry.COLUMN_OPENING_HOURS, placeDetailRequest[WEEKDAY_TEXT_ID]);
+                        shopsValues.put(ShopsContract.ShopsEntry.COLUMN_RATING, placeDetailRequest[RATING_ID]);
+                        cVVector.add(shopsValues);
+                      //  shopsValues.clear();
+                    }
+                    if (cVVector.size() > 0 && !flag_next_page) {
+                        //if flag_next_page is false, we are in the last loop
+                        //we empty the database before inserting the new data
+                        mContext.getContentResolver().delete(ShopsContract.ShopsEntry.CONTENT_URI, null, null);
+                        ContentValues[] cvArray = new ContentValues[cVVector.size()];
+                        cVVector.toArray(cvArray);
+                        int rowsInserted;
+                        rowsInserted = mContext.getContentResolver().bulkInsert(
+                                ShopsContract.ShopsEntry.CONTENT_URI,
+                                cvArray);
+
+                        //final step: get the partner shops
+                        if (rowsInserted > 0) getPartnerShops(place_ids);
+
+                        if (DEBUG) {
+                            Log.i(LOG_TAG,"Vector size: " + cVVector.size());
+                            Log.i(LOG_TAG, "No of bulk rows inserted = " + rowsInserted);
+                            int noOfElements = 0;
+                            for (int a = 0; a < place_ids.length; a++) {
+                                if (place_ids[a] != null)
+                                    noOfElements++;
+                            }
+                            Log.i(LOG_TAG, "place_ids size: " + noOfElements);
+                            Cursor shopsCursor = mContext.getContentResolver().query(
                                     ShopsContract.ShopsEntry.CONTENT_URI,
-                                    cvArray);
-
-                         //   Log.i(LOG_TAG, "No of bulk rows inserted = " + rowsInserted);
-                            //final step: get the partner shops
-                            if (rowsInserted > 0) getPartnerShops(place_ids);
-
-                            if (DEBUG) {
-                                Cursor shopsCursor = mContext.getContentResolver().query(
-                                        ShopsContract.ShopsEntry.CONTENT_URI,
-                                        null,
-                                        null,
-                                        null,
-                                        null
-                                );
-                                Log.i(LOG_TAG, "No of rows in shops = " + shopsCursor.getCount());
-                                if (shopsCursor.moveToFirst()) {
-                                    ContentValues resultValues = new ContentValues();
-                                    DatabaseUtils.cursorRowToContentValues(shopsCursor, resultValues);
-                                    Log.i(LOG_TAG, "Query succeeded! **********");
-                                    for (String loopKey : resultValues.keySet()) {
-                                        Log.i(LOG_TAG, loopKey + ": " + resultValues.getAsString(loopKey));
-                                    }
-                                } else {
-                                    Log.i(LOG_TAG, "Query failed! :( **********");
-                                }
-                                shopsCursor.close();
+                                    null,
+                                    null,
+                                    null,
+                                    null
+                            );
+                            Log.i(LOG_TAG, "No of rows in shops = " + shopsCursor.getCount());
+                            if (shopsCursor.moveToFirst()) {
+                                ContentValues resultValues = new ContentValues();
+                                DatabaseUtils.cursorRowToContentValues(shopsCursor, resultValues);
+                                Log.i(LOG_TAG, "Query succeeded! **********");
+                               /* for (String loopKey : resultValues.keySet()) {
+                                    Log.i(LOG_TAG, loopKey + ": " + resultValues.getAsString(loopKey));
+                                }*/
+                            } else {
+                                Log.i(LOG_TAG, "Query failed! :( **********");
                             }
+                            shopsCursor.close();
                         }
                     }
-                    else {//notify that the sync is complete (actually, it never happened
-                        //we notify only when an error occured/there were no results. If the sync goes well, we remove the refresh circle in the onLoadFinished
-                        //from Shop Fragment
-                        syncIntent.putExtra(Constants.SYNC_BUNDLE_STATUS_KEY,Constants.SYNC_BUNDLE_STATUS_STOPPED);//the sync has stopped
-                        syncIntent.putExtra(Constants.SYNC_BUNDLE_RESULT_KEY,apiCallStatus);//the status of the sync
-                        mContext.sendBroadcast(syncIntent);
-                    }
-
-                } catch (JSONException e) {
-                  //  Log.e(LOG_TAG, "Caught JSON Exception: " + e.getMessage());
-                    e.printStackTrace();
+                } else {//notify that the sync is complete (actually, it never happened
+                    //we notify only when an error occured/there were no results. If the sync goes well, we remove the refresh circle in the onLoadFinished
+                    //from Shop Fragment
+                    syncIntent.putExtra(Constants.SYNC_BUNDLE_STATUS_KEY, Constants.SYNC_BUNDLE_STATUS_STOPPED);//the sync has stopped
+                    syncIntent.putExtra(Constants.SYNC_BUNDLE_RESULT_KEY, apiCallStatus);//the status of the sync
+                    mContext.sendBroadcast(syncIntent);
                 }
+
+            } catch (JSONException e) {
+                //  Log.e(LOG_TAG, "Caught JSON Exception: " + e.getMessage());
+                flag_next_page = false;
+               // Log.i(LOG_TAG,"At line 335 set flag_next_page to " + flag_next_page);
+                e.printStackTrace();
+            }
             //}
+
+        }
+       // Log.i(LOG_TAG,"Number of loops: " + countLoops);
         }
 
     public static void syncImmediately(Context context/*, String placeId*/) {
