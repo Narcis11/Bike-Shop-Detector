@@ -37,7 +37,11 @@ public class ShopsDbHelper extends SQLiteOpenHelper {
                 ShopsContract.ShopsEntry.COLUMN_PHONE_NUMBER + " TEXT, " +
                 ShopsContract.ShopsEntry.COLUMN_OPENING_HOURS + " TEXT, " +
                 ShopsContract.ShopsEntry.COLUMN_RATING + " REAL, " +
-                ShopsContract.ShopsEntry.COLUMN_SHOP_PROMO_TEXT + " TEXT " +
+                ShopsContract.ShopsEntry.COLUMN_SHOP_PROMO_TEXT + " TEXT, " +
+                ShopsContract.ShopsEntry.COLUMN_SHOP_CAMERA_BEARING + " REAL, " +
+                ShopsContract.ShopsEntry.COLUMN_SHOP_CAMERA_TILT + " REAL, " +
+                ShopsContract.ShopsEntry.COLUMN_SHOP_CAMERA_ZOOM + " REAL, " +
+                ShopsContract.ShopsEntry.COLUMN_SHOP_CAMERA_POSITION + " TEXT " +
                 ");";
 /*                " NOT NULL (" + ShopsContract.ShopsEntry.COLUMN_SHOP_NAME + ", " + ShopsContract.ShopsEntry.COLUMN_SHOP_LATITUDE + ", " +
                 ShopsContract.ShopsEntry.COLUMN_SHOP_LONGITUDE + ") ON CONFLICT IGNORE);";*/

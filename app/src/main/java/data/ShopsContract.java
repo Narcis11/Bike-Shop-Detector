@@ -38,8 +38,11 @@ public class ShopsContract {
         public static final String COLUMN_PHONE_NUMBER = "phone_number";//the shop's phone number, stored as TEXT
         public static final String COLUMN_OPENING_HOURS = "opening_hours";//the opening hours of the shop with info for each day. stored as TEXT, each day is divided by "|"
         public static final String COLUMN_RATING = "rating";//the shop's rating, stored as REAL
-        public static final String COLUMN_SHOP_PROMO_TEXT = "promo_text";
-
+        public static final String COLUMN_SHOP_PROMO_TEXT = "promo_text";//the promotional text, stored as TEXT
+        public static final String COLUMN_SHOP_CAMERA_BEARING = "camera_bearing";//the streetview camera's bearing, stored as REAL
+        public static final String COLUMN_SHOP_CAMERA_TILT = "camera_tilt";//the streetview camera's tilt, stored as REAL
+        public static final String COLUMN_SHOP_CAMERA_ZOOM = "camera_zoom";//the streetview camera's zoom, stored as REAL
+        public static final String COLUMN_SHOP_CAMERA_POSITION = "camera_position";//the streetview camera's position, stored as String
         //some coding for the Content Provider
         //content://waldo.bike.bikeshops/shops
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_SHOPS).build();

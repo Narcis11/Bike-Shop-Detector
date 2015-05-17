@@ -43,7 +43,11 @@ public class ShopsTestContentProvider extends AndroidTestCase {
         insertValues.put(ShopsContract.ShopsEntry.COLUMN_WEBSITE,"www.test.ro");
         insertValues.put(ShopsContract.ShopsEntry.COLUMN_PHONE_NUMBER,"021.321.38.14");
         insertValues.put(ShopsContract.ShopsEntry.COLUMN_RATING,3.3);
-        insertValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_PROMO_TEXT,"Cel mai şmecheros magazin din lume!");
+        insertValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_PROMO_TEXT,"Cel mai şmecheros magazin din lume!#");
+        insertValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_CAMERA_BEARING, 120);
+        insertValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_CAMERA_TILT,20);
+        insertValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_CAMERA_ZOOM,4);
+        insertValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_CAMERA_POSITION,"44.4378258,26.0946376");
         Uri insertUri = mContext.getContentResolver().insert(ShopsContract.ShopsEntry.CONTENT_URI,insertValues);
         long positionId = ContentUris.parseId(insertUri);
         Log.i(LOG_TAG,"Insert uri is: " + insertUri);

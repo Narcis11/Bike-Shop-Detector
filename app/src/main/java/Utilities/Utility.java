@@ -568,7 +568,7 @@ public class Utility {
         Tracker gaTracker = ((BikeShopsDetector) application).getTracker(
                 BikeShopsDetector.TrackerName.APP_TRACKER);;
         try {
-            List<Address> coordinates = geocoder.getFromLocationName(address,1);
+            List<Address> coordinates = geocoder.getFromLocationName(address, 1);
             if (coordinates.size() > 0) {
                 coordinatesArray[0] = coordinates.get(0).getLatitude();
                 coordinatesArray[1] = coordinates.get(0).getLongitude();
@@ -705,15 +705,19 @@ public class Utility {
 
     //used to extract the promo text for the shop detail or shop map activity
     public static String getPromoText(String promoText, int activityNumber) {
-        if (activityNumber == 1) {
-            return promoText.substring(0,promoText.indexOf(Constants.HASH_SEPARATOR));
+        try {
+            if (activityNumber == 1) {
+                return promoText.substring(0, promoText.indexOf(Constants.HASH_SEPARATOR));
+            } else if (activityNumber == 2) {
+                return promoText.substring(promoText.indexOf(Constants.HASH_SEPARATOR) + 1);
+            } else {
+                return "";
+            }
         }
-        else if (activityNumber == 2) {
-            return promoText.substring(promoText.indexOf(Constants.HASH_SEPARATOR) + 1);
-        }
-        else {
+        catch(StringIndexOutOfBoundsException e) {
             return "";
         }
+
     }
 
     //this method is used to get the phone bucket. Used for getting the right size for our partners' logos
