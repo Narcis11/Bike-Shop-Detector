@@ -11,7 +11,7 @@ import android.util.Log;
 public class ShopsDbHelper extends SQLiteOpenHelper {
 
     // If we change the database schema in the future, we must increment the database version.
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     public static final String DATABASE_NAME = "shops.db";
     private final String LOG_TAG = ShopsDbHelper.class.getSimpleName();
     public ShopsDbHelper(Context context) {
@@ -52,7 +52,7 @@ public class ShopsDbHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         //This method is called when the database schema needs to be modified. As we use our database to store data from a server, and not user-generated one,
         //we simply drop the table and recreate the database.
-        final String DROP_TABLE_COMMAND = "DROP TABLE IF EXISTS" + ShopsContract.ShopsEntry.TABLE_NAME;
+        final String DROP_TABLE_COMMAND = "DROP TABLE IF EXISTS " + ShopsContract.ShopsEntry.TABLE_NAME;
         db.execSQL(DROP_TABLE_COMMAND);
         onCreate(db);
     }

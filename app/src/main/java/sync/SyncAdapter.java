@@ -575,7 +575,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         final String PARTNER_LOGO = "logoUrl"; //the URL of the partner's logo
         final String PARTNER_ADDRESS = "address";
         final String PARTNER_SCHEDULE = "opening_hours";
-
+        final String PARTNER_CAMERA_BEARING = "bearing";
+        final String PARTNER_CAMERA_TILT = "tilt";
+        final String PARTNER_CAMERA_ZOOM = "zoom";
+        final String PARTNER_CAMERA_POSITION = "position";
         //the values
         String place_id = "";
         int shop_discount;
@@ -586,6 +589,13 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         String shop_logo = "";
         String shop_address = "";
         String shop_schedule = "";
+        double shop_camera_bearing;
+        float shop_camera_bearing_float;
+        double shop_camera_tilt;
+        float shop_camera_tilt_float;
+        double shop_camera_zoom;
+        float shop_camera_zoom_float;
+        String shop_camera_position;
         try {
            // Log.i(LOG_TAG,"Response is: " + responseString);
             JSONObject partnersJson = new JSONObject(responseString);
@@ -599,7 +609,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     place_id = partnerShopDetails.getString(PARTNER_ID);
                 }
                 catch (JSONException a) {
-                    a.printStackTrace();
+                   // a.printStackTrace();
                 }
                 //get the discount
                 try{
@@ -607,7 +617,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     updateValues.put(ShopsContract.ShopsEntry.COLUMN_DISCOUNT_VALUE,shop_discount);
                 }
                 catch (JSONException f) {
-                    f.printStackTrace();
+                  //  f.printStackTrace();
                 }
                 //get the first promo text
                 try{
@@ -615,7 +625,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 }
                 catch (JSONException c) {
                     shop_textA = "";
-                    c.printStackTrace();
+                  //  c.printStackTrace();
                 }
                 //get the second promo text
                 try {
@@ -625,7 +635,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 catch (JSONException d) {
                     shop_textB = "";
                     updateValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_PROMO_TEXT,shop_textA + Constants.HASH_SEPARATOR + shop_textB);
-                    d.printStackTrace();
+                  //  d.printStackTrace();
                 }
 
                 //get the logo URL and value
@@ -633,9 +643,47 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     shop_logo = partnerShopDetails.getString(PARTNER_LOGO);
                     updateValues.put(ShopsContract.ShopsEntry.COLUMN_LOGO_URL, shop_logo);
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                  //  e.printStackTrace();
                 }
 
+                //get the camera's bearing
+                try {
+                    shop_camera_bearing = partnerShopDetails.getDouble(PARTNER_CAMERA_BEARING);
+                    shop_camera_bearing_float = (float) shop_camera_bearing;
+                    updateValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_CAMERA_BEARING,shop_camera_bearing_float);//
+                }
+                catch (JSONException e) {
+                 //   e.printStackTrace();
+                }
+                //the camera's details are more likely to be changed, so we place them outside of the if
+                //get the camera's tilt
+                try {
+                    shop_camera_tilt = partnerShopDetails.getDouble(PARTNER_CAMERA_TILT);
+                    shop_camera_tilt_float = (float) shop_camera_tilt;
+                    updateValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_CAMERA_TILT,shop_camera_tilt_float);
+                }
+                catch (JSONException e) {
+                  //  e.printStackTrace();
+                }
+
+                //get the camera's zoom
+                try {
+                    shop_camera_zoom = partnerShopDetails.getDouble(PARTNER_CAMERA_ZOOM);
+                    shop_camera_zoom_float = (float) shop_camera_zoom;
+                    updateValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_CAMERA_ZOOM,shop_camera_zoom_float);
+                }
+                catch (JSONException e) {
+                   // e.printStackTrace();
+                }
+
+                //get the camera's position
+                try {
+                    shop_camera_position = partnerShopDetails.getString(PARTNER_CAMERA_POSITION);
+                    updateValues.put(ShopsContract.ShopsEntry.COLUMN_SHOP_CAMERA_POSITION, shop_camera_position);
+                }
+                catch (JSONException e) {
+                  //  e.printStackTrace();
+                }
                 //if necessary, get the rest of the details for the partner shop
                 if (partnerShopDetails.length() > 4) {
 
@@ -674,6 +722,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     catch (JSONException s) {
                         s.printStackTrace();
                     }
+
                 }
             //update the DB
             updateValues.put(ShopsContract.ShopsEntry.COLUMN_IS_PARTNER,IS_PARTNER);

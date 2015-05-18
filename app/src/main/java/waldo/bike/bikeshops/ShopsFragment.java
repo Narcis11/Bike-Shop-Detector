@@ -68,6 +68,10 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     private String mPromoText;
     private boolean mIsListRefreshed;
     private Double mNewSpeedDistanceToShop;
+    private float mShopCameraBearing;
+    private float mShopCameraTilt;
+    private float mShopCameraZoom;
+    private String mShopCameraPosition = "";
     private static final int SHOPS_LOADER_ID = 0;//loader identifier
     private ListView mListView;
     private boolean mIsSpeedChanged;
@@ -96,7 +100,11 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
             ShopsContract.ShopsEntry.COLUMN_SHOP_PROMO_TEXT,
             ShopsContract.ShopsEntry.COLUMN_DISCOUNT_VALUE,
            // ShopsContract.ShopsEntry.COLUMN_LOGO_VALUE
-            ShopsContract.ShopsEntry.COLUMN_LOGO_URL
+            ShopsContract.ShopsEntry.COLUMN_LOGO_URL,
+            ShopsContract.ShopsEntry.COLUMN_SHOP_CAMERA_BEARING,
+            ShopsContract.ShopsEntry.COLUMN_SHOP_CAMERA_TILT,
+            ShopsContract.ShopsEntry.COLUMN_SHOP_CAMERA_ZOOM,
+            ShopsContract.ShopsEntry.COLUMN_SHOP_CAMERA_POSITION
     };
 
     // These indices are tied to SHOPS_COLUMNS.  If SHOPS_COLUMNS changes, these
@@ -114,6 +122,10 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     public static final int COL_PROMO_TEXT = 10;
     public static final int COL_DISCOUNT_VALUE = 11;
     public static final int COL_LOGO_URL = 12;
+    public static final int COL_SHOP_CAMERA_BEARING = 13;
+    public static final int COL_SHOP_CAMERA_TILT = 14;
+    public static final int COL_SHOP_CAMERA_ZOOM = 15;
+    public static final int COL_SHOP_CAMERA_POSITION = 16;
 
     public ShopsFragment() {
     }
@@ -258,6 +270,11 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                     mPlaceId = cursor.getString(COL_PLACE_ID);
                     mIsPartner = (cursor.getInt(COL_IS_PARTNER) == 1);
                     mPromoText = cursor.getString(COL_PROMO_TEXT);
+                    //we get this data here, because in ShopDetailActivity onLoadFinished is called after onStreetViewPanoramaReady
+                    mShopCameraBearing = (cursor.getFloat(COL_SHOP_CAMERA_BEARING) != 0) ? cursor.getFloat(COL_SHOP_CAMERA_BEARING) : 0;
+                    mShopCameraTilt = (cursor.getFloat(COL_SHOP_CAMERA_TILT) != 0) ? cursor.getFloat(COL_SHOP_CAMERA_TILT) : 0;
+                    mShopCameraZoom = (cursor.getFloat(COL_SHOP_CAMERA_ZOOM) != 0) ? cursor.getFloat(COL_SHOP_CAMERA_ZOOM) : 0;
+                    mShopCameraPosition = (cursor.getString(COL_SHOP_CAMERA_POSITION) != null) ? cursor.getString(COL_SHOP_CAMERA_POSITION) : "";
                     //update the database row corresponding to this shop id
                    // updateShopList(getActivity(),mPlaceId);
                     //store the position
@@ -275,7 +292,11 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                     bundle.putString(Constants.BUNDLE_SHOP_PLACE_ID,mPlaceId);
                     bundle.putBoolean(Constants.BUNDLE_IS_PARTNER, mIsPartner);
                     bundle.putString(Constants.BUNDLE_FRAGMENT, Constants.CALLED_FROM_FRAGMENT);
-                    bundle.putString(Constants.BUNDLE_PROMO_TEXT,mPromoText);
+                    bundle.putString(Constants.BUNDLE_PROMO_TEXT, mPromoText);
+                    bundle.putFloat(Constants.BUNDLE_SHOP_CAMERA_BEARING, mShopCameraBearing);
+                    bundle.putFloat(Constants.BUNDLE_SHOP_CAMERA_TILT, mShopCameraTilt);
+                    bundle.putFloat(Constants.BUNDLE_SHOP_CAMERA_ZOOM, mShopCameraZoom);
+                    bundle.putString(Constants.BUNDLE_SHOP_CAMERA_POSITION, mShopCameraPosition);
                     openDetailActivity.putExtras(bundle);
                     //lift off!
                     startActivity(openDetailActivity);

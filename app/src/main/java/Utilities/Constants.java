@@ -30,6 +30,10 @@ public class Constants {
     public static final String BUNDLE_PROMO_TEXT = "bundle_promo_text";
     public static final String BUNDLE_WEBSITE = "bundle_website";
     public static final String BUNDLE_WEBVIEW_TITLE = "bundle_webview_title";
+    public static final String BUNDLE_SHOP_CAMERA_BEARING = "bundle_camera_bearing";
+    public static final String BUNDLE_SHOP_CAMERA_TILT = "bundle_camera_tilt";
+    public static final String BUNDLE_SHOP_CAMERA_ZOOM = "bundle_camera_zoom";
+    public static final String BUNDLE_SHOP_CAMERA_POSITION = "bundle_camera_position";
     public static final String BUNDLE_USER_LAT = "bundle_user_lat_key";
     public static final String BUNDLE_USER_LNG = "bundle_user_lng_key";
     public static final String BUNDLE_FRAGMENT = "fragment_key";

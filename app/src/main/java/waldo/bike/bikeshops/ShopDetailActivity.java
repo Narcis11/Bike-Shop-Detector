@@ -29,6 +29,7 @@ import com.google.android.gms.maps.OnStreetViewPanoramaReadyCallback;
 import com.google.android.gms.maps.StreetViewPanorama;
 import com.google.android.gms.maps.StreetViewPanoramaFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.StreetViewPanoramaCamera;
 import com.google.android.gms.maps.model.StreetViewPanoramaOrientation;
 
 import Utilities.Constants;
@@ -49,6 +50,11 @@ public class ShopDetailActivity extends FragmentActivity
     private String mShopOpeningHours;
     private String mTodayFromOpeningHours;
     private float mShopRating;
+    private boolean mIsPartner;
+    private float mShopCameraBearing;
+    private float mShopCameraTilt;
+    private float mShopCameraZoom;
+    private String mShopCameraPosition = "";
     private static final int ACTIVITY_INDEX = 1;
     private static Context mContext;
     //the views
@@ -94,6 +100,11 @@ public class ShopDetailActivity extends FragmentActivity
         mShopName = mBundle.getString(Constants.BUNDLE_SHOP_NAME);
         mPlaceid = mBundle.getString(Constants.BUNDLE_SHOP_PLACE_ID);
         mPromoText = mBundle.getString(Constants.BUNDLE_PROMO_TEXT,"");//if the value is null, the promo text is ""
+        mIsPartner = mBundle.getBoolean(Constants.BUNDLE_IS_PARTNER);
+        mShopCameraBearing = mBundle.getFloat(Constants.BUNDLE_SHOP_CAMERA_BEARING);
+        mShopCameraTilt = mBundle.getFloat(Constants.BUNDLE_SHOP_CAMERA_TILT);
+        mShopCameraZoom = mBundle.getFloat(Constants.BUNDLE_SHOP_CAMERA_ZOOM);
+        mShopCameraPosition = mBundle.getString(Constants.BUNDLE_SHOP_CAMERA_POSITION);
         getActionBar().setTitle(mShopName);
         StreetViewPanoramaFragment streetViewPanoramaFragment =
                 (StreetViewPanoramaFragment) getFragmentManager()
@@ -146,8 +157,34 @@ public class ShopDetailActivity extends FragmentActivity
 
     @Override
     public void onStreetViewPanoramaReady(StreetViewPanorama streetViewPanorama) {
-        LatLng shopLatLng = new LatLng(mShopLat, mShopLng);
-        streetViewPanorama.setPosition(shopLatLng);
+       // Log.i(LOG_TAG,"In onStreetViewPanoramaReady. Bearing/tilt/zoom/position: " + mShopCameraBearing + "/" + mShopCameraTilt + "/" + mShopCameraZoom + "/" + mShopCameraPosition);
+        if (mIsPartner) {
+            if (!mShopCameraPosition.equals("")) {
+                try {
+                    mShopLat = Double.valueOf(mShopCameraPosition.substring(0, mShopCameraPosition.indexOf(Constants.COMMA_SEPARATOR)).trim());
+                    mShopLng = Double.valueOf(mShopCameraPosition.substring(mShopCameraPosition.indexOf(Constants.COMMA_SEPARATOR) + 1));
+                }
+                catch (NumberFormatException e) {
+                    //We revert to the default values if one of the coordinates is incorrect
+                    mShopLat = Double.valueOf(mBundle.getString(Constants.BUNDLE_SHOP_LAT));
+                    mShopLng = Double.valueOf(mBundle.getString(Constants.BUNDLE_SHOP_LNG));
+                }
+            }
+            LatLng shopLatLng = new LatLng(mShopLat, mShopLng);
+            //if the bearing/tilt/zoom is not sent from the server, the fallback value is 0 and it does not affect the camera
+            StreetViewPanoramaCamera camera = new StreetViewPanoramaCamera.Builder()
+                    .bearing(streetViewPanorama.getPanoramaCamera().bearing + mShopCameraBearing)//mShopCameraBearing
+                    .tilt(streetViewPanorama.getPanoramaCamera().tilt + mShopCameraTilt)
+                    .zoom(streetViewPanorama.getPanoramaCamera().zoom + mShopCameraZoom)
+                    .build();
+            streetViewPanorama.animateTo(camera, 2000);
+            streetViewPanorama.setPosition(shopLatLng);
+       //     Log.i(LOG_TAG,"After animate");
+        }
+        else {
+            LatLng shopLatLng = new LatLng(mShopLat, mShopLng);
+            streetViewPanorama.setPosition(shopLatLng);
+        }
         //the user can just click on the image, he can't manipulate it yet
         streetViewPanorama.setPanningGesturesEnabled(false);
         streetViewPanorama.setOnStreetViewPanoramaClickListener(new StreetViewPanorama.OnStreetViewPanoramaClickListener() {
