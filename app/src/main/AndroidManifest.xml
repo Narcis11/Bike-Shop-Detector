@@ -139,7 +139,8 @@
 
         <activity
             android:name="waldo.bike.bikeshops.ShopDetailActivity"
-            android:parentActivityName="waldo.bike.bikeshops.MainActivity" >
+            android:parentActivityName="waldo.bike.bikeshops.MainActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="waldo.bike.bikeshops.MainActivity" />
