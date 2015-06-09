@@ -59,11 +59,11 @@ public class AddShopFormActivity extends Activity {
         mShopNameOk = false;
         mShopWebsiteOk = true;
         mShopPhoneNumberOk = true;
-        mGaTracker = ((BikeShopsDetector) getApplication()).getTracker(
+/*        mGaTracker = ((BikeShopsDetector) getApplication()).getTracker(
                 BikeShopsDetector.TrackerName.APP_TRACKER);
         //report to GA that the screen has been opened
         mGaTracker.setScreenName(screenName);
-        mGaTracker.send(new HitBuilders.AppViewBuilder().build());
+        mGaTracker.send(new HitBuilders.AppViewBuilder().build());*/
         mShopName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -222,16 +222,16 @@ public class AddShopFormActivity extends Activity {
                 response = postForm.get();
             }
             catch (InterruptedException e) {
-                mGaTracker.send(new HitBuilders.ExceptionBuilder()
+/*                mGaTracker.send(new HitBuilders.ExceptionBuilder()
                         .setDescription("InterruptedException in AddShopFormActivity, addShop")
                         .setFatal(false)
-                        .build());
+                        .build());*/
             }
             catch (ExecutionException e) {
-                mGaTracker.send(new HitBuilders.ExceptionBuilder()
+/*                mGaTracker.send(new HitBuilders.ExceptionBuilder()
                         .setDescription("ExecutionException in AddShopFormActivity, addShop")
                         .setFatal(false)
-                        .build());
+                        .build());*/
             }
 
             if (response.indexOf(OK_STATUS) >= 0) {

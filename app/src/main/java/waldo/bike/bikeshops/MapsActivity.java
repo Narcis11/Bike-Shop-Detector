@@ -64,11 +64,11 @@ public class MapsActivity extends FragmentActivity implements LoaderManager.Load
     protected void onResume() {
         super.onResume();
         //initialise the GA tracker
-        mGaTracker = ((BikeShopsDetector) getApplication()).getTracker(
+/*        mGaTracker = ((BikeShopsDetector) getApplication()).getTracker(
                 BikeShopsDetector.TrackerName.APP_TRACKER);
         //report to GA that the screen has been opened
         mGaTracker.setScreenName(screenName);
-        mGaTracker.send(new HitBuilders.AppViewBuilder().build());
+        mGaTracker.send(new HitBuilders.AppViewBuilder().build());*/
         setUpMapIfNeeded();
     }
 

@@ -85,16 +85,16 @@ public class PostForm extends AsyncTask<String, Void, String> {
             }
         }
         catch(JSONException e) {
-            gaTracker.send(new HitBuilders.ExceptionBuilder()
+/*            gaTracker.send(new HitBuilders.ExceptionBuilder()
                     .setDescription("JSONException in PostForm, createJSONObject")
                     .setFatal(false)
-                    .build());
+                    .build());*/
         }
         catch(NullPointerException e) {
-            gaTracker.send(new HitBuilders.ExceptionBuilder()
+/*            gaTracker.send(new HitBuilders.ExceptionBuilder()
                     .setDescription("NullPointerException in PostForm, createJSONObject")
                     .setFatal(false)
-                    .build());
+                    .build());*/
         }
         return fullJson.toString();
     }

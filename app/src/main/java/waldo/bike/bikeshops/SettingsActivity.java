@@ -66,11 +66,11 @@ public class SettingsActivity extends PreferenceActivity implements
         // Add 'general' preferences, defined in the XML file
         mContext = getApplicationContext();
         mFirstLoad = true;
-        mGaTracker = ((BikeShopsDetector)  getApplication()).getTracker(
+/*        mGaTracker = ((BikeShopsDetector)  getApplication()).getTracker(
                 BikeShopsDetector.TrackerName.APP_TRACKER);
         //report to GA that this screen has been opened
         mGaTracker.setScreenName(screenName);
-        mGaTracker.send(new HitBuilders.AppViewBuilder().build());
+        mGaTracker.send(new HitBuilders.AppViewBuilder().build());*/
         loadPreferenceScreen(mFirstLoad);
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_range_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_speed_key)));
@@ -238,11 +238,11 @@ public class SettingsActivity extends PreferenceActivity implements
                 if (mIsChecked != mFirstCheck) {
                     mCheckBoxStatus = (mIsChecked) ? "checked" : "unchecked";
                     //set the event to GA
-                    mGaTracker.send(new HitBuilders.EventBuilder()
+/*                    mGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory(getString(R.string.ga_checkbox_category_id))
                             .setAction(getString(R.string.ga_checkbox_action_id))
                             .setLabel(mCheckBoxStatus)
-                            .build());
+                            .build());*/
                 }
                 else {
                 }

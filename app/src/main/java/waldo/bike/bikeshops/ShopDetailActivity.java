@@ -118,11 +118,11 @@ public class ShopDetailActivity extends FragmentActivity
     @Override
     protected void onResume() {
         super.onResume();
-        mGaTracker = ((BikeShopsDetector) getApplication()).getTracker(
+/*        mGaTracker = ((BikeShopsDetector) getApplication()).getTracker(
                 BikeShopsDetector.TrackerName.APP_TRACKER);
         //report to GA that this screen has been opened
         mGaTracker.setScreenName(screenName);
-        mGaTracker.send(new HitBuilders.AppViewBuilder().build());
+        mGaTracker.send(new HitBuilders.AppViewBuilder().build());*/
         DisplayMetrics displaymetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
         float heightPx = displaymetrics.heightPixels;
@@ -215,11 +215,11 @@ public class ShopDetailActivity extends FragmentActivity
         String intentUri = "tel:" + mShopPhoneNumber;
         Intent callIntent = new Intent(Intent.ACTION_DIAL);
         // Build and send a tracked event to GA.
-        mGaTracker.send(new HitBuilders.EventBuilder()
+/*        mGaTracker.send(new HitBuilders.EventBuilder()
                 .setCategory(getString(R.string.ga_shopnumber_category_id))
                 .setAction(getString(R.string.ga_shopnumber_action_id))
                 .setLabel(mShopPhoneNumber + " - " + mShopName)
-                .build());
+                .build());*/
         callIntent.setData(Uri.parse(intentUri));
         startActivity(callIntent);
     }
@@ -230,11 +230,11 @@ public class ShopDetailActivity extends FragmentActivity
         mBundle.putString(Constants.BUNDLE_WEBVIEW_TITLE,mShopName);//the title of the WebActivity
         try {
             // Build and send a tracked event to GA.
-            mGaTracker.send(new HitBuilders.EventBuilder()
+/*            mGaTracker.send(new HitBuilders.EventBuilder()
                     .setCategory(getString(R.string.ga_shopwebsite_category_id))
                     .setAction(getString(R.string.ga_shopwebsite_action_id))
                     .setLabel(mShopWebsite)
-                    .build());
+                    .build());*/
             intent.putExtras(mBundle);
             startActivity(intent);
         }

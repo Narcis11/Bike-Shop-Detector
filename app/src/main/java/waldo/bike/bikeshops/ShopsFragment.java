@@ -280,11 +280,11 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
                     //store the position
                     mPosition = position;
                     //set the event to GA
-                    mGaTracker.send(new HitBuilders.EventBuilder()
+/*                    mGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory(getString(R.string.ga_open_shop_category_id))
                             .setAction(getString(R.string.ga_open_shop_action_id))
                             .setLabel(mShopName)
-                            .build());
+                            .build());*/
                     //assemble the bundle
                     bundle.putString(Constants.BUNDLE_SHOP_LAT, mShopLatitude);
                     bundle.putString(Constants.BUNDLE_SHOP_LNG, mShopLongitude);
@@ -348,8 +348,8 @@ public class ShopsFragment extends Fragment implements LoaderManager.LoaderCallb
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mGaTracker = ((BikeShopsDetector)  getActivity().getApplication()).getTracker(
-                BikeShopsDetector.TrackerName.APP_TRACKER);
+/*        mGaTracker = ((BikeShopsDetector)  getActivity().getApplication()).getTracker(
+                BikeShopsDetector.TrackerName.APP_TRACKER);*/
         setHasOptionsMenu(true); //tells the system that we have button(s) in the menu
 
     }

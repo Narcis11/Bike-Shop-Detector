@@ -301,16 +301,16 @@ public class MainActivity extends Activity implements
     protected void onResume() {
         super.onResume();
         //initialise the GA tracker
-        mGaTracker = ((BikeShopsDetector) getApplication()).getTracker(
+/*        mGaTracker = ((BikeShopsDetector) getApplication()).getTracker(
                 BikeShopsDetector.TrackerName.APP_TRACKER);
         //report to GA that the screen has been opened
         mGaTracker.setScreenName(screenName);
-        mGaTracker.send(new HitBuilders.AppViewBuilder().build());
+        mGaTracker.send(new HitBuilders.AppViewBuilder().build());*/
         //report uncaught exceptions
-        Thread.UncaughtExceptionHandler myHandler = new ExceptionReporter(
+/*        Thread.UncaughtExceptionHandler myHandler = new ExceptionReporter(
                 mGaTracker,                                        // Currently used Tracker.
                 Thread.getDefaultUncaughtExceptionHandler(),      // Current default uncaught exception handler.
-                mContext);
+                mContext);*/
         mLikeViewPadding = Utility.getLikeViewPaddingOnResume(mContext);
         if (!(mLikeView.getPaddingLeft() == mLikeViewPadding[0] || mLikeView.getPaddingLeft() == 0)) {
             mLikeView.setPadding(mLikeViewPadding[0], mLikeViewPadding[1], mLikeViewPadding[2], mLikeViewPadding[3]);
@@ -375,12 +375,12 @@ public class MainActivity extends Activity implements
         if (mRepositionLikeButton) { //also signals that the like(d) button has been pressed
             if (mLikeView.getPaddingLeft() == mLikeViewPadding[0]) {
                 mLikeView.setPadding(0, 0, Utility.getPaddingRightLikeView(mContext), 0);//reposition the button after a Like action
-                //send a hit to GA for each press of the like button
+/*                //send a hit to GA for each press of the like button
                 mGaTracker.send(new HitBuilders.EventBuilder()
                         .setCategory(getString(R.string.ga_socialmedia_cat_id))
                         .setAction(getString(R.string.ga_socialmedia_act_id))
                         .setLabel(mLikeLabel)
-                        .build());
+                        .build());*/
             }
         }
         if (mTwitterLoginButton != null) {
@@ -388,10 +388,10 @@ public class MainActivity extends Activity implements
                 mTwitterLoginButton.onActivityResult(requestCode, resultCode, data);
             }
             catch (NullPointerException e){
-                mGaTracker.send(new HitBuilders.ExceptionBuilder()
+/*                mGaTracker.send(new HitBuilders.ExceptionBuilder()
                         .setDescription("NullPointerException in MainActivity, onActivityResult")
                         .setFatal(false)
-                        .build());
+                        .build());*/
                 e.printStackTrace();
             }
         }
@@ -550,11 +550,11 @@ public class MainActivity extends Activity implements
         webBundle.putString(Constants.BUNDLE_WEBVIEW_TITLE,ACTIVITY_TITLE);//the title of the web activity
         try {
             // Build and send a tracked event to GA.
-            mGaTracker.send(new HitBuilders.EventBuilder()
+/*            mGaTracker.send(new HitBuilders.EventBuilder()
                     .setCategory(getString(R.string.ga_slider_menu_category_id))
                     .setAction(getString(R.string.ga_about_us_action_id))
                     .setLabel(getString(R.string.ga_about_us_label_id))
-                    .build());
+                    .build());*/
             intent.putExtras(webBundle);
             startActivity(intent);
             //close the drawer only when we are ready to open the browser (no exception thrown)
@@ -580,12 +580,12 @@ public class MainActivity extends Activity implements
                 Toast.makeText(mContext, R.string.no_user_location, Toast.LENGTH_SHORT).show();
             } else {
                 if (cursor.getCount() > 0) {
-                    // Build and send a tracked event to GA.
+/*                    // Build and send a tracked event to GA.
                     mGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory(getString(R.string.ga_slider_menu_category_id))
                             .setAction(getString(R.string.ga_view_all_shops_action_id))
                             .setLabel(getString(R.string.ga_view_all_shops_label_id))
-                            .build());
+                            .build());*/
 
                     //close the drawer only when we are ready to open the map
                     mDrawerLayout.closeDrawer(Gravity.LEFT);
@@ -603,11 +603,13 @@ public class MainActivity extends Activity implements
             }
             else {
                 // Build and send a tracked event to GA.
+/*
                 mGaTracker.send(new HitBuilders.EventBuilder()
                         .setCategory(getString(R.string.ga_slider_menu_category_id))
                         .setAction(getString(R.string.ga_add_a_shop_action_id))
                         .setLabel(getString(R.string.ga_add_a_shop_label_id))
                         .build());
+*/
 
                 //close the drawer only when we are ready to open the map
                 mDrawerLayout.closeDrawer(Gravity.LEFT);
@@ -641,11 +643,11 @@ public class MainActivity extends Activity implements
             @Override
             public void onClick(View v) {
                 //send a hit to GA for each press of the Twitter follow button
-                mGaTracker.send(new HitBuilders.EventBuilder()
+/*                mGaTracker.send(new HitBuilders.EventBuilder()
                         .setCategory(getString(R.string.ga_socialmedia_cat_id))
                         .setAction(getString(R.string.ga_socialmedia_act_id))
                         .setLabel(mFollowLabel)
-                        .build());
+                        .build());*/
                 Drawable followDrawable = getResources().getDrawable(R.drawable.twitter_follow);
                 Drawable followingDrawable = getResources().getDrawable(R.drawable.twitter_following);
                 mRepositionLikeButton = false;
@@ -701,27 +703,27 @@ public class MainActivity extends Activity implements
                     }
                 }
                 catch (InterruptedException e) {
-                    mGaTracker.send(new HitBuilders.ExceptionBuilder()
+/*                    mGaTracker.send(new HitBuilders.ExceptionBuilder()
                             .setDescription("InterruptedException in MainActivity, setTwitterLoginCallback")
                             .setFatal(false)
-                            .build());
+                            .build());*/
                     e.printStackTrace();
                 }
                 catch (ExecutionException e) {
-                    mGaTracker.send(new HitBuilders.ExceptionBuilder()
+/*                    mGaTracker.send(new HitBuilders.ExceptionBuilder()
                             .setDescription("ExecutionException in MainActivity, setTwitterLoginCallback")
                             .setFatal(false)
-                            .build());
+                            .build());*/
                     e.printStackTrace();
                 }
             }
 
             @Override
             public void failure(TwitterException e) {
-                mGaTracker.send(new HitBuilders.ExceptionBuilder()
+/*                mGaTracker.send(new HitBuilders.ExceptionBuilder()
                         .setDescription( getResources().getString(R.string.twitter_operation_failed) + " in MainActivity")
                         .setFatal(false)
-                        .build());
+                        .build());*/
                 Toast.makeText(mContext,getResources().getString(R.string.twitter_operation_failed),Toast.LENGTH_SHORT).show();
             }
         });
@@ -749,17 +751,17 @@ public class MainActivity extends Activity implements
             }
         }
         catch (InterruptedException e) {
-            mGaTracker.send(new HitBuilders.ExceptionBuilder()
+/*            mGaTracker.send(new HitBuilders.ExceptionBuilder()
                     .setDescription("InterruptedException in MainActivity, twitterOperationWithToken")
                     .setFatal(false)
-                    .build());
+                    .build());*/
             e.printStackTrace();
         }
         catch (ExecutionException e) {
-            mGaTracker.send(new HitBuilders.ExceptionBuilder()
+/*            mGaTracker.send(new HitBuilders.ExceptionBuilder()
                     .setDescription("InterruptedException in MainActivity, ExecutionException")
                     .setFatal(false)
-                    .build());
+                    .build());*/
             e.printStackTrace();
         }
     }
@@ -780,10 +782,10 @@ public class MainActivity extends Activity implements
     //called when the like button is pressed
     private void handleLikeButton(View v) {
         mRepositionLikeButton = true;
-        mGaTracker.send(new HitBuilders.EventBuilder()
+/*        mGaTracker.send(new HitBuilders.EventBuilder()
                 .setCategory(getString(R.string.ga_socialmedia_cat_id))
                 .setAction(getString(R.string.ga_socialmedia_act_id))
                 .setLabel(mLikeLabel)
-                .build());
+                .build());*/
     }
          }
