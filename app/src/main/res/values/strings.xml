@@ -149,7 +149,7 @@
     <string name="waiting_gps">Waiting for GPS connection...</string>
     <string name="no_shops">No shops in the selected range</string>
     <!-- Keys and IDs -->
-    <string name="gmaps_api_key">AIzaSyCHf4BobJQWDa39E_VJtUkwkuimFfsz7Z0</string>
+    <string name="gmaps_api_key">your_api_key</string>
     <string name="facebook_appId">1528344614097187</string>
     <string name="title_activity_shop_detail">ShopDetailActivity</string>
     <string name="title_activity_shop_street_view">ShopStreetViewActivity</string>
